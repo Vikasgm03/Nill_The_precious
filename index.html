@@ -3,148 +3,167 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>For You | Birthday 🕊️</title>
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;500&family=Playfair+Display:italic,wght@0,400;1,700&display=swap" rel="stylesheet">
+    <title>Happy Birthday | For You</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:italic,wght@0,400;1,700&family=Inter:wght@300;400&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --bg-color: #fdfcf0; /* Soft cream */
-            --accent-soft: #e8d5cc; /* Muted peach */
-            --text-color: #4a4a4a;
+            --soft-white: #fafafa;
+            --text-main: #333333;
+            --accent: #d4a373; /* Earthy gold for a calm vibe */
         }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            margin: 0;
-            background: linear-gradient(135deg, #fdfcf0 0%, #fae1d4 100%);
-            background-attachment: fixed;
-            color: var(--text-color);
-            font-family: 'Quicksand', sans-serif;
-            line-height: 1.6;
+            background-color: var(--soft-white);
+            font-family: 'Inter', sans-serif;
+            color: var(--text-main);
+            overflow-x: hidden;
         }
 
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 40px 20px;
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: 60px;
-            animation: fadeIn 2s ease-in;
-        }
-
-        h1 {
-            font-family: 'Playfair Display', serif;
-            font-size: 3rem;
-            font-weight: 300;
-            color: #8e7d7d;
-        }
-
-        /* The Neat Bento Grid */
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-        }
-
-        .item {
-            background: rgba(255, 255, 255, 0.4);
-            backdrop-filter: blur(5px);
-            border-radius: 30px;
-            padding: 25px;
-            border: 1px solid rgba(255, 255, 255, 0.6);
-            transition: all 0.5s ease;
+        /* 1. THE FULL-SCREEN BANNER */
+        .hero {
+            height: 100vh;
+            width: 100%;
+            background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), 
+                        url('header-photo.jpg'); /* REPLACE WITH HER PHOTO */
+            background-size: cover;
+            background-position: center;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            color: white;
             text-align: center;
         }
 
-        .item:hover {
-            background: rgba(255, 255, 255, 0.8);
-            transform: translateY(-5px);
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(3rem, 10vw, 6rem);
+            font-weight: 700;
+            letter-spacing: -2px;
+            animation: fadeInDown 2s ease;
         }
 
-        /* Large featured items */
-        .large { grid-column: span 2; }
-
-        img, video {
-            width: 100%;
-            border-radius: 20px;
-            margin-bottom: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        .scroll-indicator {
+            position: absolute;
+            bottom: 30px;
+            font-size: 0.8rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            opacity: 0.8;
+            animation: bounce 2s infinite;
         }
 
+        /* 2. NEAT SCROLLING CONTENT */
+        .content-section {
+            max-width: 800px;
+            margin: 100px auto;
+            padding: 0 20px;
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 1s ease-out;
+            margin-bottom: 120px;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* 3. QUOTES & IMAGES */
         .quote {
             font-family: 'Playfair Display', serif;
+            font-size: 2rem;
             font-style: italic;
-            font-size: 1.4rem;
-            color: #6d6d6d;
-            padding: 20px;
+            text-align: center;
+            line-height: 1.4;
+            color: var(--accent);
         }
 
-        .label {
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            font-size: 0.7rem;
-            margin-bottom: 10px;
-            color: #b5a4a4;
+        .image-container img {
+            width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.05);
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
+        /* 4. AUTOPLAY VIDEOS */
+        .video-wrapper {
+            width: 100%;
+            border-radius: 15px;
+            overflow: hidden;
+            background: #000;
+        }
+
+        video { width: 100%; display: block; }
+
+        /* ANIMATIONS */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        @media (max-width: 600px) {
-            .grid { grid-template-columns: 1fr; }
-            .large { grid-column: span 1; }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+            40% {transform: translateY(-10px);}
+            60% {transform: translateY(-5px);}
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <header>
-            <div class="label">A curated space for</div>
-            <h1>[Friend's Name]</h1>
-            <p>Breathe in, smile, and enjoy your day.</p>
-        </header>
+    <section class="hero">
+        <h1>Happy Birthday, [Name]</h1>
+        <div class="scroll-indicator">Scroll to begin</div>
+    </section>
 
-        <div class="grid">
-            <div class="item">
-                <div class="label">A favorite memory</div>
-                <img src="photo1.jpg" alt="Memory">
-                <p>The day we found that hidden cafe.</p>
-            </div>
+    <div class="content-section">
+        
+        <div class="fade-in">
+            <p class="quote">"Some people make the world special just by being in it."</p>
+        </div>
 
-            <div class="item">
-                <div class="label">Words for you</div>
-                <div class="quote">"You are the sister I chose for myself."</div>
-            </div>
+        <div class="fade-in image-container">
+            <img src="memory1.jpg" alt="Memory One">
+            <p style="text-align: center; margin-top: 15px; color: #888;">Exactly one year ago today.</p>
+        </div>
 
-            <div class="item large">
-                <div class="label">A little surprise</div>
-                <video controls>
-                    <source src="video.mp4" type="video/mp4">
-                    Your browser does not support the video tag.
+        <div class="fade-in">
+            <p class="quote">"To the one who knows all my stories and still stays."</p>
+        </div>
+
+        <div class="fade-in">
+            <div class="label" style="text-align: center; margin-bottom: 20px; letter-spacing: 2px; font-size: 0.7rem;">AN EMOTIONAL MOMENT</div>
+            <div class="video-wrapper">
+                <video autoplay loop muted playsinline>
+                    <source src="surprise-video.mp4" type="video/mp4">
                 </video>
-                <p>A message from everyone who loves you.</p>
-            </div>
-
-            <div class="item">
-                <img src="photo2.jpg" alt="Memory">
-                <p>Sunshine and smiles.</p>
-            </div>
-
-            <div class="item">
-                <div class="label">Daily Reminder</div>
-                <div class="quote">"Be kind to yourself today."</div>
             </div>
         </div>
+
+        <div class="fade-in" style="text-align: center; border-top: 1px solid #eee; padding-top: 50px;">
+            <h2 style="font-family: 'Playfair Display'; font-size: 2.5rem;">I love you!</h2>
+            <p style="margin-top: 20px;">Check your mailbox for a real-life surprise. ❤️</p>
+        </div>
+
     </div>
 
+    <script>
+        // SCRIPT TO MAKE ELEMENTS FADE IN ON SCROLL
+        const observerOptions = { threshold: 0.1 };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+    </script>
 </body>
 </html>
