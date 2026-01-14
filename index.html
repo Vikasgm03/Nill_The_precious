@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LoveFlix - For Her</title>
+    <title>BestieFlix - Happy Birthday!</title>
     <style>
         :root {
             --netflix-red: #e50914;
@@ -31,33 +31,36 @@
             transition: opacity 1s ease-out;
         }
         .profile-title {
-            font-size: 3.5rem;
+            font-size: 3rem;
             font-weight: 400;
             margin-bottom: 30px;
+            text-align: center;
         }
         .profiles-container {
             display: flex;
-            gap: 30px;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
         }
         .profile-card {
             text-align: center;
             cursor: pointer;
             transition: transform 0.3s;
+            margin: 10px;
         }
         .profile-card:hover {
             transform: scale(1.1);
         }
-        .profile-card:hover .profile-name {
-            color: white;
-        }
         .avatar {
-            width: 150px;
-            height: 150px;
-            background-image: url('her.jpg'); /* PUT HER PHOTO HERE */
+            width: 120px;
+            height: 120px;
+            background-color: #333;
+            /* YOU CAN PUT DIFFERENT PHOTOS FOR EACH PROFILE HERE */
+            background-image: url('funny.jpg'); 
             background-size: cover;
             border-radius: 4px;
             border: 3px solid transparent;
-            box-sizing: border-box;
+            margin: 0 auto;
         }
         .profile-card:hover .avatar {
             border: 3px solid white;
@@ -66,17 +69,17 @@
             display: block;
             margin-top: 15px;
             color: grey;
-            font-size: 1.2rem;
+            font-size: 1rem;
         }
 
         /* --- SCREEN 2: MAIN SITE --- */
         #main-site {
-            display: none; /* Hidden initially */
+            display: none;
             opacity: 0;
             transition: opacity 2s ease-in;
         }
 
-        /* Navigation */
+        /* Nav */
         .nav {
             position: fixed;
             top: 0;
@@ -92,22 +95,22 @@
             font-size: 30px;
             font-weight: bold;
             letter-spacing: 2px;
+            text-shadow: 2px 2px 5px #000;
         }
 
-        /* Hero Section */
+        /* Hero */
         .banner {
             height: 85vh;
-            background-image: url('background.jpg'); /* PUT A COUPLE PHOTO HERE */
+            background-image: url('main_pic.jpg'); /* PUT A GOOD PIC OF HER OR BOTH OF YOU HERE */
             background-size: cover;
             background-position: center;
             color: white;
-            object-fit: contain;
             box-shadow: inset 0 -250px 250px #141414;
             display: flex;
             align-items: center;
         }
         .banner-contents {
-            margin-left: 50px;
+            margin-left: 40px;
             padding-top: 100px;
             max-width: 600px;
         }
@@ -115,36 +118,34 @@
             font-size: 4rem;
             font-weight: 800;
             padding-bottom: 0.3rem;
+            text-shadow: 2px 2px 5px #000;
         }
         .match-text {
-            color: #46d369; /* Netflix Green */
+            color: #46d369;
             font-weight: bold;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             margin-right: 15px;
         }
         .banner-desc {
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             line-height: 1.3;
             padding-top: 1rem;
             max-width: 500px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
-        }
-        .banner-buttons {
-            margin-top: 20px;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
+            background-color: rgba(0,0,0,0.3); /* Slight dark background for readability */
+            padding: 10px;
+            border-radius: 5px;
         }
         .btn {
             cursor: pointer;
             color: white;
-            outline: none;
             border: none;
             font-weight: 700;
-            border-radius: 0.2vw;
-            padding-left: 2rem;
-            padding-right: 2rem;
-            padding-top: 0.5rem;
-            padding-bottom: 0.5rem;
+            border-radius: 4px;
+            padding: 10px 25px;
             margin-right: 1rem;
             font-size: 1.2rem;
+            margin-top: 20px;
         }
         .btn-play {
             background-color: white;
@@ -153,11 +154,8 @@
         .btn-play:hover {
             background-color: rgba(255, 255, 255, 0.75);
         }
-        .btn-list {
+        .btn-info {
             background-color: rgba(109, 109, 110, 0.7);
-        }
-        .btn-list:hover {
-            background-color: rgba(109, 109, 110, 0.4);
         }
 
         /* Rows */
@@ -167,6 +165,7 @@
         }
         .row h2 {
             margin-left: 20px;
+            font-size: 1.5rem;
         }
         .row-posters {
             display: flex;
@@ -175,10 +174,10 @@
             padding: 20px;
         }
         .row-posters::-webkit-scrollbar {
-            display: none;
+            display: none; 
         }
         .poster {
-            max-height: 200px;
+            max-height: 180px;
             margin-right: 15px;
             transition: transform 450ms;
             border-radius: 4px;
@@ -187,26 +186,36 @@
         .poster:hover {
             transform: scale(1.1);
         }
-        
-        /* Modal (The Letter) */
-        #letter-modal {
+
+        /* Modal (The Note) */
+        #note-modal {
             display: none;
             position: fixed;
             top: 0; left: 0;
             width: 100%; height: 100%;
-            background: rgba(0,0,0,0.95);
+            background: rgba(0,0,0,0.9);
             z-index: 3000;
             align-items: center;
             justify-content: center;
+            padding: 20px;
+        }
+        .note-content {
+            background-color: #141414;
+            border: 1px solid #333;
+            padding: 40px;
+            max-width: 600px;
             text-align: center;
+            border-radius: 10px;
+            position: relative;
         }
-        .scrolling-text {
-            height: 80%;
-            overflow: hidden;
-            color: white;
-            font-size: 1.5rem;
-            line-height: 2;
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 30px;
+            cursor: pointer;
         }
+        
     </style>
 </head>
 <body>
@@ -216,97 +225,107 @@
         <div class="profiles-container">
             <div class="profile-card" onclick="enterSite()">
                 <div class="avatar"></div>
-                <span class="profile-name">My Queen 👑</span>
+                <span class="profile-name">The Drama Queen 👑</span>
+            </div>
+            <div class="profile-card" onclick="enterSite()">
+                <div class="avatar" style="filter: sepia(0.5);"></div>
+                <span class="profile-name">The CEO of Yapping 🗣️</span>
             </div>
             <div class="profile-card" onclick="enterSite()">
                 <div class="avatar" style="filter: grayscale(100%);"></div>
-                <span class="profile-name">Love of my Life ❤️</span>
+                <span class="profile-name">Sleepy Head 😴</span>
             </div>
         </div>
     </div>
 
     <div id="main-site">
         <div class="nav">
-            <div class="logo">LOVEFLIX</div>
+            <div class="logo">BESTIEFLIX</div>
         </div>
 
         <header class="banner">
             <div class="banner-contents">
-                <h1 class="banner-title">Our Story</h1>
+                <h1 class="banner-title">Happy Birthday!</h1>
                 <div>
-                    <span class="match-text">100% Match</span>
-                    <span style="border: 1px solid white; padding: 0 5px;">U</span>
-                    <span> 2 Seasons</span>
+                    <span class="match-text">98% Chaos Match</span>
+                    <span style="border: 1px solid white; padding: 0 5px; margin-left:10px;">R</span>
+                    <span style="margin-left:10px;">Limited Series</span>
                 </div>
-                <h1 class="banner-desc">
-                    A story about a boy who met a girl and realized that life is just better when she is around. 
-                    Warning: Contains extreme cuteness.
-                </h1>
+                <p class="banner-desc">
+                    The true story of the craziest, loudest, and most supportive friend a person could ask for. 
+                    Includes deleted scenes and embarrassing moments.
+                </p>
                 <div class="banner-buttons">
-                    <button class="btn btn-play" onclick="playLoveLetter()">&#9658; Play</button>
-                    <button class="btn btn-list">+ My List</button>
+                    <button class="btn btn-play" onclick="openNote()">&#9658; Play Message</button>
+                    <button class="btn btn-info">ℹ More Info</button>
                 </div>
             </div>
         </header>
 
         <div class="row">
-            <h2>Season 1: How it Started</h2>
+            <h2>Top Picks for You (Lookin' Good)</h2>
             <div class="row-posters">
-                <img src="her.jpg" class="poster">
-                <img src="her.jpg" class="poster">
-                <img src="her.jpg" class="poster">
+                <img src="nice1.jpg" class="poster">
+                <img src="nice2.jpg" class="poster">
+                <img src="nice3.jpg" class="poster">
+                <img src="nice4.jpg" class="poster">
             </div>
         </div>
 
         <div class="row">
-            <h2>Season 2: The Best Moments</h2>
+            <h2>Horror & Comedy (Delete Later)</h2>
             <div class="row-posters">
-                <img src="her.jpg" class="poster">
-                <img src="her.jpg" class="poster">
-                <img src="her.jpg" class="poster">
+                <img src="funny1.jpg" class="poster">
+                <img src="funny2.jpg" class="poster">
+                <img src="funny3.jpg" class="poster">
+                <img src="funny4.jpg" class="poster">
+            </div>
+        </div>
+        
+         <div class="row">
+            <h2>Nostalgia Trip</h2>
+            <div class="row-posters">
+                <img src="old1.jpg" class="poster">
+                <img src="old2.jpg" class="poster">
+                <img src="old3.jpg" class="poster">
             </div>
         </div>
     </div>
 
-    <div id="letter-modal" onclick="closeLetter()">
-        <div class="scrolling-text">
-            <p>Hey [Her Name],</p>
-            <p>I created this little world for you.</p>
-            <p>Because you are the main character in my life.</p>
-            <p>Every day with you feels like a movie scene.</p>
-            <p>I love you more than words can say.</p>
-            <p>Happy Birthday / Happy Anniversary!</p>
-            <p>Love, [Your Name]</p>
+    <div id="note-modal">
+        <div class="note-content">
+            <span class="close-btn" onclick="closeNote()">&times;</span>
+            <h2>To My Partner in Crime</h2>
+            <p style="font-size: 1.2rem; line-height: 1.6; color: #ccc;">
+                Happy Birthday! <br><br>
+                Honestly, I don't know how I haven't blocked you yet, but I guess life is boring without your drama.
+                Thanks for being the only person who understands my weird jokes.
+                <br><br>
+                Here's to another year of bad decisions and expensive food.
+                <br><br>
+                <strong>You're the best!</strong>
+            </p>
         </div>
     </div>
 
     <script>
         function enterSite() {
-            // Fade out profile screen
             document.getElementById('profile-screen').style.opacity = '0';
-            
-            // Wait 1 second then hide profile and show main site
             setTimeout(() => {
                 document.getElementById('profile-screen').style.display = 'none';
                 document.getElementById('main-site').style.display = 'block';
-                
                 // Trigger reflow
                 void document.getElementById('main-site').offsetWidth;
-                
                 document.getElementById('main-site').style.opacity = '1';
-                
-                // Optional: Play audio here if you have an mp3
-                // var audio = new Audio('tudum.mp3');
-                // audio.play();
             }, 1000);
         }
 
-        function playLoveLetter() {
-            document.getElementById('letter-modal').style.display = 'flex';
+        function openNote() {
+            document.getElementById('note-modal').style.display = 'flex';
         }
 
-        function closeLetter() {
-            document.getElementById('letter-modal').style.display = 'none';
+        function closeNote() {
+            document.getElementById('note-modal').style.display = 'none';
         }
     </script>
 </body>
