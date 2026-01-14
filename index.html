@@ -3,140 +3,311 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FriendFlix - Happy Birthday!</title>
+    <title>LoveFlix - For Her</title>
     <style>
-        /* General Netflix Style */
+        :root {
+            --netflix-red: #e50914;
+            --bg-color: #141414;
+        }
         body {
-            background-color: #141414; /* Netflix Black */
+            background-color: var(--bg-color);
             color: white;
-            font-family: 'Arial', sans-serif;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
             margin: 0;
-            padding: 0;
+            overflow-x: hidden;
         }
 
-        /* Navbar */
-        .navbar {
+        /* --- SCREEN 1: WHO IS WATCHING? --- */
+        #profile-screen {
             display: flex;
-            justify-content: space-between;
-            padding: 20px 40px;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background: #141414;
+            z-index: 2000;
             position: fixed;
             width: 100%;
+            transition: opacity 1s ease-out;
+        }
+        .profile-title {
+            font-size: 3.5rem;
+            font-weight: 400;
+            margin-bottom: 30px;
+        }
+        .profiles-container {
+            display: flex;
+            gap: 30px;
+        }
+        .profile-card {
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        .profile-card:hover {
+            transform: scale(1.1);
+        }
+        .profile-card:hover .profile-name {
+            color: white;
+        }
+        .avatar {
+            width: 150px;
+            height: 150px;
+            background-image: url('her.jpg'); /* PUT HER PHOTO HERE */
+            background-size: cover;
+            border-radius: 4px;
+            border: 3px solid transparent;
+            box-sizing: border-box;
+        }
+        .profile-card:hover .avatar {
+            border: 3px solid white;
+        }
+        .profile-name {
+            display: block;
+            margin-top: 15px;
+            color: grey;
+            font-size: 1.2rem;
+        }
+
+        /* --- SCREEN 2: MAIN SITE --- */
+        #main-site {
+            display: none; /* Hidden initially */
+            opacity: 0;
+            transition: opacity 2s ease-in;
+        }
+
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
             background: linear-gradient(to bottom, rgba(0,0,0,0.7) 10%, rgba(0,0,0,0));
-            z-index: 1000;
+            z-index: 100;
         }
         .logo {
-            color: #E50914; /* Netflix Red */
+            color: var(--netflix-red);
             font-size: 30px;
             font-weight: bold;
-            text-transform: uppercase;
+            letter-spacing: 2px;
         }
 
-        /* Hero Section (The Billboard) */
-        .hero {
-            height: 80vh;
-            /* REPLACE 'hero.jpg' WITH YOUR FRIEND'S BEST PHOTO */
-            background-image: url('hero.jpg'); 
+        /* Hero Section */
+        .banner {
+            height: 85vh;
+            background-image: url('background.jpg'); /* PUT A COUPLE PHOTO HERE */
             background-size: cover;
             background-position: center;
+            color: white;
+            object-fit: contain;
+            box-shadow: inset 0 -250px 250px #141414;
             display: flex;
             align-items: center;
-            padding-left: 40px;
-            box-shadow: inset 0 -100px 100px #141414; /* Fade to black at bottom */
         }
-        .hero-content {
-            max-width: 500px;
+        .banner-contents {
+            margin-left: 50px;
+            padding-top: 100px;
+            max-width: 600px;
         }
-        .hero-title {
-            font-size: 60px;
-            margin-bottom: 10px;
+        .banner-title {
+            font-size: 4rem;
+            font-weight: 800;
+            padding-bottom: 0.3rem;
         }
-        .hero-desc {
+        .match-text {
+            color: #46d369; /* Netflix Green */
+            font-weight: bold;
             font-size: 1.2rem;
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            margin-right: 15px;
+        }
+        .banner-desc {
+            font-size: 1.3rem;
+            line-height: 1.3;
+            padding-top: 1rem;
+            max-width: 500px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+        }
+        .banner-buttons {
+            margin-top: 20px;
         }
         .btn {
-            padding: 10px 20px;
-            border-radius: 4px;
-            border: none;
-            font-size: 1.2rem;
             cursor: pointer;
-            margin-right: 10px;
+            color: white;
+            outline: none;
+            border: none;
+            font-weight: 700;
+            border-radius: 0.2vw;
+            padding-left: 2rem;
+            padding-right: 2rem;
+            padding-top: 0.5rem;
+            padding-bottom: 0.5rem;
+            margin-right: 1rem;
+            font-size: 1.2rem;
         }
-        .btn-play { background-color: white; color: black; }
-        .btn-info { background-color: rgba(109, 109, 110, 0.7); color: white; }
+        .btn-play {
+            background-color: white;
+            color: black;
+        }
+        .btn-play:hover {
+            background-color: rgba(255, 255, 255, 0.75);
+        }
+        .btn-list {
+            background-color: rgba(109, 109, 110, 0.7);
+        }
+        .btn-list:hover {
+            background-color: rgba(109, 109, 110, 0.4);
+        }
 
-        /* Rows (Categories) */
+        /* Rows */
         .row {
-            padding: 20px 40px;
+            margin-left: 20px;
+            margin-bottom: 40px;
         }
-        .row-title {
-            font-size: 1.5rem;
-            margin-bottom: 10px;
-            font-weight: bold;
+        .row h2 {
+            margin-left: 20px;
         }
         .row-posters {
             display: flex;
             overflow-y: hidden;
-            overflow-x: scroll; /* Allows side scrolling */
-            padding: 20px 0;
+            overflow-x: scroll;
+            padding: 20px;
         }
         .row-posters::-webkit-scrollbar {
-            display: none; /* Hides scrollbar for clean look */
+            display: none;
         }
         .poster {
-            width: 200px; /* Width of each image */
-            margin-right: 10px;
-            transition: transform 450ms; /* Hover zoom effect */
-            border-radius: 5px;
+            max-height: 200px;
+            margin-right: 15px;
+            transition: transform 450ms;
+            border-radius: 4px;
             cursor: pointer;
         }
         .poster:hover {
-            transform: scale(1.08); /* Grows when hovered */
+            transform: scale(1.1);
+        }
+        
+        /* Modal (The Letter) */
+        #letter-modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 3000;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        .scrolling-text {
+            height: 80%;
+            overflow: hidden;
+            color: white;
+            font-size: 1.5rem;
+            line-height: 2;
         }
     </style>
 </head>
 <body>
 
-    <div class="navbar">
-        <div class="logo">FRIENDFLIX</div>
-        <div style="padding-right: 60px;">Profile</div>
-    </div>
-
-    <div class="hero">
-        <div class="hero-content">
-            <h1 class="hero-title">Happy Birthday</h1>
-            <p class="hero-desc">
-                Season 23 starts now. Witness the drama, the laughter, and the journey of the craziest person I know.
-                <br><br>
-                <strong>#1 in Friendship Today</strong>
-            </p>
-            <button class="btn btn-play">▶ Play Video</button>
-            <button class="btn btn-info">ℹ More Info</button>
+    <div id="profile-screen">
+        <h1 class="profile-title">Who's watching?</h1>
+        <div class="profiles-container">
+            <div class="profile-card" onclick="enterSite()">
+                <div class="avatar"></div>
+                <span class="profile-name">My Queen 👑</span>
+            </div>
+            <div class="profile-card" onclick="enterSite()">
+                <div class="avatar" style="filter: grayscale(100%);"></div>
+                <span class="profile-name">Love of my Life ❤️</span>
+            </div>
         </div>
     </div>
 
-    <div class="row">
-        <h2 class="row-title">Trending Now</h2>
-        <div class="row-posters">
-            <img src="pic1.jpg" class="poster" alt="Memory">
-            <img src="pic2.jpg" class="poster" alt="Memory">
-            <img src="pic3.jpg" class="poster" alt="Memory">
-            <img src="pic4.jpg" class="poster" alt="Memory">
-            <img src="pic5.jpg" class="poster" alt="Memory">
+    <div id="main-site">
+        <div class="nav">
+            <div class="logo">LOVEFLIX</div>
+        </div>
+
+        <header class="banner">
+            <div class="banner-contents">
+                <h1 class="banner-title">Our Story</h1>
+                <div>
+                    <span class="match-text">100% Match</span>
+                    <span style="border: 1px solid white; padding: 0 5px;">U</span>
+                    <span> 2 Seasons</span>
+                </div>
+                <h1 class="banner-desc">
+                    A story about a boy who met a girl and realized that life is just better when she is around. 
+                    Warning: Contains extreme cuteness.
+                </h1>
+                <div class="banner-buttons">
+                    <button class="btn btn-play" onclick="playLoveLetter()">&#9658; Play</button>
+                    <button class="btn btn-list">+ My List</button>
+                </div>
+            </div>
+        </header>
+
+        <div class="row">
+            <h2>Season 1: How it Started</h2>
+            <div class="row-posters">
+                <img src="her.jpg" class="poster">
+                <img src="her.jpg" class="poster">
+                <img src="her.jpg" class="poster">
+            </div>
+        </div>
+
+        <div class="row">
+            <h2>Season 2: The Best Moments</h2>
+            <div class="row-posters">
+                <img src="her.jpg" class="poster">
+                <img src="her.jpg" class="poster">
+                <img src="her.jpg" class="poster">
+            </div>
         </div>
     </div>
 
-    <div class="row">
-        <h2 class="row-title">Top Comedy Hits</h2>
-        <div class="row-posters">
-            <img src="funny1.jpg" class="poster" alt="Memory">
-            <img src="funny2.jpg" class="poster" alt="Memory">
-            <img src="funny3.jpg" class="poster" alt="Memory">
-            <img src="funny4.jpg" class="poster" alt="Memory">
-            <img src="funny5.jpg" class="poster" alt="Memory">
+    <div id="letter-modal" onclick="closeLetter()">
+        <div class="scrolling-text">
+            <p>Hey [Her Name],</p>
+            <p>I created this little world for you.</p>
+            <p>Because you are the main character in my life.</p>
+            <p>Every day with you feels like a movie scene.</p>
+            <p>I love you more than words can say.</p>
+            <p>Happy Birthday / Happy Anniversary!</p>
+            <p>Love, [Your Name]</p>
         </div>
     </div>
 
+    <script>
+        function enterSite() {
+            // Fade out profile screen
+            document.getElementById('profile-screen').style.opacity = '0';
+            
+            // Wait 1 second then hide profile and show main site
+            setTimeout(() => {
+                document.getElementById('profile-screen').style.display = 'none';
+                document.getElementById('main-site').style.display = 'block';
+                
+                // Trigger reflow
+                void document.getElementById('main-site').offsetWidth;
+                
+                document.getElementById('main-site').style.opacity = '1';
+                
+                // Optional: Play audio here if you have an mp3
+                // var audio = new Audio('tudum.mp3');
+                // audio.play();
+            }, 1000);
+        }
+
+        function playLoveLetter() {
+            document.getElementById('letter-modal').style.display = 'flex';
+        }
+
+        function closeLetter() {
+            document.getElementById('letter-modal').style.display = 'none';
+        }
+    </script>
 </body>
 </html>
