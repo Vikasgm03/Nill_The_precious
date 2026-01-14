@@ -3,330 +3,116 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BestieFlix - Happy Birthday!</title>
+    <title>Happy Birthday! ✨</title>
     <style>
-        :root {
-            --netflix-red: #e50914;
-            --bg-color: #141414;
-        }
+        /* 1. ANIMATED COLORFUL BACKGROUND */
         body {
-            background-color: var(--bg-color);
-            color: white;
-            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
             margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+            color: white;
             overflow-x: hidden;
         }
 
-        /* --- SCREEN 1: WHO IS WATCHING? --- */
-        #profile-screen {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            background: #141414;
-            z-index: 2000;
-            position: fixed;
-            width: 100%;
-            transition: opacity 1s ease-out;
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
-        .profile-title {
-            font-size: 3rem;
-            font-weight: 400;
-            margin-bottom: 30px;
+
+        /* 2. HEADER SECTION */
+        .header {
             text-align: center;
+            padding: 100px 20px;
+            text-shadow: 2px 4px 10px rgba(0,0,0,0.3);
         }
-        .profiles-container {
-            display: flex;
-            gap: 20px;
-            flex-wrap: wrap;
-            justify-content: center;
+
+        .header h1 {
+            font-size: 4rem;
+            margin-bottom: 10px;
+            animation: bounce 2s infinite;
         }
-        .profile-card {
-            text-align: center;
-            cursor: pointer;
-            transition: transform 0.3s;
-            margin: 10px;
-        }
-        .profile-card:hover {
-            transform: scale(1.1);
-        }
-        .avatar {
-            width: 120px;
-            height: 120px;
-            background-color: #333;
-            /* YOU CAN PUT DIFFERENT PHOTOS FOR EACH PROFILE HERE */
-            background-image: url('funny.jpg'); 
-            background-size: cover;
-            border-radius: 4px;
-            border: 3px solid transparent;
+
+        /* 3. THE GALLERY GRID */
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            padding: 40px;
+            max-width: 1200px;
             margin: 0 auto;
         }
-        .profile-card:hover .avatar {
-            border: 3px solid white;
-        }
-        .profile-name {
-            display: block;
-            margin-top: 15px;
-            color: grey;
-            font-size: 1rem;
+
+        /* 4. THE VIBRANT CARDS */
+        .card {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px border rgba(255, 255, 255, 0.3);
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            cursor: pointer;
         }
 
-        /* --- SCREEN 2: MAIN SITE --- */
-        #main-site {
-            display: none;
-            opacity: 0;
-            transition: opacity 2s ease-in;
+        .card:hover {
+            transform: scale(1.05) rotate(2deg);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            background: rgba(255, 255, 255, 0.3);
         }
 
-        /* Nav */
-        .nav {
-            position: fixed;
-            top: 0;
+        .card img {
             width: 100%;
-            padding: 20px 40px;
-            display: flex;
-            justify-content: space-between;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.7) 10%, rgba(0,0,0,0));
-            z-index: 100;
-        }
-        .logo {
-            color: var(--netflix-red);
-            font-size: 30px;
-            font-weight: bold;
-            letter-spacing: 2px;
-            text-shadow: 2px 2px 5px #000;
+            height: 300px;
+            object-fit: cover;
         }
 
-        /* Hero */
-        .banner {
-            height: 85vh;
-            background-image: url('main_pic.jpg'); /* PUT A GOOD PIC OF HER OR BOTH OF YOU HERE */
-            background-size: cover;
-            background-position: center;
-            color: white;
-            box-shadow: inset 0 -250px 250px #141414;
-            display: flex;
-            align-items: center;
-        }
-        .banner-contents {
-            margin-left: 40px;
-            padding-top: 100px;
-            max-width: 600px;
-        }
-        .banner-title {
-            font-size: 4rem;
-            font-weight: 800;
-            padding-bottom: 0.3rem;
-            text-shadow: 2px 2px 5px #000;
-        }
-        .match-text {
-            color: #46d369;
-            font-weight: bold;
-            font-size: 1.1rem;
-            margin-right: 15px;
-        }
-        .banner-desc {
-            font-size: 1.2rem;
-            line-height: 1.3;
-            padding-top: 1rem;
-            max-width: 500px;
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
-            background-color: rgba(0,0,0,0.3); /* Slight dark background for readability */
-            padding: 10px;
-            border-radius: 5px;
-        }
-        .btn {
-            cursor: pointer;
-            color: white;
-            border: none;
-            font-weight: 700;
-            border-radius: 4px;
-            padding: 10px 25px;
-            margin-right: 1rem;
-            font-size: 1.2rem;
-            margin-top: 20px;
-        }
-        .btn-play {
-            background-color: white;
-            color: black;
-        }
-        .btn-play:hover {
-            background-color: rgba(255, 255, 255, 0.75);
-        }
-        .btn-info {
-            background-color: rgba(109, 109, 110, 0.7);
-        }
-
-        /* Rows */
-        .row {
-            margin-left: 20px;
-            margin-bottom: 40px;
-        }
-        .row h2 {
-            margin-left: 20px;
-            font-size: 1.5rem;
-        }
-        .row-posters {
-            display: flex;
-            overflow-y: hidden;
-            overflow-x: scroll;
+        .card-text {
             padding: 20px;
-        }
-        .row-posters::-webkit-scrollbar {
-            display: none; 
-        }
-        .poster {
-            max-height: 180px;
-            margin-right: 15px;
-            transition: transform 450ms;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        .poster:hover {
-            transform: scale(1.1);
-        }
-
-        /* Modal (The Note) */
-        #note-modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(0,0,0,0.9);
-            z-index: 3000;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-        .note-content {
-            background-color: #141414;
-            border: 1px solid #333;
-            padding: 40px;
-            max-width: 600px;
             text-align: center;
-            border-radius: 10px;
-            position: relative;
+            font-weight: bold;
+            font-size: 1.2rem;
         }
-        .close-btn {
-            position: absolute;
-            top: 10px;
-            right: 20px;
-            font-size: 30px;
-            cursor: pointer;
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
         }
-        
     </style>
 </head>
 <body>
 
-    <div id="profile-screen">
-        <h1 class="profile-title">Who's watching?</h1>
-        <div class="profiles-container">
-            <div class="profile-card" onclick="enterSite()">
-                <div class="avatar"></div>
-                <span class="profile-name">The Drama Queen 👑</span>
-            </div>
-            <div class="profile-card" onclick="enterSite()">
-                <div class="avatar" style="filter: sepia(0.5);"></div>
-                <span class="profile-name">The CEO of Yapping 🗣️</span>
-            </div>
-            <div class="profile-card" onclick="enterSite()">
-                <div class="avatar" style="filter: grayscale(100%);"></div>
-                <span class="profile-name">Sleepy Head 😴</span>
-            </div>
-        </div>
+    <div class="header">
+        <h1>Happy Birthday, [Name]! 🌈</h1>
+        <p>A colorful journey through our best moments</p>
     </div>
 
-    <div id="main-site">
-        <div class="nav">
-            <div class="logo">BESTIEFLIX</div>
+    <div class="gallery">
+        <div class="card">
+            <img src="your-image1.jpg" alt="Memory 1">
+            <div class="card-text">That crazy night in the city! 🌃</div>
         </div>
 
-        <header class="banner">
-            <div class="banner-contents">
-                <h1 class="banner-title">Happy Birthday!</h1>
-                <div>
-                    <span class="match-text">98% Chaos Match</span>
-                    <span style="border: 1px solid white; padding: 0 5px; margin-left:10px;">R</span>
-                    <span style="margin-left:10px;">Limited Series</span>
-                </div>
-                <p class="banner-desc">
-                    The true story of the craziest, loudest, and most supportive friend a person could ask for. 
-                    Includes deleted scenes and embarrassing moments.
-                </p>
-                <div class="banner-buttons">
-                    <button class="btn btn-play" onclick="openNote()">&#9658; Play Message</button>
-                    <button class="btn btn-info">ℹ More Info</button>
-                </div>
-            </div>
-        </header>
-
-        <div class="row">
-            <h2>Top Picks for You (Lookin' Good)</h2>
-            <div class="row-posters">
-                <img src="nice1.jpg" class="poster">
-                <img src="nice2.jpg" class="poster">
-                <img src="nice3.jpg" class="poster">
-                <img src="nice4.jpg" class="poster">
-            </div>
+        <div class="card">
+            <img src="your-image2.jpg" alt="Memory 2">
+            <div class="card-text">Best. Trip. Ever. ✈️</div>
         </div>
 
-        <div class="row">
-            <h2>Horror & Comedy (Delete Later)</h2>
-            <div class="row-posters">
-                <img src="funny1.jpg" class="poster">
-                <img src="funny2.jpg" class="poster">
-                <img src="funny3.jpg" class="poster">
-                <img src="funny4.jpg" class="poster">
-            </div>
+        <div class="card">
+            <img src="your-image3.jpg" alt="Memory 3">
+            <div class="card-text">Our favorite coffee spot ☕</div>
         </div>
         
-         <div class="row">
-            <h2>Nostalgia Trip</h2>
-            <div class="row-posters">
-                <img src="old1.jpg" class="poster">
-                <img src="old2.jpg" class="poster">
-                <img src="old3.jpg" class="poster">
-            </div>
         </div>
-    </div>
-
-    <div id="note-modal">
-        <div class="note-content">
-            <span class="close-btn" onclick="closeNote()">&times;</span>
-            <h2>To My Partner in Crime</h2>
-            <p style="font-size: 1.2rem; line-height: 1.6; color: #ccc;">
-                Happy Birthday! <br><br>
-                Honestly, I don't know how I haven't blocked you yet, but I guess life is boring without your drama.
-                Thanks for being the only person who understands my weird jokes.
-                <br><br>
-                Here's to another year of bad decisions and expensive food.
-                <br><br>
-                <strong>You're the best!</strong>
-            </p>
-        </div>
-    </div>
 
     <script>
-        function enterSite() {
-            document.getElementById('profile-screen').style.opacity = '0';
-            setTimeout(() => {
-                document.getElementById('profile-screen').style.display = 'none';
-                document.getElementById('main-site').style.display = 'block';
-                // Trigger reflow
-                void document.getElementById('main-site').offsetWidth;
-                document.getElementById('main-site').style.opacity = '1';
-            }, 1000);
-        }
-
-        function openNote() {
-            document.getElementById('note-modal').style.display = 'flex';
-        }
-
-        function closeNote() {
-            document.getElementById('note-modal').style.display = 'none';
-        }
+        // Optional: Fun click effect
+        document.addEventListener('click', () => {
+            console.log("Adding some sparkle!");
+            // You can add a confetti library here later
+        });
     </script>
 </body>
 </html>
