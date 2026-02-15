@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Identity Verification | The Journey</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Protocol 724 | The Journey</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
@@ -11,406 +11,378 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
 
-    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700&family=Cinzel:wght@400;700&family=Inter:wght@300;400;600&family=Playfair+Display:ital,wght@1,400;1,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700&family=Cinzel:wght@400;700&family=Playfair+Display:ital,wght@1,400;1,700&display=swap" rel="stylesheet">
 
     <style>
-        /* --- GLOBAL STYLES --- */
-        :root {
-            --gold: #D4AF37;
-            --deep-black: #050505;
-        }
-        body {
-            background-color: var(--deep-black);
-            color: #ffffff;
-            font-family: 'Inter', sans-serif;
-            overflow-x: hidden;
-            cursor: none;
-        }
-
-        /* --- HUD SCANNER STYLES --- */
-        .hud-container {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            display: flex; align-items: center; justify-content: center;
-            background: radial-gradient(circle at center, #001a2c 0%, #000 70%);
-            z-index: 9999; font-family: 'Share Tech Mono', monospace; color: #0ff;
-        }
-        .scan-frame {
-            width: 300px; height: 300px; border: 2px solid rgba(0, 255, 255, 0.3);
-            position: relative; box-shadow: 0 0 20px rgba(0, 255, 255, 0.1);
-        }
-        .bracket {
-            position: absolute; width: 40px; height: 40px; border: 4px solid #0ff; transition: all 0.5s ease;
-        }
+        /* --- CORE --- */
+        :root { --gold: #D4AF37; --blue: #0ff; --black: #050505; }
+        body { background-color: var(--black); color: white; font-family: 'Inter', sans-serif; overflow-x: hidden; touch-action: pan-y; -webkit-tap-highlight-color: transparent; }
+        
+        /* --- HUD SCANNER (Restored) --- */
+        .hud-container { position: fixed; inset: 0; z-index: 9999; background: radial-gradient(circle, #001a2c 0%, #000 90%); display: flex; align-items: center; justify-content: center; font-family: 'Share Tech Mono'; color: var(--blue); }
+        .scan-frame { width: 300px; height: 300px; border: 2px solid rgba(0,255,255,0.2); position: relative; }
+        .bracket { position: absolute; width: 30px; height: 30px; border: 4px solid var(--blue); transition: 0.5s; }
         .tl { top: -2px; left: -2px; border-bottom: 0; border-right: 0; }
         .tr { top: -2px; right: -2px; border-bottom: 0; border-left: 0; }
         .bl { bottom: -2px; left: -2px; border-top: 0; border-right: 0; }
         .br { bottom: -2px; right: -2px; border-top: 0; border-left: 0; }
-        .scan-line {
-            position: absolute; top: 0; left: 0; width: 100%; height: 4px;
-            background: #0ff; box-shadow: 0 0 15px #0ff, 0 0 30px #0ff; opacity: 0;
-        }
-        .grid-bg {
-            position: absolute; inset: 0;
-            background-image: linear-gradient(rgba(0, 255, 255, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 255, 255, 0.1) 1px, transparent 1px);
-            background-size: 40px 40px; opacity: 0.2; z-index: 0;
-        }
-        .status-text { text-shadow: 0 0 5px #0ff; letter-spacing: 2px; }
-        .success-mode .scan-frame { border-color: #0f0; box-shadow: 0 0 30px #0f0; }
-        .success-mode .bracket { border-color: #0f0; }
-        .success-mode { color: #0f0 !important; }
-
-        /* --- SITE STYLES --- */
-        #site-wrapper { opacity: 0; transition: opacity 2s ease; }
-        .cursor-dot, .cursor-outline {
-            position: fixed; top: 0; left: 0; transform: translate(-50%, -50%);
-            border-radius: 50%; z-index: 9999; pointer-events: none;
-        }
-        .cursor-dot { width: 8px; height: 8px; background-color: var(--gold); }
-        .cursor-outline { width: 40px; height: 40px; border: 1px solid rgba(212, 175, 55, 0.5); transition: width 0.2s, height 0.2s; }
+        .scan-line { width: 100%; height: 2px; background: var(--blue); box-shadow: 0 0 10px var(--blue); position: absolute; top: 0; opacity: 0; }
         
+        /* --- UI ELEMENTS --- */
+        .key-counter { position: fixed; top: 20px; right: 20px; z-index: 50; background: rgba(0,0,0,0.5); backdrop-filter: blur(10px); padding: 10px 20px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.1); display: none; }
+        .hidden-key { position: absolute; font-size: 2rem; color: var(--gold); cursor: pointer; animation: float 3s infinite ease-in-out; z-index: 40; filter: drop-shadow(0 0 10px var(--gold)); opacity: 0.7; }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+
+        /* --- TIME TRAVEL SLIDER --- */
+        .slider-container { position: relative; width: 100%; max-width: 600px; height: 400px; margin: 0 auto; overflow: hidden; border-radius: 20px; border: 1px solid rgba(255,255,255,0.2); }
+        .img-before, .img-after { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
+        .img-after { clip-path: polygon(0 0, 50% 0, 50% 100%, 0 100%); }
+        .slider-handle { position: absolute; top: 0; bottom: 0; left: 50%; width: 4px; background: white; cursor: ew-resize; z-index: 10; }
+        .handle-knob { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 40px; height: 40px; background: white; border-radius: 50%; display: flex; items-center; justify-content: center; color: black; box-shadow: 0 0 20px rgba(0,0,0,0.5); }
+
+        /* --- GLOBE --- */
+        #globe-canvas { width: 100%; height: 500px; }
+
+        /* --- THE VAULT & SCRATCH CARD --- */
+        #vault-overlay { position: fixed; inset: 0; background: #000; z-index: 9000; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; }
+        .vault-door { width: 100px; height: 100px; border: 2px solid var(--gold); border-radius: 50%; display: flex; items-center; justify-content: center; font-size: 2rem; color: var(--gold); }
+        
+        #scratch-section { position: fixed; inset: 0; background: #000; z-index: 9001; display: none; flex-direction: column; align-items: center; justify-content: center; }
+        canvas#scratch-card { border-radius: 10px; cursor: crosshair; touch-action: none; }
+        .gift-underlay { position: absolute; text-align: center; pointer-events: none; width: 300px; }
+        
+        /* --- UTILS --- */
         .font-cinematic { font-family: 'Cinzel', serif; }
-        .font-emotional { font-family: 'Playfair Display', serif; }
-        .text-gradient {
-            background: linear-gradient(to right, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
-            -webkit-background-clip: text; background-clip: text; color: transparent;
-        }
-
-        /* Star Map Canvas */
-        #star-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
-        
-        /* Other Components */
-        .netflix-scroll { display: flex; overflow-x: auto; gap: 1rem; padding: 2rem 0; scrollbar-width: none; }
-        .netflix-scroll::-webkit-scrollbar { display: none; }
-        .video-card {
-            min-width: 280px; height: 400px; border-radius: 8px; transition: transform 0.3s ease; position: relative; overflow: hidden; cursor: pointer;
-        }
-        .video-card:hover { transform: scale(1.1); z-index: 20; box-shadow: 0 10px 40px rgba(0,0,0,0.8); }
-        
-        .cake-stage { position: relative; width: 300px; height: 300px; margin: 0 auto; }
-        .cake-body { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 200px; height: 140px; background: #FFF0F5; border-radius: 10px 10px 0 0; }
-        .icing { position: absolute; top: 0; left: 0; width: 100%; height: 40px; background: #FFB7B2; border-radius: 10px 10px 20px 20px; }
-        .candle { position: absolute; bottom: 140px; left: 50%; transform: translateX(-50%); width: 14px; height: 40px; background: linear-gradient(to right, #fff, #eee); z-index: 10; }
-        .flame {
-            position: absolute; top: -25px; left: 50%; transform: translateX(-50%); width: 14px; height: 26px; background: #FFD700;
-            border-radius: 50% 50% 20% 20%; animation: flicker 0.8s infinite alternate; box-shadow: 0 0 10px #FFD700, 0 0 30px #FF4500; cursor: pointer; transform-origin: bottom center;
-        }
-        @keyframes flicker { 0% { transform: translateX(-50%) scale(1); opacity: 1; } 100% { transform: translateX(-50%) scale(1.1) rotate(2deg); opacity: 0.8; } }
-        .flame.out { display: none; }
-        .gift-wrapper { perspective: 1000px; opacity: 0; pointer-events: none; transition: opacity 1s; }
-        .gift-wrapper.active { opacity: 1; pointer-events: all; }
+        .text-gradient { background: linear-gradient(to right, #bf953f, #fcf6ba, #aa771c); -webkit-background-clip: text; color: transparent; }
     </style>
 </head>
-<body class="antialiased">
+<body>
 
     <audio id="sfx-scan" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3"></audio> 
     <audio id="sfx-success" src="https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3"></audio>
+    <audio id="bg-music" loop><source src="https://cdn.pixabay.com/audio/2022/05/27/audio_1808fbf07a.mp3" type="audio/mp3"></audio>
+
+    <div class="key-counter" id="key-counter">
+        <i class="fas fa-key text-yellow-400 mr-2"></i> <span id="keys-found">0</span>/3
+    </div>
 
     <div id="hud-layer" class="hud-container">
-        <div class="grid-bg"></div>
-        <div class="flex flex-col items-center gap-6 relative z-10">
+        <div class="flex flex-col items-center gap-6 text-center px-4">
             <div class="scan-frame" id="scanner">
-                <div class="bracket tl"></div> <div class="bracket tr"></div>
-                <div class="bracket bl"></div> <div class="bracket br"></div>
+                <div class="bracket tl"></div><div class="bracket tr"></div><div class="bracket bl"></div><div class="bracket br"></div>
                 <div class="scan-line"></div>
-                <div class="absolute inset-0 flex items-center justify-center opacity-30"><i class="fas fa-user-circle text-9xl" id="face-icon"></i></div>
+                <div class="absolute inset-0 flex items-center justify-center opacity-30"><i class="fas fa-fingerprint text-9xl"></i></div>
             </div>
-            <div class="text-center space-y-2">
-                <h2 id="status" class="text-2xl font-bold status-text">SYSTEM LOCKED</h2>
-                <p id="sub-status" class="text-xs opacity-70">BIOMETRIC AUTHENTICATION REQUIRED</p>
+            <div>
+                <h2 id="status" class="text-xl md:text-2xl font-bold tracking-widest text-[#0ff]">SYSTEM LOCKED</h2>
+                <p id="sub-status" class="text-xs md:text-sm opacity-70 mt-2">BIOMETRIC REQUIRED</p>
             </div>
-            <button id="start-btn" class="mt-8 px-8 py-3 border border-[#0ff] hover:bg-[#0ff] hover:text-black transition-all tracking-[0.3em] uppercase text-sm animate-pulse">Initiate Scan</button>
+            <button id="start-btn" class="mt-8 px-8 py-3 border border-[#0ff] text-[#0ff] tracking-[0.3em] uppercase text-sm animate-pulse hover:bg-[#0ff] hover:text-black transition-all">
+                Initiate Scan
+            </button>
         </div>
     </div>
 
-    <div id="site-wrapper">
-        <div class="cursor-dot"></div><div class="cursor-outline"></div>
-        <audio id="bg-music" loop><source src="https://cdn.pixabay.com/audio/2022/05/27/audio_1808fbf07a.mp3" type="audio/mp3"></audio>
+    <div id="main-content" class="opacity-0 transition-opacity duration-1000">
         
-        <section id="intro-screen" class="fixed inset-0 z-[100] bg-black flex flex-col items-center justify-center cursor-pointer">
-            <div class="text-center space-y-6">
-                <p class="text-xs tracking-[0.6em] text-gray-500 uppercase fade-elem">Access Verified</p>
-                <h1 class="text-5xl md:text-7xl font-cinematic text-white tracking-widest fade-elem scale-elem">LUMINA</h1>
-                <p class="text-sm text-gray-400 font-light fade-elem animate-pulse mt-8">Tap to Enter The Timeline</p>
+        <section class="relative h-screen bg-black overflow-hidden flex flex-col items-center justify-center">
+            <canvas id="star-canvas" class="absolute inset-0"></canvas>
+            <div class="relative z-10 text-center px-4 mt-20">
+                <p class="text-xs tracking-[0.5em] text-gray-500 mb-4">TEMPORAL COORDINATES</p>
+                <h1 class="text-6xl md:text-8xl font-cinematic text-white mb-2">OCT 24</h1> <p class="text-yellow-500 italic font-serif">"The stars aligned for you."</p>
             </div>
+            
+            <div class="hidden-key" style="top: 80%; left: 10%;" onclick="collectKey(this)">🔑</div>
         </section>
 
-        <section class="relative h-screen bg-black overflow-hidden flex items-center justify-center">
-            <canvas id="star-canvas"></canvas>
+        <section class="py-20 bg-[#0a0a0a] px-4">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-cinematic text-white">Time Travel</h2>
+                <p class="text-gray-500 text-sm">Drag to see the journey</p>
+            </div>
             
-            <div class="absolute z-10 text-center pointer-events-none px-4">
-                <p class="text-xs md:text-sm text-gray-500 tracking-[0.5em] mb-4 opacity-0 star-text-reveal">TEMPORAL COORDINATES</p>
-                <h2 class="text-5xl md:text-8xl text-white font-cinematic opacity-0 star-text-reveal" id="birth-date-display">OCT 24</h2>
-                <div class="h-0.5 w-0 bg-yellow-500 mx-auto my-4 opacity-0 star-text-reveal" id="star-line"></div>
-                <p class="text-lg text-yellow-500 font-emotional italic opacity-0 star-text-reveal">"The night the stars aligned for you."</p>
+            <div class="slider-container" id="slider-box">
+                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=600" class="img-before" alt="Now">
+                <img src="https://images.unsplash.com/photo-1519689680058-324335c77eba?w=600" class="img-after" id="img-after" alt="Baby">
                 
-                <div class="absolute bottom-[-150px] left-1/2 -translate-x-1/2 animate-bounce">
-                    <i class="fas fa-chevron-down text-white/30 text-2xl"></i>
+                <div class="slider-handle" id="slider-handle">
+                    <div class="handle-knob"><i class="fas fa-arrows-alt-h"></i></div>
                 </div>
+            </div>
+        </section>
+
+        <section class="py-20 bg-black relative overflow-hidden">
+            <div class="text-center px-4 mb-8">
+                <h2 class="text-3xl font-cinematic text-white">Global Wishes</h2>
+                <p class="text-gray-500">Love from every corner</p>
             </div>
             
-            <div class="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-[#050505] to-transparent z-10"></div>
+            <div class="relative h-[400px] flex items-center justify-center">
+                <canvas id="globe-canvas"></canvas>
+                <div class="absolute w-16 h-16 rounded-full bg-cover border-2 border-white/50 animate-bounce" style="background-image:url('https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100'); top: 20%; left: 20%;"></div>
+                <div class="absolute w-20 h-20 rounded-full bg-cover border-2 border-white/50 animate-bounce" style="background-image:url('https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100'); top: 60%; right: 20%; animation-delay: 1s;"></div>
+            </div>
+
+            <div class="hidden-key" style="bottom: 10%; right: 10%;" onclick="collectKey(this)">🔑</div>
         </section>
 
-        <section class="relative min-h-screen flex items-center justify-center overflow-hidden py-20">
-            <div class="relative z-10 text-center px-4">
-                <h2 class="text-xl md:text-3xl font-light text-white/80 mb-6 hero-text translate-y-10 opacity-0">Today, the universe celebrates</h2>
-                <h1 class="text-6xl md:text-9xl font-cinematic font-bold text-gradient hero-text translate-y-10 opacity-0">YOU</h1>
-                <p class="mt-8 text-lg md:text-xl font-emotional text-gray-300 max-w-2xl mx-auto hero-text translate-y-10 opacity-0 italic">
-                    "Another year bolder, another year wiser, another year of being unforgettable."
-                </p>
+        <section class="py-24 bg-gradient-to-b from-[#050505] to-[#111]">
+            <div class="px-6 mb-12">
+                <h2 class="text-3xl font-cinematic text-white">Memories</h2>
+                <div class="h-1 w-20 bg-yellow-600 mt-2"></div>
+            </div>
+            
+            <div class="space-y-12 px-4">
+                <div class="relative h-64 md:h-96 rounded-2xl overflow-hidden parallax-wrap">
+                    <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=800" class="w-full h-[120%] object-cover parallax-img">
+                </div>
+                <div class="relative h-64 md:h-96 rounded-2xl overflow-hidden parallax-wrap">
+                    <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=800" class="w-full h-[120%] object-cover parallax-img">
+                    <div class="hidden-key" style="top: 50%; left: 50%;" onclick="collectKey(this)">🔑</div>
+                </div>
             </div>
         </section>
+        
+        <div class="h-40 bg-black flex items-center justify-center text-gray-700 text-sm">
+            Collect all 3 keys to open the vault...
+        </div>
+    </div>
 
-        <section class="min-h-screen bg-[#050505] flex items-center justify-center py-20 relative">
-            <div class="max-w-4xl mx-auto px-6 text-center space-y-32">
-                <div class="scroll-reveal opacity-0 translate-y-10">
-                    <p class="text-3xl md:text-5xl font-emotional leading-tight text-gray-200">Your laughter is the soundtrack<br>to our happiest memories.</p>
-                </div>
-                <div class="scroll-reveal opacity-0 translate-y-10">
-                    <p class="text-2xl md:text-4xl font-light font-cinematic text-gradient">"To the world you are one person,<br>but to me, you are the world."</p>
-                </div>
-            </div>
-        </section>
+    <div id="vault-overlay">
+        <div class="text-center">
+            <div class="vault-door mb-6"><i class="fas fa-lock"></i></div>
+            <h2 class="text-2xl text-white font-cinematic">VAULT UNLOCKED</h2>
+            <p class="text-gray-400 mt-2 animate-pulse">Entering Secure Chamber...</p>
+        </div>
+    </div>
 
-        <section class="py-24 bg-gradient-to-b from-[#050505] to-[#0a0a0a]">
-            <div class="px-8 md:px-16 mb-16">
-                <h2 class="text-4xl font-cinematic text-white">The Collection</h2>
+    <div id="scratch-section">
+        <div class="relative">
+            <div class="gift-underlay">
+                <h3 class="text-gold text-xl font-bold mb-2">HAPPY BIRTHDAY!</h3>
+                <h2 class="text-3xl text-white font-bold mb-4">WE ARE GOING TO PARIS!</h2>
+                <p class="text-gray-400 text-sm">Pack your bags for next weekend.</p>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-12 gap-6 px-4 md:px-16 h-[80vh]">
-                <div class="md:col-span-4 h-full relative rounded-2xl overflow-hidden group">
-                    <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=800" class="parallax-img w-full h-[120%] object-cover absolute top-0">
-                </div>
-                <div class="md:col-span-4 md:col-start-5 h-[80%] mt-[10%] relative rounded-2xl overflow-hidden group">
-                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=800" class="parallax-img w-full h-[120%] object-cover absolute top-0">
-                </div>
-                <div class="md:col-span-4 md:col-start-9 h-full relative rounded-2xl overflow-hidden group">
-                    <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=800" class="parallax-img w-full h-[120%] object-cover absolute top-0">
-                </div>
-            </div>
-        </section>
-
-        <section class="py-20 bg-[#050505]">
-            <div class="px-8 md:px-16 mb-6">
-                <h3 class="text-2xl text-white font-semibold">Fan Favorites (Wishes)</h3>
-            </div>
-            <div class="netflix-scroll px-8 md:px-16">
-                <div class="video-card flex-shrink-0 bg-gray-900 group">
-                    <img src="https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?w=600" class="w-full h-full object-cover opacity-70 group-hover:opacity-100 transition-opacity">
-                    <div class="absolute bottom-0 left-0 w-full p-4 bg-gradient-to-t from-black to-transparent"><h4 class="text-white font-bold">Mom & Dad</h4></div>
-                </div>
-                <div class="video-card flex-shrink-0 bg-gray-900 group">
-                    <img src="https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=600" class="w-full h-full object-cover opacity-70 group-hover:opacity-100 transition-opacity">
-                    <div class="absolute bottom-0 left-0 w-full p-4 bg-gradient-to-t from-black to-transparent"><h4 class="text-white font-bold">Besties</h4></div>
-                </div>
-            </div>
-        </section>
-
-        <section class="min-h-screen flex flex-col items-center justify-center bg-[#050505] relative overflow-hidden">
-            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-yellow-600/10 rounded-full blur-[100px]"></div>
-            <div id="cake-section" class="z-20 text-center transition-all duration-1000">
-                <h2 class="text-4xl font-cinematic text-white mb-2">Make a Wish</h2>
-                <div class="cake-stage mt-12">
-                    <div class="cake-body"><div class="icing"></div></div>
-                    <div class="candle"><div class="flame" id="flame"></div></div>
-                </div>
-            </div>
-            <div id="surprise-section" class="absolute inset-0 flex flex-col items-center justify-center z-30 gift-wrapper">
-                <div class="text-center max-w-2xl px-6">
-                    <i class="fas fa-gift text-6xl text-gradient mb-8 animate-bounce"></i>
-                    <h2 class="text-5xl md:text-7xl font-cinematic text-white mb-6">Happy Birthday!</h2>
-                    <div class="bg-white/5 backdrop-blur-lg border border-white/10 p-8 rounded-2xl transform hover:scale-105 transition-transform duration-300">
-                        <h3 class="text-xl text-yellow-500 font-bold mb-2 uppercase tracking-wider">Your Gift</h3>
-                        <p class="text-2xl text-white font-emotional italic mb-6">"Pack your bags. We are going to Paris next weekend!"</p>
-                    </div>
-                </div>
-            </div>
-        </section>
+            <canvas id="scratch-card" width="300" height="150"></canvas>
+        </div>
+        <p class="text-gray-500 mt-8 text-sm animate-pulse">Scratch to reveal your gift</p>
     </div>
 
     <script>
         // --- CONFIGURATION ---
         const HER_NAME = "SARAH"; 
-        const BIRTH_DATE_DISPLAY = "OCT 24, 2004"; // Update this date
-        document.getElementById('birth-date-display').innerText = BIRTH_DATE_DISPLAY;
 
-        // --- HUD LOGIC ---
+        // --- 1. HUD LOGIC ---
         const startBtn = document.getElementById('start-btn');
         const hudLayer = document.getElementById('hud-layer');
-        const siteWrapper = document.getElementById('site-wrapper');
+        const mainContent = document.getElementById('main-content');
         const sfxScan = document.getElementById('sfx-scan');
         const sfxSuccess = document.getElementById('sfx-success');
-        
+        const bgMusic = document.getElementById('bg-music');
+        const keyCounter = document.getElementById('key-counter');
+
         startBtn.addEventListener('click', () => {
-            startBtn.style.display = 'none'; sfxScan.volume = 0.5; sfxScan.play();
-            const scanLine = document.querySelector('.scan-line');
-            gsap.to(scanLine, { opacity: 1, duration: 0.2 });
-            gsap.to(scanLine, { top: '100%', duration: 2, ease: "power2.inOut", repeat: 1, yoyo: true });
+            startBtn.style.display = 'none';
+            sfxScan.volume = 0.5; sfxScan.play();
             
+            // Animation
+            const tl = gsap.timeline();
+            tl.to('.scan-line', { opacity: 1, duration: 0.2 })
+              .to('.scan-line', { top: '100%', duration: 2, ease: "power2.inOut", repeat: 1, yoyo: true });
+
             setTimeout(() => {
                 sfxScan.pause(); sfxSuccess.play();
-                document.body.classList.add('success-mode');
-                document.getElementById('face-icon').classList.replace('fa-user-circle', 'fa-check-circle');
                 document.getElementById('status').innerText = "ACCESS GRANTED";
-                document.getElementById('sub-status').innerText = `WELCOME, ${HER_NAME}`;
-                gsap.to('.bracket', { padding: 20, duration: 0.5 });
+                document.getElementById('status').style.color = "#0f0";
+                document.querySelector('.scan-frame').style.borderColor = "#0f0";
+                
                 setTimeout(() => {
-                    gsap.to(hudLayer, { scale: 1.5, opacity: 0, duration: 1, onComplete: () => {
-                        hudLayer.style.display = 'none';
-                        gsap.to(siteWrapper, { opacity: 1, duration: 2 });
-                        initStarMap(); // Start Star Map
-                    }});
-                }, 2000);
-            }, 4000);
+                    gsap.to(hudLayer, { y: '-100%', duration: 1, ease: "power2.in" });
+                    mainContent.style.opacity = 1;
+                    keyCounter.style.display = "block";
+                    bgMusic.volume = 0.4; bgMusic.play();
+                    initStarMap();
+                    initGlobe();
+                }, 1500);
+            }, 3500);
         });
 
-        // --- 3D STAR MAP LOGIC ---
+        // --- 2. TIME TRAVEL SLIDER ---
+        const sliderBox = document.getElementById('slider-box');
+        const imgAfter = document.getElementById('img-after');
+        const handle = document.getElementById('slider-handle');
+
+        function moveSlider(e) {
+            const rect = sliderBox.getBoundingClientRect();
+            let x = (e.clientX || e.touches[0].clientX) - rect.left;
+            x = Math.max(0, Math.min(x, rect.width));
+            const percent = (x / rect.width) * 100;
+            
+            imgAfter.style.clipPath = `polygon(0 0, ${percent}% 0, ${percent}% 100%, 0 100%)`;
+            handle.style.left = `${percent}%`;
+        }
+
+        sliderBox.addEventListener('mousemove', moveSlider);
+        sliderBox.addEventListener('touchmove', moveSlider);
+
+        // --- 3. STAR MAP (Lightweight) ---
         function initStarMap() {
             const canvas = document.getElementById('star-canvas');
             const ctx = canvas.getContext('2d');
-            let width, height;
+            canvas.width = window.innerWidth; canvas.height = window.innerHeight;
             
-            const stars = [];
-            const numStars = 400;
-            let mouseX = 0, mouseY = 0;
-
-            function resize() {
-                width = canvas.width = window.innerWidth;
-                height = canvas.height = window.innerHeight;
-            }
-            window.addEventListener('resize', resize);
-            resize();
-
-            // Create Stars
-            for(let i=0; i<numStars; i++) {
-                stars.push({
-                    x: (Math.random() - 0.5) * 2000,
-                    y: (Math.random() - 0.5) * 2000,
-                    z: Math.random() * 2000
-                });
-            }
-
-            window.addEventListener('mousemove', (e) => {
-                mouseX = (e.clientX - width/2) * 0.0001;
-                mouseY = (e.clientY - height/2) * 0.0001;
-            });
+            const stars = Array(200).fill().map(() => ({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                size: Math.random() * 2,
+                speed: Math.random() * 0.5
+            }));
 
             function animate() {
-                ctx.fillStyle = '#000';
-                ctx.fillRect(0, 0, width, height);
-
-                const cx = width/2;
-                const cy = height/2;
-
-                stars.forEach(star => {
-                    // Rotate
-                    let x = star.x;
-                    let z = star.z;
-                    // Rotation formula
-                    star.x = x * Math.cos(mouseX) - z * Math.sin(mouseX);
-                    star.z = z * Math.cos(mouseX) + x * Math.sin(mouseX);
-                    
-                    // Move star closer
-                    star.z -= 2; 
-                    if(star.z <= 0) star.z = 2000;
-
-                    // Projection
-                    const scale = 500 / (star.z);
-                    const sx = cx + star.x * scale;
-                    const sy = cy + star.y * scale;
-                    const r = (1 - star.z/2000) * 3;
-
-                    // Draw Star
-                    ctx.beginPath();
-                    ctx.arc(sx, sy, r, 0, Math.PI*2);
-                    ctx.fillStyle = `rgba(255, 255, 255, ${1 - star.z/2000})`;
-                    ctx.fill();
-
-                    // Constellation effect (Connect close stars)
-                    stars.forEach(other => {
-                        if(star === other) return;
-                        const dx = star.x - other.x;
-                        const dy = star.y - other.y;
-                        const dz = star.z - other.z;
-                        const dist = Math.sqrt(dx*dx + dy*dy + dz*dz);
-                        
-                        if(dist < 100) {
-                            const otherScale = 500 / other.z;
-                            const ox = cx + other.x * otherScale;
-                            const oy = cy + other.y * otherScale;
-                            
-                            ctx.beginPath();
-                            ctx.moveTo(sx, sy);
-                            ctx.lineTo(ox, oy);
-                            ctx.strokeStyle = `rgba(255, 255, 255, ${(1 - star.z/2000) * 0.1})`;
-                            ctx.stroke();
-                        }
-                    });
+                ctx.fillStyle = 'black'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = 'white';
+                stars.forEach(s => {
+                    s.y -= s.speed;
+                    if(s.y < 0) s.y = canvas.height;
+                    ctx.beginPath(); ctx.arc(s.x, s.y, s.size, 0, Math.PI*2); ctx.fill();
                 });
                 requestAnimationFrame(animate);
             }
             animate();
         }
 
-        // --- MAIN SITE INTERACTIONS ---
-        gsap.registerPlugin(ScrollTrigger);
-        
-        // Intro Click
-        const introScreen = document.getElementById('intro-screen');
-        const bgMusic = document.getElementById('bg-music');
-        
-        introScreen.addEventListener('click', () => {
-            bgMusic.volume = 0.5; bgMusic.play();
-            gsap.to('.fade-elem', { y: -20, opacity: 0, stagger: 0.1, duration: 0.8 });
-            gsap.to(introScreen, { opacity: 0, duration: 1.5, pointerEvents: 'none' });
+        // --- 4. HOLOGRAPHIC GLOBE ---
+        function initGlobe() {
+            const canvas = document.getElementById('globe-canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth; canvas.height = 400;
+            let time = 0;
+
+            function draw() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                const cx = canvas.width / 2; const cy = canvas.height / 2;
+                
+                ctx.fillStyle = '#0ff';
+                for(let i=0; i<150; i++) {
+                    const lat = Math.acos(1 - 2 * (i + 0.5) / 150);
+                    const lon = Math.PI * 10 * (i + 0.5) / 150 + time;
+                    
+                    const r = 120;
+                    const x = cx + r * Math.sin(lat) * Math.cos(lon);
+                    const z = r * Math.sin(lat) * Math.sin(lon); // Depth
+                    const y = cy + r * Math.cos(lat);
+                    
+                    if(z > 0) { // Only draw front
+                        const size = (z/r) * 2 + 1;
+                        ctx.beginPath(); ctx.arc(x, y, size, 0, Math.PI*2); ctx.fill();
+                    }
+                }
+                time += 0.01;
+                requestAnimationFrame(draw);
+            }
+            draw();
+        }
+
+        // --- 5. SCAVENGER HUNT & VAULT ---
+        let keysFound = 0;
+        function collectKey(el) {
+            if(el.style.display === 'none') return;
             
-            // Reveal Star Text
-            gsap.to('.star-text-reveal', {
-                y: 0, opacity: 1, stagger: 0.3, delay: 1, duration: 2, ease: "power2.out"
-            });
-            gsap.to("#star-line", { width: 100, duration: 1.5, delay: 1.5 });
+            // Animation
+            gsap.to(el, { scale: 2, opacity: 0, duration: 0.5 });
+            el.style.pointerEvents = 'none';
             
-            // Prep Hero Animation
-            gsap.to(".hero-text", {
-                scrollTrigger: { trigger: ".hero-text", start: "top 80%" },
-                y: 0, opacity: 1, duration: 1.5, stagger: 0.3
-            });
-        });
+            keysFound++;
+            document.getElementById('keys-found').innerText = keysFound;
+            
+            // Confetti for key find
+            confetti({ particleCount: 50, spread: 50, origin: { x: el.getBoundingClientRect().left/window.innerWidth, y: el.getBoundingClientRect().top/window.innerHeight } });
 
-        // Common Animations
-        const dot = document.querySelector('.cursor-dot');
-        const outline = document.querySelector('.cursor-outline');
-        window.addEventListener('mousemove', (e) => {
-            dot.style.left = `${e.clientX}px`; dot.style.top = `${e.clientY}px`;
-            outline.animate({ left: `${e.clientX}px`, top: `${e.clientY}px` }, { duration: 500, fill: "forwards" });
-        });
+            if(keysFound === 3) {
+                setTimeout(openVault, 1000);
+            }
+        }
 
-        gsap.utils.toArray('.scroll-reveal').forEach(elem => {
-            gsap.to(elem, {
-                scrollTrigger: { trigger: elem, start: "top 80%" },
-                y: 0, opacity: 1, duration: 1.2
-            });
-        });
-        
-        gsap.utils.toArray('.parallax-img').forEach(img => {
-            gsap.to(img, {
-                y: "20%", ease: "none",
-                scrollTrigger: { trigger: img.parentElement, start: "top bottom", end: "bottom top", scrub: true }
-            });
-        });
-
-        // Cake
-        const flame = document.getElementById('flame');
-        flame.addEventListener('click', () => {
-            flame.classList.add('out');
-            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#D4AF37', '#ffffff'] });
-            gsap.to("#cake-section", { opacity: 0, scale: 0.9, duration: 1 });
+        function openVault() {
+            const vault = document.getElementById('vault-overlay');
+            vault.style.pointerEvents = 'all';
+            gsap.to(vault, { opacity: 1, duration: 1 });
+            
             setTimeout(() => {
-                document.getElementById('cake-section').style.display = 'none';
-                document.getElementById('surprise-section').classList.add('active');
-                gsap.from("#surprise-section i", { scale: 0, rotation: 180, duration: 1, type: "elastic" });
-                gsap.from("#surprise-section h2", { y: 50, opacity: 0, duration: 1, delay: 0.5 });
-            }, 1000);
+                // Unlock Animation
+                const door = vault.querySelector('.vault-door');
+                door.innerHTML = '<i class="fas fa-lock-open"></i>';
+                gsap.to(door, { scale: 50, opacity: 0, duration: 1.5, ease: "power2.in" });
+                
+                setTimeout(() => {
+                    vault.style.display = 'none';
+                    initScratchCard();
+                }, 1000);
+            }, 2000);
+        }
+
+        // --- 6. SCRATCH CARD (ENDING) ---
+        function initScratchCard() {
+            const section = document.getElementById('scratch-section');
+            section.style.display = 'flex';
+            
+            const canvas = document.getElementById('scratch-card');
+            const ctx = canvas.getContext('2d');
+            
+            // Fill Silver
+            ctx.fillStyle = '#C0C0C0';
+            ctx.fillRect(0, 0, 300, 150);
+            
+            // Add Text Overlay
+            ctx.fillStyle = '#000';
+            ctx.font = "20px Arial";
+            ctx.fillText("SCRATCH HERE", 75, 80);
+
+            let isDrawing = false;
+
+            function scratch(e) {
+                if (!isDrawing) return;
+                e.preventDefault(); // Stop scrolling on mobile
+                const rect = canvas.getBoundingClientRect();
+                const x = (e.clientX || e.touches[0].clientX) - rect.left;
+                const y = (e.clientY || e.touches[0].clientY) - rect.top;
+                
+                ctx.globalCompositeOperation = 'destination-out';
+                ctx.beginPath();
+                ctx.arc(x, y, 20, 0, Math.PI * 2);
+                ctx.fill();
+                
+                checkScratchPercent();
+            }
+
+            canvas.addEventListener('mousedown', () => isDrawing = true);
+            canvas.addEventListener('touchstart', () => isDrawing = true);
+            window.addEventListener('mouseup', () => isDrawing = false);
+            window.addEventListener('touchend', () => isDrawing = false);
+            canvas.addEventListener('mousemove', scratch);
+            canvas.addEventListener('touchmove', scratch);
+        }
+
+        function checkScratchPercent() {
+            // Optional: If scratched > 50%, reveal all (simplified here)
+            // Just let them scratch manually for satisfaction
+        }
+
+        // --- 7. SCROLL ANIMATIONS ---
+        gsap.utils.toArray('.parallax-wrap').forEach(container => {
+            let img = container.querySelector('img');
+            gsap.to(img, {
+                y: "20%",
+                ease: "none",
+                scrollTrigger: {
+                    trigger: container,
+                    start: "top bottom",
+                    end: "bottom top",
+                    scrub: true
+                }
+            });
         });
+
     </script>
 </body>
 </html>
