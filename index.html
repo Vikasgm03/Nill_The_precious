@@ -2,868 +2,536 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Identity Verification | The Journey</title>
-   
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700&family=Cinzel:wght@400;700&family=Inter:wght@300;400;600&family=Playfair+Display:ital,wght@1,400;1,700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" defer></script>
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Cinzel:wght@400;700&family=Inter:wght@300;400;600&family=Playfair+Display:ital,wght@1,400;1,700&display=swap" rel="stylesheet">
+
     <style>
-        /* --- GLOBAL & LUXURY STYLES (Original) --- */
-        :root {
-            --gold: #D4AF37;
-            --rose-gold: #E0BFB8;
-            --deep-black: #050505;
-            --glass: rgba(255, 255, 255, 0.05);
-        }
-        body {
-            background-color: var(--deep-black);
-            color: #ffffff;
-            font-family: 'Inter', sans-serif;
-            overflow-x: hidden; /* Prevent horizontal scroll */
-            cursor: none; /* Custom cursor */
-        }
-        /* Mobile optimizations */
-        @media (max-width: 640px) {
-            .scan-frame { width: 220px !important; height: 220px !important; }
-            .text-9xl { font-size: 4.5rem !important; }
-            .text-7xl { font-size: 3.5rem !important; }
-            .video-card { min-width: 240px; height: 340px; }
-            .netflix-scroll { padding: 1.5rem 0; gap: 0.75rem; }
-            .cake-stage { width: 240px; height: 240px; }
-            .cake-body { width: 160px; height: 110px; }
-        }
-        /* --- HUD SCANNER STYLES (New Feature) --- */
-        .hud-container {
-            position: fixed; /* Fixed to cover everything */
-            top: 0; left: 0;
-            width: 100vw;
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: radial-gradient(circle at center, #001a2c 0%, #000 70%);
-            z-index: 9999; /* Highest priority */
-            font-family: 'Share Tech Mono', monospace;
-            color: #0ff;
-        }
-        .scan-frame {
-            width: 300px; height: 300px;
-            border: 2px solid rgba(0, 255, 255, 0.3);
-            position: relative;
-            box-shadow: 0 0 20px rgba(0, 255, 255, 0.1);
-        }
-        .bracket {
-            position: absolute; width: 40px; height: 40px;
-            border: 4px solid #0ff; transition: all 0.5s ease;
-        }
+        /* --- CORE STYLES --- */
+        :root { --gold: #D4AF37; --deep-black: #050505; }
+        body { background-color: var(--deep-black); color: #ffffff; font-family: 'Inter', sans-serif; overflow-x: hidden; -webkit-tap-highlight-color: transparent; }
+        
+        /* Mobile Optimization: Prevent layout shifts */
+        img { display: block; max-width: 100%; height: auto; }
+        
+        /* --- HUD SCANNER --- */
+        .hud-container { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle at center, #001a2c 0%, #000 70%); z-index: 9999; font-family: 'Share Tech Mono', monospace; color: #0ff; }
+        .scan-frame { width: 300px; height: 300px; border: 2px solid rgba(0, 255, 255, 0.3); position: relative; box-shadow: 0 0 20px rgba(0, 255, 255, 0.1); }
+        .bracket { position: absolute; width: 40px; height: 40px; border: 4px solid #0ff; transition: all 0.5s ease; }
         .tl { top: -2px; left: -2px; border-bottom: 0; border-right: 0; }
         .tr { top: -2px; right: -2px; border-bottom: 0; border-left: 0; }
         .bl { bottom: -2px; left: -2px; border-top: 0; border-right: 0; }
         .br { bottom: -2px; right: -2px; border-top: 0; border-left: 0; }
-        .scan-line {
-            position: absolute; top: 0; left: 0; width: 100%; height: 4px;
-            background: #0ff; box-shadow: 0 0 15px #0ff, 0 0 30px #0ff; opacity: 0;
+        .scan-line { position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: #0ff; box-shadow: 0 0 15px #0ff, 0 0 30px #0ff; opacity: 0; will-change: top, opacity; }
+        .grid-bg { position: absolute; inset: 0; background-image: linear-gradient(rgba(0, 255, 255, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 255, 255, 0.1) 1px, transparent 1px); background-size: 40px 40px; opacity: 0.2; pointer-events: none; }
+        
+        /* --- SITE WRAPPER --- */
+        #site-wrapper { opacity: 0; transition: opacity 2s ease; will-change: opacity; }
+        
+        /* --- CUSTOM CURSOR (Desktop Only) --- */
+        @media (hover: hover) and (pointer: fine) {
+            .cursor-dot, .cursor-outline { position: fixed; top: 0; left: 0; transform: translate(-50%, -50%); border-radius: 50%; z-index: 10000; pointer-events: none; }
+            .cursor-dot { width: 8px; height: 8px; background-color: var(--gold); }
+            .cursor-outline { width: 40px; height: 40px; border: 1px solid rgba(212, 175, 55, 0.5); transition: width 0.2s, height 0.2s; will-change: transform; }
+            body { cursor: none; }
         }
-        .grid-bg {
-            position: absolute; inset: 0;
-            background-image:
-                linear-gradient(rgba(0, 255, 255, 0.1) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 255, 255, 0.1) 1px, transparent 1px);
-            background-size: 40px 40px; opacity: 0.2; z-index: 0;
-        }
-        .status-text { text-shadow: 0 0 5px #0ff; letter-spacing: 2px; }
-        /* HUD Success State */
-        .success-mode .scan-frame { border-color: #0f0; box-shadow: 0 0 30px #0f0; }
-        .success-mode .bracket { border-color: #0f0; }
-        .success-mode { color: #0f0 !important; }
-        /* Wrapper to hide the main site initially */
-        #site-wrapper {
-            opacity: 0;
-            transition: opacity 2s ease;
-        }
-        /* --- ORIGINAL SITE STYLES --- */
-        .cursor-dot, .cursor-outline {
-            position: fixed; top: 0; left: 0;
-            transform: translate(-50%, -50%); border-radius: 50%;
-            z-index: 9999; pointer-events: none;
-        }
-        .cursor-dot { width: 8px; height: 8px; background-color: var(--gold); }
-        .cursor-outline {
-            width: 40px; height: 40px;
-            border: 1px solid rgba(212, 175, 55, 0.5);
-            transition: width 0.2s, height 0.2s;
-        }
+        
+        /* --- UTILS --- */
         .font-cinematic { font-family: 'Cinzel', serif; }
         .font-emotional { font-family: 'Playfair Display', serif; }
-       
-        .text-gradient {
-            background: linear-gradient(to right, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
-            -webkit-background-clip: text; background-clip: text; color: transparent;
-        }
-        .netflix-scroll {
-            display: flex; overflow-x: auto; gap: 1rem; padding: 2rem 0;
-            scrollbar-width: none; -ms-overflow-style: none;
-        }
-        .netflix-scroll::-webkit-scrollbar { display: none; }
-       
-        .video-card {
-            min-width: 280px; height: 400px; border-radius: 8px;
-            transition: transform 0.3s ease, z-index 0.3s;
-            position: relative; overflow: hidden; cursor: pointer;
-        }
-        .video-card:hover { transform: scale(1.1); z-index: 20; box-shadow: 0 10px 40px rgba(0,0,0,0.8); }
+        .text-gradient { background: linear-gradient(to right, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c); -webkit-background-clip: text; background-clip: text; color: transparent; }
+        
+        /* --- INTERACTIVE ELEMENTS --- */
+        .video-card { min-width: 280px; height: 400px; border-radius: 8px; transition: transform 0.3s ease; position: relative; overflow: hidden; cursor: pointer; }
+        .video-card:hover { transform: scale(1.05); z-index: 20; }
+        .netflix-scroll { display: flex; overflow-x: auto; gap: 1rem; padding: 2rem 0; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+        
+        /* --- CAKE --- */
         .cake-stage { position: relative; width: 300px; height: 300px; margin: 0 auto; }
-        .cake-body {
-            position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
-            width: 200px; height: 140px; background: #FFF0F5; border-radius: 10px 10px 0 0;
-            box-shadow: inset -10px 0 20px rgba(0,0,0,0.1);
-        }
-        .icing {
-            position: absolute; top: 0; left: 0; width: 100%; height: 40px;
-            background: #FFB7B2; border-radius: 10px 10px 20px 20px;
-        }
-        .candle {
-            position: absolute; bottom: 140px; left: 50%; transform: translateX(-50%);
-            width: 14px; height: 40px; background: linear-gradient(to right, #fff, #eee); z-index: 10;
-        }
-        .flame {
-            position: absolute; top: -25px; left: 50%; transform: translateX(-50%);
-            width: 14px; height: 26px; background: #FFD700;
-            border-radius: 50% 50% 20% 20%; animation: flicker 0.8s infinite alternate;
-            box-shadow: 0 0 10px #FFD700, 0 0 30px #FF4500; cursor: pointer; transform-origin: bottom center;
-        }
-        @keyframes flicker {
-            0% { transform: translateX(-50%) scale(1); opacity: 1; }
-            100% { transform: translateX(-50%) scale(1.1) rotate(2deg); opacity: 0.8; }
-        }
+        .cake-body { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 200px; height: 140px; background: #FFF0F5; border-radius: 10px 10px 0 0; }
+        .icing { position: absolute; top: 0; left: 0; width: 100%; height: 40px; background: #FFB7B2; border-radius: 10px 10px 20px 20px; }
+        .candle { position: absolute; bottom: 140px; left: 50%; transform: translateX(-50%); width: 14px; height: 40px; background: linear-gradient(to right, #fff, #eee); z-index: 10; }
+        .flame { position: absolute; top: -25px; left: 50%; transform: translateX(-50%); width: 14px; height: 26px; background: #FFD700; border-radius: 50% 50% 20% 20%; animation: flicker 0.8s infinite alternate; box-shadow: 0 0 10px #FFD700, 0 0 30px #FF4500; cursor: pointer; transform-origin: bottom center; }
+        @keyframes flicker { 0% { transform: translateX(-50%) scale(1); opacity: 1; } 100% { transform: translateX(-50%) scale(1.1) rotate(2deg); opacity: 0.8; } }
         .flame.out { display: none; }
-        .gift-wrapper { perspective: 1000px; opacity: 0; pointer-events: none; transition: opacity 1s; }
-        .gift-wrapper.active { opacity: 1; pointer-events: all; }
-       
-        .floating-heart {
-            position: fixed; color: rgba(224, 191, 184, 0.4);
-            animation: floatUp 6s linear forwards; pointer-events: none; z-index: 1;
+        
+        /* --- NEW FEATURES STYLES --- */
+        .time-slider { position: relative; overflow: hidden; border-radius: 24px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); }
+        .time-overlay { position: absolute; inset: 0; clip-path: inset(0 50% 0 0); will-change: clip-path; }
+        .globe { transform-style: preserve-3d; will-change: transform; }
+        .key { transition: transform 0.3s, opacity 0.3s; cursor: pointer; }
+        .key.collected { opacity: 0; pointer-events: none; transform: scale(2); }
+        .vault-door { will-change: transform; }
+        
+        /* Mobile specific adjustments */
+        @media (max-width: 640px) {
+            .scan-frame { width: 240px; height: 240px; }
+            .text-9xl { font-size: 5rem; }
+            .cake-stage { transform: scale(0.8); }
         }
-        @keyframes floatUp {
-            0% { transform: translateY(100vh) scale(0.5); opacity: 0; }
-            50% { opacity: 0.8; }
-            100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
-        }
-
-        /* NEW FEATURE STYLES - Efficient & Mobile-First */
-        .star-canvas { pointer-events: none; }
-        .time-slider { position: relative; overflow: hidden; border-radius: 24px; box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.5); }
-        .time-overlay { position: absolute; inset: 0; transition: clip-path 0.1s linear; }
-        .globe { transition: transform 0.05s linear; }
-        .memory-card { transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
-        .memory-card:hover { transform: translateY(-8px) scale(1.02); }
-        .key { transition: all 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55); }
-        .key.collected { opacity: 0.15; transform: scale(0.6) rotate(15deg) !important; pointer-events: none; }
-        .keys-bar { transition: all 0.6s ease; }
-        .vault-door { transition: transform 1.8s cubic-bezier(0.25, 0.1, 0.25, 1); }
-        .scratch-canvas { touch-action: none; }
-        .modal { animation: modalPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); }
-        @keyframes modalPop { from { opacity: 0; transform: scale(0.6) translateY(40px); } to { opacity: 1; transform: scale(1) translateY(0); } }
     </style>
 </head>
-<body class="antialiased">
-    <audio id="sfx-scan" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3"></audio>
-    <audio id="sfx-success" src="https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3"></audio>
+<body>
+
+    <audio id="sfx-scan" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" preload="auto"></audio> 
+    <audio id="sfx-success" src="https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3" preload="auto"></audio>
+    <audio id="bg-music" loop preload="auto"><source src="https://cdn.pixabay.com/audio/2022/05/27/audio_1808fbf07a.mp3" type="audio/mp3"></audio>
+
+    <div id="music-control" class="fixed bottom-6 right-6 z-[200] w-12 h-12 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center cursor-pointer border border-white/20 hover:bg-white/20 transition-all hidden">
+        <i class="fas fa-volume-high text-white"></i>
+    </div>
+
     <div id="hud-layer" class="hud-container">
         <div class="grid-bg"></div>
-        <div class="absolute left-10 top-1/2 -translate-y-1/2 hidden md:block text-xs opacity-60">
-            <div id="data-stream-left">initializing...</div>
+        <div class="absolute left-4 top-1/2 -translate-y-1/2 hidden md:block text-[10px] opacity-60">
+            <div id="data-stream-left">INITIALIZING...</div>
         </div>
-        <div class="flex flex-col items-center gap-6 relative z-10">
+        <div class="flex flex-col items-center gap-6 relative z-10 p-4">
             <div class="scan-frame" id="scanner">
                 <div class="bracket tl"></div> <div class="bracket tr"></div>
                 <div class="bracket bl"></div> <div class="bracket br"></div>
-               
                 <div class="scan-line"></div>
-               
                 <div class="absolute inset-0 flex items-center justify-center opacity-30">
                     <i class="fas fa-user-circle text-9xl" id="face-icon"></i>
                 </div>
             </div>
             <div class="text-center space-y-2">
-                <h2 id="status" class="text-2xl font-bold status-text">SYSTEM LOCKED</h2>
+                <h2 id="status" class="text-2xl font-bold tracking-widest" style="text-shadow: 0 0 5px #0ff;">SYSTEM LOCKED</h2>
                 <p id="sub-status" class="text-xs opacity-70">BIOMETRIC AUTHENTICATION REQUIRED</p>
             </div>
-            <button id="start-btn" class="mt-8 px-8 py-3 border border-[#0ff] hover:bg-[#0ff] hover:text-black transition-all tracking-[0.3em] uppercase text-sm animate-pulse">
+            <button id="start-btn" class="mt-8 px-8 py-3 border border-[#0ff] hover:bg-[#0ff] hover:text-black transition-colors tracking-[0.3em] uppercase text-sm animate-pulse">
                 Initiate Scan
             </button>
         </div>
-        <div class="absolute right-10 top-1/2 -translate-y-1/2 hidden md:block text-xs opacity-60 text-right">
-            <div id="data-stream-right">waiting for input...</div>
+        <div class="absolute right-4 top-1/2 -translate-y-1/2 hidden md:block text-[10px] opacity-60 text-right">
+            <div id="data-stream-right">WAITING INPUT...</div>
         </div>
     </div>
+
     <div id="site-wrapper">
-       
-        <div class="cursor-dot"></div>
-        <div class="cursor-outline"></div>
-        <audio id="bg-music" loop>
-            <source src="https://cdn.pixabay.com/audio/2022/05/27/audio_1808fbf07a.mp3" type="audio/mp3">
-        </audio>
-        <div class="fixed bottom-6 right-6 z-50 text-white/30 hover:text-white transition-colors cursor-pointer" id="mute-btn">
-            <i class="fas fa-volume-high"></i>
-        </div>
+        
+        <div class="cursor-dot hidden md:block"></div>
+        <div class="cursor-outline hidden md:block"></div>
+
         <section id="intro-screen" class="fixed inset-0 z-[100] bg-black flex flex-col items-center justify-center cursor-pointer">
-            <div class="text-center space-y-6">
+            <div class="text-center space-y-6 px-4">
                 <p class="text-xs tracking-[0.6em] text-gray-500 uppercase fade-elem">Access Verified</p>
                 <h1 class="text-5xl md:text-7xl font-cinematic text-white tracking-widest fade-elem scale-elem">LUMINA</h1>
                 <p class="text-sm text-gray-400 font-light fade-elem animate-pulse mt-8">Tap to Begin Experience</p>
             </div>
         </section>
+
         <section class="relative h-screen flex items-center justify-center overflow-hidden">
             <div class="absolute inset-0 z-0">
-                <img src="https://images.unsplash.com/photo-1513201099705-a9746e1e201f?q=80&w=2874&auto=format&fit=crop"
-                     class="w-full h-full object-cover opacity-30 scale-110" id="hero-bg" alt="Hero">
+                <img src="https://images.unsplash.com/photo-1513201099705-a9746e1e201f?q=80&w=2000&auto=format&fit=crop" class="w-full h-full object-cover opacity-30 scale-110 will-change-transform" id="hero-bg" alt="Hero">
                 <div class="absolute inset-0 bg-gradient-to-b from-black/20 via-black/60 to-[#050505]"></div>
             </div>
             <div class="relative z-10 text-center px-4">
                 <h2 class="text-xl md:text-3xl font-light text-white/80 mb-6 hero-text translate-y-10 opacity-0">Today, the universe celebrates</h2>
                 <h1 class="text-6xl md:text-9xl font-cinematic font-bold text-gradient hero-text translate-y-10 opacity-0">YOU</h1>
-                <p class="mt-8 text-lg md:text-xl font-emotional text-gray-300 max-w-2xl mx-auto hero-text translate-y-10 opacity-0 italic">
-                    "Another year bolder, another year wiser, another year of being unforgettable."
-                </p>
+                <p class="mt-8 text-lg md:text-xl font-emotional text-gray-300 max-w-2xl mx-auto hero-text translate-y-10 opacity-0 italic">"Another year bolder, another year wiser."</p>
             </div>
         </section>
+
         <section class="min-h-screen bg-[#050505] flex items-center justify-center py-20 relative">
             <div class="max-w-4xl mx-auto px-6 text-center space-y-32">
                 <div class="scroll-reveal opacity-0 translate-y-10">
                     <i class="fas fa-quote-left text-2xl text-yellow-600/50 mb-6"></i>
-                    <p class="text-3xl md:text-5xl font-emotional leading-tight text-gray-200">
-                        Your laughter is the soundtrack<br>to our happiest memories.
-                    </p>
-                </div>
-               
-                <div class="scroll-reveal opacity-0 translate-y-10">
-                    <p class="text-3xl md:text-5xl font-emotional leading-tight text-gray-200">
-                        Your kindness is the anchor<br>that holds us steady.
-                    </p>
+                    <p class="text-3xl md:text-5xl font-emotional leading-tight text-gray-200">Your laughter is the soundtrack<br>to our happiest memories.</p>
                 </div>
                 <div class="scroll-reveal opacity-0 translate-y-10">
-                    <p class="text-2xl md:text-4xl font-light font-cinematic text-gradient">
-                        "To the world you are one person,<br>but to me, you are the world."
-                    </p>
+                    <p class="text-2xl md:text-4xl font-light font-cinematic text-gradient">"To the world you are one person,<br>but to me, you are the world."</p>
                 </div>
             </div>
         </section>
 
-        <!-- === NEW SECTION 1: 3D STAR MAP === -->
-        <section id="star-map-section" class="relative min-h-screen bg-black flex items-center justify-center overflow-hidden">
-            <canvas id="star-canvas" class="star-canvas absolute inset-0"></canvas>
-            <div class="absolute inset-0 bg-gradient-to-b from-transparent via-black/70 to-black"></div>
-            <div class="relative z-10 text-center px-6 max-w-lg">
-                <div class="mb-8 inline-flex items-center gap-3 bg-white/5 backdrop-blur-3xl border border-white/10 px-8 py-3 rounded-3xl">
-                    <span class="text-4xl">🌌</span>
-                    <span class="font-mono text-xs tracking-[4px] text-cyan-400">CELESTIAL ARCHIVE</span>
+        <section class="relative h-screen bg-black flex items-center justify-center overflow-hidden">
+            <canvas id="star-canvas" class="absolute inset-0 w-full h-full"></canvas>
+            <div class="absolute inset-0 bg-gradient-to-b from-transparent via-black/50 to-black pointer-events-none"></div>
+            <div class="relative z-10 text-center px-6 pointer-events-none">
+                <div class="mb-6 inline-flex items-center gap-2 bg-white/5 backdrop-blur-md border border-white/10 px-6 py-2 rounded-full">
+                    <span class="text-2xl">🌌</span><span class="font-mono text-xs tracking-[4px] text-cyan-400">CELESTIAL ARCHIVE</span>
                 </div>
-                <h2 class="text-5xl md:text-7xl font-cinematic leading-none mb-6 text-gradient">THE STARS<br>ALIGNED</h2>
-                <div class="space-y-2">
-                    <p class="text-4xl font-light text-white/90" id="birth-date-display">July 22, 1995</p>
-                    <p class="text-2xl text-amber-400 font-light">♌ Leo • The Lioness</p>
-                </div>
-                <div class="mt-16 text-[10px] font-mono opacity-40 tracking-widest">A constellation was born the day you arrived</div>
+                <h2 class="text-5xl md:text-7xl font-cinematic leading-none mb-4 text-gradient">THE STARS<br>ALIGNED</h2>
+                <p class="text-3xl font-light text-white/90" id="birth-date-display">July 22, 1995</p>
             </div>
         </section>
 
-        <!-- === NEW SECTION 2: TIME TRAVEL SLIDER === -->
-        <section id="time-travel-section" class="min-h-screen bg-[#050505] flex items-center justify-center py-12 md:py-20">
-            <div class="max-w-5xl w-full px-4 md:px-8">
-                <div class="text-center mb-12">
-                    <div class="inline-block px-6 py-2 bg-white/5 backdrop-blur-xl rounded-full border border-white/10">
-                        <span class="text-amber-400 text-sm tracking-[3px] font-mono">CHAPTER 02 • TEMPORAL SHIFT</span>
+        <section class="min-h-screen bg-[#050505] flex items-center justify-center py-20">
+            <div class="w-full max-w-4xl px-4 text-center">
+                <h2 class="text-5xl font-cinematic mb-2">TIME TRAVEL</h2>
+                <p class="text-gray-400 mb-8">Swipe to see the journey</p>
+                <div class="time-slider max-w-[500px] mx-auto aspect-[4/5] relative">
+                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=600" class="w-full h-full object-cover" alt="Now">
+                    <div id="baby-overlay" class="time-overlay bg-black">
+                        <img src="https://images.unsplash.com/photo-1519689680058-324335c77eba?w=600" class="w-full h-full object-cover" alt="Baby">
                     </div>
-                    <h2 class="text-5xl md:text-7xl font-cinematic mt-6">TIME TRAVEL</h2>
-                    <p class="text-gray-400 mt-3">Swipe to see her journey</p>
-                </div>
-                
-                <div class="time-slider max-w-[520px] mx-auto" id="time-comparison">
-                    <div class="relative rounded-3xl overflow-hidden shadow-2xl border border-white/10">
-                        <!-- Now photo -->
-                        <img id="now-photo" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=1200" 
-                             class="w-full h-auto" alt="Now">
-                        <!-- Baby overlay -->
-                        <div id="baby-overlay" class="time-overlay">
-                            <img id="baby-photo" src="https://picsum.photos/id/1015/1200/800" 
-                                 class="w-full h-auto" alt="Baby Sarah">
-                        </div>
+                    <div class="absolute inset-0 pointer-events-none flex items-center justify-center opacity-50">
+                        <div class="w-0.5 h-full bg-white/50"></div>
                     </div>
-                    <!-- Slider -->
-                    <div class="absolute bottom-6 left-1/2 -translate-x-1/2 bg-black/80 backdrop-blur-2xl px-8 py-3 rounded-3xl flex items-center gap-4 shadow-xl">
-                        <span class="text-xs font-mono text-amber-400">BABY</span>
-                        <input type="range" id="time-slider" min="0" max="100" value="50" 
-                               class="accent-amber-400 w-48 md:w-64 cursor-pointer">
-                        <span class="text-xs font-mono text-cyan-400">NOW</span>
-                    </div>
+                    <input type="range" id="time-range" min="0" max="100" value="50" class="absolute inset-0 w-full h-full opacity-0 cursor-ew-resize z-20">
                 </div>
             </div>
         </section>
 
-        <!-- === ORIGINAL COLLECTION (now enhanced with subtle keys) === -->
-        <section class="py-24 bg-gradient-to-b from-[#050505] to-[#0a0a0a] overflow-hidden">
-            <div class="px-8 md:px-16 mb-16 flex items-end justify-between">
-                <div>
-                    <h2 class="text-4xl font-cinematic text-white">The Collection</h2>
-                    <div class="h-0.5 w-24 bg-yellow-600 mt-4"></div>
-                </div>
-                <span class="text-gray-600 font-mono hidden md:block">01 / MEMORIES</span>
+        <section class="py-24 bg-gradient-to-b from-[#050505] to-[#0a0a0a]">
+            <div class="px-8 md:px-16 mb-12 flex justify-between items-end">
+                <h2 class="text-4xl font-cinematic text-white">Memories</h2>
+                <span class="text-gray-600 font-mono hidden md:block">01 / COLLECTION</span>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-12 gap-6 px-4 md:px-16 h-[100vh]">
-                <div class="md:col-span-4 h-full relative rounded-2xl overflow-hidden group memory-card">
-                    <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=800" class="parallax-img w-full h-[120%] object-cover absolute top-0">
-                    <div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors"></div>
-                    <div onclick="collectKey(this)" class="key absolute top-8 right-8 text-5xl opacity-30 hover:opacity-100">🔑</div>
+                <div class="md:col-span-4 h-full relative rounded-2xl overflow-hidden group parallax-container">
+                    <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=600" class="w-full h-[120%] object-cover absolute top-0 parallax-img" alt="Memory 1">
+                    <div class="absolute top-4 right-4 text-4xl opacity-50 hover:opacity-100 key" onclick="collectKey(this)">🔑</div>
                 </div>
-                <div class="md:col-span-4 md:col-start-5 h-[80%] mt-[10%] relative rounded-2xl overflow-hidden group memory-card">
-                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=800" class="parallax-img w-full h-[120%] object-cover absolute top-0">
-                    <div onclick="collectKey(this)" class="key absolute top-8 right-8 text-5xl opacity-30 hover:opacity-100">🔑</div>
+                <div class="md:col-span-4 md:col-start-5 h-[80%] mt-[10%] relative rounded-2xl overflow-hidden group parallax-container">
+                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=600" class="w-full h-[120%] object-cover absolute top-0 parallax-img" alt="Memory 2">
+                    <div class="absolute top-4 right-4 text-4xl opacity-50 hover:opacity-100 key" onclick="collectKey(this)">🔑</div>
                 </div>
-                <div class="md:col-span-4 md:col-start-9 h-full relative rounded-2xl overflow-hidden group memory-card">
-                    <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=800" class="parallax-img w-full h-[120%] object-cover absolute top-0">
-                    <div onclick="collectKey(this)" class="key absolute top-8 right-8 text-5xl opacity-30 hover:opacity-100">🔑</div>
+                <div class="md:col-span-4 md:col-start-9 h-full relative rounded-2xl overflow-hidden group parallax-container">
+                    <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=600" class="w-full h-[120%] object-cover absolute top-0 parallax-img" alt="Memory 3">
+                    <div class="absolute top-4 right-4 text-4xl opacity-50 hover:opacity-100 key" onclick="collectKey(this)">🔑</div>
                 </div>
-                <!-- 4th key in a floating card for mobile balance -->
-                <div class="md:hidden col-span-1 mt-8 flex justify-center">
-                    <div class="memory-card w-72 relative rounded-2xl overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800" class="w-full h-80 object-cover">
-                        <div onclick="collectKey(this)" class="key absolute top-6 right-6 text-5xl opacity-30 hover:opacity-100">🔑</div>
-                    </div>
+                <div class="md:hidden h-80 relative rounded-2xl overflow-hidden mt-4">
+                     <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600" class="w-full h-full object-cover">
+                     <div class="absolute top-4 right-4 text-4xl opacity-50 hover:opacity-100 key" onclick="collectKey(this)">🔑</div>
                 </div>
             </div>
         </section>
 
-        <!-- === NEW SECTION 3: 3D GLOBE WITH VIDEO WISHES === -->
-        <section id="globe-section" class="min-h-screen bg-black relative flex items-center justify-center overflow-hidden">
-            <div class="absolute inset-0 bg-[radial-gradient(at_center,#0a1429_0%,transparent_70%)]"></div>
-            <div class="relative z-10 text-center">
-                <div class="mb-8">
-                    <span class="px-5 py-1.5 bg-cyan-400/10 text-cyan-400 text-xs font-mono tracking-[3px] rounded-full">LIVE FROM THE WORLD</span>
-                </div>
-                <h2 class="text-6xl font-cinematic mb-2">Wishes From The Globe</h2>
-                <p class="text-gray-400 mb-16">Touch the markers • Real voices, real love</p>
-                
-                <div id="globe-wrapper" class="relative w-[320px] h-[320px] md:w-[520px] md:h-[520px] mx-auto">
-                    <div id="globe" class="globe w-full h-full rounded-full border-[12px] border-cyan-400/20 shadow-[inset_0_0_80px_rgba(0,255,255,0.15),0_0_120px_rgba(0,255,255,0.3)] relative overflow-hidden cursor-grab">
-                        <!-- Earth texture -->
-                        <div class="absolute inset-0 bg-[url('https://picsum.photos/id/1015/2000')] bg-cover opacity-60 mix-blend-soft-light"></div>
-                        <!-- Glow -->
-                        <div class="absolute inset-[-40px] bg-cyan-400/10 rounded-full blur-3xl"></div>
-                        
-                        <!-- Wish markers -->
-                        <div onclick="showWish(0)" class="absolute top-[22%] left-[28%] w-9 h-9 bg-red-500 rounded-full flex items-center justify-center text-xl shadow-lg hover:scale-125 active:scale-90 transition-all cursor-pointer">🇺🇸</div>
-                        <div onclick="showWish(1)" class="absolute top-[48%] left-[65%] w-9 h-9 bg-emerald-500 rounded-full flex items-center justify-center text-xl shadow-lg hover:scale-125 active:scale-90 transition-all cursor-pointer">❤️</div>
-                        <div onclick="showWish(2)" class="absolute top-[65%] left-[35%] w-9 h-9 bg-amber-500 rounded-full flex items-center justify-center text-xl shadow-lg hover:scale-125 active:scale-90 transition-all cursor-pointer">🎓</div>
-                        <div onclick="showWish(3)" class="absolute top-[35%] left-[72%] w-9 h-9 bg-purple-500 rounded-full flex items-center justify-center text-xl shadow-lg hover:scale-125 active:scale-90 transition-all cursor-pointer">🇫🇷</div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- === NEW SECTION 4: SCAVENGER HUNT KEYS BAR === -->
-        <div id="keys-bar" class="keys-bar hidden fixed bottom-8 left-1/2 -translate-x-1/2 bg-zinc-950/90 backdrop-blur-3xl border border-white/10 px-10 py-5 rounded-3xl flex items-center gap-8 z-50 shadow-2xl">
-            <!-- keys added by JS -->
+        <div id="keys-bar" class="fixed bottom-8 left-1/2 -translate-x-1/2 bg-zinc-900/90 backdrop-blur-md border border-white/10 px-6 py-3 rounded-full flex items-center gap-4 z-40 hidden shadow-2xl transition-all">
+            <span class="text-xs font-mono text-gray-400">VAULT KEYS:</span>
+            <div id="keys-container" class="flex gap-2"></div>
         </div>
 
-        <!-- === ORIGINAL FAN FAVORITES (kept untouched) === -->
-        <section class="py-20 bg-[#050505] relative z-20">
-            <div class="px-8 md:px-16 mb-6">
-                <h3 class="text-2xl text-white font-semibold mb-1">Fan Favorites (Wishes)</h3>
-                <p class="text-sm text-gray-500">Trending Now • Season 26</p>
-            </div>
-            <div class="netflix-scroll px-8 md:px-16 pb-10">
-                <div class="video-card flex-shrink-0 bg-gray-900 group">
-                    <img src="https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?w=600" class="w-full h-full object-cover opacity-70 group-hover:opacity-100 transition-opacity">
-                    <div class="absolute bottom-0 left-0 w-full p-4 bg-gradient-to-t from-black via-black/80 to-transparent">
-                        <p class="text-green-400 text-xs font-bold mb-1">98% Match</p>
-                        <h4 class="text-white font-bold text-lg">Mom & Dad</h4>
-                        <p class="text-gray-400 text-xs">Emotional • Heartfelt</p>
-                    </div>
-                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
-                        <div class="w-12 h-12 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center border border-white/30">
-                            <i class="fas fa-play text-white ml-1"></i>
-                        </div>
-                    </div>
-                </div>
-                <div class="video-card flex-shrink-0 bg-gray-900 group">
-                    <img src="https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=600" class="w-full h-full object-cover opacity-70 group-hover:opacity-100 transition-opacity">
-                    <div class="absolute bottom-0 left-0 w-full p-4 bg-gradient-to-t from-black via-black/80 to-transparent">
-                        <p class="text-green-400 text-xs font-bold mb-1">New Release</p>
-                        <h4 class="text-white font-bold text-lg">Besties from NYC</h4>
-                        <p class="text-gray-400 text-xs">Comedy • Fun</p>
-                    </div>
+        <section class="min-h-screen bg-black relative flex flex-col items-center justify-center overflow-hidden py-20">
+            <h2 class="text-4xl font-cinematic mb-2 z-10">Global Wishes</h2>
+            <p class="text-gray-400 mb-10 z-10">Tap the markers</p>
+            <div id="globe-wrapper" class="relative w-[300px] h-[300px] md:w-[450px] md:h-[450px]">
+                <div id="globe" class="globe w-full h-full rounded-full relative shadow-[0_0_50px_rgba(0,255,255,0.2)]">
+                    <div class="absolute inset-0 bg-[url('https://picsum.photos/id/1015/1000/500')] bg-cover opacity-50 rounded-full"></div>
+                    <div onclick="openVideo('https://www.youtube.com/embed/9bZkp7q19f0')" class="absolute top-[30%] left-[30%] w-8 h-8 bg-red-500 rounded-full flex items-center justify-center cursor-pointer hover:scale-125 transition-transform z-20">❤️</div>
+                    <div onclick="openVideo('https://www.youtube.com/embed/3JZ_D3ELwOQ')" class="absolute top-[50%] left-[70%] w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center cursor-pointer hover:scale-125 transition-transform z-20">🎬</div>
                 </div>
             </div>
         </section>
 
-        <!-- === CLIMAX: VAULT (appears when all keys collected) === -->
-        <div id="vault-screen" class="hidden fixed inset-0 bg-black z-[999] flex items-center justify-center">
-            <div class="relative w-full max-w-lg px-6">
-                <!-- Vault doors -->
-                <div class="flex h-[420px] relative">
-                    <div id="door-left" class="vault-door w-1/2 h-full bg-gradient-to-r from-zinc-900 to-black border-r-8 border-amber-400 flex items-center justify-center overflow-hidden">
-                        <div class="text-amber-400 text-8xl opacity-20">🔐</div>
-                    </div>
-                    <div id="door-right" class="vault-door w-1/2 h-full bg-gradient-to-l from-zinc-900 to-black border-l-8 border-amber-400 flex items-center justify-center overflow-hidden">
-                        <div class="text-amber-400 text-8xl opacity-20">🔐</div>
-                    </div>
+        <section class="py-20 bg-[#050505]">
+            <div class="px-8 md:px-16 mb-6">
+                <h3 class="text-2xl text-white font-semibold mb-1">Video Messages</h3>
+            </div>
+            <div class="netflix-scroll px-8 md:px-16">
+                <div class="video-card flex-shrink-0 bg-gray-900 group">
+                    <img src="https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?w=400" class="w-full h-full object-cover opacity-70 group-hover:opacity-100 transition-opacity" alt="Video 1">
+                    <div class="absolute bottom-4 left-4"><h4 class="font-bold">Mom & Dad</h4></div>
                 </div>
-                
-                <!-- Vault content (scratch card) -->
-                <div id="vault-content" class="hidden absolute inset-0 flex flex-col items-center justify-center">
-                    <div class="text-center mb-10">
-                        <h2 class="text-5xl font-cinematic text-gradient tracking-wider">THE VAULT IS OPEN</h2>
-                        <p class="text-amber-400 text-sm mt-2 font-mono">SCRATCH TO REVEAL YOUR REAL GIFT</p>
-                    </div>
-                    
-                    <div class="relative w-[340px] h-[210px] md:w-[420px] md:h-[260px] bg-white rounded-3xl overflow-hidden shadow-2xl border border-amber-400/30">
-                        <!-- Reveal layer -->
-                        <div id="reveal-layer" class="absolute inset-0 bg-gradient-to-br from-rose-400 via-amber-400 to-yellow-400 flex items-center justify-center p-8 text-center">
+                 <div class="video-card flex-shrink-0 bg-gray-900 group">
+                    <img src="https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=400" class="w-full h-full object-cover opacity-70 group-hover:opacity-100 transition-opacity" alt="Video 2">
+                    <div class="absolute bottom-4 left-4"><h4 class="font-bold">Besties</h4></div>
+                </div>
+            </div>
+        </section>
+
+        <div id="vault-screen" class="hidden fixed inset-0 bg-black z-[200] flex items-center justify-center">
+            <div class="relative w-full max-w-lg px-6">
+                <div class="flex h-[400px] relative overflow-hidden">
+                    <div id="door-left" class="vault-door w-1/2 h-full bg-zinc-900 border-r-4 border-amber-400 flex items-center justify-center"><span class="text-6xl">🔒</span></div>
+                    <div id="door-right" class="vault-door w-1/2 h-full bg-zinc-900 border-l-4 border-amber-400 flex items-center justify-center"><span class="text-6xl">🔒</span></div>
+                </div>
+                <div id="vault-content" class="absolute inset-0 flex flex-col items-center justify-center hidden">
+                    <h2 class="text-3xl font-cinematic text-amber-400 mb-4">VAULT OPEN</h2>
+                    <div class="relative w-[300px] h-[200px] bg-white rounded-xl overflow-hidden shadow-2xl">
+                        <div class="absolute inset-0 flex items-center justify-center p-4 text-center text-black font-bold">
                             <div>
-                                <p class="text-3xl font-bold text-black leading-tight">Happy Birthday, Sarah ✨</p>
-                                <p class="text-xl text-black/90 mt-6">Pack your bags.<br>We’re going to Paris next weekend.</p>
-                                <div class="mt-8 text-xs font-mono text-black/60">Tickets are in your email • I love you endlessly</div>
+                                <h3 class="text-2xl mb-2">PARIS TRIP! ✈️</h3>
+                                <p class="text-sm text-gray-600">Pack your bags for next weekend.</p>
                             </div>
                         </div>
-                        <!-- Scratch canvas -->
-                        <canvas id="scratch-canvas" width="420" height="260" class="scratch-canvas absolute inset-0"></canvas>
+                        <canvas id="scratch-canvas" width="300" height="200" class="absolute inset-0 cursor-crosshair touch-none"></canvas>
                     </div>
-                    
-                    <button onclick="location.reload()" 
-                            class="mt-12 text-xs tracking-[2px] uppercase text-gray-500 hover:text-white transition-colors">
-                        Replay The Journey
-                    </button>
+                    <button onclick="location.reload()" class="mt-8 text-sm text-gray-500 uppercase tracking-widest">Replay</button>
                 </div>
             </div>
         </div>
 
-        <!-- === ORIGINAL CAKE SECTION (kept as the emotional peak) === -->
-        <section class="min-h-screen flex flex-col items-center justify-center bg-[#050505] relative overflow-hidden">
-            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-yellow-600/10 rounded-full blur-[100px]"></div>
+        <section class="min-h-screen flex flex-col items-center justify-center bg-[#050505] relative overflow-hidden py-20">
             <div id="cake-section" class="z-20 text-center transition-all duration-1000">
                 <h2 class="text-4xl font-cinematic text-white mb-2">Make a Wish</h2>
-                <p class="text-gray-400 mb-12 text-sm font-light tracking-wide animate-pulse">Click the flame to blow it out</p>
-                <div class="cake-stage">
+                <div class="cake-stage mt-10">
                     <div class="cake-body"><div class="icing"></div></div>
                     <div class="candle"><div class="flame" id="flame"></div></div>
                 </div>
             </div>
             <div id="surprise-section" class="absolute inset-0 flex flex-col items-center justify-center z-30 gift-wrapper">
-                <div class="text-center max-w-2xl px-6">
-                    <i class="fas fa-gift text-6xl text-gradient mb-8 animate-bounce"></i>
-                    <h2 class="text-5xl md:text-7xl font-cinematic text-white mb-6">Happy Birthday!</h2>
-                    <div class="bg-white/5 backdrop-blur-lg border border-white/10 p-8 rounded-2xl transform hover:scale-105 transition-transform duration-300">
-                        <h3 class="text-xl text-yellow-500 font-bold mb-2 uppercase tracking-wider">Your Gift</h3>
-                        <p class="text-2xl text-white font-emotional italic mb-6">"Pack your bags. We are going to Paris next weekend!"</p>
-                        <p class="text-sm text-gray-500">Check your email for tickets.</p>
-                    </div>
-                    <button onclick="location.reload()" class="mt-12 text-gray-500 hover:text-white text-sm transition-colors uppercase tracking-widest">Replay Experience</button>
+                <div class="text-center">
+                    <i class="fas fa-gift text-6xl text-gradient mb-4 animate-bounce"></i>
+                    <h2 class="text-5xl font-cinematic text-white">Happy Birthday!</h2>
                 </div>
             </div>
         </section>
+
     </div>
-    <!-- Wish Modal -->
-    <div id="wish-modal" class="hidden fixed inset-0 bg-black/95 z-[200] flex items-center justify-center">
-        <div class="max-w-xl w-full mx-4 bg-zinc-900 rounded-3xl overflow-hidden modal">
-            <div class="flex justify-between items-center border-b border-white/10 px-6 py-4">
-                <div class="text-cyan-400 font-mono text-xs">VIDEO WISH • LIVE</div>
-                <button onclick="closeWishModal()" class="text-4xl leading-none text-white/60 hover:text-white">×</button>
+
+    <div id="video-modal" class="hidden fixed inset-0 bg-black/95 z-[250] flex items-center justify-center p-4">
+        <div class="w-full max-w-2xl bg-zinc-900 rounded-lg overflow-hidden relative">
+            <button onclick="document.getElementById('video-modal').classList.add('hidden'); document.getElementById('modal-frame').src=''" class="absolute top-2 right-4 text-3xl text-white">&times;</button>
+            <div class="aspect-video">
+                <iframe id="modal-frame" class="w-full h-full" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
             </div>
-            <div id="wish-video" class="aspect-video bg-black"></div>
-            <div id="wish-caption" class="p-6 text-center text-gray-300"></div>
         </div>
     </div>
 
     <script>
-        // --- CONFIGURATION ---
-        const HER_NAME = "SARAH";
-        const HER_BIRTH_DATE = "July 22, 1995";
-        
-        // --- HUD LOGIC ---
-        const startBtn = document.getElementById('start-btn');
-        const statusText = document.getElementById('status');
-        const subStatus = document.getElementById('sub-status');
-        const scanLine = document.querySelector('.scan-line');
-        const sfxScan = document.getElementById('sfx-scan');
-        const sfxSuccess = document.getElementById('sfx-success');
-        const hudLayer = document.getElementById('hud-layer');
-        const siteWrapper = document.getElementById('site-wrapper');
-        const faceIcon = document.getElementById('face-icon');
-        const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&";
-        function scramble(element, newText, duration) {
-            let iterations = 0;
-            const interval = setInterval(() => {
-                element.innerText = newText.split("").map((letter, index) => {
-                    if (index < iterations) return newText[index];
-                    return chars[Math.floor(Math.random() * chars.length)];
-                }).join("");
-                if (iterations >= newText.length) clearInterval(interval);
-                iterations += 1 / 2;
-            }, 30);
-        }
-        function startDataStream() {
-            setInterval(() => {
-                const randomHex = Math.random().toString(16).substr(2, 8).toUpperCase();
-                document.getElementById('data-stream-left').innerHTML += `<div>>> ANALYZING SECTOR ${randomHex}</div>`;
-                document.getElementById('data-stream-right').innerHTML += `<div>BIO-METRIC MATCH: ${Math.floor(Math.random()*100)}%</div>`;
-                if(document.getElementById('data-stream-left').children.length > 10) {
-                    document.getElementById('data-stream-left').firstChild.remove();
-                    document.getElementById('data-stream-right').firstChild.remove();
-                }
-            }, 100);
-        }
-        // START SCAN
-        startBtn.addEventListener('click', () => {
-            startBtn.style.display = 'none';
-            sfxScan.volume = 0.5; sfxScan.play();
-            startDataStream();
-           
-            const tl = gsap.timeline();
-            scramble(statusText, "SCANNING TARGET...", 1000);
-            scramble(subStatus, "DO NOT MOVE...", 1000);
-           
-            tl.to(scanLine, { opacity: 1, duration: 0.2 })
-              .to(scanLine, { top: '100%', duration: 2, ease: "power2.inOut", repeat: 1, yoyo: true });
-            setTimeout(() => {
-                sfxScan.pause(); sfxSuccess.play();
-                document.body.classList.add('success-mode');
-                faceIcon.classList.remove('fa-user-circle');
-                faceIcon.classList.add('fa-check-circle');
-               
-                scramble(statusText, "ACCESS GRANTED", 500);
-                scramble(subStatus, `WELCOME, ${HER_NAME}`, 500);
-                gsap.to('.bracket', { padding: 20, duration: 0.5, ease: "back.out(1.7)" });
-                gsap.to('.scan-frame', { scale: 1.1, duration: 0.5 });
-                // FADE OUT HUD, FADE IN SITE
-                setTimeout(() => {
-                    gsap.to(hudLayer, {
-                        scale: 1.5, opacity: 0, duration: 1,
-                        onComplete: () => {
-                            hudLayer.style.display = 'none';
-                            gsap.to(siteWrapper, { opacity: 1, duration: 2 });
-                        }
-                    });
-                }, 2000);
-            }, 4000);
-        });
-        // --- MAIN SITE LOGIC ---
-        gsap.registerPlugin(ScrollTrigger);
-       
-        // Cursor
-        const dot = document.querySelector('.cursor-dot');
-        const outline = document.querySelector('.cursor-outline');
-        window.addEventListener('mousemove', (e) => {
-            const x = e.clientX; const y = e.clientY;
-            dot.style.left = `${x}px`; dot.style.top = `${y}px`;
-            outline.animate({ left: `${x}px`, top: `${y}px` }, { duration: 500, fill: "forwards" });
-        });
-        // Intro (Lumina)
-        const introScreen = document.getElementById('intro-screen');
-        const bgMusic = document.getElementById('bg-music');
-       
-        introScreen.addEventListener('click', () => {
-            bgMusic.volume = 0.4; bgMusic.play().catch(e => console.log("Audio needed user interaction"));
-            const tl = gsap.timeline();
-            tl.to('.fade-elem', { y: -20, opacity: 0, stagger: 0.1, duration: 0.8 })
-              .to(introScreen, { opacity: 0, duration: 1.5, pointerEvents: 'none' })
-              .call(startHeroAnimation);
-        });
-        function startHeroAnimation() {
-            gsap.to("#hero-bg", { scale: 1, duration: 10, ease: "power2.out" });
-            gsap.to(".hero-text", { y: 0, opacity: 1, duration: 1.5, stagger: 0.3, ease: "power3.out" });
-        }
-        // Scroll Reveal
-        gsap.utils.toArray('.scroll-reveal').forEach(elem => {
-            gsap.to(elem, {
-                scrollTrigger: { trigger: elem, start: "top 80%", toggleActions: "play none none reverse" },
-                y: 0, opacity: 1, duration: 1.2, ease: "power3.out"
-            });
-        });
-        // Parallax
-        gsap.utils.toArray('.parallax-img').forEach(img => {
-            gsap.to(img, {
-                y: "20%", ease: "none",
-                scrollTrigger: { trigger: img.parentElement, start: "top bottom", end: "bottom top", scrub: true }
-            });
-        });
-        // Cake
-        const flame = document.getElementById('flame');
-        const cakeSection = document.getElementById('cake-section');
-        const surpriseSection = document.getElementById('surprise-section');
-        flame.addEventListener('click', () => {
-            flame.classList.add('out');
-            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#D4AF37', '#ffffff', '#E0BFB8'] });
-           
-            let vol = 0.4;
-            const volInterval = setInterval(() => {
-                if(vol < 1.0) { vol += 0.1; bgMusic.volume = vol; } else clearInterval(volInterval);
-            }, 200);
-            gsap.to(cakeSection, { opacity: 0, scale: 0.9, duration: 1, delay: 0.5 });
-            setTimeout(() => {
-                cakeSection.style.display = 'none';
-                surpriseSection.classList.add('active');
-                gsap.from("#surprise-section i", { scale: 0, rotation: 180, duration: 1, type: "elastic" });
-                gsap.from("#surprise-section h2", { y: 50, opacity: 0, duration: 1, delay: 0.5 });
-                gsap.from(".gift-content", { y: 50, opacity: 0, duration: 1, delay: 0.8 });
-                launchFireworks();
-            }, 1500);
-        });
-        // Floating Hearts & Fireworks
-        function createHeart() {
-            const heart = document.createElement('div');
-            heart.classList.add('floating-heart');
-            heart.innerHTML = '❤';
-            heart.style.left = Math.random() * 100 + "vw";
-            heart.style.fontSize = Math.random() * 20 + 10 + "px";
-            heart.style.animationDuration = Math.random() * 3 + 4 + "s";
-            document.body.appendChild(heart);
-            setTimeout(() => heart.remove(), 7000);
-        }
-        setInterval(createHeart, 600);
-        function launchFireworks() {
-            var duration = 5 * 1000; var animationEnd = Date.now() + duration;
-            var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
-            var interval = setInterval(function() {
-                var timeLeft = animationEnd - Date.now();
-                if (timeLeft <= 0) return clearInterval(interval);
-                var particleCount = 50 * (timeLeft / duration);
-                confetti(Object.assign({}, defaults, { particleCount, origin: { x: Math.random(), y: Math.random() - 0.2 } }));
-            }, 250);
-        }
+        // --- DATA ---
+        const CONFIG = { name: "SARAH", birthDate: "July 22, 1995" };
+        document.getElementById('birth-date-display').textContent = CONFIG.birthDate;
 
-        // === NEW FEATURES IMPLEMENTATION ===
-
-        // 1. Star Map
-        function initStarMap() {
-            const canvas = document.getElementById('star-canvas');
-            if (!canvas) return;
-            const ctx = canvas.getContext('2d');
-            let w = canvas.width = window.innerWidth;
-            let h = canvas.height = window.innerHeight;
-            
-            window.addEventListener('resize', () => {
-                w = canvas.width = window.innerWidth;
-                h = canvas.height = window.innerHeight;
-            });
-
-            const stars = [];
-            for (let i = 0; i < 1200; i++) {
-                stars.push({
-                    x: Math.random() * w,
-                    y: Math.random() * h,
-                    r: Math.random() * 1.8 + 0.4,
-                    a: Math.random() * 0.8 + 0.2,
-                    s: Math.random() * 0.015 + 0.008
-                });
-            }
-
-            function animateStars() {
-                ctx.fillStyle = 'rgba(5, 5, 5, 0.12)';
-                ctx.fillRect(0, 0, w, h);
-                
-                stars.forEach(star => {
-                    ctx.fillStyle = `rgba(255,255,255,${star.a})`;
-                    ctx.beginPath();
-                    ctx.arc(star.x, star.y, star.r, 0, Math.PI * 2);
-                    ctx.fill();
-                    
-                    star.a = Math.sin(Date.now() * star.s + star.x) * 0.35 + 0.65;
-                });
-                requestAnimationFrame(animateStars);
-            }
-            animateStars();
-        }
-
-        // 2. Time Travel Slider
-        function initTimeTravel() {
-            const slider = document.getElementById('time-slider');
-            const overlay = document.getElementById('baby-overlay');
-            if (!slider || !overlay) return;
-            
-            slider.addEventListener('input', () => {
-                const val = 100 - parseFloat(slider.value);
-                overlay.style.clipPath = `inset(0 ${val}% 0 0)`;
-            });
-            
-            // Initial state
-            overlay.style.clipPath = `inset(0 50% 0 0)`;
-        }
-
-        // 3. Globe
-        let globeRotation = 0;
-        function initGlobe() {
-            const globe = document.getElementById('globe');
-            if (!globe) return;
-            
-            // Auto rotate
-            setInterval(() => {
-                globeRotation += 0.35;
-                globe.style.transform = `rotateY(${globeRotation}deg)`;
-            }, 40);
-            
-            // Mouse tilt (mobile friendly)
-            const wrapper = document.getElementById('globe-wrapper');
-            let isDragging = false;
-            let prevX = 0;
-            
-            wrapper.addEventListener('mousedown', e => { isDragging = true; prevX = e.clientX; });
-            window.addEventListener('mouseup', () => isDragging = false);
-            window.addEventListener('mousemove', e => {
-                if (!isDragging) return;
-                const delta = (e.clientX - prevX) * 0.8;
-                globeRotation += delta;
-                prevX = e.clientX;
-                globe.style.transform = `rotateY(${globeRotation}deg)`;
-            });
-            
-            // Touch support
-            wrapper.addEventListener('touchstart', e => {
-                isDragging = true;
-                prevX = e.touches[0].clientX;
-            });
-            wrapper.addEventListener('touchend', () => isDragging = false);
-            wrapper.addEventListener('touchmove', e => {
-                if (!isDragging) return;
-                const delta = (e.touches[0].clientX - prevX) * 0.8;
-                globeRotation += delta;
-                prevX = e.touches[0].clientX;
-                globe.style.transform = `rotateY(${globeRotation}deg)`;
-            });
-        }
-
-        // Wish videos (placeholders - replace with real links)
-        const wishVideos = [
-            { html: `<iframe width="100%" height="100%" src="https://www.youtube.com/embed/9bZkp7q19f0" frameborder="0" allow="autoplay" allowfullscreen></iframe>`, caption: "From your NYC besties ❤️" },
-            { html: `<video width="100%" height="100%" autoplay loop muted playsinline><source src="https://assets.mixkit.co/videos/preview/12345/12345-small.mp4" type="video/mp4"></video>`, caption: "Mom & Dad's message" },
-            { html: `<iframe width="100%" height="100%" src="https://www.youtube.com/embed/3JZ_D3ELwOQ" frameborder="0" allow="autoplay" allowfullscreen></iframe>`, caption: "College crew forever" },
-            { html: `<video width="100%" height="100%" autoplay loop muted playsinline><source src="https://assets.mixkit.co/videos/preview/23456/23456-small.mp4" type="video/mp4"></video>`, caption: "From Paris with love" }
-        ];
-
-        function showWish(i) {
-            const modal = document.getElementById('wish-modal');
-            const videoContainer = document.getElementById('wish-video');
-            const caption = document.getElementById('wish-caption');
-            
-            videoContainer.innerHTML = wishVideos[i].html;
-            caption.textContent = wishVideos[i].caption;
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-        }
-        
-        function closeWishModal() {
-            const modal = document.getElementById('wish-modal');
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
-        }
-
-        // 4. Scavenger Hunt
-        let collectedKeys = 0;
-        const totalKeys = 4;
-        
-        function collectKey(el) {
-            if (el.classList.contains('collected')) return;
-            
-            el.classList.add('collected');
-            collectedKeys++;
-            
-            // Add to keys bar
-            const bar = document.getElementById('keys-bar');
-            bar.classList.remove('hidden');
-            
-            const keyIcon = document.createElement('div');
-            keyIcon.innerHTML = '🔑';
-            keyIcon.className = 'text-4xl drop-shadow-md';
-            bar.appendChild(keyIcon);
-            
-            // Confetti on each key
-            confetti({ particleCount: 30, spread: 50, origin: { y: 0.85 } });
-            
-            if (collectedKeys === totalKeys) {
-                setTimeout(() => {
-                    openVault();
-                }, 900);
-            }
-        }
-        
-        function openVault() {
-            const vault = document.getElementById('vault-screen');
-            vault.classList.remove('hidden');
-            
-            // Open doors
-            gsap.to('#door-left', { x: '-120%', duration: 1.6, ease: "power4.inOut" });
-            gsap.to('#door-right', { x: '120%', duration: 1.6, ease: "power4.inOut", onComplete: () => {
-                document.getElementById('vault-content').classList.remove('hidden');
-                initScratchCard();
-            }});
-        }
-        
-        // Scratch Card
-        function initScratchCard() {
-            const canvas = document.getElementById('scratch-canvas');
-            if (!canvas) return;
-            const ctx = canvas.getContext('2d');
-            
-            ctx.fillStyle = '#1f1f1f';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            
-            let isScratching = false;
-            
-            function scratch(e) {
-                if (!isScratching) return;
-                const rect = canvas.getBoundingClientRect();
-                const x = (e.clientX || e.touches[0].clientX) - rect.left;
-                const y = (e.clientY || e.touches[0].clientY) - rect.top;
-                
-                ctx.globalCompositeOperation = 'destination-out';
-                ctx.beginPath();
-                ctx.arc(x, y, 28, 0, Math.PI * 2);
-                ctx.fill();
-            }
-            
-            // Mouse
-            canvas.addEventListener('mousedown', () => isScratching = true);
-            canvas.addEventListener('mousemove', scratch);
-            canvas.addEventListener('mouseup', () => isScratching = false);
-            canvas.addEventListener('mouseleave', () => isScratching = false);
-            
-            // Touch
-            canvas.addEventListener('touchstart', e => { isScratching = true; scratch(e); });
-            canvas.addEventListener('touchmove', scratch);
-            canvas.addEventListener('touchend', () => isScratching = false);
-        }
-
-        // Initialize everything
-        window.onload = () => {
-            // Original
-            // Cursor already set
-            
-            // New features
-            initStarMap();
-            initTimeTravel();
-            initGlobe();
-            
-            // Birth date
-            document.getElementById('birth-date-display').textContent = HER_BIRTH_DATE;
-            
-            // Mute button
-            const muteBtn = document.getElementById('mute-btn');
-            let isMuted = false;
-            muteBtn.addEventListener('click', () => {
-                isMuted = !isMuted;
-                bgMusic.muted = isMuted;
-                muteBtn.innerHTML = isMuted ? '<i class="fas fa-volume-mute"></i>' : '<i class="fas fa-volume-high"></i>';
-            });
-            
-            // Hide cursor on mobile
-            if ('ontouchstart' in window) {
-                document.querySelectorAll('.cursor-dot, .cursor-outline').forEach(el => el.style.display = 'none');
+        // --- AUDIO SYSTEM ---
+        const audio = {
+            bg: document.getElementById('bg-music'),
+            scan: document.getElementById('sfx-scan'),
+            success: document.getElementById('sfx-success'),
+            btn: document.getElementById('music-control'),
+            icon: document.querySelector('#music-control i'),
+            isMuted: false,
+            init: function() {
+                this.bg.volume = 0.4;
+                this.btn.classList.remove('hidden');
+                this.btn.addEventListener('click', () => this.toggle());
+            },
+            toggle: function() {
+                this.isMuted = !this.isMuted;
+                this.bg.muted = this.isMuted;
+                this.icon.className = this.isMuted ? 'fas fa-volume-mute text-white' : 'fas fa-volume-high text-white';
             }
         };
+
+        // --- HUD SCANNER ---
+        const hud = {
+            el: document.getElementById('hud-layer'),
+            startBtn: document.getElementById('start-btn'),
+            scanLine: document.querySelector('.scan-line'),
+            init: function() {
+                this.startBtn.addEventListener('click', () => this.start());
+            },
+            start: function() {
+                this.startBtn.style.display = 'none';
+                audio.scan.play();
+                
+                // Text Scramble Effect
+                const scramble = (id, text) => {
+                    const el = document.getElementById(id);
+                    let idx = 0;
+                    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+                    const interval = setInterval(() => {
+                        el.innerText = text.split('').map((char, i) => i < idx ? char : chars[Math.floor(Math.random() * chars.length)]).join('');
+                        if (idx >= text.length) clearInterval(interval);
+                        idx += 1/3;
+                    }, 30);
+                };
+
+                scramble('status', 'SCANNING TARGET...');
+                
+                // Scan Animation
+                gsap.to(this.scanLine, { opacity: 1, duration: 0.2 });
+                gsap.to(this.scanLine, { top: '100%', duration: 2, ease: "power2.inOut", repeat: 1, yoyo: true, onComplete: () => this.success() });
+            },
+            success: function() {
+                audio.scan.pause();
+                audio.success.play();
+                document.getElementById('status').innerText = "ACCESS GRANTED";
+                document.getElementById('status').style.color = "#0f0";
+                document.querySelector('.scan-frame').style.borderColor = "#0f0";
+                
+                setTimeout(() => {
+                    gsap.to(this.el, { opacity: 0, duration: 1, onComplete: () => {
+                        this.el.style.display = 'none';
+                        gsap.to('#site-wrapper', { opacity: 1, duration: 1 });
+                        app.initFeatures();
+                    }});
+                }, 1500);
+            }
+        };
+
+        // --- MAIN APP LOGIC ---
+        const app = {
+            init: function() {
+                hud.init();
+                // Cursor Logic
+                if (window.matchMedia("(hover: hover)").matches) {
+                    const dot = document.querySelector('.cursor-dot');
+                    const outline = document.querySelector('.cursor-outline');
+                    window.addEventListener('mousemove', e => {
+                        dot.style.left = outline.style.left = e.clientX + 'px';
+                        dot.style.top = outline.style.top = e.clientY + 'px';
+                        outline.animate({ left: e.clientX + 'px', top: e.clientY + 'px' }, { duration: 500, fill: "forwards" });
+                    });
+                }
+            },
+            initFeatures: function() {
+                this.initIntro();
+                this.initStarMap();
+                this.initSlider();
+                this.initKeys();
+                this.initGlobe();
+                this.initCake();
+                this.initScroll();
+            },
+            initIntro: function() {
+                const intro = document.getElementById('intro-screen');
+                intro.addEventListener('click', () => {
+                    audio.bg.play().catch(() => {}); // Attempt play
+                    audio.init();
+                    gsap.to('.fade-elem', { y: -20, opacity: 0, stagger: 0.1 });
+                    gsap.to(intro, { opacity: 0, duration: 1, pointerEvents: 'none' });
+                    // Trigger Hero Animation
+                    gsap.to(".hero-text", { y: 0, opacity: 1, duration: 1.5, stagger: 0.2, delay: 0.5 });
+                    gsap.to("#hero-bg", { scale: 1, duration: 10 });
+                });
+            },
+            initStarMap: function() {
+                const canvas = document.getElementById('star-canvas');
+                const ctx = canvas.getContext('2d');
+                let w, h;
+                const stars = [];
+                
+                const resize = () => { w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; };
+                window.addEventListener('resize', resize);
+                resize();
+
+                // Generate Stars
+                for(let i=0; i<800; i++) stars.push({ x: Math.random()*w, y: Math.random()*h, r: Math.random()*1.5, a: Math.random() });
+
+                // Render Loop (Optimized)
+                const animate = () => {
+                    ctx.clearRect(0,0,w,h);
+                    ctx.fillStyle = "white";
+                    stars.forEach(s => {
+                        ctx.globalAlpha = Math.abs(Math.sin(Date.now()/1000 * s.r + s.x));
+                        ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI*2); ctx.fill();
+                    });
+                    requestAnimationFrame(animate);
+                };
+                animate();
+            },
+            initSlider: function() {
+                const range = document.getElementById('time-range');
+                const overlay = document.getElementById('baby-overlay');
+                range.addEventListener('input', (e) => {
+                    overlay.style.clipPath = `inset(0 ${100 - e.target.value}% 0 0)`;
+                });
+            },
+            initKeys: function() {
+                let count = 0;
+                const total = 4;
+                window.collectKey = (el) => {
+                    if(el.classList.contains('collected')) return;
+                    el.classList.add('collected');
+                    count++;
+                    
+                    // Update UI
+                    const bar = document.getElementById('keys-bar');
+                    bar.classList.remove('hidden');
+                    const icon = document.createElement('div');
+                    icon.innerHTML = '🔑';
+                    document.getElementById('keys-container').appendChild(icon);
+                    
+                    confetti({ particleCount: 30, spread: 50, origin: { y: 0.8 } });
+
+                    if(count >= total) setTimeout(this.openVault, 1000);
+                };
+            },
+            openVault: function() {
+                const screen = document.getElementById('vault-screen');
+                screen.classList.remove('hidden');
+                gsap.to('#door-left', { x: '-100%', duration: 1.5, ease: 'power2.inOut' });
+                gsap.to('#door-right', { x: '100%', duration: 1.5, ease: 'power2.inOut', onComplete: () => {
+                    document.getElementById('vault-content').classList.remove('hidden');
+                    app.initScratch();
+                }});
+            },
+            initScratch: function() {
+                const canvas = document.getElementById('scratch-canvas');
+                const ctx = canvas.getContext('2d');
+                ctx.fillStyle = "#C0C0C0"; // Silver
+                ctx.fillRect(0,0,300,200);
+                ctx.fillStyle = "#000";
+                ctx.font = "20px Arial";
+                ctx.fillText("SCRATCH ME", 85, 110);
+                
+                let isDrawing = false;
+                const scratch = (e) => {
+                    if(!isDrawing) return;
+                    const rect = canvas.getBoundingClientRect();
+                    const x = (e.clientX || e.touches[0].clientX) - rect.left;
+                    const y = (e.clientY || e.touches[0].clientY) - rect.top;
+                    ctx.globalCompositeOperation = "destination-out";
+                    ctx.beginPath(); ctx.arc(x,y,20,0,Math.PI*2); ctx.fill();
+                };
+                
+                canvas.addEventListener('mousedown', () => isDrawing = true);
+                canvas.addEventListener('touchstart', (e) => { isDrawing = true; scratch(e); });
+                window.addEventListener('mouseup', () => isDrawing = false);
+                window.addEventListener('touchend', () => isDrawing = false);
+                canvas.addEventListener('mousemove', scratch);
+                canvas.addEventListener('touchmove', scratch);
+            },
+            initGlobe: function() {
+                const globe = document.getElementById('globe');
+                let rotation = 0;
+                // Simple auto-rotate
+                setInterval(() => {
+                    rotation += 0.2;
+                    globe.style.transform = `rotateY(${rotation}deg)`;
+                }, 50);
+                
+                window.openVideo = (url) => {
+                    const modal = document.getElementById('video-modal');
+                    modal.classList.remove('hidden');
+                    document.getElementById('modal-frame').src = url;
+                };
+            },
+            initCake: function() {
+                document.getElementById('flame').addEventListener('click', function() {
+                    this.classList.add('out');
+                    confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+                    gsap.to('#cake-section', { opacity: 0, duration: 1 });
+                    setTimeout(() => {
+                        document.getElementById('cake-section').style.display = 'none';
+                        document.getElementById('surprise-section').classList.add('active');
+                        gsap.from('#surprise-section', { scale: 0.8, opacity: 0, duration: 1 });
+                    }, 1000);
+                });
+            },
+            initScroll: function() {
+                // Parallax Images
+                gsap.utils.toArray('.parallax-img').forEach(img => {
+                    gsap.to(img, {
+                        y: "20%", ease: "none",
+                        scrollTrigger: { trigger: img.parentElement, start: "top bottom", end: "bottom top", scrub: true }
+                    });
+                });
+                // Reveal Text
+                gsap.utils.toArray('.scroll-reveal').forEach(elem => {
+                    gsap.to(elem, {
+                        y: 0, opacity: 1, duration: 1,
+                        scrollTrigger: { trigger: elem, start: "top 80%" }
+                    });
+                });
+            }
+        };
+
+        // Boot
+        window.addEventListener('DOMContentLoaded', () => app.init());
+
     </script>
 </body>
 </html>
