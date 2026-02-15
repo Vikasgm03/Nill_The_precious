@@ -3,454 +3,575 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>For Priya ✨</title>
-    
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lato:wght@300;400;700&family=Great+Vibes&display=swap" rel="stylesheet">
+    <title>HBD PRIYA | The Main Event</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;500;700&family=Montserrat:wght@300;400;600;800&family=Great+Vibes&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        gold: { 
-                            100: '#f9f1d8', 
-                            200: '#f0deaa', 
-                            300: '#e6c67c', 
-                            400: '#d4af37', // CLASSIC GOLD
-                            500: '#b08d26', 
-                            600: '#8a6b1e' 
-                        },
-                        stone: {
-                            50: '#fafaf9',
-                            800: '#292524',
-                            900: '#1c1917'
-                        }
-                    },
-                    fontFamily: {
-                        script: ['"Great Vibes"', 'cursive'],
-                        serif: ['"Playfair Display"', 'serif'],
-                        sans: ['"Lato"', 'sans-serif'],
-                    }
-                }
-            }
-        }
-    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.7.0/vanilla-tilt.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
     <style>
+        :root {
+            /* Cyber-Romantic Palette */
+            --primary: #ff0055; /* Neon Pink */
+            --primary-glow: rgba(255, 0, 85, 0.6);
+            --secondary: #00f2ff; /* Cyan accent */
+            --bg: #050505;
+            --glass: rgba(20, 20, 20, 0.6);
+            --border: rgba(255, 255, 255, 0.1);
+            --text: #ffffff;
+            --font-head: 'Oswald', sans-serif;
+            --font-body: 'Montserrat', sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; }
+
         body {
-            background-color: #fafaf9; /* Stone-50 */
-            color: #1c1917; /* Stone-900 */
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: var(--font-body);
             overflow-x: hidden;
-            background-image: radial-gradient(circle at 50% 0%, #f9f1d8 0%, transparent 60%);
         }
 
-        /* Expensive Paper Texture Overlay */
-        body::before {
-            content: "";
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E");
-            z-index: -1;
-            pointer-events: none;
+        /* --- CUSTOM CURSOR --- */
+        #cursor {
+            width: 20px; height: 20px;
+            border: 2px solid var(--primary);
+            border-radius: 50%;
+            position: fixed; pointer-events: none; z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: all 0.1s ease;
+            mix-blend-mode: difference;
         }
-
-        /* Crystal Card Style */
-        .crystal-card {
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(212, 175, 55, 0.2); /* Subtle Gold Border */
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.03);
-            transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+        #cursor-blur {
+            width: 300px; height: 300px;
+            background: var(--primary-glow);
+            border-radius: 50%;
+            position: fixed; pointer-events: none; z-index: 0;
+            filter: blur(100px);
+            opacity: 0.4;
+            transform: translate(-50%, -50%);
         }
         
-        .crystal-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 40px rgba(212, 175, 55, 0.15); /* Gold Glow */
-            border-color: rgba(212, 175, 55, 0.5);
+        /* Hover State */
+        .hovered-cursor {
+            background: var(--primary);
+            transform: translate(-50%, -50%) scale(2.5);
+            border: none !important;
+            opacity: 0.8;
         }
 
-        .text-gradient {
-            background: linear-gradient(135deg, #b08d26 0%, #d4af37 50%, #8a6b1e 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        /* --- HEADER --- */
+        header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 20px 5%; position: fixed; width: 100%; top: 0; z-index: 1000;
+            background: rgba(0,0,0,0.8); backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+        }
+        .logo { font-family: var(--font-head); font-size: 1.8rem; font-weight: 700; letter-spacing: 2px; }
+        .logo span { color: var(--primary); text-shadow: 0 0 10px var(--primary); }
+
+        nav ul { display: flex; gap: 30px; list-style: none; }
+        nav a { 
+            text-decoration: none; color: #fff; font-weight: 600; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;
+            position: relative;
+        }
+        nav a::after {
+            content: ''; position: absolute; bottom: -5px; left: 0; width: 0%; height: 2px;
+            background: var(--primary); transition: 0.3s;
+        }
+        nav a:hover::after { width: 100%; }
+
+        .join-btn {
+            padding: 8px 25px; border: 1px solid var(--primary); color: var(--primary);
+            font-family: var(--font-head); letter-spacing: 1px; text-decoration: none;
+            transition: 0.3s;
+        }
+        .join-btn:hover { background: var(--primary); color: white; box-shadow: 0 0 20px var(--primary-glow); }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            height: 100vh; width: 100%; position: relative;
+            display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;
+            /* Replace with a cool photo of her or a dark aesthetic bg */
+            background: url('https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=2070&auto=format&fit=crop') no-repeat center center/cover;
+            background-attachment: fixed;
+        }
+        .overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(5,5,5,1)); }
+        
+        .hero-content { position: relative; z-index: 2; width: 100%; padding: 0 20px; }
+        
+        .pill-badge {
+            display: inline-block; padding: 8px 20px; border: 1px solid var(--border);
+            border-radius: 50px; font-size: 0.8rem; letter-spacing: 2px; color: #fff;
+            background: rgba(255,255,255,0.1); backdrop-filter: blur(5px); margin-bottom: 20px;
+        }
+        .dot { display: inline-block; width: 8px; height: 8px; background: #00ff88; border-radius: 50%; margin-right: 8px; box-shadow: 0 0 10px #00ff88; }
+
+        .hero h1 {
+            font-family: var(--font-head); font-size: clamp(3rem, 8vw, 7rem); line-height: 0.9;
+            text-transform: uppercase; margin-bottom: 20px; color: white;
+        }
+        .hero h1 span { 
+            color: transparent; -webkit-text-stroke: 2px var(--primary); 
+            position: relative; display: inline-block;
+        }
+        
+        /* Glitch Effect */
+        .glitch { animation: glitch 3s infinite; }
+        @keyframes glitch {
+            0% { transform: skew(0deg); }
+            20% { transform: skew(-2deg); }
+            22% { transform: skew(2deg); }
+            24% { transform: skew(0deg); }
+            100% { transform: skew(0deg); }
         }
 
-        /* Timeline Line */
-        .timeline-line::before {
-            content: '';
-            position: absolute;
-            top: 0; bottom: 0; left: 50%;
-            width: 1px;
-            background: #d4af37; /* Gold */
-            opacity: 0.3;
-            transform: translateX(-50%);
-            z-index: -1;
+        .hero p {
+            font-size: 1.1rem; color: #ccc; margin-bottom: 40px; max-width: 600px; margin-left: auto; margin-right: auto;
         }
 
-        /* Audio Wave */
-        .wave-bar {
-            width: 2px;
-            background: #1c1917;
-            animation: wave 1s ease-in-out infinite paused;
+        .hero-btns { display: flex; gap: 20px; justify-content: center; }
+        .modern-btn {
+            padding: 15px 40px; background: white; color: black; border: none; border-radius: 50px;
+            font-family: var(--font-head); font-size: 1.1rem; letter-spacing: 1px; cursor: pointer;
+            transition: 0.3s;
         }
-        .playing .wave-bar { animation-play-state: running; }
-        @keyframes wave { 0%, 100% { height: 8px; } 50% { height: 20px; } }
+        .modern-btn:hover { transform: translateY(-5px); box-shadow: 0 0 30px rgba(255,255,255,0.3); }
 
-        /* Smooth Reveal */
-        .reveal-blur { filter: blur(20px); opacity: 0; transition: all 1.5s ease; }
-        .reveal-active { filter: blur(0); opacity: 1; }
+        /* Floating Icons */
+        .floating-icon {
+            position: absolute; font-size: 3rem; color: rgba(255, 255, 255, 0.1);
+            animation: float 6s ease-in-out infinite; z-index: 1;
+        }
+        .f1 { top: 20%; left: 10%; animation-delay: 0s; }
+        .f2 { top: 30%; right: 10%; animation-delay: 2s; font-size: 2rem; }
+        .f3 { bottom: 20%; left: 15%; animation-delay: 1s; }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
 
-        .cursor::after { content: '|'; animation: blink 1s infinite; }
-        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+        /* --- SECTION STYLES --- */
+        section { padding: 100px 5%; position: relative; }
+        .section-title {
+            font-family: var(--font-head); font-size: 4rem; text-align: center; margin-bottom: 60px;
+            text-transform: uppercase;
+        }
+        .section-title span { color: var(--primary); text-shadow: 0 0 20px var(--primary-glow); }
+
+        /* --- TABS (The "Schedule" Replacement) --- */
+        .level-controls { display: flex; justify-content: center; gap: 20px; margin-bottom: 40px; flex-wrap: wrap; }
+        .level-btn {
+            padding: 15px 40px; background: transparent; border: 1px solid #333; color: #666;
+            font-family: var(--font-head); letter-spacing: 1px; cursor: pointer; transition: 0.3s;
+        }
+        .level-btn.active { border-color: var(--primary); color: white; box-shadow: 0 0 20px var(--primary-glow); }
+        
+        .timeline-grid { display: none; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; animation: fadeIn 0.5s ease; }
+        .timeline-grid.active { display: grid; }
+        @keyframes fadeIn { from { opacity:0; transform: translateY(20px); } to { opacity:1; transform: translateY(0); } }
+
+        .day-card {
+            background: var(--glass); border: 1px solid var(--border); padding: 30px;
+            transition: 0.3s; position: relative; overflow: hidden;
+        }
+        .day-card:hover { border-color: var(--primary); transform: translateY(-10px); }
+        .day-title { font-size: 1.5rem; color: var(--primary); margin-bottom: 15px; font-family: var(--font-head); border-bottom: 1px solid #333; padding-bottom: 10px; }
+        .memory-list li { list-style: none; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05); color: #ccc; display: flex; justify-content: space-between; }
+
+        /* --- TOOLS (Love Calculator) --- */
+        .tools-container { display: flex; flex-wrap: wrap; gap: 30px; justify-content: center; }
+        .tool-card {
+            width: 100%; max-width: 450px; background: var(--glass); border: 1px solid var(--border);
+            padding: 40px; position: relative;
+        }
+        .tool-card h3 { font-family: var(--font-head); font-size: 1.5rem; margin-bottom: 20px; color: white; }
+        input {
+            width: 100%; padding: 15px; background: rgba(0,0,0,0.5); border: 1px solid #333; color: white;
+            margin-bottom: 15px; font-family: var(--font-body); outline: none; transition: 0.3s;
+        }
+        input:focus { border-color: var(--primary); }
+        .calc-btn {
+            width: 100%; padding: 15px; background: var(--primary); color: white; border: none;
+            font-weight: bold; cursor: pointer; letter-spacing: 2px; transition: 0.3s;
+        }
+        .calc-btn:hover { background: white; color: black; box-shadow: 0 0 20px white; }
+
+        /* --- PLANS ("Gift Coupons") --- */
+        .plan-card {
+            background: var(--glass); border: 1px solid var(--border); padding: 40px; text-align: center;
+            transition: 0.3s; position: relative;
+        }
+        .plan-card:hover { transform: scale(1.05); border-color: var(--secondary); box-shadow: 0 0 30px rgba(0, 242, 255, 0.2); }
+        .plan-name { font-size: 2rem; font-family: var(--font-head); margin-bottom: 10px; }
+        .price { font-size: 3rem; font-weight: 800; color: var(--secondary); margin: 20px 0; font-family: var(--font-head); text-shadow: 0 0 10px var(--secondary); }
+        .features li { list-style: none; margin: 15px 0; color: #aaa; }
+        .features i { color: var(--secondary); margin-right: 10px; }
+
+        /* --- GALLERY SWIPER --- */
+        .swiper { width: 100%; padding-top: 50px; padding-bottom: 50px; }
+        .swiper-slide {
+            background-position: center; background-size: cover; width: 300px; height: 400px;
+            border-radius: 10px; border: 1px solid var(--border); filter: grayscale(100%); transition: 0.5s;
+        }
+        .swiper-slide-active { filter: grayscale(0%); transform: scale(1.1); border-color: var(--primary); box-shadow: 0 0 30px var(--primary-glow); }
+        .slide-overlay {
+            position: absolute; bottom: 0; width: 100%; padding: 20px;
+            background: linear-gradient(to top, black, transparent);
+        }
+
+        /* --- MARQUEE --- */
+        .marquee-section { background: var(--primary); padding: 20px 0; transform: rotate(-2deg) scale(1.1); margin: 50px 0; }
+        .marquee-content { display: flex; gap: 50px; white-space: nowrap; animation: scroll 20s linear infinite; }
+        .marquee-item { font-family: var(--font-head); font-size: 3rem; font-weight: 700; color: black; text-transform: uppercase; }
+        @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
+
+        /* --- FOOTER --- */
+        footer {
+            background: #000; padding: 50px 5%; text-align: center; border-top: 1px solid #222;
+        }
+        .socials a {
+            display: inline-flex; width: 50px; height: 50px; border: 1px solid #333; border-radius: 50%;
+            justify-content: center; align-items: center; color: white; margin: 0 10px; transition: 0.3s;
+        }
+        .socials a:hover { background: var(--primary); border-color: var(--primary); box-shadow: 0 0 20px var(--primary); }
     </style>
 </head>
-<body class="antialiased selection:bg-gold-200 selection:text-stone-900">
+<body>
 
-    <div id="gate" class="fixed inset-0 z-[100] bg-[#fafaf9] flex flex-col items-center justify-center text-center px-6">
-        <div class="max-w-md w-full">
-            <h1 class="font-serif text-5xl text-stone-900 mb-4 tracking-tight">Priya.</h1>
-            <p class="font-sans text-stone-500 mb-10 text-sm uppercase tracking-widest">A private collection of memories</p>
-            
-            <div class="relative">
-                <input type="password" id="password" class="w-64 bg-transparent border-b border-stone-300 py-2 text-center text-stone-900 focus:outline-none focus:border-gold-400 transition placeholder-stone-300 font-serif text-xl" placeholder="Enter Password">
-                <button onclick="unlock()" class="block mx-auto mt-8 px-8 py-3 bg-stone-900 text-white font-sans text-xs font-bold uppercase tracking-widest hover:bg-gold-500 transition duration-500">Enter</button>
+    <div id="cursor"></div>
+    <div id="cursor-blur"></div>
+
+    <header>
+        <div class="logo">HAPPY <span>BIRTHDAY</span></div>
+        <nav>
+            <ul>
+                <li><a href="#home" class="interact">Home</a></li>
+                <li><a href="#timeline" class="interact">Memories</a></li>
+                <li><a href="#gifts" class="interact">Gifts</a></li>
+                <li><a href="#tools" class="interact">Fun</a></li>
+            </ul>
+        </nav>
+        <a href="#gifts" class="join-btn interact">MAKE A WISH</a>
+    </header>
+
+    <div class="hero" id="home">
+        <div class="overlay"></div>
+        
+        <div class="floating-icon f1"><i class="fas fa-heart"></i></div>
+        <div class="floating-icon f2"><i class="fas fa-star"></i></div>
+        <div class="floating-icon f3"><i class="fas fa-gem"></i></div>
+
+        <div class="hero-content">
+            <div class="pill-badge">
+                <span class="dot"></span> FEB 28 • THE QUEEN'S DAY
             </div>
-            <p id="error-msg" class="text-gold-600 text-xs mt-4 hidden font-sans tracking-wide">Incorrect. Try 'love'.</p>
+            <h1>
+                LEVEL UP <br> 
+                <span class="glitch">PRIYA</span>
+            </h1>
+            <p>
+                Another year bolder, wiser, and more beautiful. <br>
+                Welcome to your digital celebration.
+            </p>
+            <div class="hero-btns">
+                <button class="modern-btn interact" onclick="document.getElementById('gifts').scrollIntoView()">CLAIM GIFTS</button>
+            </div>
         </div>
     </div>
 
-    <main id="content" class="opacity-0">
+    <div class="marquee-section">
+        <div class="marquee-content">
+            <div class="marquee-item">HAPPY BIRTHDAY PRIYA</div>
+            <div class="marquee-item">•</div>
+            <div class="marquee-item">QUEEN OF MY HEART</div>
+            <div class="marquee-item">•</div>
+            <div class="marquee-item">LEVEL 21 UNLOCKED</div>
+            <div class="marquee-item">•</div>
+            <div class="marquee-item">HAPPY BIRTHDAY PRIYA</div>
+            <div class="marquee-item">•</div>
+            <div class="marquee-item">QUEEN OF MY HEART</div>
+            <div class="marquee-item">•</div>
+        </div>
+    </div>
+
+    <section id="timeline">
+        <h2 class="section-title">THE <span>TIMELINE</span></h2>
         
-        <button onclick="toggleMusic()" class="fixed top-8 right-8 z-50 w-10 h-10 border border-stone-200 rounded-full flex items-center justify-center text-stone-900 hover:border-gold-400 hover:text-gold-500 transition duration-300 bg-white/50 backdrop-blur-md">
-            <i id="music-icon" class="fas fa-music text-xs"></i>
-        </button>
-        <audio id="bg-music" loop src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
-
-        <section class="min-h-screen flex flex-col justify-center items-center text-center px-4 pt-20 relative">
-            
-            <div class="hero-anim opacity-0 translate-y-10 relative mb-12">
-                <div class="p-1 border border-gold-300 rounded-full">
-                    <div class="p-1 border border-stone-100 rounded-full">
-                        <img src="https://picsum.photos/id/1027/300/300" class="w-48 h-48 rounded-full object-cover grayscale hover:grayscale-0 transition duration-1000">
-                    </div>
-                </div>
-            </div>
-            
-            <div class="hero-anim opacity-0 translate-y-10">
-                <p class="font-sans text-stone-400 text-xs font-bold tracking-[0.3em] uppercase mb-4">The Celebration of</p>
-                <h1 class="font-serif text-6xl md:text-9xl text-stone-900 mb-6 tracking-tight">Happy Birthday</h1>
-                <p class="font-script text-5xl md:text-6xl text-gold-500">My Beloved Priya</p>
-            </div>
-            
-            <div class="hero-anim opacity-0 translate-y-10 mt-20">
-                <div class="h-16 w-px bg-gold-300 mx-auto"></div>
-            </div>
-        </section>
-
-        <section class="py-32 px-4 max-w-4xl mx-auto">
-            <div class="text-center mb-24">
-                <h2 class="font-serif text-4xl text-stone-900">Our Story</h2>
-                <div class="h-1 w-12 bg-gold-400 mx-auto mt-4"></div>
-            </div>
-            
-            <div class="relative timeline-line space-y-32">
-                <div class="timeline-item relative flex md:justify-end items-center md:w-1/2 md:ml-auto pl-10 md:pl-0 opacity-0">
-                    <div class="hidden md:block absolute -left-1.5 w-3 h-3 bg-white border border-gold-400 rounded-full z-10"></div>
-                    <div class="crystal-card p-8 rounded-sm w-full md:ml-12">
-                        <span class="font-sans text-gold-500 text-[10px] font-bold tracking-widest uppercase">Chapter I</span>
-                        <h3 class="font-serif text-2xl text-stone-900 mt-2 mb-3">The Beginning</h3>
-                        <p class="font-serif text-stone-600 leading-relaxed italic">"It started with a simple hello, but I knew in that moment, life would never be the same."</p>
-                    </div>
-                </div>
-
-                <div class="timeline-item relative flex md:justify-start items-center md:w-1/2 pr-10 md:pr-0 opacity-0">
-                    <div class="hidden md:block absolute left-full -translate-x-1/2 w-3 h-3 bg-white border border-gold-400 rounded-full z-10"></div>
-                    <div class="crystal-card p-8 rounded-sm w-full md:mr-12 text-right md:text-left">
-                        <span class="font-sans text-gold-500 text-[10px] font-bold tracking-widest uppercase">Chapter II</span>
-                        <h3 class="font-serif text-2xl text-stone-900 mt-2 mb-3">The Laughter</h3>
-                        <p class="font-serif text-stone-600 leading-relaxed italic">"Caught in the rain, soaking wet, laughing until our stomachs hurt. That was the day I fell."</p>
-                    </div>
-                </div>
-
-                <div class="timeline-item relative flex md:justify-end items-center md:w-1/2 md:ml-auto pl-10 md:pl-0 opacity-0">
-                    <div class="hidden md:block absolute -left-1.5 w-3 h-3 bg-white border border-gold-400 rounded-full z-10"></div>
-                    <div class="crystal-card p-8 rounded-sm w-full md:ml-12">
-                        <span class="font-sans text-gold-500 text-[10px] font-bold tracking-widest uppercase">Chapter III</span>
-                        <h3 class="font-serif text-2xl text-stone-900 mt-2 mb-3">Today</h3>
-                        <p class="font-serif text-stone-600 leading-relaxed italic">"Another year around the sun, and you shine brighter than ever. You are my masterpiece."</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="py-24 px-4 bg-white">
-            <div class="max-w-lg mx-auto">
-                <div class="text-center mb-10">
-                    <h2 class="font-serif text-3xl text-stone-900">A Voice Note</h2>
-                    <p class="font-sans text-stone-400 text-xs tracking-widest uppercase mt-2">Press play to listen</p>
-                </div>
-
-                <div class="border border-stone-200 p-6 flex items-center gap-6 bg-[#fafaf9]">
-                    <button onclick="playVoiceNote()" id="voice-btn" class="w-12 h-12 bg-stone-900 text-white flex items-center justify-center hover:bg-gold-500 transition duration-500">
-                        <i class="fas fa-play text-xs"></i>
-                    </button>
-                    
-                    <div class="flex-1">
-                        <div id="waveform" class="flex items-center gap-1 h-6 justify-center opacity-50">
-                            <div class="wave-bar h-2"></div><div class="wave-bar h-4"></div><div class="wave-bar h-2"></div>
-                            <div class="wave-bar h-5"></div><div class="wave-bar h-3"></div><div class="wave-bar h-4"></div>
-                            <div class="wave-bar h-2"></div><div class="wave-bar h-3"></div><div class="wave-bar h-2"></div>
-                            <div class="wave-bar h-4"></div><div class="wave-bar h-2"></div><div class="wave-bar h-3"></div>
-                        </div>
-                    </div>
-                    
-                    <span class="font-sans text-xs text-stone-400">0:45</span>
-                </div>
-                <audio id="voice-audio" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3"></audio>
-            </div>
-        </section>
-
-        <section class="py-32 px-4">
-            <div class="max-w-7xl mx-auto">
-                <div class="text-center mb-20">
-                    <h2 class="font-serif text-4xl text-stone-900">Global Wishes</h2>
-                    <p class="font-sans text-stone-500 text-sm mt-3 tracking-wide">LOVE FROM AROUND THE WORLD</p>
-                </div>
-
-                <div id="video-grid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-px bg-stone-200 border border-stone-200">
-                    </div>
-            </div>
-        </section>
-
-        <section class="py-32 px-6 text-center bg-stone-900 text-stone-300">
-            <div class="max-w-3xl mx-auto relative">
-                <div class="min-h-[150px] flex items-center justify-center">
-                    <p id="typewriter-text" class="font-serif text-2xl md:text-3xl leading-relaxed cursor"></p>
-                </div>
-                <button onclick="startTyping()" id="start-type-btn" class="mt-12 px-10 py-4 border border-stone-700 text-stone-400 text-xs font-bold tracking-[0.2em] hover:text-white hover:border-white transition duration-500 uppercase">
-                    Read the Letter
-                </button>
-            </div>
-        </section>
-
-        <section class="py-40 px-4 text-center">
-            <p class="font-sans text-stone-400 text-[10px] font-bold uppercase tracking-[0.3em] mb-12">Scroll to reveal</p>
-            
-            <div class="relative max-w-lg mx-auto cursor-pointer group" onclick="revealSecret(this)">
-                <div class="absolute inset-0 z-10 flex items-center justify-center transition duration-1000 group-hover:opacity-80">
-                    <span class="bg-white border border-stone-200 px-6 py-3 text-xs font-bold tracking-widest text-stone-900 uppercase shadow-sm">
-                        Unlock Secret
-                    </span>
-                </div>
-                
-                <div class="secret-blur p-12 bg-white border border-stone-100 shadow-2xl">
-                    <h3 class="font-serif text-3xl text-gold-500 mb-6 italic">Tonight's Plan</h3>
-                    <p class="font-serif text-lg leading-loose text-stone-700">
-                        Reservations at 7:00 PM.<br>
-                        The place we've always talked about.<br>
-                        <span class="text-sm font-sans text-stone-400 uppercase tracking-widest mt-4 block">Wear the black dress.</span>
-                    </p>
-                </div>
-            </div>
-        </section>
-
-        <footer class="py-12 text-center text-stone-300 text-[10px] uppercase tracking-[0.3em] bg-stone-900">
-            2026 • For Her Eyes Only
-        </footer>
-        
-        <div id="video-modal" class="fixed inset-0 z-[200] bg-white/95 hidden flex-col items-center justify-center p-4">
-            <button onclick="closeVideo()" class="absolute top-8 right-8 text-stone-400 hover:text-stone-900 text-4xl font-light transition">&times;</button>
-            <div class="w-full max-w-5xl aspect-video bg-black shadow-2xl">
-                <iframe id="modal-iframe" class="w-full h-full" src="" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-            </div>
-            <p id="video-caption" class="text-stone-900 font-serif text-2xl mt-8 text-center italic"></p>
+        <div class="level-controls">
+            <button class="level-btn active interact" onclick="switchTab('past')">THE PAST</button>
+            <button class="level-btn interact" onclick="switchTab('present')">THE PRESENT</button>
+            <button class="level-btn interact" onclick="switchTab('future')">THE FUTURE</button>
         </div>
 
-    </main>
+        <div id="past" class="timeline-grid active">
+            <div class="day-card interact" data-tilt>
+                <div class="day-title">FIRST MEET <span>2024</span></div>
+                <ul class="memory-list">
+                    <li>Location <span>Coffee Shop</span></li>
+                    <li>Vibe <span>Nervous & Cute</span></li>
+                    <li>Status <span>Crushing</span></li>
+                </ul>
+            </div>
+            <div class="day-card interact" data-tilt>
+                <div class="day-title">FIRST TRIP <span>Goa</span></div>
+                <ul class="memory-list">
+                    <li>Mood <span>Adventure</span></li>
+                    <li>Photos Taken <span>1,000+</span></li>
+                    <li>Sleep <span>Zero</span></li>
+                </ul>
+            </div>
+            <div class="day-card interact" data-tilt>
+                <div class="day-title">INSIDE JOKES <span>∞</span></div>
+                <ul class="memory-list">
+                    <li>"Panda" <span>Nickname</span></li>
+                    <li>Pizza <span>Obsession</span></li>
+                    <li>Laughs <span>Daily</span></li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="present" class="timeline-grid">
+            <div class="day-card interact" data-tilt>
+                <div class="day-title">YOUR TRAITS <span>Stats</span></div>
+                <ul class="memory-list">
+                    <li>Kindness <span>100%</span></li>
+                    <li>Cuteness <span>Overload</span></li>
+                    <li>Anger <span>1% (Scary)</span></li>
+                </ul>
+            </div>
+            <div class="day-card interact" data-tilt>
+                <div class="day-title">CURRENT MOOD <span>Party</span></div>
+                <ul class="memory-list">
+                    <li>Cake <span>Loading...</span></li>
+                    <li>Gifts <span>Ready</span></li>
+                    <li>Love <span>Infinite</span></li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="future" class="timeline-grid">
+            <div class="day-card interact" data-tilt>
+                <div class="day-title">BUCKET LIST <span>2026</span></div>
+                <ul class="memory-list">
+                    <li>Paris <span>Dream</span></li>
+                    <li>Skydiving <span>Maybe?</span></li>
+                    <li>Growing Old <span>Together</span></li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section id="gallery">
+        <h2 class="section-title">VISUAL <span>DIARY</span></h2>
+        <div class="swiper mySwiper">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide interact" style="background-image: url('https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=500&auto=format&fit=crop');"></div>
+                <div class="swiper-slide interact" style="background-image: url('https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=500&auto=format&fit=crop');"></div>
+                <div class="swiper-slide interact" style="background-image: url('https://images.unsplash.com/photo-1517841905240-472988babdf9?w=500&auto=format&fit=crop');"></div>
+                <div class="swiper-slide interact" style="background-image: url('https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=500&auto=format&fit=crop');"></div>
+                <div class="swiper-slide interact" style="background-image: url('https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500&auto=format&fit=crop');"></div>
+            </div>
+        </div>
+    </section>
+
+    <section id="tools">
+        <h2 class="section-title">LOVE <span>METRICS</span></h2>
+        <div class="tools-container">
+            <div class="tool-card interact" data-tilt>
+                <h3><i class="fas fa-heart text-primary"></i> Love Calculator</h3>
+                <input type="text" id="yourName" placeholder="Your Name">
+                <input type="text" id="herName" value="Priya" readonly style="color:var(--primary); font-weight:bold;">
+                <button class="calc-btn" onclick="calcLove()">CALCULATE PERCENTAGE</button>
+                <div id="loveResult" style="margin-top:20px; font-size:1.5rem; font-family:var(--font-head); color:var(--primary);"></div>
+            </div>
+
+            <div class="tool-card interact" data-tilt>
+                <h3><i class="fas fa-hourglass-half text-secondary"></i> Time Together</h3>
+                <div style="display:flex; justify-content:space-between; margin-top:30px;">
+                    <div style="text-align:center;">
+                        <span id="daysCount" style="font-size:3rem; font-weight:bold; color:white;">0</span>
+                        <p style="color:#888;">DAYS</p>
+                    </div>
+                    <div style="text-align:center;">
+                        <span id="hoursCount" style="font-size:3rem; font-weight:bold; color:white;">0</span>
+                        <p style="color:#888;">HOURS</p>
+                    </div>
+                </div>
+                <p style="margin-top:20px; color:#666; font-size:0.9rem;">Since the day we met</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="gifts">
+        <h2 class="section-title">BIRTHDAY <span>COUPONS</span></h2>
+        <div class="tools-container">
+            <div class="plan-card interact" data-tilt>
+                <div class="plan-name">DINNER DATE</div>
+                <div class="price">FREE</div>
+                <ul class="features">
+                    <li><i class="fas fa-check"></i> Any Restaurant</li>
+                    <li><i class="fas fa-check"></i> Dessert Included</li>
+                    <li><i class="fas fa-check"></i> Unlimited Talks</li>
+                </ul>
+                <button class="calc-btn" onclick="redeem('Dinner')">REDEEM NOW</button>
+            </div>
+
+            <div class="plan-card interact" style="border-color:var(--secondary); box-shadow:0 0 20px rgba(0,242,255,0.1);" data-tilt>
+                <div style="position:absolute; top:0; right:0; background:var(--secondary); color:black; padding:5px 15px; font-weight:bold; font-size:0.8rem;">PREMIUM</div>
+                <div class="plan-name">SHOPPING</div>
+                <div class="price" style="color:var(--secondary);">UNLIMITED</div>
+                <ul class="features">
+                    <li><i class="fas fa-check"></i> Your Choice</li>
+                    <li><i class="fas fa-check"></i> My Card</li>
+                    <li><i class="fas fa-check"></i> Bag Carrying Service</li>
+                </ul>
+                <button class="calc-btn" style="background:var(--secondary); color:black;" onclick="redeem('Shopping')">REDEEM NOW</button>
+            </div>
+
+            <div class="plan-card interact" data-tilt>
+                <div class="plan-name">TRIP</div>
+                <div class="price">ANYWHERE</div>
+                <ul class="features">
+                    <li><i class="fas fa-check"></i> Weekend Getaway</li>
+                    <li><i class="fas fa-check"></i> Full Planning</li>
+                    <li><i class="fas fa-check"></i> Relax Mode</li>
+                </ul>
+                <button class="calc-btn" onclick="redeem('Trip')">REDEEM NOW</button>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="logo">HAPPY <span>BIRTHDAY</span></div>
+        <p style="color:#888; margin: 20px 0;">
+            Made with code, caffeine, and lots of love. <br>
+            © 2026 For Priya. All Rights Reserved.
+        </p>
+        <div class="socials">
+            <a href="#" class="interact"><i class="fab fa-instagram"></i></a>
+            <a href="#" class="interact"><i class="fab fa-whatsapp"></i></a>
+            <a href="#" class="interact"><i class="fas fa-envelope"></i></a>
+        </div>
+        <br>
+        <div style="font-family:var(--font-head); letter-spacing:2px; color:var(--primary);">
+            DEVELOPED BY VIKAS G M
+        </div>
+    </footer>
 
     <script>
+        // 1. CUSTOM CURSOR LOGIC
+        const cursor = document.getElementById('cursor');
+        const cursorBlur = document.getElementById('cursor-blur');
+
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.x + 'px';
+            cursor.style.top = e.y + 'px';
+            
+            cursorBlur.animate({
+                left: e.x + 'px',
+                top: e.y + 'px'
+            }, { duration: 500, fill: "forwards" });
+        });
+
+        // Hover effect for interactive elements
+        document.querySelectorAll('.interact').forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('hovered-cursor'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('hovered-cursor'));
+        });
+
+        // 2. TAB SWITCHING (Timeline)
+        function switchTab(tabId) {
+            // Remove active class from all buttons and grids
+            document.querySelectorAll('.level-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.timeline-grid').forEach(grid => grid.classList.remove('active'));
+            
+            // Add active to clicked button and target grid
+            event.target.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+        }
+
+        // 3. LOVE CALCULATOR
+        function calcLove() {
+            const name = document.getElementById('yourName').value;
+            if(name) {
+                const result = document.getElementById('loveResult');
+                result.innerHTML = "CALCULATING...";
+                setTimeout(() => {
+                    result.innerHTML = "100% MATCH ❤️";
+                    confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+                }, 1000);
+            }
+        }
+
+        // 4. DATE COUNTER (Since we met)
+        // Set this to your actual meeting date
+        const startDate = new Date("2024-01-01"); // YYYY-MM-DD
+        
+        function updateCounter() {
+            const now = new Date();
+            const diff = now - startDate;
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+            
+            document.getElementById('daysCount').innerText = days;
+            document.getElementById('hoursCount').innerText = hours;
+        }
+        setInterval(updateCounter, 1000);
+        updateCounter();
+
+        // 5. REDEEM COUPON
+        function redeem(gift) {
+            alert(`YAY! You redeemed the ${gift} coupon. Screenshot this and send it to me! 📸`);
+            confetti();
+        }
+
+        // 6. SWIPER INIT
+        var swiper = new Swiper(".mySwiper", {
+            effect: "coverflow",
+            grabCursor: true,
+            centeredSlides: true,
+            slidesPerView: "auto",
+            coverflowEffect: {
+                rotate: 50,
+                stretch: 0,
+                depth: 100,
+                modifier: 1,
+                slideShadows: true,
+            },
+            pagination: {
+                el: ".swiper-pagination",
+            },
+            autoplay: {
+                delay: 2500,
+                disableOnInteraction: false,
+            },
+        });
+
+        // 7. GSAP ANIMATIONS
         gsap.registerPlugin(ScrollTrigger);
 
-        // --- CONFIG ---
-        const PASSWORD = "love";
-        const LETTER_TEXT = "Priya... in a noisy world, you are my quiet place. In a chaotic life, you are my clarity. Thank you for simply being you. Happy Birthday.";
+        gsap.from(".hero h1", { opacity: 0, y: 50, duration: 1.5, delay: 0.5 });
+        gsap.from(".hero p", { opacity: 0, y: 20, duration: 1, delay: 1 });
         
-        const WISHES = [
-            { id: "dQw4w9wgxcq", name: "Mother" },
-            { id: "dQw4w9wgxcq", name: "Best Friend" },
-            { id: "dQw4w9wgxcq", name: "London" },
-            { id: "dQw4w9wgxcq", name: "Paris" },
-            { id: "dQw4w9wgxcq", name: "The Girls" },
-            { id: "dQw4w9wgxcq", name: "Wish 06" },
-            { id: "dQw4w9wgxcq", name: "Wish 07" },
-            { id: "dQw4w9wgxcq", name: "Wish 08" },
-            { id: "dQw4w9wgxcq", name: "Wish 09" },
-            { id: "dQw4w9wgxcq", name: "Wish 10" },
-            { id: "dQw4w9wgxcq", name: "Wish 11" },
-            { id: "dQw4w9wgxcq", name: "Wish 12" },
-            { id: "dQw4w9wgxcq", name: "Wish 13" },
-            { id: "dQw4w9wgxcq", name: "Wish 14" },
-            { id: "dQw4w9wgxcq", name: "Wish 15" },
-            { id: "dQw4w9wgxcq", name: "Wish 16" },
-            { id: "dQw4w9wgxcq", name: "Wish 17" },
-            { id: "dQw4w9wgxcq", name: "Wish 18" },
-            { id: "dQw4w9wgxcq", name: "Wish 19" },
-            { id: "dQw4w9wgxcq", name: "Wish 20" },
-        ];
-
-        // --- UNLOCK ---
-        function unlock() {
-            const input = document.getElementById('password').value.toLowerCase();
-            if(input === PASSWORD) {
-                gsap.to("#gate", { opacity: 0, duration: 1.5, ease: "power2.inOut", onComplete: () => {
-                    document.getElementById('gate').style.display = 'none';
-                    document.getElementById('content').style.opacity = '1';
-                    initAnimations();
-                }});
-            } else {
-                gsap.fromTo("#password", {x: -5}, {x: 5, duration: 0.1, repeat: 3, yoyo: true});
-                document.getElementById('error-msg').classList.remove('hidden');
-            }
-        }
-
-        // --- ANIMATIONS ---
-        function initAnimations() {
-            gsap.to(".hero-anim", {
-                y: 0, opacity: 1, duration: 2, stagger: 0.4, ease: "power3.out"
+        gsap.utils.toArray('.section-title').forEach(title => {
+            gsap.from(title, {
+                scrollTrigger: { trigger: title, start: "top 80%" },
+                opacity: 0, y: 50, duration: 1
             });
+        });
 
-            gsap.utils.toArray(".timeline-item").forEach((item) => {
-                gsap.fromTo(item, 
-                    { opacity: 0, y: 30 },
-                    {
-                        opacity: 1, y: 0, duration: 1.5, ease: "power3.out",
-                        scrollTrigger: { trigger: item, start: "top 85%" }
-                    }
-                );
-            });
-        }
-
-        // --- RENDER VIDEO GRID (Minimalist) ---
-        function renderVideoGrid() {
-            const grid = document.getElementById('video-grid');
-            WISHES.forEach(video => {
-                const card = document.createElement('div');
-                card.className = "group relative aspect-[3/4] bg-white overflow-hidden cursor-pointer hover:opacity-90 transition duration-500";
-                card.onclick = () => playVideo(video.id, video.name);
-                
-                const thumbUrl = `https://img.youtube.com/vi/${video.id}/hqdefault.jpg`;
-                card.innerHTML = `
-                    <img src="${thumbUrl}" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition duration-700">
-                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-500">
-                        <div class="w-12 h-12 bg-white flex items-center justify-center shadow-xl">
-                            <i class="fas fa-play text-stone-900 text-xs"></i>
-                        </div>
-                    </div>
-                    <div class="absolute bottom-4 left-4">
-                        <p class="text-white text-[10px] font-bold uppercase tracking-widest drop-shadow-md">${video.name}</p>
-                    </div>
-                `;
-                grid.appendChild(card);
-            });
-        }
-
-        // --- UTILS ---
-        function playVoiceNote() {
-            const audio = document.getElementById('voice-audio');
-            const bgMusic = document.getElementById('bg-music');
-            const btn = document.getElementById('voice-btn');
-            const waveform = document.getElementById('waveform');
-            
-            if (audio.paused) {
-                bgMusic.pause();
-                audio.play();
-                btn.innerHTML = '<i class="fas fa-pause text-xs"></i>';
-                waveform.classList.add('playing');
-                audio.onended = () => {
-                    btn.innerHTML = '<i class="fas fa-play text-xs"></i>';
-                    waveform.classList.remove('playing');
-                };
-            } else {
-                audio.pause();
-                btn.innerHTML = '<i class="fas fa-play text-xs"></i>';
-                waveform.classList.remove('playing');
-            }
-        }
-
-        function startTyping() {
-            const btn = document.getElementById('start-type-btn');
-            const container = document.getElementById('typewriter-text');
-            gsap.to(btn, {opacity: 0, duration: 1, onComplete: () => btn.style.display = 'none'});
-            
-            let i = 0;
-            const speed = 60;
-            function type() {
-                if (i < LETTER_TEXT.length) {
-                    container.innerHTML += LETTER_TEXT.charAt(i);
-                    i++;
-                    setTimeout(type, speed);
-                }
-            }
-            type();
-        }
-
-        function toggleMusic() {
-            const music = document.getElementById('bg-music');
-            const icon = document.getElementById('music-icon');
-            if (music.paused) {
-                music.play();
-                icon.className = 'fas fa-pause text-xs';
-            } else {
-                music.pause();
-                icon.className = 'fas fa-music text-xs';
-            }
-        }
-
-        function revealSecret(element) {
-            const overlay = element.querySelector('.absolute');
-            const content = element.querySelector('.secret-blur');
-            gsap.to(overlay, {opacity: 0, duration: 1});
-            overlay.style.pointerEvents = 'none';
-            content.classList.remove('secret-blur');
-            content.classList.add('secret-reveal');
-        }
-
-        function playVideo(id, name) {
-            const modal = document.getElementById('video-modal');
-            const iframe = document.getElementById('modal-iframe');
-            const caption = document.getElementById('video-caption');
-            const bgMusic = document.getElementById('bg-music');
-            
-            if(!bgMusic.paused) { bgMusic.pause(); document.getElementById('music-icon').className = 'fas fa-music text-xs'; }
-            
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-            gsap.fromTo(modal, {opacity: 0}, {opacity: 1, duration: 0.5});
-            
-            iframe.src = `https://www.youtube.com/embed/${id}?autoplay=1&rel=0`;
-            caption.innerText = name;
-        }
-
-        function closeVideo() {
-            const modal = document.getElementById('video-modal');
-            const iframe = document.getElementById('modal-iframe');
-            
-            gsap.to(modal, {opacity: 0, duration: 0.5, onComplete: () => {
-                modal.classList.add('hidden');
-                modal.classList.remove('flex');
-                iframe.src = "";
-            }});
-        }
-
-        window.addEventListener('load', renderVideoGrid);
+        // 8. TILT INIT
+        VanillaTilt.init(document.querySelectorAll("[data-tilt]"), {
+            max: 15,
+            speed: 400,
+            glare: true,
+            "max-glare": 0.2,
+        });
     </script>
 </body>
 </html>
