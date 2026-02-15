@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Journey | Happy Birthday</title>
+    <title>The Journey | A Cinematic Gift</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
@@ -16,7 +16,7 @@
     <style>
         :root {
             --gold: #D4AF37;
-            --rose-gold: #B76E79;
+            --rose-gold: #E0BFB8;
             --deep-black: #050505;
             --glass: rgba(255, 255, 255, 0.05);
         }
@@ -26,482 +26,427 @@
             color: #ffffff;
             font-family: 'Inter', sans-serif;
             overflow-x: hidden;
-            cursor: none; /* Custom cursor */
+            cursor: none; /* Custom cursor enabled */
         }
 
-        /* Custom Cursor */
+        /* --- Custom Cursor --- */
         .cursor-dot, .cursor-outline {
             position: fixed;
-            top: 0;
-            left: 0;
+            top: 0; left: 0;
             transform: translate(-50%, -50%);
             border-radius: 50%;
             z-index: 9999;
             pointer-events: none;
         }
-        .cursor-dot {
-            width: 8px;
-            height: 8px;
-            background-color: var(--gold);
-        }
+        .cursor-dot { width: 8px; height: 8px; background-color: var(--gold); }
         .cursor-outline {
-            width: 40px;
-            height: 40px;
+            width: 40px; height: 40px;
             border: 1px solid rgba(212, 175, 55, 0.5);
             transition: width 0.2s, height 0.2s;
         }
 
-        /* Typography */
-        h1, h2, .serif {
-            font-family: 'Cinzel', serif;
-        }
-        .emotional-text {
-            font-family: 'Playfair Display', serif;
-        }
-
-        /* Gold Gradient Text */
-        .text-gradient-gold {
+        /* --- Typography & Utilities --- */
+        .font-cinematic { font-family: 'Cinzel', serif; }
+        .font-emotional { font-family: 'Playfair Display', serif; }
+        
+        .text-gradient {
             background: linear-gradient(to right, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
         }
 
-        /* Netflix Scroller */
-        .netflix-slider {
+        /* --- Netflix Slider --- */
+        .netflix-scroll {
             display: flex;
-            gap: 1rem;
             overflow-x: auto;
+            gap: 1rem;
             padding: 2rem 0;
-            scroll-behavior: smooth;
-            -ms-overflow-style: none;
-            scrollbar-width: none;
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none;  /* IE */
         }
-        .netflix-slider::-webkit-scrollbar {
-            display: none;
-        }
+        .netflix-scroll::-webkit-scrollbar { display: none; }
+        
         .video-card {
-            min-width: 300px;
-            height: 450px;
-            background: #111;
-            border-radius: 12px;
-            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            min-width: 280px;
+            height: 400px;
+            border-radius: 8px;
+            transition: transform 0.3s ease, z-index 0.3s;
             position: relative;
             overflow: hidden;
             cursor: pointer;
         }
         .video-card:hover {
-            transform: scale(1.05);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            z-index: 10;
+            transform: scale(1.1);
+            z-index: 20;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.8);
         }
 
-        /* Cake Animation */
-        .cake-container { position: relative; width: 300px; height: 300px; margin: 0 auto; cursor: pointer; }
-        .cake-base {
+        /* --- Interactive Cake --- */
+        .cake-stage { position: relative; width: 300px; height: 300px; margin: 0 auto; }
+        .cake-body {
             position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
-            width: 200px; height: 120px; background: #fce4ec; border-radius: 10px 10px 0 0;
-            box-shadow: inset -10px 0px 20px rgba(0,0,0,0.1);
+            width: 200px; height: 140px; background: #FFF0F5; border-radius: 10px 10px 0 0;
+            box-shadow: inset -10px 0 20px rgba(0,0,0,0.1);
         }
-        .cake-layer {
-            position: absolute; bottom: 120px; left: 50%; transform: translateX(-50%);
-            width: 160px; height: 80px; background: #f8bbd0; border-radius: 10px 10px 0 0;
+        .icing {
+            position: absolute; top: 0; left: 0; width: 100%; height: 40px;
+            background: #FFB7B2; border-radius: 10px 10px 20px 20px;
         }
         .candle {
-            position: absolute; top: -30px; left: 50%; transform: translateX(-50%);
-            width: 12px; height: 35px; background: linear-gradient(to bottom, #fff, #ddd);
-            border-radius: 4px; z-index: 5;
+            position: absolute; bottom: 140px; left: 50%; transform: translateX(-50%);
+            width: 14px; height: 40px; background: linear-gradient(to right, #fff, #eee);
+            z-index: 10;
         }
         .flame {
-            position: absolute; top: -20px; left: 50%; transform: translateX(-50%);
-            width: 12px; height: 20px; background: #ff9800; border-radius: 50% 50% 20% 20%;
-            animation: flicker 1s infinite alternate;
-            box-shadow: 0 0 10px #ffeb3b, 0 0 20px #ff9800;
+            position: absolute; top: -25px; left: 50%; transform: translateX(-50%);
+            width: 14px; height: 26px; background: #FFD700;
+            border-radius: 50% 50% 20% 20%;
+            animation: flicker 0.8s infinite alternate;
+            box-shadow: 0 0 10px #FFD700, 0 0 30px #FF4500;
+            cursor: pointer;
             transform-origin: bottom center;
         }
+        @keyframes flicker { 
+            0% { transform: translateX(-50%) scale(1); opacity: 1; } 
+            100% { transform: translateX(-50%) scale(1.1) rotate(2deg); opacity: 0.8; } 
+        }
         .flame.out { display: none; }
-        @keyframes flicker { 0% { transform: translateX(-50%) scale(1); opacity: 1; } 100% { transform: translateX(-50%) scale(1.1) rotate(2deg); opacity: 0.8; } }
 
-        /* Floating Hearts */
-        .heart-float {
-            position: fixed;
-            color: var(--rose-gold);
-            animation: floatUp 4s linear forwards;
+        /* --- Unlock Animation --- */
+        .gift-wrapper {
+            perspective: 1000px;
+            opacity: 0;
             pointer-events: none;
-            z-index: 50;
+            transition: opacity 1s;
+        }
+        .gift-wrapper.active { opacity: 1; pointer-events: all; }
+        
+        .floating-heart {
+            position: fixed;
+            color: rgba(224, 191, 184, 0.4);
+            animation: floatUp 6s linear forwards;
+            pointer-events: none;
+            z-index: 1;
         }
         @keyframes floatUp {
-            0% { transform: translateY(100vh) scale(0); opacity: 0; }
+            0% { transform: translateY(100vh) scale(0.5); opacity: 0; }
             50% { opacity: 0.8; }
-            100% { transform: translateY(-10vh) scale(1.5); opacity: 0; }
+            100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
         }
-
-        /* Glassmorphism */
-        .glass-panel {
-            background: var(--glass);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-        }
-
-        /* Gift Box */
-        .gift-box {
-            font-size: 5rem;
-            cursor: pointer;
-            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        .gift-box:hover { transform: rotate(5deg) scale(1.1); }
-        .gift-content { opacity: 0; transform: translateY(20px); transition: all 1s ease; }
     </style>
 </head>
-<body>
-
-    <div class="fixed bottom-8 left-8 z-50 flex items-center gap-4 glass-panel p-3">
-        <div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center cursor-pointer" id="music-btn">
-            <i class="fas fa-play text-xs" id="play-icon"></i>
-        </div>
-        <div class="text-xs font-light">
-            <p class="text-gray-400">Now Playing</p>
-            <p id="track-name" class="text-white w-24 truncate">Cinematic Opener</p>
-        </div>
-        <audio id="bg-music" loop>
-            <source src="https://cdn.pixabay.com/audio/2022/03/10/audio_512686851f.mp3" type="audio/mp3">
-        </audio>
-    </div>
+<body class="antialiased">
 
     <div class="cursor-dot"></div>
     <div class="cursor-outline"></div>
 
-    <section id="intro" class="fixed inset-0 z-50 bg-black flex flex-col items-center justify-center cursor-pointer">
-        <div class="text-center">
-            <p class="text-xs tracking-[0.5em] text-gray-400 mb-4 uppercase">An Emotional Journey</p>
-            <h1 class="text-4xl md:text-6xl text-white font-light tracking-widest opacity-0 intro-text">LUMINA</h1>
-            <p class="mt-8 text-sm text-gray-500 animate-pulse">Click anywhere to begin</p>
+    <audio id="bg-music" loop>
+        <source src="https://cdn.pixabay.com/audio/2022/05/27/audio_1808fbf07a.mp3" type="audio/mp3">
+    </audio>
+    <div class="fixed bottom-6 right-6 z-50 text-white/30 hover:text-white transition-colors cursor-pointer" id="mute-btn">
+        <i class="fas fa-volume-high"></i>
+    </div>
+
+    <section id="intro-screen" class="fixed inset-0 z-[100] bg-black flex flex-col items-center justify-center cursor-pointer">
+        <div class="text-center space-y-6">
+            <p class="text-xs tracking-[0.6em] text-gray-500 uppercase fade-elem">A Digital Experience</p>
+            <h1 class="text-5xl md:text-7xl font-cinematic text-white tracking-widest fade-elem scale-elem">LUMINA</h1>
+            <p class="text-sm text-gray-400 font-light fade-elem animate-pulse mt-8">Tap to Begin</p>
         </div>
     </section>
 
-    <section class="min-h-screen relative flex items-center justify-center overflow-hidden">
-        <div class="absolute inset-0 z-0 opacity-40">
-            <img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=2070&auto=format&fit=crop" class="w-full h-full object-cover grayscale" alt="Background">
+    <section class="relative h-screen flex items-center justify-center overflow-hidden">
+        <div class="absolute inset-0 z-0">
+            <img src="https://images.unsplash.com/photo-1513201099705-a9746e1e201f?q=80&w=2874&auto=format&fit=crop" 
+                 class="w-full h-full object-cover opacity-30 scale-110" id="hero-bg" alt="Hero">
+            <div class="absolute inset-0 bg-gradient-to-b from-black/20 via-black/60 to-[#050505]"></div>
         </div>
-        <div class="absolute inset-0 bg-gradient-to-b from-transparent via-black/80 to-[#050505] z-10"></div>
-        
-        <div class="relative z-20 text-center px-4">
-            <h2 class="text-xl md:text-2xl text-white/80 font-light mb-4 hero-elem">Today, the world celebrates</h2>
-            <h1 class="text-6xl md:text-9xl font-bold text-gradient-gold hero-elem">YOU</h1>
-            <p class="mt-6 text-lg md:text-xl font-light text-gray-300 max-w-2xl mx-auto hero-elem emotional-text">
-                "Not just another year, but another chapter of your brilliance."
+
+        <div class="relative z-10 text-center px-4">
+            <h2 class="text-xl md:text-3xl font-light text-white/80 mb-6 hero-text translate-y-10 opacity-0">Today, the universe celebrates</h2>
+            <h1 class="text-6xl md:text-9xl font-cinematic font-bold text-gradient hero-text translate-y-10 opacity-0">YOU</h1>
+            <p class="mt-8 text-lg md:text-xl font-emotional text-gray-300 max-w-2xl mx-auto hero-text translate-y-10 opacity-0 italic">
+                "Another year bolder, another year wiser, another year of being unforgettable."
             </p>
         </div>
-        
-        <div class="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce z-20">
-            <i class="fas fa-chevron-down text-white/30"></i>
-        </div>
     </section>
 
-    <section class="min-h-screen bg-[#050505] flex items-center justify-center py-20">
-        <div class="max-w-3xl mx-auto px-6 text-center space-y-20">
-            <div class="gsap-fade-up">
-                <i class="fas fa-star text-yellow-600 text-xl mb-4"></i>
-                <p class="text-2xl md:text-4xl leading-relaxed emotional-text text-gray-200">
-                    "In a world of ordinary,<br>you remain the <span class="text-gradient-gold">extraordinary</span>."
+    <section class="min-h-screen bg-[#050505] flex items-center justify-center py-20 relative">
+        <div class="max-w-4xl mx-auto px-6 text-center space-y-32">
+            <div class="scroll-reveal opacity-0 translate-y-10">
+                <i class="fas fa-quote-left text-2xl text-yellow-600/50 mb-6"></i>
+                <p class="text-3xl md:text-5xl font-emotional leading-tight text-gray-200">
+                    Your laughter is the soundtrack<br>to our happiest memories.
                 </p>
-            </div>
-            <div class="gsap-fade-up">
-                <p class="text-xl md:text-3xl leading-relaxed emotional-text text-gray-400">
-                    Your laughter is the melody<br>we didn't know we needed.
-                </p>
-            </div>
-            <div class="gsap-fade-up">
-                <p class="text-xl md:text-3xl leading-relaxed emotional-text text-gray-400">
-                    Your kindness, the gravity<br>that holds us together.
-                </p>
-            </div>
-        </div>
-    </section>
-
-    <section class="py-24 bg-[#050505] overflow-hidden">
-        <div class="px-6 md:px-12 mb-12">
-            <h2 class="text-4xl font-serif text-white">Moments in Time</h2>
-            <div class="h-1 w-20 bg-yellow-600 mt-4"></div>
-        </div>
-        
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 px-4 md:px-12 h-[80vh]">
-            <div class="col-span-1 row-span-2 relative overflow-hidden rounded-xl group parallax-img">
-                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
-            </div>
-            <div class="col-span-1 relative overflow-hidden rounded-xl group parallax-img pt-12">
-                <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=800&q=80" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
-            </div>
-            <div class="col-span-1 row-span-2 relative overflow-hidden rounded-xl group parallax-img">
-                <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=800&q=80" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
-            </div>
-        </div>
-    </section>
-
-    <section class="py-24 bg-gradient-to-b from-[#050505] to-[#0a0a0a]">
-        <div class="px-6 md:px-12 mb-8">
-            <h2 class="text-3xl font-serif text-white mb-2">The World Wishes You</h2>
-            <p class="text-gray-500 text-sm">Top Picks for You • 20+ Videos</p>
-        </div>
-
-        <div class="netflix-slider pl-6 md:pl-12">
-            <div class="video-card flex-shrink-0 group relative">
-                <img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=400" class="w-full h-full object-cover opacity-60 group-hover:opacity-40 transition-opacity">
-                <div class="absolute bottom-0 left-0 p-4 w-full bg-gradient-to-t from-black to-transparent">
-                    <p class="text-white font-bold">From New York</p>
-                    <p class="text-xs text-green-400">98% Match</p>
-                </div>
-                <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                    <i class="fas fa-play-circle text-5xl text-white drop-shadow-lg"></i>
-                </div>
             </div>
             
-            <div class="video-card flex-shrink-0 group relative">
-                <img src="https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=400" class="w-full h-full object-cover opacity-60 group-hover:opacity-40 transition-opacity">
-                <div class="absolute bottom-0 left-0 p-4 w-full bg-gradient-to-t from-black to-transparent">
-                    <p class="text-white font-bold">From The Team</p>
-                    <p class="text-xs text-green-400">New Release</p>
-                </div>
+            <div class="scroll-reveal opacity-0 translate-y-10">
+                <p class="text-3xl md:text-5xl font-emotional leading-tight text-gray-200">
+                    Your kindness is the anchor<br>that holds us steady.
+                </p>
             </div>
 
-            <div class="video-card flex-shrink-0 group relative">
-                <img src="https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?w=400" class="w-full h-full object-cover opacity-60 group-hover:opacity-40 transition-opacity">
-                <div class="absolute bottom-0 left-0 p-4 w-full bg-gradient-to-t from-black to-transparent">
-                    <p class="text-white font-bold">Surprise Message</p>
-                </div>
-            </div>
-             </div>
-    </section>
-
-    <section class="min-h-screen flex flex-col items-center justify-center bg-[#050505] relative">
-        <div class="text-center mb-12 z-20">
-            <h2 class="text-4xl text-gradient-gold font-serif mb-4">Make a Wish</h2>
-            <p class="text-gray-400" id="cake-instruction">Click the flame to blow out the candle</p>
-        </div>
-
-        <div class="cake-container" id="cake-interaction">
-            <div class="cake-base"></div>
-            <div class="cake-layer"></div>
-            <div class="candle">
-                <div class="flame" id="flame"></div>
+            <div class="scroll-reveal opacity-0 translate-y-10">
+                <p class="text-2xl md:text-4xl font-light font-cinematic text-gradient">
+                    "To the world you are one person,<br>but to me, you are the world."
+                </p>
             </div>
         </div>
     </section>
 
-    <section id="gift-section" class="min-h-screen flex flex-col items-center justify-center bg-[#050505] hidden">
-        <div class="gift-box" id="gift-trigger">
-            🎁
+    <section class="py-24 bg-gradient-to-b from-[#050505] to-[#0a0a0a] overflow-hidden">
+        <div class="px-8 md:px-16 mb-16 flex items-end justify-between">
+            <div>
+                <h2 class="text-4xl font-cinematic text-white">The Collection</h2>
+                <div class="h-0.5 w-24 bg-yellow-600 mt-4"></div>
+            </div>
+            <span class="text-gray-600 font-mono hidden md:block">01 / MEMORIES</span>
         </div>
-        <p class="text-gray-500 mt-4 animate-pulse">Tap to Open</p>
+
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-6 px-4 md:px-16 h-[100vh]">
+            <div class="md:col-span-4 h-full relative rounded-2xl overflow-hidden group">
+                <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=800" class="parallax-img w-full h-[120%] object-cover absolute top-0">
+                <div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors"></div>
+            </div>
+            <div class="md:col-span-4 md:col-start-5 h-[80%] mt-[10%] relative rounded-2xl overflow-hidden group">
+                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=800" class="parallax-img w-full h-[120%] object-cover absolute top-0">
+            </div>
+            <div class="md:col-span-4 md:col-start-9 h-full relative rounded-2xl overflow-hidden group">
+                <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=800" class="parallax-img w-full h-[120%] object-cover absolute top-0">
+            </div>
+        </div>
+    </section>
+
+    <section class="py-20 bg-[#050505] relative z-20">
+        <div class="px-8 md:px-16 mb-6">
+            <h3 class="text-2xl text-white font-semibold mb-1">Fan Favorites (Wishes)</h3>
+            <p class="text-sm text-gray-500">Trending Now • Season 26</p>
+        </div>
+
+        <div class="netflix-scroll px-8 md:px-16 pb-10">
+            <div class="video-card flex-shrink-0 bg-gray-900 group">
+                <img src="https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?w=600" class="w-full h-full object-cover opacity-70 group-hover:opacity-100 transition-opacity">
+                <div class="absolute bottom-0 left-0 w-full p-4 bg-gradient-to-t from-black via-black/80 to-transparent">
+                    <p class="text-green-400 text-xs font-bold mb-1">98% Match</p>
+                    <h4 class="text-white font-bold text-lg">Mom & Dad</h4>
+                    <p class="text-gray-400 text-xs">Emotional • Heartfelt</p>
+                </div>
+                <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
+                    <div class="w-12 h-12 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center border border-white/30">
+                        <i class="fas fa-play text-white ml-1"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="video-card flex-shrink-0 bg-gray-900 group">
+                <img src="https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=600" class="w-full h-full object-cover opacity-70 group-hover:opacity-100 transition-opacity">
+                <div class="absolute bottom-0 left-0 w-full p-4 bg-gradient-to-t from-black via-black/80 to-transparent">
+                    <p class="text-green-400 text-xs font-bold mb-1">New Release</p>
+                    <h4 class="text-white font-bold text-lg">Besties from NYC</h4>
+                    <p class="text-gray-400 text-xs">Comedy • Fun</p>
+                </div>
+            </div>
+
+            <div class="video-card flex-shrink-0 bg-gray-900 group">
+                 <div class="w-full h-full flex items-center justify-center bg-gray-800 border border-gray-700">
+                    <span class="text-gray-500">More Wishes...</span>
+                 </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="min-h-screen flex flex-col items-center justify-center bg-[#050505] relative overflow-hidden">
         
-        <div class="gift-content text-center max-w-2xl px-6 mt-8">
-            <h2 class="text-5xl font-serif text-white mb-6">Your Real Gift</h2>
-            <p class="text-xl text-gray-300 leading-relaxed">
-                [Insert Personal Message Here: "We've booked a trip to Bali..." or "Look under your pillow..."]
-            </p>
-            <button class="mt-8 px-8 py-3 bg-white text-black font-bold rounded-full hover:bg-gray-200 transition-colors">
-                Claim It
-            </button>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-yellow-600/10 rounded-full blur-[100px]"></div>
+
+        <div id="cake-section" class="z-20 text-center transition-all duration-1000">
+            <h2 class="text-4xl font-cinematic text-white mb-2">Make a Wish</h2>
+            <p class="text-gray-400 mb-12 text-sm font-light tracking-wide animate-pulse">Click the flame to blow it out</p>
+            
+            <div class="cake-stage">
+                <div class="cake-body">
+                    <div class="icing"></div>
+                </div>
+                <div class="candle">
+                    <div class="flame" id="flame"></div>
+                </div>
+            </div>
         </div>
+
+        <div id="surprise-section" class="absolute inset-0 flex flex-col items-center justify-center z-30 gift-wrapper">
+            <div class="text-center max-w-2xl px-6">
+                <i class="fas fa-gift text-6xl text-gradient mb-8 animate-bounce"></i>
+                <h2 class="text-5xl md:text-7xl font-cinematic text-white mb-6">Happy Birthday!</h2>
+                
+                <div class="bg-white/5 backdrop-blur-lg border border-white/10 p-8 rounded-2xl transform hover:scale-105 transition-transform duration-300">
+                    <h3 class="text-xl text-yellow-500 font-bold mb-2 uppercase tracking-wider">Your Gift</h3>
+                    <p class="text-2xl text-white font-emotional italic mb-6">
+                        "Pack your bags. We are going to Paris next weekend!"
+                    </p>
+                    <p class="text-sm text-gray-500">Check your email for tickets.</p>
+                </div>
+                
+                <button onclick="location.reload()" class="mt-12 text-gray-500 hover:text-white text-sm transition-colors uppercase tracking-widest">
+                    Replay Experience
+                </button>
+            </div>
+        </div>
+
     </section>
 
     <script>
-        // --- 1. Custom Cursor Logic ---
-        const cursorDot = document.querySelector('.cursor-dot');
-        const cursorOutline = document.querySelector('.cursor-outline');
-
+        // --- 1. SETUP & UTILS ---
+        gsap.registerPlugin(ScrollTrigger);
+        
+        // Custom Cursor Logic
+        const dot = document.querySelector('.cursor-dot');
+        const outline = document.querySelector('.cursor-outline');
+        
         window.addEventListener('mousemove', (e) => {
-            const posX = e.clientX;
-            const posY = e.clientY;
-
+            const x = e.clientX;
+            const y = e.clientY;
+            
             // Dot follows instantly
-            cursorDot.style.left = `${posX}px`;
-            cursorDot.style.top = `${posY}px`;
-
-            // Outline follows with delay (simulated via animation in CSS, we just set coords)
-            cursorOutline.animate({
-                left: `${posX}px`,
-                top: `${posY}px`
+            dot.style.left = `${x}px`;
+            dot.style.top = `${y}px`;
+            
+            // Outline follows with slight delay
+            outline.animate({
+                left: `${x}px`,
+                top: `${y}px`
             }, { duration: 500, fill: "forwards" });
         });
 
-        // --- 2. Intro & Music ---
-        const intro = document.getElementById('intro');
+        // --- 2. INTRO SEQUENCE ---
+        const introScreen = document.getElementById('intro-screen');
         const bgMusic = document.getElementById('bg-music');
-        const musicBtn = document.getElementById('music-btn');
-        const playIcon = document.getElementById('play-icon');
-        let isPlaying = false;
-
-        intro.addEventListener('click', () => {
-            // Start Music
-            bgMusic.volume = 0.5;
-            bgMusic.play().then(() => {
-                isPlaying = true;
-                playIcon.classList.remove('fa-play');
-                playIcon.classList.add('fa-pause');
-            }).catch(e => console.log("Audio play failed", e));
-
-            // Animate Out
-            gsap.to('.intro-text', { opacity: 0, y: -50, duration: 1 });
-            gsap.to(intro, { 
-                opacity: 0, 
-                duration: 1.5, 
-                delay: 0.5, 
-                onComplete: () => {
-                    intro.style.display = 'none';
-                    startHeroAnimation();
-                } 
-            });
+        
+        introScreen.addEventListener('click', () => {
+            // Play Audio
+            bgMusic.volume = 0.4;
+            bgMusic.play().catch(e => console.log("Audio needed user interaction"));
+            
+            // Animate Intro Out
+            const tl = gsap.timeline();
+            tl.to('.fade-elem', { y: -20, opacity: 0, stagger: 0.1, duration: 0.8 })
+              .to(introScreen, { opacity: 0, duration: 1.5, pointerEvents: 'none' })
+              .call(startHeroAnimation); // Trigger hero animation
         });
-
-        // Music Toggle
-        musicBtn.addEventListener('click', () => {
-            if(isPlaying) {
-                bgMusic.pause();
-                playIcon.classList.remove('fa-pause');
-                playIcon.classList.add('fa-play');
-            } else {
-                bgMusic.play();
-                playIcon.classList.remove('fa-play');
-                playIcon.classList.add('fa-pause');
-            }
-            isPlaying = !isPlaying;
-        });
-
-        // --- 3. Animations (GSAP) ---
-        gsap.registerPlugin(ScrollTrigger);
-
-        // Intro Text Fade In
-        gsap.to('.intro-text', { opacity: 1, duration: 2, delay: 0.5 });
 
         function startHeroAnimation() {
-            const tl = gsap.timeline();
-            tl.from('.hero-elem', {
-                y: 50,
-                opacity: 0,
+            // Zoom Background
+            gsap.to("#hero-bg", { scale: 1, duration: 10, ease: "power2.out" });
+            
+            // Reveal Text
+            gsap.to(".hero-text", {
+                y: 0,
+                opacity: 1,
                 duration: 1.5,
                 stagger: 0.3,
                 ease: "power3.out"
             });
         }
 
-        // Scroll Trigger for Text Sections
-        gsap.utils.toArray('.gsap-fade-up').forEach(elem => {
-            gsap.from(elem, {
+        // --- 3. SCROLL ANIMATIONS ---
+        
+        // Poetry Reveal
+        gsap.utils.toArray('.scroll-reveal').forEach(elem => {
+            gsap.to(elem, {
                 scrollTrigger: {
                     trigger: elem,
                     start: "top 80%",
+                    toggleActions: "play none none reverse"
                 },
-                y: 50,
-                opacity: 0,
-                duration: 1.5,
+                y: 0,
+                opacity: 1,
+                duration: 1.2,
                 ease: "power3.out"
             });
         });
 
-        // Parallax Effect for Gallery
-        gsap.utils.toArray('.parallax-img').forEach(elem => {
-            gsap.to(elem, {
+        // Parallax Images
+        gsap.utils.toArray('.parallax-img').forEach(img => {
+            gsap.to(img, {
+                y: "20%", // Move image down slightly as we scroll
+                ease: "none",
                 scrollTrigger: {
-                    trigger: elem,
+                    trigger: img.parentElement,
                     start: "top bottom",
                     end: "bottom top",
                     scrub: true
-                },
-                y: -50,
-                ease: "none"
+                }
             });
         });
 
-        // --- 4. Cake & Celebration Logic ---
+        // --- 4. INTERACTIVE CAKE ---
         const flame = document.getElementById('flame');
-        const cakeInstruction = document.getElementById('cake-instruction');
-        const giftSection = document.getElementById('gift-section');
-        const giftTrigger = document.getElementById('gift-trigger');
-        const giftContent = document.querySelector('.gift-content');
+        const cakeSection = document.getElementById('cake-section');
+        const surpriseSection = document.getElementById('surprise-section');
 
         flame.addEventListener('click', () => {
-            // Blow out candle
+            // 1. Blow out candle
             flame.classList.add('out');
-            cakeInstruction.innerText = "Happy Birthday!";
             
-            // Confetti Explosion
-            var duration = 3000;
-            var end = Date.now() + duration;
+            // 2. Confetti Explosion
+            confetti({
+                particleCount: 150,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#D4AF37', '#ffffff', '#E0BFB8']
+            });
 
-            (function frame() {
-                confetti({
-                    particleCount: 5,
-                    angle: 60,
-                    spread: 55,
-                    origin: { x: 0 },
-                    colors: ['#D4AF37', '#B76E79', '#ffffff']
-                });
-                confetti({
-                    particleCount: 5,
-                    angle: 120,
-                    spread: 55,
-                    origin: { x: 1 },
-                    colors: ['#D4AF37', '#B76E79', '#ffffff']
-                });
+            // 3. Audio Swell (Simulated via volume)
+            let vol = 0.4;
+            const volInterval = setInterval(() => {
+                if(vol < 1.0) { vol += 0.1; bgMusic.volume = vol; }
+                else clearInterval(volInterval);
+            }, 200);
 
-                if (Date.now() < end) {
-                    requestAnimationFrame(frame);
-                }
-            }());
-
-            // Transition to Gift Section
+            // 4. Transition to Surprise
+            gsap.to(cakeSection, { opacity: 0, scale: 0.9, duration: 1, delay: 0.5 });
+            
             setTimeout(() => {
-                gsap.to('.cake-container', { opacity: 0, duration: 1 });
-                gsap.to(cakeInstruction, { opacity: 0, duration: 1 });
+                cakeSection.style.display = 'none';
+                surpriseSection.classList.add('active');
                 
-                setTimeout(() => {
-                    document.querySelector('.cake-container').style.display = 'none';
-                    giftSection.classList.remove('hidden');
-                    gsap.from(giftSection, { opacity: 0, duration: 2 });
-                }, 1000);
-            }, 3000);
+                // Animate Gift Reveal
+                gsap.from("#surprise-section i", { scale: 0, rotation: 180, duration: 1, type: "elastic" });
+                gsap.from("#surprise-section h2", { y: 50, opacity: 0, duration: 1, delay: 0.5 });
+                gsap.from(".gift-content", { y: 50, opacity: 0, duration: 1, delay: 0.8 });
+
+                // More Fireworks
+                launchFireworks();
+            }, 1500);
         });
 
-        // Gift Unlock
-        giftTrigger.addEventListener('click', () => {
-            gsap.to(giftTrigger, { scale: 0, rotation: 360, duration: 0.5 });
-            gsap.to('.gift-content', { opacity: 1, y: 0, duration: 1, delay: 0.5 });
-            
-            // More intense fireworks
-            var count = 200;
-            var defaults = {
-                origin: { y: 0.7 }
-            };
-
-            function fire(particleRatio, opts) {
-                confetti(Object.assign({}, defaults, opts, {
-                    particleCount: Math.floor(count * particleRatio)
-                }));
-            }
-
-            fire(0.25, { spread: 26, startVelocity: 55, });
-            fire(0.2, { spread: 60, });
-            fire(0.35, { spread: 100, decay: 0.91, scalar: 0.8 });
-            fire(0.1, { spread: 120, startVelocity: 25, decay: 0.92, scalar: 1.2 });
-            fire(0.1, { spread: 120, startVelocity: 45, });
-        });
-
-        // --- 5. Floating Hearts Effect ---
-        setInterval(() => {
+        // --- 5. ATMOSPHERE ---
+        function createHeart() {
             const heart = document.createElement('div');
-            heart.classList.add('heart-float');
+            heart.classList.add('floating-heart');
             heart.innerHTML = '❤';
-            heart.style.left = Math.random() * 100 + 'vw';
-            heart.style.fontSize = (Math.random() * 20 + 10) + 'px';
+            heart.style.left = Math.random() * 100 + "vw";
+            heart.style.fontSize = Math.random() * 20 + 10 + "px";
+            heart.style.animationDuration = Math.random() * 3 + 4 + "s";
             document.body.appendChild(heart);
-            
-            setTimeout(() => {
-                heart.remove();
-            }, 4000);
-        }, 800);
+            setTimeout(() => heart.remove(), 7000);
+        }
+        setInterval(createHeart, 600);
 
+        function launchFireworks() {
+            var duration = 5 * 1000;
+            var animationEnd = Date.now() + duration;
+            var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+
+            var interval = setInterval(function() {
+                var timeLeft = animationEnd - Date.now();
+                if (timeLeft <= 0) {
+                    return clearInterval(interval);
+                }
+                var particleCount = 50 * (timeLeft / duration);
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: Math.random(), y: Math.random() - 0.2 } }));
+            }, 250);
+        }
     </script>
 </body>
 </html>
