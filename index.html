@@ -3,106 +3,170 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Identity Verification | Protocol 724</title>
+    <title>Identity Verification | The Journey</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700&family=Cinzel:wght@400;700&family=Inter:wght@300;400;600&family=Playfair+Display:ital,wght@1,400;1,700&display=swap" rel="stylesheet">
 
     <style>
-        body {
-            background-color: #000;
-            color: #0ff;
-            font-family: 'Share Tech Mono', monospace;
-            overflow: hidden;
-            height: 100vh;
-            width: 100vw;
-            cursor: crosshair;
+        /* --- GLOBAL & LUXURY STYLES (Original) --- */
+        :root {
+            --gold: #D4AF37;
+            --rose-gold: #E0BFB8;
+            --deep-black: #050505;
+            --glass: rgba(255, 255, 255, 0.05);
         }
 
-        /* --- HUD STYLING --- */
+        body {
+            background-color: var(--deep-black);
+            color: #ffffff;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden; /* Prevent horizontal scroll */
+            cursor: none; /* Custom cursor */
+        }
+
+        /* --- HUD SCANNER STYLES (New Feature) --- */
         .hud-container {
-            position: relative;
-            width: 100%;
-            height: 100%;
+            position: fixed; /* Fixed to cover everything */
+            top: 0; left: 0;
+            width: 100vw;
+            height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             background: radial-gradient(circle at center, #001a2c 0%, #000 70%);
+            z-index: 9999; /* Highest priority */
+            font-family: 'Share Tech Mono', monospace;
+            color: #0ff;
         }
 
-        /* The Scanning Frame */
         .scan-frame {
-            width: 300px;
-            height: 300px;
+            width: 300px; height: 300px;
             border: 2px solid rgba(0, 255, 255, 0.3);
             position: relative;
             box-shadow: 0 0 20px rgba(0, 255, 255, 0.1);
         }
 
-        /* Corner Brackets */
         .bracket {
-            position: absolute;
-            width: 40px;
-            height: 40px;
-            border: 4px solid #0ff;
-            transition: all 0.5s ease;
+            position: absolute; width: 40px; height: 40px;
+            border: 4px solid #0ff; transition: all 0.5s ease;
         }
         .tl { top: -2px; left: -2px; border-bottom: 0; border-right: 0; }
         .tr { top: -2px; right: -2px; border-bottom: 0; border-left: 0; }
         .bl { bottom: -2px; left: -2px; border-top: 0; border-right: 0; }
         .br { bottom: -2px; right: -2px; border-top: 0; border-left: 0; }
 
-        /* The Moving Laser */
         .scan-line {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: #0ff;
-            box-shadow: 0 0 15px #0ff, 0 0 30px #0ff;
-            opacity: 0;
+            position: absolute; top: 0; left: 0; width: 100%; height: 4px;
+            background: #0ff; box-shadow: 0 0 15px #0ff, 0 0 30px #0ff; opacity: 0;
         }
 
-        /* Background Grid */
         .grid-bg {
-            position: absolute;
-            inset: 0;
+            position: absolute; inset: 0;
             background-image: 
                 linear-gradient(rgba(0, 255, 255, 0.1) 1px, transparent 1px),
                 linear-gradient(90deg, rgba(0, 255, 255, 0.1) 1px, transparent 1px);
-            background-size: 40px 40px;
-            opacity: 0.2;
-            z-index: 0;
+            background-size: 40px 40px; opacity: 0.2; z-index: 0;
         }
 
-        /* Text Scramble Effect */
-        .status-text {
-            text-shadow: 0 0 5px #0ff;
-            letter-spacing: 2px;
-        }
+        .status-text { text-shadow: 0 0 5px #0ff; letter-spacing: 2px; }
 
-        /* Success State */
+        /* HUD Success State */
         .success-mode .scan-frame { border-color: #0f0; box-shadow: 0 0 30px #0f0; }
         .success-mode .bracket { border-color: #0f0; }
         .success-mode { color: #0f0 !important; }
 
-        /* Hidden Content (The Main Site) */
-        #main-content {
-            display: none;
+        /* Wrapper to hide the main site initially */
+        #site-wrapper {
             opacity: 0;
             transition: opacity 2s ease;
         }
+
+        /* --- ORIGINAL SITE STYLES --- */
+        .cursor-dot, .cursor-outline {
+            position: fixed; top: 0; left: 0;
+            transform: translate(-50%, -50%); border-radius: 50%;
+            z-index: 9999; pointer-events: none;
+        }
+        .cursor-dot { width: 8px; height: 8px; background-color: var(--gold); }
+        .cursor-outline {
+            width: 40px; height: 40px;
+            border: 1px solid rgba(212, 175, 55, 0.5);
+            transition: width 0.2s, height 0.2s;
+        }
+
+        .font-cinematic { font-family: 'Cinzel', serif; }
+        .font-emotional { font-family: 'Playfair Display', serif; }
+        
+        .text-gradient {
+            background: linear-gradient(to right, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
+            -webkit-background-clip: text; background-clip: text; color: transparent;
+        }
+
+        .netflix-scroll {
+            display: flex; overflow-x: auto; gap: 1rem; padding: 2rem 0;
+            scrollbar-width: none; -ms-overflow-style: none;
+        }
+        .netflix-scroll::-webkit-scrollbar { display: none; }
+        
+        .video-card {
+            min-width: 280px; height: 400px; border-radius: 8px;
+            transition: transform 0.3s ease, z-index 0.3s;
+            position: relative; overflow: hidden; cursor: pointer;
+        }
+        .video-card:hover { transform: scale(1.1); z-index: 20; box-shadow: 0 10px 40px rgba(0,0,0,0.8); }
+
+        .cake-stage { position: relative; width: 300px; height: 300px; margin: 0 auto; }
+        .cake-body {
+            position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
+            width: 200px; height: 140px; background: #FFF0F5; border-radius: 10px 10px 0 0;
+            box-shadow: inset -10px 0 20px rgba(0,0,0,0.1);
+        }
+        .icing {
+            position: absolute; top: 0; left: 0; width: 100%; height: 40px;
+            background: #FFB7B2; border-radius: 10px 10px 20px 20px;
+        }
+        .candle {
+            position: absolute; bottom: 140px; left: 50%; transform: translateX(-50%);
+            width: 14px; height: 40px; background: linear-gradient(to right, #fff, #eee); z-index: 10;
+        }
+        .flame {
+            position: absolute; top: -25px; left: 50%; transform: translateX(-50%);
+            width: 14px; height: 26px; background: #FFD700;
+            border-radius: 50% 50% 20% 20%; animation: flicker 0.8s infinite alternate;
+            box-shadow: 0 0 10px #FFD700, 0 0 30px #FF4500; cursor: pointer; transform-origin: bottom center;
+        }
+        @keyframes flicker { 
+            0% { transform: translateX(-50%) scale(1); opacity: 1; } 
+            100% { transform: translateX(-50%) scale(1.1) rotate(2deg); opacity: 0.8; } 
+        }
+        .flame.out { display: none; }
+
+        .gift-wrapper { perspective: 1000px; opacity: 0; pointer-events: none; transition: opacity 1s; }
+        .gift-wrapper.active { opacity: 1; pointer-events: all; }
+        
+        .floating-heart {
+            position: fixed; color: rgba(224, 191, 184, 0.4);
+            animation: floatUp 6s linear forwards; pointer-events: none; z-index: 1;
+        }
+        @keyframes floatUp {
+            0% { transform: translateY(100vh) scale(0.5); opacity: 0; }
+            50% { opacity: 0.8; }
+            100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
+        }
     </style>
 </head>
-<body>
+<body class="antialiased">
 
     <audio id="sfx-scan" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3"></audio> 
     <audio id="sfx-success" src="https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3"></audio>
 
-    <div id="hud-layer" class="hud-container z-50">
+    <div id="hud-layer" class="hud-container">
         <div class="grid-bg"></div>
 
         <div class="absolute left-10 top-1/2 -translate-y-1/2 hidden md:block text-xs opacity-60">
@@ -110,12 +174,9 @@
         </div>
 
         <div class="flex flex-col items-center gap-6 relative z-10">
-            
             <div class="scan-frame" id="scanner">
-                <div class="bracket tl"></div>
-                <div class="bracket tr"></div>
-                <div class="bracket bl"></div>
-                <div class="bracket br"></div>
+                <div class="bracket tl"></div> <div class="bracket tr"></div>
+                <div class="bracket bl"></div> <div class="bracket br"></div>
                 
                 <div class="scan-line"></div>
                 
@@ -139,18 +200,151 @@
         </div>
     </div>
 
-    <div id="main-content" class="fixed inset-0 bg-[#050505] text-white flex items-center justify-center">
-        <div class="text-center">
-            <h1 class="text-6xl font-serif text-[#D4AF37] mb-4">Welcome, [Her Name]</h1>
-            <p class="text-gray-400">Your journey begins now.</p>
+    <div id="site-wrapper">
+        
+        <div class="cursor-dot"></div>
+        <div class="cursor-outline"></div>
+
+        <audio id="bg-music" loop>
+            <source src="https://cdn.pixabay.com/audio/2022/05/27/audio_1808fbf07a.mp3" type="audio/mp3">
+        </audio>
+        <div class="fixed bottom-6 right-6 z-50 text-white/30 hover:text-white transition-colors cursor-pointer" id="mute-btn">
+            <i class="fas fa-volume-high"></i>
+        </div>
+
+        <section id="intro-screen" class="fixed inset-0 z-[100] bg-black flex flex-col items-center justify-center cursor-pointer">
+            <div class="text-center space-y-6">
+                <p class="text-xs tracking-[0.6em] text-gray-500 uppercase fade-elem">Access Verified</p>
+                <h1 class="text-5xl md:text-7xl font-cinematic text-white tracking-widest fade-elem scale-elem">LUMINA</h1>
+                <p class="text-sm text-gray-400 font-light fade-elem animate-pulse mt-8">Tap to Begin Experience</p>
             </div>
+        </section>
+
+        <section class="relative h-screen flex items-center justify-center overflow-hidden">
+            <div class="absolute inset-0 z-0">
+                <img src="https://images.unsplash.com/photo-1513201099705-a9746e1e201f?q=80&w=2874&auto=format&fit=crop" 
+                     class="w-full h-full object-cover opacity-30 scale-110" id="hero-bg" alt="Hero">
+                <div class="absolute inset-0 bg-gradient-to-b from-black/20 via-black/60 to-[#050505]"></div>
+            </div>
+
+            <div class="relative z-10 text-center px-4">
+                <h2 class="text-xl md:text-3xl font-light text-white/80 mb-6 hero-text translate-y-10 opacity-0">Today, the universe celebrates</h2>
+                <h1 class="text-6xl md:text-9xl font-cinematic font-bold text-gradient hero-text translate-y-10 opacity-0">YOU</h1>
+                <p class="mt-8 text-lg md:text-xl font-emotional text-gray-300 max-w-2xl mx-auto hero-text translate-y-10 opacity-0 italic">
+                    "Another year bolder, another year wiser, another year of being unforgettable."
+                </p>
+            </div>
+        </section>
+
+        <section class="min-h-screen bg-[#050505] flex items-center justify-center py-20 relative">
+            <div class="max-w-4xl mx-auto px-6 text-center space-y-32">
+                <div class="scroll-reveal opacity-0 translate-y-10">
+                    <i class="fas fa-quote-left text-2xl text-yellow-600/50 mb-6"></i>
+                    <p class="text-3xl md:text-5xl font-emotional leading-tight text-gray-200">
+                        Your laughter is the soundtrack<br>to our happiest memories.
+                    </p>
+                </div>
+                
+                <div class="scroll-reveal opacity-0 translate-y-10">
+                    <p class="text-3xl md:text-5xl font-emotional leading-tight text-gray-200">
+                        Your kindness is the anchor<br>that holds us steady.
+                    </p>
+                </div>
+
+                <div class="scroll-reveal opacity-0 translate-y-10">
+                    <p class="text-2xl md:text-4xl font-light font-cinematic text-gradient">
+                        "To the world you are one person,<br>but to me, you are the world."
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="py-24 bg-gradient-to-b from-[#050505] to-[#0a0a0a] overflow-hidden">
+            <div class="px-8 md:px-16 mb-16 flex items-end justify-between">
+                <div>
+                    <h2 class="text-4xl font-cinematic text-white">The Collection</h2>
+                    <div class="h-0.5 w-24 bg-yellow-600 mt-4"></div>
+                </div>
+                <span class="text-gray-600 font-mono hidden md:block">01 / MEMORIES</span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-6 px-4 md:px-16 h-[100vh]">
+                <div class="md:col-span-4 h-full relative rounded-2xl overflow-hidden group">
+                    <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=800" class="parallax-img w-full h-[120%] object-cover absolute top-0">
+                    <div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors"></div>
+                </div>
+                <div class="md:col-span-4 md:col-start-5 h-[80%] mt-[10%] relative rounded-2xl overflow-hidden group">
+                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=800" class="parallax-img w-full h-[120%] object-cover absolute top-0">
+                </div>
+                <div class="md:col-span-4 md:col-start-9 h-full relative rounded-2xl overflow-hidden group">
+                    <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=800" class="parallax-img w-full h-[120%] object-cover absolute top-0">
+                </div>
+            </div>
+        </section>
+
+        <section class="py-20 bg-[#050505] relative z-20">
+            <div class="px-8 md:px-16 mb-6">
+                <h3 class="text-2xl text-white font-semibold mb-1">Fan Favorites (Wishes)</h3>
+                <p class="text-sm text-gray-500">Trending Now • Season 26</p>
+            </div>
+
+            <div class="netflix-scroll px-8 md:px-16 pb-10">
+                <div class="video-card flex-shrink-0 bg-gray-900 group">
+                    <img src="https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?w=600" class="w-full h-full object-cover opacity-70 group-hover:opacity-100 transition-opacity">
+                    <div class="absolute bottom-0 left-0 w-full p-4 bg-gradient-to-t from-black via-black/80 to-transparent">
+                        <p class="text-green-400 text-xs font-bold mb-1">98% Match</p>
+                        <h4 class="text-white font-bold text-lg">Mom & Dad</h4>
+                        <p class="text-gray-400 text-xs">Emotional • Heartfelt</p>
+                    </div>
+                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
+                        <div class="w-12 h-12 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center border border-white/30">
+                            <i class="fas fa-play text-white ml-1"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="video-card flex-shrink-0 bg-gray-900 group">
+                    <img src="https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=600" class="w-full h-full object-cover opacity-70 group-hover:opacity-100 transition-opacity">
+                    <div class="absolute bottom-0 left-0 w-full p-4 bg-gradient-to-t from-black via-black/80 to-transparent">
+                        <p class="text-green-400 text-xs font-bold mb-1">New Release</p>
+                        <h4 class="text-white font-bold text-lg">Besties from NYC</h4>
+                        <p class="text-gray-400 text-xs">Comedy • Fun</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="min-h-screen flex flex-col items-center justify-center bg-[#050505] relative overflow-hidden">
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-yellow-600/10 rounded-full blur-[100px]"></div>
+
+            <div id="cake-section" class="z-20 text-center transition-all duration-1000">
+                <h2 class="text-4xl font-cinematic text-white mb-2">Make a Wish</h2>
+                <p class="text-gray-400 mb-12 text-sm font-light tracking-wide animate-pulse">Click the flame to blow it out</p>
+                <div class="cake-stage">
+                    <div class="cake-body"><div class="icing"></div></div>
+                    <div class="candle"><div class="flame" id="flame"></div></div>
+                </div>
+            </div>
+
+            <div id="surprise-section" class="absolute inset-0 flex flex-col items-center justify-center z-30 gift-wrapper">
+                <div class="text-center max-w-2xl px-6">
+                    <i class="fas fa-gift text-6xl text-gradient mb-8 animate-bounce"></i>
+                    <h2 class="text-5xl md:text-7xl font-cinematic text-white mb-6">Happy Birthday!</h2>
+                    <div class="bg-white/5 backdrop-blur-lg border border-white/10 p-8 rounded-2xl transform hover:scale-105 transition-transform duration-300">
+                        <h3 class="text-xl text-yellow-500 font-bold mb-2 uppercase tracking-wider">Your Gift</h3>
+                        <p class="text-2xl text-white font-emotional italic mb-6">"Pack your bags. We are going to Paris next weekend!"</p>
+                        <p class="text-sm text-gray-500">Check your email for tickets.</p>
+                    </div>
+                    <button onclick="location.reload()" class="mt-12 text-gray-500 hover:text-white text-sm transition-colors uppercase tracking-widest">Replay Experience</button>
+                </div>
+            </div>
+        </section>
     </div>
 
     <script>
         // --- CONFIGURATION ---
-        const HER_NAME = "SARAH"; // CHANGE THIS TO HER NAME
-        
-        // --- ELEMENTS ---
+        const HER_NAME = "SARAH"; // CHANGE THIS
+
+        // --- HUD LOGIC ---
         const startBtn = document.getElementById('start-btn');
         const statusText = document.getElementById('status');
         const subStatus = document.getElementById('sub-status');
@@ -158,35 +352,27 @@
         const sfxScan = document.getElementById('sfx-scan');
         const sfxSuccess = document.getElementById('sfx-success');
         const hudLayer = document.getElementById('hud-layer');
-        const mainContent = document.getElementById('main-content');
+        const siteWrapper = document.getElementById('site-wrapper');
         const faceIcon = document.getElementById('face-icon');
 
-        // --- UTILS: Text Scrambler ---
         const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&";
         function scramble(element, newText, duration) {
             let iterations = 0;
             const interval = setInterval(() => {
-                element.innerText = newText
-                    .split("")
-                    .map((letter, index) => {
-                        if (index < iterations) return newText[index];
-                        return chars[Math.floor(Math.random() * chars.length)];
-                    })
-                    .join("");
-                
+                element.innerText = newText.split("").map((letter, index) => {
+                    if (index < iterations) return newText[index];
+                    return chars[Math.floor(Math.random() * chars.length)];
+                }).join("");
                 if (iterations >= newText.length) clearInterval(interval);
-                iterations += 1 / 2; // Speed of resolve
+                iterations += 1 / 2;
             }, 30);
         }
 
-        // --- UTILS: Fake Data Stream ---
         function startDataStream() {
             setInterval(() => {
                 const randomHex = Math.random().toString(16).substr(2, 8).toUpperCase();
                 document.getElementById('data-stream-left').innerHTML += `<div>>> ANALYZING SECTOR ${randomHex}</div>`;
                 document.getElementById('data-stream-right').innerHTML += `<div>BIO-METRIC MATCH: ${Math.floor(Math.random()*100)}%</div>`;
-                
-                // Keep list short
                 if(document.getElementById('data-stream-left').children.length > 10) {
                     document.getElementById('data-stream-left').firstChild.remove();
                     document.getElementById('data-stream-right').firstChild.remove();
@@ -194,37 +380,21 @@
             }, 100);
         }
 
-        // --- SEQUENCE LOGIC ---
+        // START SCAN
         startBtn.addEventListener('click', () => {
-            // 1. UI Changes
             startBtn.style.display = 'none';
-            sfxScan.volume = 0.5;
-            sfxScan.play();
+            sfxScan.volume = 0.5; sfxScan.play();
             startDataStream();
-
-            // 2. Animate Scan Line (GSAP)
+            
             const tl = gsap.timeline();
-
-            // Status Update
             scramble(statusText, "SCANNING TARGET...", 1000);
             scramble(subStatus, "DO NOT MOVE...", 1000);
-
-            // Scan Animation
+            
             tl.to(scanLine, { opacity: 1, duration: 0.2 })
-              .to(scanLine, { 
-                  top: '100%', 
-                  duration: 2, 
-                  ease: "power2.inOut", 
-                  repeat: 1, 
-                  yoyo: true 
-              });
+              .to(scanLine, { top: '100%', duration: 2, ease: "power2.inOut", repeat: 1, yoyo: true });
 
-            // 3. Success Trigger (After 4 seconds)
             setTimeout(() => {
-                sfxScan.pause();
-                sfxSuccess.play();
-
-                // Visual Success
+                sfxScan.pause(); sfxSuccess.play();
                 document.body.classList.add('success-mode');
                 faceIcon.classList.remove('fa-user-circle');
                 faceIcon.classList.add('fa-check-circle');
@@ -232,27 +402,115 @@
                 scramble(statusText, "ACCESS GRANTED", 500);
                 scramble(subStatus, `WELCOME, ${HER_NAME}`, 500);
 
-                // Open the Brackets
                 gsap.to('.bracket', { padding: 20, duration: 0.5, ease: "back.out(1.7)" });
                 gsap.to('.scan-frame', { scale: 1.1, duration: 0.5 });
 
-                // 4. Final Transition
+                // FADE OUT HUD, FADE IN SITE
                 setTimeout(() => {
                     gsap.to(hudLayer, { 
-                        scale: 1.5, 
-                        opacity: 0, 
-                        duration: 1, 
+                        scale: 1.5, opacity: 0, duration: 1, 
                         onComplete: () => {
                             hudLayer.style.display = 'none';
-                            mainContent.style.display = 'flex';
-                            gsap.to(mainContent, { opacity: 1, duration: 2 });
+                            gsap.to(siteWrapper, { opacity: 1, duration: 2 });
                         } 
                     });
                 }, 2000);
-
             }, 4000);
         });
 
+        // --- MAIN SITE LOGIC ---
+        gsap.registerPlugin(ScrollTrigger);
+        
+        // Cursor
+        const dot = document.querySelector('.cursor-dot');
+        const outline = document.querySelector('.cursor-outline');
+        window.addEventListener('mousemove', (e) => {
+            const x = e.clientX; const y = e.clientY;
+            dot.style.left = `${x}px`; dot.style.top = `${y}px`;
+            outline.animate({ left: `${x}px`, top: `${y}px` }, { duration: 500, fill: "forwards" });
+        });
+
+        // Intro (Lumina)
+        const introScreen = document.getElementById('intro-screen');
+        const bgMusic = document.getElementById('bg-music');
+        
+        introScreen.addEventListener('click', () => {
+            bgMusic.volume = 0.4; bgMusic.play().catch(e => console.log("Audio needed user interaction"));
+            const tl = gsap.timeline();
+            tl.to('.fade-elem', { y: -20, opacity: 0, stagger: 0.1, duration: 0.8 })
+              .to(introScreen, { opacity: 0, duration: 1.5, pointerEvents: 'none' })
+              .call(startHeroAnimation);
+        });
+
+        function startHeroAnimation() {
+            gsap.to("#hero-bg", { scale: 1, duration: 10, ease: "power2.out" });
+            gsap.to(".hero-text", { y: 0, opacity: 1, duration: 1.5, stagger: 0.3, ease: "power3.out" });
+        }
+
+        // Scroll Reveal
+        gsap.utils.toArray('.scroll-reveal').forEach(elem => {
+            gsap.to(elem, {
+                scrollTrigger: { trigger: elem, start: "top 80%", toggleActions: "play none none reverse" },
+                y: 0, opacity: 1, duration: 1.2, ease: "power3.out"
+            });
+        });
+
+        // Parallax
+        gsap.utils.toArray('.parallax-img').forEach(img => {
+            gsap.to(img, {
+                y: "20%", ease: "none",
+                scrollTrigger: { trigger: img.parentElement, start: "top bottom", end: "bottom top", scrub: true }
+            });
+        });
+
+        // Cake
+        const flame = document.getElementById('flame');
+        const cakeSection = document.getElementById('cake-section');
+        const surpriseSection = document.getElementById('surprise-section');
+
+        flame.addEventListener('click', () => {
+            flame.classList.add('out');
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#D4AF37', '#ffffff', '#E0BFB8'] });
+            
+            let vol = 0.4;
+            const volInterval = setInterval(() => {
+                if(vol < 1.0) { vol += 0.1; bgMusic.volume = vol; } else clearInterval(volInterval);
+            }, 200);
+
+            gsap.to(cakeSection, { opacity: 0, scale: 0.9, duration: 1, delay: 0.5 });
+            setTimeout(() => {
+                cakeSection.style.display = 'none';
+                surpriseSection.classList.add('active');
+                gsap.from("#surprise-section i", { scale: 0, rotation: 180, duration: 1, type: "elastic" });
+                gsap.from("#surprise-section h2", { y: 50, opacity: 0, duration: 1, delay: 0.5 });
+                gsap.from(".gift-content", { y: 50, opacity: 0, duration: 1, delay: 0.8 });
+                launchFireworks();
+            }, 1500);
+        });
+
+        // Floating Hearts & Fireworks
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('floating-heart');
+            heart.innerHTML = '❤';
+            heart.style.left = Math.random() * 100 + "vw";
+            heart.style.fontSize = Math.random() * 20 + 10 + "px";
+            heart.style.animationDuration = Math.random() * 3 + 4 + "s";
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 7000);
+        }
+        setInterval(createHeart, 600);
+
+        function launchFireworks() {
+            var duration = 5 * 1000; var animationEnd = Date.now() + duration;
+            var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+            var interval = setInterval(function() {
+                var timeLeft = animationEnd - Date.now();
+                if (timeLeft <= 0) return clearInterval(interval);
+                var particleCount = 50 * (timeLeft / duration);
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: Math.random(), y: Math.random() - 0.2 } }));
+            }, 250);
+        }
     </script>
 </body>
 </html>
