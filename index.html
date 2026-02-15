@@ -1,169 +1,377 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Happy Birthday | For You</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:italic,wght@0,400;1,700&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+    <title>For Priya ❤️</title>
     
-    <style>
-        :root {
-            --soft-white: #fafafa;
-            --text-main: #333333;
-            --accent: #d4a373; /* Earthy gold for a calm vibe */
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        body {
-            background-color: var(--soft-white);
-            font-family: 'Inter', sans-serif;
-            color: var(--text-main);
-            overflow-x: hidden;
-        }
-
-        /* 1. THE FULL-SCREEN BANNER */
-        .hero {
-            height: 100vh;
-            width: 100%;
-            background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), 
-                        url('header-photo.jpg'); /* REPLACE WITH HER PHOTO */
-            background-size: cover;
-            background-position: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            color: white;
-            text-align: center;
-        }
-
-        .hero h1 {
-            font-family: 'Playfair Display', serif;
-            font-size: clamp(3rem, 10vw, 6rem);
-            font-weight: 700;
-            letter-spacing: -2px;
-            animation: fadeInDown 2s ease;
-        }
-
-        .scroll-indicator {
-            position: absolute;
-            bottom: 30px;
-            font-size: 0.8rem;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            opacity: 0.8;
-            animation: bounce 2s infinite;
-        }
-
-        /* 2. NEAT SCROLLING CONTENT */
-        .content-section {
-            max-width: 800px;
-            margin: 100px auto;
-            padding: 0 20px;
-        }
-
-        .fade-in {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 1s ease-out;
-            margin-bottom: 120px;
-        }
-
-        .fade-in.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* 3. QUOTES & IMAGES */
-        .quote {
-            font-family: 'Playfair Display', serif;
-            font-size: 2rem;
-            font-style: italic;
-            text-align: center;
-            line-height: 1.4;
-            color: var(--accent);
-        }
-
-        .image-container img {
-            width: 100%;
-            border-radius: 10px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.05);
-        }
-
-        /* 4. AUTOPLAY VIDEOS */
-        .video-wrapper {
-            width: 100%;
-            border-radius: 15px;
-            overflow: hidden;
-            background: #000;
-        }
-
-        video { width: 100%; display: block; }
-
-        /* ANIMATIONS */
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
-            40% {transform: translateY(-10px);}
-            60% {transform: translateY(-5px);}
-        }
-    </style>
-</head>
-<body>
-
-    <section class="hero">
-        <h1>Happy Birthday, [Name]</h1>
-        <div class="scroll-indicator">Scroll to begin</div>
-    </section>
-
-    <div class="content-section">
-        
-        <div class="fade-in">
-            <p class="quote">"Some people make the world special just by being in it."</p>
-        </div>
-
-        <div class="fade-in image-container">
-            <img src="memory1.jpg" alt="Memory One">
-            <p style="text-align: center; margin-top: 15px; color: #888;">Exactly one year ago today.</p>
-        </div>
-
-        <div class="fade-in">
-            <p class="quote">"To the one who knows all my stories and still stays."</p>
-        </div>
-
-        <div class="fade-in">
-            <div class="label" style="text-align: center; margin-bottom: 20px; letter-spacing: 2px; font-size: 0.7rem;">AN EMOTIONAL MOMENT</div>
-            <div class="video-wrapper">
-                <video autoplay loop muted playsinline>
-                    <source src="surprise-video.mp4" type="video/mp4">
-                </video>
-            </div>
-        </div>
-
-        <div class="fade-in" style="text-align: center; border-top: 1px solid #eee; padding-top: 50px;">
-            <h2 style="font-family: 'Playfair Display'; font-size: 2.5rem;">I love you!</h2>
-            <p style="margin-top: 20px;">Check your mailbox for a real-life surprise. ❤️</p>
-        </div>
-
-    </div>
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,600&family=Outfit:wght@200;400;600&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <script>
-        // SCRIPT TO MAKE ELEMENTS FADE IN ON SCROLL
-        const observerOptions = { threshold: 0.1 };
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        rose: { 50: '#fff1f2', 100: '#ffe4e6', 500: '#f43f5e', 900: '#881337' },
+                        gold: '#d4af37',
+                    },
+                    fontFamily: {
+                        hand: ['"Dancing Script"', 'cursive'],
+                        serif: ['"Cormorant Garamond"', 'serif'],
+                        sans: ['"Outfit"', 'sans-serif'],
+                    }
                 }
-            });
-        }, observerOptions);
+            }
+        }
+    </script>
 
-        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+    <style>
+        /* --- THE MAGIC BACKGROUND --- */
+        body {
+            /* 1. PUT YOUR IMAGE URL HERE */
+            background-image: url('https://images.unsplash.com/photo-1518895949257-7621c3c786d7?q=80&w=2574&auto=format&fit=crop'); 
+            
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed; /* Keeps image still while scrolling */
+            min-height: 100vh;
+            color: #1e293b; /* Slate-800 */
+        }
+
+        /* The "Little Bit Blurry" Glass Overlay */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%;
+            z-index: -1; /* Behind content */
+            
+            /* The Glass Effect */
+            background: rgba(255, 255, 255, 0.3); /* White tint */
+            backdrop-filter: blur(8px); /* The blur amount (adjust 4px - 12px) */
+            -webkit-backdrop-filter: blur(8px); /* Safari support */
+        }
+
+        /* --- CONTENT STYLES --- */
+        
+        /* Stronger glass for cards to make text readable */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+        }
+
+        /* Typing Cursor */
+        .cursor::after {
+            content: '|';
+            animation: blink 1s infinite;
+        }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+        /* Timeline Line */
+        .timeline-line::before {
+            content: '';
+            position: absolute;
+            top: 0; bottom: 0; left: 50%;
+            width: 2px;
+            background: rgba(244, 63, 94, 0.5); /* Rose-500 semi-transparent */
+            transform: translateX(-50%);
+            z-index: -1;
+        }
+
+        /* Voice Note Waveform Animation */
+        .wave-bar {
+            width: 3px;
+            background: #f43f5e;
+            border-radius: 99px;
+            animation: wave 1s ease-in-out infinite;
+            animation-play-state: paused;
+        }
+        .playing .wave-bar { animation-play-state: running; }
+        
+        @keyframes wave {
+            0%, 100% { height: 10px; }
+            50% { height: 25px; }
+        }
+
+        /* Hidden Secret Blur */
+        .secret-blur {
+            filter: blur(12px);
+            user-select: none;
+            transition: filter 1.5s ease;
+            cursor: pointer;
+        }
+        .secret-reveal { filter: blur(0); }
+    </style>
+</head>
+<body class="antialiased selection:bg-rose-200">
+
+    <div id="gate" class="fixed inset-0 z-[100] bg-black/95 flex flex-col items-center justify-center text-center px-4 transition-opacity duration-1000">
+        <div class="max-w-md w-full">
+            <div class="text-6xl mb-6 animate-pulse">💌</div>
+            <h1 class="text-white font-serif text-4xl mb-2">Hi Priya,</h1>
+            <p class="text-rose-200 font-sans mb-8">This website is created only for you. ❤️</p>
+            
+            <div class="glass-card p-6 rounded-2xl">
+                <p class="text-xs text-gray-500 uppercase tracking-widest mb-2">Security Check</p>
+                <input type="password" id="password" class="w-full bg-white/50 border border-gray-300 rounded-lg px-4 py-3 text-center focus:outline-none focus:ring-2 focus:ring-rose-400 mb-4" placeholder="Enter password...">
+                <button onclick="unlock()" class="w-full bg-rose-500 hover:bg-rose-600 text-white font-bold py-3 rounded-lg transition">Open My Heart</button>
+                <p id="error-msg" class="text-red-500 text-sm mt-3 hidden font-bold">Try 'love' 😉</p>
+            </div>
+        </div>
+    </div>
+
+    <main id="content" class="opacity-0 transition-opacity duration-1000">
+        
+        <button onclick="toggleMusic()" class="fixed top-5 right-5 z-50 w-10 h-10 glass-card rounded-full shadow-lg flex items-center justify-center text-rose-500 hover:bg-white transition">
+            <i id="music-icon" class="fas fa-music"></i>
+        </button>
+        <audio id="bg-music" loop src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
+
+        <section class="min-h-screen flex flex-col justify-center items-center text-center px-4 pt-20">
+            <div class="relative mb-8">
+                <div class="absolute inset-0 bg-rose-400 rounded-full blur-2xl opacity-40 animate-pulse"></div>
+                <img src="https://picsum.photos/id/1027/200/200" class="relative w-40 h-40 rounded-full border-4 border-white/80 shadow-2xl object-cover">
+            </div>
+            
+            <div class="glass-card px-8 py-6 rounded-3xl inline-block mb-6">
+                <h1 class="font-serif text-5xl md:text-8xl text-slate-900 mb-2">Happy Birthday</h1>
+                <p class="font-hand text-3xl text-rose-500">My Favorite Human</p>
+            </div>
+            
+            <div class="mt-8 animate-bounce text-slate-800">
+                <i class="fas fa-chevron-down text-2xl"></i>
+            </div>
+        </section>
+
+        <section class="py-20 px-4 max-w-4xl mx-auto">
+            <div class="glass-card p-4 rounded-xl inline-block mb-16 relative left-1/2 -translate-x-1/2">
+                <h2 class="text-center font-serif text-3xl text-slate-800">Our Journey</h2>
+            </div>
+            
+            <div class="relative timeline-line space-y-12">
+                
+                <div class="relative flex md:justify-end items-center md:w-1/2 md:ml-auto pl-8 md:pl-0 opacity-0 translate-y-10 transition duration-700 reveal-on-scroll">
+                    <div class="absolute left-0 md:-left-3 w-6 h-6 bg-rose-500 rounded-full border-4 border-white shadow transform -translate-x-1/2"></div>
+                    <div class="glass-card p-6 rounded-2xl w-full md:ml-8 hover:scale-105 transition duration-300">
+                        <span class="text-rose-500 text-xs font-bold bg-white/50 px-2 py-1 rounded">CHAPTER 1</span>
+                        <h3 class="font-serif text-xl font-bold mt-2">The First Meet</h3>
+                        <p class="text-slate-700 text-sm mt-2">I was nervous, you were smiling. That coffee shop will always be my favorite place on earth.</p>
+                    </div>
+                </div>
+
+                <div class="relative flex md:justify-start items-center md:w-1/2 pr-8 md:pr-0 opacity-0 translate-y-10 transition duration-700 delay-200 reveal-on-scroll">
+                    <div class="absolute left-0 md:left-full w-6 h-6 bg-rose-500 rounded-full border-4 border-white shadow transform -translate-x-1/2"></div>
+                    <div class="glass-card p-6 rounded-2xl w-full md:mr-8 hover:scale-105 transition duration-300 text-right md:text-left">
+                        <span class="text-rose-500 text-xs font-bold bg-white/50 px-2 py-1 rounded">CHAPTER 2</span>
+                        <h3 class="font-serif text-xl font-bold mt-2">That Funny Moment</h3>
+                        <p class="text-slate-700 text-sm mt-2">Remember when we got lost in the rain and you laughed so hard? I fell in love right there.</p>
+                    </div>
+                </div>
+
+                <div class="relative flex md:justify-end items-center md:w-1/2 md:ml-auto pl-8 md:pl-0 opacity-0 translate-y-10 transition duration-700 delay-400 reveal-on-scroll">
+                    <div class="absolute left-0 md:-left-3 w-6 h-6 bg-rose-500 rounded-full border-4 border-white shadow transform -translate-x-1/2"></div>
+                    <div class="glass-card p-6 rounded-2xl w-full md:ml-8 hover:scale-105 transition duration-300">
+                        <span class="text-rose-500 text-xs font-bold bg-white/50 px-2 py-1 rounded">CHAPTER 3</span>
+                        <h3 class="font-serif text-xl font-bold mt-2">Today</h3>
+                        <p class="text-slate-700 text-sm mt-2">Celebrating the day the universe decided to give me the best gift ever. You.</p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="py-20 px-4">
+            <div class="max-w-md mx-auto">
+                <div class="text-center mb-10">
+                    <span class="glass-card px-4 py-2 rounded-full text-xs font-bold tracking-widest text-rose-600">AUDIO MESSAGE</span>
+                    <h2 class="font-serif text-3xl mt-3 text-slate-800">Listen closely... 🎧</h2>
+                </div>
+
+                <div class="glass-card p-4 rounded-3xl rounded-tl-none flex items-center gap-4">
+                    <button onclick="playVoiceNote()" id="voice-btn" class="w-12 h-12 bg-rose-500 rounded-full flex items-center justify-center text-white shadow-lg hover:scale-105 transition">
+                        <i class="fas fa-play pl-1"></i>
+                    </button>
+                    
+                    <div class="flex-1">
+                        <div id="waveform" class="flex items-center gap-1 h-8">
+                            <div class="wave-bar h-3"></div><div class="wave-bar h-5"></div><div class="wave-bar h-2"></div>
+                            <div class="wave-bar h-6"></div><div class="wave-bar h-3"></div><div class="wave-bar h-5"></div>
+                            <div class="wave-bar h-2"></div><div class="wave-bar h-4"></div><div class="wave-bar h-3"></div>
+                            <div class="wave-bar h-5"></div><div class="wave-bar h-2"></div><div class="wave-bar h-3"></div>
+                        </div>
+                    </div>
+                    
+                    <span class="text-xs text-slate-500 font-bold">0:45</span>
+                </div>
+                <p class="text-center text-slate-600 text-xs mt-4">recorded just for you</p>
+                
+                <audio id="voice-audio" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3"></audio>
+            </div>
+        </section>
+
+        <section class="py-24 px-6 text-center">
+            <div class="glass-card max-w-2xl mx-auto p-10 rounded-3xl relative">
+                <i class="fas fa-quote-left text-4xl text-rose-500 mb-8 opacity-50 absolute top-6 left-6"></i>
+                <div class="min-h-[200px] flex items-center justify-center">
+                    <p id="typewriter-text" class="font-serif text-2xl md:text-3xl leading-relaxed cursor text-slate-800"></p>
+                </div>
+                <button onclick="startTyping()" id="start-type-btn" class="mt-8 px-8 py-3 bg-slate-900 text-white rounded-full text-sm hover:bg-slate-700 transition shadow-lg">
+                    Read My Heart
+                </button>
+            </div>
+        </section>
+
+        <section class="py-32 px-4 text-center overflow-hidden relative">
+            <p class="text-slate-800 font-bold text-sm mb-12 uppercase tracking-widest bg-white/40 inline-block px-4 py-1 rounded-full">Scroll to the end</p>
+            
+            <div class="relative max-w-lg mx-auto cursor-pointer group" onclick="revealSecret(this)">
+                <div class="absolute inset-0 z-10 flex items-center justify-center transition duration-500">
+                    <span class="glass-card px-6 py-3 rounded-full text-sm font-bold border border-white/40 pointer-events-none shadow-xl text-slate-900">
+                        <i class="fas fa-lock mr-2 text-rose-500"></i> TAP TO REVEAL SECRET
+                    </span>
+                </div>
+                
+                <div class="secret-blur p-10 glass-card rounded-2xl border border-white/40">
+                    <h3 class="font-serif text-3xl text-rose-600 mb-4">One Last Thing...</h3>
+                    <p class="font-sans text-lg leading-relaxed text-slate-800">
+                        I booked that restaurant you've always wanted to go to. Pick you up at 7 PM tonight. Wear that dress I love. <br><br>
+                        I love you more than code, more than coffee, more than anything.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <footer class="py-6 text-center text-slate-700 text-xs font-bold">
+            Made with ❤️ by You
+        </footer>
+
+    </main>
+
+    <script>
+        // --- 1. CONFIGURATION ---
+        const PASSWORD = "love"; // Her password
+        const LETTER_TEXT = "Priya... words fail me when I look at you. You are the logic to my chaos, the CSS to my HTML, and the beat to my heart. Happy Birthday, my love.";
+
+        // --- 2. UNLOCK GATE ---
+        function unlock() {
+            const input = document.getElementById('password').value.toLowerCase();
+            if(input === PASSWORD) {
+                const gate = document.getElementById('gate');
+                const content = document.getElementById('content');
+                
+                gate.style.opacity = '0';
+                setTimeout(() => {
+                    gate.style.display = 'none';
+                    content.style.opacity = '1';
+                    
+                    // Trigger Timeline Animation setup
+                    setupObserver();
+                }, 1000);
+            } else {
+                document.getElementById('error-msg').classList.remove('hidden');
+            }
+        }
+
+        // --- 3. TIMELINE ANIMATION (Intersection Observer) ---
+        function setupObserver() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.remove('opacity-0', 'translate-y-10');
+                    }
+                });
+            });
+
+            document.querySelectorAll('.reveal-on-scroll').forEach((el) => {
+                observer.observe(el);
+            });
+        }
+
+        // --- 4. VOICE NOTE PLAYER ---
+        function playVoiceNote() {
+            const audio = document.getElementById('voice-audio');
+            const bgMusic = document.getElementById('bg-music');
+            const btn = document.getElementById('voice-btn');
+            const waveform = document.getElementById('waveform');
+
+            if (audio.paused) {
+                // Pause background music if playing
+                bgMusic.pause();
+                
+                audio.play();
+                btn.innerHTML = '<i class="fas fa-pause pl-1"></i>';
+                waveform.classList.add('playing');
+                
+                // When audio ends
+                audio.onended = () => {
+                    btn.innerHTML = '<i class="fas fa-play pl-1"></i>';
+                    waveform.classList.remove('playing');
+                    // Optional: Resume bg music
+                    // bgMusic.play(); 
+                };
+            } else {
+                audio.pause();
+                btn.innerHTML = '<i class="fas fa-play pl-1"></i>';
+                waveform.classList.remove('playing');
+            }
+        }
+
+        // --- 5. TYPEWRITER EFFECT ---
+        function startTyping() {
+            const btn = document.getElementById('start-type-btn');
+            const container = document.getElementById('typewriter-text');
+            
+            // Hide button
+            btn.style.display = 'none';
+            
+            let i = 0;
+            const speed = 50; // Typing speed
+
+            function type() {
+                if (i < LETTER_TEXT.length) {
+                    container.innerHTML += LETTER_TEXT.charAt(i);
+                    i++;
+                    setTimeout(type, speed);
+                }
+            }
+            type();
+        }
+
+        // --- 6. BACKGROUND MUSIC ---
+        function toggleMusic() {
+            const music = document.getElementById('bg-music');
+            const icon = document.getElementById('music-icon');
+            
+            if (music.paused) {
+                music.play();
+                icon.className = 'fas fa-pause';
+            } else {
+                music.pause();
+                icon.className = 'fas fa-music';
+            }
+        }
+
+        // --- 7. SECRET REVEAL ---
+        function revealSecret(element) {
+            const overlay = element.querySelector('.absolute');
+            const content = element.querySelector('.secret-blur');
+            
+            overlay.style.opacity = '0';
+            overlay.style.pointerEvents = 'none'; // Ensure click goes through after
+            content.classList.remove('secret-blur');
+            content.classList.add('secret-reveal');
+        }
     </script>
 </body>
 </html>
