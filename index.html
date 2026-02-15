@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>For Priya 💜</title>
+    <title>For Priya ✨</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,600&family=Outfit:wght@200;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lato:wght@300;400;700&family=Great+Vibes&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
@@ -19,23 +19,24 @@
             theme: {
                 extend: {
                     colors: {
-                        // Custom Lavender Palette
-                        lavender: { 
-                            50: '#f5f3ff', 
-                            100: '#ede9fe', 
-                            200: '#ddd6fe',
-                            300: '#c4b5fd',
-                            400: '#a78bfa',
-                            500: '#8b5cf6', // Primary Brand Color
-                            600: '#7c3aed', 
-                            800: '#5b21b6',
-                            900: '#4c1d95' 
+                        gold: { 
+                            100: '#f9f1d8', 
+                            200: '#f0deaa', 
+                            300: '#e6c67c', 
+                            400: '#d4af37', // CLASSIC GOLD
+                            500: '#b08d26', 
+                            600: '#8a6b1e' 
                         },
+                        stone: {
+                            50: '#fafaf9',
+                            800: '#292524',
+                            900: '#1c1917'
+                        }
                     },
                     fontFamily: {
-                        hand: ['"Dancing Script"', 'cursive'],
-                        serif: ['"Cormorant Garamond"', 'serif'],
-                        sans: ['"Outfit"', 'sans-serif'],
+                        script: ['"Great Vibes"', 'cursive'],
+                        serif: ['"Playfair Display"', 'serif'],
+                        sans: ['"Lato"', 'sans-serif'],
                     }
                 }
             }
@@ -44,223 +45,233 @@
 
     <style>
         body {
-            /* LAVENDER THEMED BACKGROUND */
-            background-image: url('https://images.unsplash.com/photo-1614850523459-c2f4c699c52e?q=80&w=2670&auto=format&fit=crop'); 
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            min-height: 100vh;
-            color: #1e293b;
+            background-color: #fafaf9; /* Stone-50 */
+            color: #1c1917; /* Stone-900 */
             overflow-x: hidden;
+            background-image: radial-gradient(circle at 50% 0%, #f9f1d8 0%, transparent 60%);
         }
 
-        /* Violet tinted glass overlay */
+        /* Expensive Paper Texture Overlay */
         body::before {
-            content: '';
+            content: "";
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E");
             z-index: -1;
-            background: rgba(230, 230, 255, 0.25); /* Subtle purple tint */
+            pointer-events: none;
+        }
+
+        /* Crystal Card Style */
+        .crystal-card {
+            background: rgba(255, 255, 255, 0.7);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(212, 175, 55, 0.2); /* Subtle Gold Border */
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.03);
+            transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+        
+        .crystal-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(212, 175, 55, 0.15); /* Gold Glow */
+            border-color: rgba(212, 175, 55, 0.5);
         }
 
-        .glass-card {
-            background: rgba(255, 255, 255, 0.60);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.6);
-            box-shadow: 0 10px 40px -10px rgba(139, 92, 246, 0.15); /* Purple shadow */
+        .text-gradient {
+            background: linear-gradient(135deg, #b08d26 0%, #d4af37 50%, #8a6b1e 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
+        /* Timeline Line */
         .timeline-line::before {
             content: '';
             position: absolute;
             top: 0; bottom: 0; left: 50%;
-            width: 2px;
-            background: rgba(139, 92, 246, 0.3); /* Lavender-500 */
+            width: 1px;
+            background: #d4af37; /* Gold */
+            opacity: 0.3;
             transform: translateX(-50%);
             z-index: -1;
         }
 
-        .tilt-card {
-            transform-style: preserve-3d;
-            perspective: 1000px;
-        }
-        
+        /* Audio Wave */
         .wave-bar {
-            width: 3px;
-            background: #8b5cf6; /* Lavender-500 */
-            border-radius: 99px;
-            animation: wave 1s ease-in-out infinite;
-            animation-play-state: paused;
+            width: 2px;
+            background: #1c1917;
+            animation: wave 1s ease-in-out infinite paused;
         }
         .playing .wave-bar { animation-play-state: running; }
-        @keyframes wave { 0%, 100% { height: 10px; } 50% { height: 25px; } }
+        @keyframes wave { 0%, 100% { height: 8px; } 50% { height: 20px; } }
+
+        /* Smooth Reveal */
+        .reveal-blur { filter: blur(20px); opacity: 0; transition: all 1.5s ease; }
+        .reveal-active { filter: blur(0); opacity: 1; }
 
         .cursor::after { content: '|'; animation: blink 1s infinite; }
         @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
-        
-        .secret-blur { filter: blur(15px); transition: filter 1.5s ease; }
-        .secret-reveal { filter: blur(0); }
     </style>
 </head>
-<body class="antialiased selection:bg-lavender-200 selection:text-lavender-900">
+<body class="antialiased selection:bg-gold-200 selection:text-stone-900">
 
-    <div id="gate" class="fixed inset-0 z-[100] bg-black/95 flex flex-col items-center justify-center text-center px-4">
+    <div id="gate" class="fixed inset-0 z-[100] bg-[#fafaf9] flex flex-col items-center justify-center text-center px-6">
         <div class="max-w-md w-full">
-            <div class="text-6xl mb-6 animate-pulse">💜</div>
-            <h1 class="text-white font-serif text-4xl mb-2">Hi Priya,</h1>
-            <p class="text-lavender-200 font-sans mb-8">This dreamy world is just for you.</p>
-            <div class="glass-card p-6 rounded-2xl">
-                <p class="text-xs text-gray-500 uppercase tracking-widest mb-2">Security Check</p>
-                <input type="password" id="password" class="w-full bg-white/50 border border-lavender-200 rounded-lg px-4 py-3 text-center focus:outline-none focus:ring-2 focus:ring-lavender-500 mb-4 text-lavender-900 placeholder-lavender-400" placeholder="Enter password...">
-                <button onclick="unlock()" class="w-full bg-lavender-500 hover:bg-lavender-600 text-white font-bold py-3 rounded-lg transition transform active:scale-95 shadow-lg shadow-lavender-500/30">Open My Heart</button>
-                <p id="error-msg" class="text-red-400 text-sm mt-3 hidden font-bold">Try 'love' 😉</p>
+            <h1 class="font-serif text-5xl text-stone-900 mb-4 tracking-tight">Priya.</h1>
+            <p class="font-sans text-stone-500 mb-10 text-sm uppercase tracking-widest">A private collection of memories</p>
+            
+            <div class="relative">
+                <input type="password" id="password" class="w-64 bg-transparent border-b border-stone-300 py-2 text-center text-stone-900 focus:outline-none focus:border-gold-400 transition placeholder-stone-300 font-serif text-xl" placeholder="Enter Password">
+                <button onclick="unlock()" class="block mx-auto mt-8 px-8 py-3 bg-stone-900 text-white font-sans text-xs font-bold uppercase tracking-widest hover:bg-gold-500 transition duration-500">Enter</button>
             </div>
+            <p id="error-msg" class="text-gold-600 text-xs mt-4 hidden font-sans tracking-wide">Incorrect. Try 'love'.</p>
         </div>
     </div>
 
     <main id="content" class="opacity-0">
         
-        <button onclick="toggleMusic()" class="fixed top-5 right-5 z-50 w-12 h-12 glass-card rounded-full shadow-lg flex items-center justify-center text-lavender-600 hover:scale-110 transition duration-300">
-            <i id="music-icon" class="fas fa-music text-xl"></i>
+        <button onclick="toggleMusic()" class="fixed top-8 right-8 z-50 w-10 h-10 border border-stone-200 rounded-full flex items-center justify-center text-stone-900 hover:border-gold-400 hover:text-gold-500 transition duration-300 bg-white/50 backdrop-blur-md">
+            <i id="music-icon" class="fas fa-music text-xs"></i>
         </button>
         <audio id="bg-music" loop src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
 
-        <section class="min-h-screen flex flex-col justify-center items-center text-center px-4 pt-20 overflow-hidden relative">
-            <div class="hero-anim relative mb-8 opacity-0 translate-y-10">
-                <div class="absolute inset-0 bg-lavender-400 rounded-full blur-3xl opacity-40 animate-pulse"></div>
-                <img src="https://picsum.photos/id/1027/300/300" class="relative w-48 h-48 rounded-full border-4 border-white/80 shadow-2xl object-cover ring-4 ring-lavender-200/50">
+        <section class="min-h-screen flex flex-col justify-center items-center text-center px-4 pt-20 relative">
+            
+            <div class="hero-anim opacity-0 translate-y-10 relative mb-12">
+                <div class="p-1 border border-gold-300 rounded-full">
+                    <div class="p-1 border border-stone-100 rounded-full">
+                        <img src="https://picsum.photos/id/1027/300/300" class="w-48 h-48 rounded-full object-cover grayscale hover:grayscale-0 transition duration-1000">
+                    </div>
+                </div>
             </div>
             
-            <div class="hero-anim glass-card px-10 py-8 rounded-[2rem] inline-block mb-6 opacity-0 translate-y-10 border-lavender-100">
-                <h1 class="font-serif text-5xl md:text-8xl text-slate-900 mb-2 leading-tight">Happy Birthday</h1>
-                <p class="font-hand text-4xl text-lavender-600 font-bold">My Lavender Queen</p>
+            <div class="hero-anim opacity-0 translate-y-10">
+                <p class="font-sans text-stone-400 text-xs font-bold tracking-[0.3em] uppercase mb-4">The Celebration of</p>
+                <h1 class="font-serif text-6xl md:text-9xl text-stone-900 mb-6 tracking-tight">Happy Birthday</h1>
+                <p class="font-script text-5xl md:text-6xl text-gold-500">My Beloved Priya</p>
             </div>
             
-            <div class="hero-anim mt-12 text-lavender-800 opacity-0 translate-y-10">
-                <i class="fas fa-chevron-down text-2xl animate-bounce"></i>
+            <div class="hero-anim opacity-0 translate-y-10 mt-20">
+                <div class="h-16 w-px bg-gold-300 mx-auto"></div>
             </div>
         </section>
 
-        <section class="py-24 px-4 max-w-5xl mx-auto">
-            <div class="text-center mb-16">
-                <h2 class="font-serif text-4xl text-lavender-900 bg-white/40 inline-block px-8 py-2 rounded-full backdrop-blur-sm border border-lavender-100">Our Journey</h2>
+        <section class="py-32 px-4 max-w-4xl mx-auto">
+            <div class="text-center mb-24">
+                <h2 class="font-serif text-4xl text-stone-900">Our Story</h2>
+                <div class="h-1 w-12 bg-gold-400 mx-auto mt-4"></div>
             </div>
             
-            <div class="relative timeline-line space-y-24">
-                <div class="timeline-item relative flex md:justify-end items-center md:w-1/2 md:ml-auto pl-8 md:pl-0 opacity-0">
-                    <div class="hidden md:block absolute -left-3 w-6 h-6 bg-lavender-500 rounded-full border-4 border-white shadow z-10"></div>
-                    <div class="glass-card p-8 rounded-2xl w-full md:ml-12 tilt-card hover:border-lavender-300 transition duration-300 group">
-                        <span class="text-lavender-600 text-xs font-bold bg-lavender-100 px-3 py-1 rounded-full border border-lavender-200 group-hover:bg-lavender-500 group-hover:text-white transition">CHAPTER 1</span>
-                        <h3 class="font-serif text-2xl font-bold mt-3 text-lavender-900">The First Meet</h3>
-                        <p class="text-slate-700 text-base mt-2 leading-relaxed">I was nervous, you were smiling. That coffee shop will always be my favorite place on earth.</p>
+            <div class="relative timeline-line space-y-32">
+                <div class="timeline-item relative flex md:justify-end items-center md:w-1/2 md:ml-auto pl-10 md:pl-0 opacity-0">
+                    <div class="hidden md:block absolute -left-1.5 w-3 h-3 bg-white border border-gold-400 rounded-full z-10"></div>
+                    <div class="crystal-card p-8 rounded-sm w-full md:ml-12">
+                        <span class="font-sans text-gold-500 text-[10px] font-bold tracking-widest uppercase">Chapter I</span>
+                        <h3 class="font-serif text-2xl text-stone-900 mt-2 mb-3">The Beginning</h3>
+                        <p class="font-serif text-stone-600 leading-relaxed italic">"It started with a simple hello, but I knew in that moment, life would never be the same."</p>
                     </div>
                 </div>
 
-                <div class="timeline-item relative flex md:justify-start items-center md:w-1/2 pr-8 md:pr-0 opacity-0">
-                    <div class="hidden md:block absolute left-full -translate-x-1/2 w-6 h-6 bg-lavender-500 rounded-full border-4 border-white shadow z-10"></div>
-                    <div class="glass-card p-8 rounded-2xl w-full md:mr-12 tilt-card hover:border-lavender-300 transition duration-300 text-right md:text-left group">
-                        <span class="text-lavender-600 text-xs font-bold bg-lavender-100 px-3 py-1 rounded-full border border-lavender-200 group-hover:bg-lavender-500 group-hover:text-white transition">CHAPTER 2</span>
-                        <h3 class="font-serif text-2xl font-bold mt-3 text-lavender-900">That Funny Moment</h3>
-                        <p class="text-slate-700 text-base mt-2 leading-relaxed">Remember when we got lost in the rain and you laughed so hard? I fell in love right there.</p>
+                <div class="timeline-item relative flex md:justify-start items-center md:w-1/2 pr-10 md:pr-0 opacity-0">
+                    <div class="hidden md:block absolute left-full -translate-x-1/2 w-3 h-3 bg-white border border-gold-400 rounded-full z-10"></div>
+                    <div class="crystal-card p-8 rounded-sm w-full md:mr-12 text-right md:text-left">
+                        <span class="font-sans text-gold-500 text-[10px] font-bold tracking-widest uppercase">Chapter II</span>
+                        <h3 class="font-serif text-2xl text-stone-900 mt-2 mb-3">The Laughter</h3>
+                        <p class="font-serif text-stone-600 leading-relaxed italic">"Caught in the rain, soaking wet, laughing until our stomachs hurt. That was the day I fell."</p>
                     </div>
                 </div>
 
-                <div class="timeline-item relative flex md:justify-end items-center md:w-1/2 md:ml-auto pl-8 md:pl-0 opacity-0">
-                    <div class="hidden md:block absolute -left-3 w-6 h-6 bg-lavender-500 rounded-full border-4 border-white shadow z-10"></div>
-                    <div class="glass-card p-8 rounded-2xl w-full md:ml-12 tilt-card hover:border-lavender-300 transition duration-300 group">
-                        <span class="text-lavender-600 text-xs font-bold bg-lavender-100 px-3 py-1 rounded-full border border-lavender-200 group-hover:bg-lavender-500 group-hover:text-white transition">CHAPTER 3</span>
-                        <h3 class="font-serif text-2xl font-bold mt-3 text-lavender-900">Today</h3>
-                        <p class="text-slate-700 text-base mt-2 leading-relaxed">Celebrating the day the universe decided to give me the best gift ever. You.</p>
+                <div class="timeline-item relative flex md:justify-end items-center md:w-1/2 md:ml-auto pl-10 md:pl-0 opacity-0">
+                    <div class="hidden md:block absolute -left-1.5 w-3 h-3 bg-white border border-gold-400 rounded-full z-10"></div>
+                    <div class="crystal-card p-8 rounded-sm w-full md:ml-12">
+                        <span class="font-sans text-gold-500 text-[10px] font-bold tracking-widest uppercase">Chapter III</span>
+                        <h3 class="font-serif text-2xl text-stone-900 mt-2 mb-3">Today</h3>
+                        <p class="font-serif text-stone-600 leading-relaxed italic">"Another year around the sun, and you shine brighter than ever. You are my masterpiece."</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section class="py-20 px-4">
-            <div class="max-w-md mx-auto transform hover:scale-105 transition duration-500">
-                <div class="text-center mb-8">
-                    <span class="bg-white/60 px-4 py-1 rounded-full text-xs font-bold tracking-widest text-lavender-600 border border-white">AUDIO MESSAGE</span>
-                    <h2 class="font-serif text-3xl mt-4 text-slate-800">Listen closely... 🎧</h2>
+        <section class="py-24 px-4 bg-white">
+            <div class="max-w-lg mx-auto">
+                <div class="text-center mb-10">
+                    <h2 class="font-serif text-3xl text-stone-900">A Voice Note</h2>
+                    <p class="font-sans text-stone-400 text-xs tracking-widest uppercase mt-2">Press play to listen</p>
                 </div>
 
-                <div class="glass-card p-5 rounded-[2rem] rounded-tl-none flex items-center gap-5 shadow-2xl border-lavender-200">
-                    <button onclick="playVoiceNote()" id="voice-btn" class="w-14 h-14 bg-gradient-to-br from-lavender-400 to-lavender-600 rounded-full flex items-center justify-center text-white shadow-lg hover:shadow-lavender-500/30 transition transform active:scale-95">
-                        <i class="fas fa-play pl-1 text-xl"></i>
+                <div class="border border-stone-200 p-6 flex items-center gap-6 bg-[#fafaf9]">
+                    <button onclick="playVoiceNote()" id="voice-btn" class="w-12 h-12 bg-stone-900 text-white flex items-center justify-center hover:bg-gold-500 transition duration-500">
+                        <i class="fas fa-play text-xs"></i>
                     </button>
                     
                     <div class="flex-1">
-                        <div id="waveform" class="flex items-center gap-1 h-8 justify-center">
-                            <div class="wave-bar h-3"></div><div class="wave-bar h-5"></div><div class="wave-bar h-2"></div>
-                            <div class="wave-bar h-6"></div><div class="wave-bar h-3"></div><div class="wave-bar h-5"></div>
-                            <div class="wave-bar h-2"></div><div class="wave-bar h-4"></div><div class="wave-bar h-3"></div>
-                            <div class="wave-bar h-5"></div><div class="wave-bar h-2"></div><div class="wave-bar h-3"></div>
+                        <div id="waveform" class="flex items-center gap-1 h-6 justify-center opacity-50">
+                            <div class="wave-bar h-2"></div><div class="wave-bar h-4"></div><div class="wave-bar h-2"></div>
+                            <div class="wave-bar h-5"></div><div class="wave-bar h-3"></div><div class="wave-bar h-4"></div>
+                            <div class="wave-bar h-2"></div><div class="wave-bar h-3"></div><div class="wave-bar h-2"></div>
+                            <div class="wave-bar h-4"></div><div class="wave-bar h-2"></div><div class="wave-bar h-3"></div>
                         </div>
                     </div>
                     
-                    <span class="text-xs text-lavender-600 font-bold">0:45</span>
+                    <span class="font-sans text-xs text-stone-400">0:45</span>
                 </div>
-                <p class="text-center text-lavender-700 text-xs mt-4 font-medium tracking-wide">recorded just for you</p>
                 <audio id="voice-audio" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3"></audio>
             </div>
         </section>
 
-        <section class="py-24 px-4">
-            <div class="max-w-6xl mx-auto">
-                <div class="text-center mb-16">
-                    <span class="bg-white/60 px-4 py-1 rounded-full text-xs font-bold tracking-widest text-lavender-600 uppercase border border-white">Global Love</span>
-                    <h2 class="font-serif text-5xl mt-4 text-slate-900">20 Wishes from the World 🌍</h2>
+        <section class="py-32 px-4">
+            <div class="max-w-7xl mx-auto">
+                <div class="text-center mb-20">
+                    <h2 class="font-serif text-4xl text-stone-900">Global Wishes</h2>
+                    <p class="font-sans text-stone-500 text-sm mt-3 tracking-wide">LOVE FROM AROUND THE WORLD</p>
                 </div>
 
-                <div id="video-grid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                <div id="video-grid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-px bg-stone-200 border border-stone-200">
                     </div>
             </div>
         </section>
 
-        <section class="py-24 px-6 text-center">
-            <div class="glass-card max-w-3xl mx-auto p-12 rounded-[2.5rem] relative transform hover:-translate-y-2 transition duration-500 border-lavender-100">
-                <i class="fas fa-quote-left text-5xl text-lavender-300 mb-8 opacity-50 absolute top-8 left-8"></i>
-                <div class="min-h-[200px] flex items-center justify-center">
-                    <p id="typewriter-text" class="font-serif text-2xl md:text-4xl leading-relaxed cursor text-slate-800"></p>
+        <section class="py-32 px-6 text-center bg-stone-900 text-stone-300">
+            <div class="max-w-3xl mx-auto relative">
+                <div class="min-h-[150px] flex items-center justify-center">
+                    <p id="typewriter-text" class="font-serif text-2xl md:text-3xl leading-relaxed cursor"></p>
                 </div>
-                <button onclick="startTyping()" id="start-type-btn" class="mt-10 px-10 py-4 bg-lavender-900 text-white rounded-full text-sm font-bold tracking-widest hover:bg-lavender-600 transition shadow-xl transform hover:scale-105">
-                    READ MY HEART
+                <button onclick="startTyping()" id="start-type-btn" class="mt-12 px-10 py-4 border border-stone-700 text-stone-400 text-xs font-bold tracking-[0.2em] hover:text-white hover:border-white transition duration-500 uppercase">
+                    Read the Letter
                 </button>
             </div>
         </section>
 
-        <section class="py-32 px-4 text-center overflow-hidden relative">
-            <p class="text-slate-600 font-bold text-xs mb-8 uppercase tracking-[0.2em] bg-white/50 inline-block px-4 py-2 rounded-full">Scroll to the end</p>
+        <section class="py-40 px-4 text-center">
+            <p class="font-sans text-stone-400 text-[10px] font-bold uppercase tracking-[0.3em] mb-12">Scroll to reveal</p>
             
             <div class="relative max-w-lg mx-auto cursor-pointer group" onclick="revealSecret(this)">
-                <div class="absolute inset-0 z-10 flex items-center justify-center transition duration-700 group-hover:opacity-0">
-                    <span class="glass-card px-8 py-4 rounded-full text-sm font-bold border border-white/40 pointer-events-none shadow-xl text-slate-900 flex items-center gap-3">
-                        <i class="fas fa-lock text-lavender-500"></i> TAP TO REVEAL SECRET
+                <div class="absolute inset-0 z-10 flex items-center justify-center transition duration-1000 group-hover:opacity-80">
+                    <span class="bg-white border border-stone-200 px-6 py-3 text-xs font-bold tracking-widest text-stone-900 uppercase shadow-sm">
+                        Unlock Secret
                     </span>
                 </div>
                 
-                <div class="secret-blur p-12 glass-card rounded-[2rem] border border-white/40">
-                    <h3 class="font-serif text-3xl text-lavender-600 mb-4">One Last Thing...</h3>
-                    <p class="font-sans text-xl leading-relaxed text-slate-800">
-                        I booked that restaurant you've always wanted to go to. Pick you up at 7 PM tonight. Wear that dress I love. <br><br>
-                        I love you more than code, more than coffee, more than anything.
+                <div class="secret-blur p-12 bg-white border border-stone-100 shadow-2xl">
+                    <h3 class="font-serif text-3xl text-gold-500 mb-6 italic">Tonight's Plan</h3>
+                    <p class="font-serif text-lg leading-loose text-stone-700">
+                        Reservations at 7:00 PM.<br>
+                        The place we've always talked about.<br>
+                        <span class="text-sm font-sans text-stone-400 uppercase tracking-widest mt-4 block">Wear the black dress.</span>
                     </p>
                 </div>
             </div>
         </section>
 
-        <footer class="py-10 text-center text-lavender-400 text-xs font-bold tracking-widest">
-            MADE WITH 💜 BY YOU
+        <footer class="py-12 text-center text-stone-300 text-[10px] uppercase tracking-[0.3em] bg-stone-900">
+            2026 • For Her Eyes Only
         </footer>
         
-        <div id="video-modal" class="fixed inset-0 z-[200] bg-black/95 hidden flex-col items-center justify-center p-4 backdrop-blur-sm">
-            <button onclick="closeVideo()" class="absolute top-6 right-6 text-white/80 hover:text-white text-4xl transition transform hover:rotate-90">&times;</button>
-            <div class="w-full max-w-5xl aspect-video bg-black rounded-3xl overflow-hidden shadow-2xl border border-white/10">
+        <div id="video-modal" class="fixed inset-0 z-[200] bg-white/95 hidden flex-col items-center justify-center p-4">
+            <button onclick="closeVideo()" class="absolute top-8 right-8 text-stone-400 hover:text-stone-900 text-4xl font-light transition">&times;</button>
+            <div class="w-full max-w-5xl aspect-video bg-black shadow-2xl">
                 <iframe id="modal-iframe" class="w-full h-full" src="" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
             </div>
-            <p id="video-caption" class="text-white font-serif text-2xl mt-8 text-center tracking-wide"></p>
+            <p id="video-caption" class="text-stone-900 font-serif text-2xl mt-8 text-center italic"></p>
         </div>
 
     </main>
@@ -268,99 +279,90 @@
     <script>
         gsap.registerPlugin(ScrollTrigger);
 
-        // --- 1. CONFIGURATION ---
+        // --- CONFIG ---
         const PASSWORD = "love";
-        const LETTER_TEXT = "Priya... words fail me when I look at you. You are the logic to my chaos, the CSS to my HTML, and the beat to my heart. Happy Birthday, my love.";
+        const LETTER_TEXT = "Priya... in a noisy world, you are my quiet place. In a chaotic life, you are my clarity. Thank you for simply being you. Happy Birthday.";
         
-        // --- VIDEO LIST ---
         const WISHES = [
-            { id: "dQw4w9wgxcq", name: "Wish from Mom 💜" },
-            { id: "dQw4w9wgxcq", name: "Bestie Goals 👯‍♀️" },
-            { id: "dQw4w9wgxcq", name: "Stranger in London 🇬🇧" },
-            { id: "dQw4w9wgxcq", name: "Stranger in Paris 🇫🇷" },
-            { id: "dQw4w9wgxcq", name: "College Gang 🎓" },
-            { id: "dQw4w9wgxcq", name: "Wish #6" },
-            { id: "dQw4w9wgxcq", name: "Wish #7" },
-            { id: "dQw4w9wgxcq", name: "Wish #8" },
-            { id: "dQw4w9wgxcq", name: "Wish #9" },
-            { id: "dQw4w9wgxcq", name: "Wish #10" },
-            { id: "dQw4w9wgxcq", name: "Wish #11" },
-            { id: "dQw4w9wgxcq", name: "Wish #12" },
-            { id: "dQw4w9wgxcq", name: "Wish #13" },
-            { id: "dQw4w9wgxcq", name: "Wish #14" },
-            { id: "dQw4w9wgxcq", name: "Wish #15" },
-            { id: "dQw4w9wgxcq", name: "Wish #16" },
-            { id: "dQw4w9wgxcq", name: "Wish #17" },
-            { id: "dQw4w9wgxcq", name: "Wish #18" },
-            { id: "dQw4w9wgxcq", name: "Wish #19" },
-            { id: "dQw4w9wgxcq", name: "Wish #20" },
+            { id: "dQw4w9wgxcq", name: "Mother" },
+            { id: "dQw4w9wgxcq", name: "Best Friend" },
+            { id: "dQw4w9wgxcq", name: "London" },
+            { id: "dQw4w9wgxcq", name: "Paris" },
+            { id: "dQw4w9wgxcq", name: "The Girls" },
+            { id: "dQw4w9wgxcq", name: "Wish 06" },
+            { id: "dQw4w9wgxcq", name: "Wish 07" },
+            { id: "dQw4w9wgxcq", name: "Wish 08" },
+            { id: "dQw4w9wgxcq", name: "Wish 09" },
+            { id: "dQw4w9wgxcq", name: "Wish 10" },
+            { id: "dQw4w9wgxcq", name: "Wish 11" },
+            { id: "dQw4w9wgxcq", name: "Wish 12" },
+            { id: "dQw4w9wgxcq", name: "Wish 13" },
+            { id: "dQw4w9wgxcq", name: "Wish 14" },
+            { id: "dQw4w9wgxcq", name: "Wish 15" },
+            { id: "dQw4w9wgxcq", name: "Wish 16" },
+            { id: "dQw4w9wgxcq", name: "Wish 17" },
+            { id: "dQw4w9wgxcq", name: "Wish 18" },
+            { id: "dQw4w9wgxcq", name: "Wish 19" },
+            { id: "dQw4w9wgxcq", name: "Wish 20" },
         ];
 
-        // --- 2. UNLOCK & ANIMATE ---
+        // --- UNLOCK ---
         function unlock() {
             const input = document.getElementById('password').value.toLowerCase();
             if(input === PASSWORD) {
-                gsap.to("#gate", { opacity: 0, duration: 1, onComplete: () => {
+                gsap.to("#gate", { opacity: 0, duration: 1.5, ease: "power2.inOut", onComplete: () => {
                     document.getElementById('gate').style.display = 'none';
                     document.getElementById('content').style.opacity = '1';
                     initAnimations();
                 }});
             } else {
-                gsap.fromTo("#password", {x: -10}, {x: 10, duration: 0.1, repeat: 5, yoyo: true});
+                gsap.fromTo("#password", {x: -5}, {x: 5, duration: 0.1, repeat: 3, yoyo: true});
                 document.getElementById('error-msg').classList.remove('hidden');
             }
         }
 
-        // --- 3. GSAP ANIMATIONS ---
+        // --- ANIMATIONS ---
         function initAnimations() {
-            // Hero
             gsap.to(".hero-anim", {
-                y: 0, opacity: 1, duration: 1.5, stagger: 0.3, ease: "power4.out"
+                y: 0, opacity: 1, duration: 2, stagger: 0.4, ease: "power3.out"
             });
 
-            // Timeline Items
-            gsap.utils.toArray(".timeline-item").forEach((item, i) => {
+            gsap.utils.toArray(".timeline-item").forEach((item) => {
                 gsap.fromTo(item, 
-                    { opacity: 0, y: 50 },
+                    { opacity: 0, y: 30 },
                     {
-                        opacity: 1, y: 0, duration: 1, ease: "power3.out",
-                        scrollTrigger: { trigger: item, start: "top 80%" }
+                        opacity: 1, y: 0, duration: 1.5, ease: "power3.out",
+                        scrollTrigger: { trigger: item, start: "top 85%" }
                     }
                 );
             });
-
-            // Video Grid Stagger
-            gsap.from(".video-card", {
-                scrollTrigger: { trigger: "#video-grid", start: "top 85%" },
-                y: 50, opacity: 0, duration: 0.8, stagger: 0.1, ease: "back.out(1.7)"
-            });
         }
 
-        // --- 4. RENDER GRID ---
+        // --- RENDER VIDEO GRID (Minimalist) ---
         function renderVideoGrid() {
             const grid = document.getElementById('video-grid');
             WISHES.forEach(video => {
                 const card = document.createElement('div');
-                card.className = "video-card group relative aspect-[3/4] rounded-2xl overflow-hidden cursor-pointer shadow-lg border border-white/40 bg-white/20 backdrop-blur-sm transform transition duration-300 hover:scale-105 hover:shadow-2xl";
+                card.className = "group relative aspect-[3/4] bg-white overflow-hidden cursor-pointer hover:opacity-90 transition duration-500";
                 card.onclick = () => playVideo(video.id, video.name);
                 
                 const thumbUrl = `https://img.youtube.com/vi/${video.id}/hqdefault.jpg`;
                 card.innerHTML = `
-                    <img src="${thumbUrl}" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition duration-500">
-                    <div class="absolute inset-0 flex items-center justify-center">
-                        <div class="w-14 h-14 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center group-hover:bg-lavender-500 transition duration-300 shadow-inner border border-white/30">
-                            <i class="fas fa-play text-white ml-1 text-xl"></i>
+                    <img src="${thumbUrl}" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition duration-700">
+                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-500">
+                        <div class="w-12 h-12 bg-white flex items-center justify-center shadow-xl">
+                            <i class="fas fa-play text-stone-900 text-xs"></i>
                         </div>
                     </div>
-                    <div class="absolute bottom-0 w-full p-4 bg-gradient-to-t from-black/90 via-black/50 to-transparent">
-                        <p class="text-white text-sm font-bold truncate tracking-wide">${video.name}</p>
+                    <div class="absolute bottom-4 left-4">
+                        <p class="text-white text-[10px] font-bold uppercase tracking-widest drop-shadow-md">${video.name}</p>
                     </div>
                 `;
                 grid.appendChild(card);
             });
         }
 
-        // --- 5. AUDIO & TYPEWRITER ---
+        // --- UTILS ---
         function playVoiceNote() {
             const audio = document.getElementById('voice-audio');
             const bgMusic = document.getElementById('bg-music');
@@ -370,15 +372,15 @@
             if (audio.paused) {
                 bgMusic.pause();
                 audio.play();
-                btn.innerHTML = '<i class="fas fa-pause pl-1 text-xl"></i>';
+                btn.innerHTML = '<i class="fas fa-pause text-xs"></i>';
                 waveform.classList.add('playing');
                 audio.onended = () => {
-                    btn.innerHTML = '<i class="fas fa-play pl-1 text-xl"></i>';
+                    btn.innerHTML = '<i class="fas fa-play text-xs"></i>';
                     waveform.classList.remove('playing');
                 };
             } else {
                 audio.pause();
-                btn.innerHTML = '<i class="fas fa-play pl-1 text-xl"></i>';
+                btn.innerHTML = '<i class="fas fa-play text-xs"></i>';
                 waveform.classList.remove('playing');
             }
         }
@@ -386,10 +388,10 @@
         function startTyping() {
             const btn = document.getElementById('start-type-btn');
             const container = document.getElementById('typewriter-text');
-            gsap.to(btn, {opacity: 0, duration: 0.5, onComplete: () => btn.style.display = 'none'});
+            gsap.to(btn, {opacity: 0, duration: 1, onComplete: () => btn.style.display = 'none'});
             
             let i = 0;
-            const speed = 50;
+            const speed = 60;
             function type() {
                 if (i < LETTER_TEXT.length) {
                     container.innerHTML += LETTER_TEXT.charAt(i);
@@ -405,17 +407,17 @@
             const icon = document.getElementById('music-icon');
             if (music.paused) {
                 music.play();
-                icon.className = 'fas fa-pause text-xl';
+                icon.className = 'fas fa-pause text-xs';
             } else {
                 music.pause();
-                icon.className = 'fas fa-music text-xl';
+                icon.className = 'fas fa-music text-xs';
             }
         }
 
         function revealSecret(element) {
             const overlay = element.querySelector('.absolute');
             const content = element.querySelector('.secret-blur');
-            gsap.to(overlay, {opacity: 0, duration: 0.5});
+            gsap.to(overlay, {opacity: 0, duration: 1});
             overlay.style.pointerEvents = 'none';
             content.classList.remove('secret-blur');
             content.classList.add('secret-reveal');
@@ -427,11 +429,11 @@
             const caption = document.getElementById('video-caption');
             const bgMusic = document.getElementById('bg-music');
             
-            if(!bgMusic.paused) { bgMusic.pause(); document.getElementById('music-icon').className = 'fas fa-music text-xl'; }
+            if(!bgMusic.paused) { bgMusic.pause(); document.getElementById('music-icon').className = 'fas fa-music text-xs'; }
             
             modal.classList.remove('hidden');
             modal.classList.add('flex');
-            gsap.fromTo(modal, {opacity: 0}, {opacity: 1, duration: 0.3});
+            gsap.fromTo(modal, {opacity: 0}, {opacity: 1, duration: 0.5});
             
             iframe.src = `https://www.youtube.com/embed/${id}?autoplay=1&rel=0`;
             caption.innerText = name;
@@ -441,7 +443,7 @@
             const modal = document.getElementById('video-modal');
             const iframe = document.getElementById('modal-iframe');
             
-            gsap.to(modal, {opacity: 0, duration: 0.3, onComplete: () => {
+            gsap.to(modal, {opacity: 0, duration: 0.5, onComplete: () => {
                 modal.classList.add('hidden');
                 modal.classList.remove('flex');
                 iframe.src = "";
