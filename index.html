@@ -11,14 +11,15 @@
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
     <script>
         tailwind.config = {
-            darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
                         rose: { 50: '#fff1f2', 100: '#ffe4e6', 500: '#f43f5e', 900: '#881337' },
-                        gold: '#d4af37',
                     },
                     fontFamily: {
                         hand: ['"Dancing Script"', 'cursive'],
@@ -31,55 +32,52 @@
     </script>
 
     <style>
-        /* --- THE MAGIC BACKGROUND --- */
         body {
-            /* 1. PUT YOUR IMAGE URL HERE */
+            /* REPLACE THIS URL WITH YOUR IMAGE */
             background-image: url('https://images.unsplash.com/photo-1518895949257-7621c3c786d7?q=80&w=2574&auto=format&fit=crop'); 
-            
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
             min-height: 100vh;
             color: #1e293b;
+            overflow-x: hidden; /* Hide horizontal scrollbar */
         }
 
-        /* Glass Overlay */
         body::before {
             content: '';
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             z-index: -1;
-            background: rgba(255, 255, 255, 0.3);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
         }
 
-        /* Glass Card Style */
         .glass-card {
             background: rgba(255, 255, 255, 0.65);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.6);
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+            box-shadow: 0 10px 40px -10px rgba(0,0,0,0.1);
         }
-
-        /* Animations */
-        .cursor::after {
-            content: '|';
-            animation: blink 1s infinite;
-        }
-        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 
         .timeline-line::before {
             content: '';
             position: absolute;
             top: 0; bottom: 0; left: 50%;
             width: 2px;
-            background: rgba(244, 63, 94, 0.5);
+            background: rgba(244, 63, 94, 0.3);
             transform: translateX(-50%);
             z-index: -1;
         }
 
+        /* 3D Tilt Effect Container */
+        .tilt-card {
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+        
+        /* Audio Wave Animation */
         .wave-bar {
             width: 3px;
             background: #f43f5e;
@@ -88,108 +86,105 @@
             animation-play-state: paused;
         }
         .playing .wave-bar { animation-play-state: running; }
-        
-        @keyframes wave {
-            0%, 100% { height: 10px; }
-            50% { height: 25px; }
-        }
+        @keyframes wave { 0%, 100% { height: 10px; } 50% { height: 25px; } }
 
-        .secret-blur {
-            filter: blur(12px);
-            user-select: none;
-            transition: filter 1.5s ease;
-            cursor: pointer;
-        }
+        /* Cursor Blink */
+        .cursor::after { content: '|'; animation: blink 1s infinite; }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+        
+        /* Secret Blur */
+        .secret-blur { filter: blur(15px); transition: filter 1.5s ease; }
         .secret-reveal { filter: blur(0); }
     </style>
 </head>
 <body class="antialiased selection:bg-rose-200">
 
-    <div id="gate" class="fixed inset-0 z-[100] bg-black/95 flex flex-col items-center justify-center text-center px-4 transition-opacity duration-1000">
+    <div id="gate" class="fixed inset-0 z-[100] bg-black/95 flex flex-col items-center justify-center text-center px-4">
         <div class="max-w-md w-full">
             <div class="text-6xl mb-6 animate-pulse">💌</div>
             <h1 class="text-white font-serif text-4xl mb-2">Hi Priya,</h1>
             <p class="text-rose-200 font-sans mb-8">This website is created only for you. ❤️</p>
-            
             <div class="glass-card p-6 rounded-2xl">
                 <p class="text-xs text-gray-500 uppercase tracking-widest mb-2">Security Check</p>
                 <input type="password" id="password" class="w-full bg-white/50 border border-gray-300 rounded-lg px-4 py-3 text-center focus:outline-none focus:ring-2 focus:ring-rose-400 mb-4" placeholder="Enter password...">
-                <button onclick="unlock()" class="w-full bg-rose-500 hover:bg-rose-600 text-white font-bold py-3 rounded-lg transition">Open My Heart</button>
+                <button onclick="unlock()" class="w-full bg-rose-500 hover:bg-rose-600 text-white font-bold py-3 rounded-lg transition transform active:scale-95">Open My Heart</button>
                 <p id="error-msg" class="text-red-500 text-sm mt-3 hidden font-bold">Try 'love' 😉</p>
             </div>
         </div>
     </div>
 
-    <main id="content" class="opacity-0 transition-opacity duration-1000">
+    <main id="content" class="opacity-0">
         
-        <button onclick="toggleMusic()" class="fixed top-5 right-5 z-50 w-10 h-10 glass-card rounded-full shadow-lg flex items-center justify-center text-rose-500 hover:bg-white transition">
-            <i id="music-icon" class="fas fa-music"></i>
+        <button onclick="toggleMusic()" class="fixed top-5 right-5 z-50 w-12 h-12 glass-card rounded-full shadow-lg flex items-center justify-center text-rose-500 hover:scale-110 transition duration-300">
+            <i id="music-icon" class="fas fa-music text-xl"></i>
         </button>
         <audio id="bg-music" loop src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
 
-        <section class="min-h-screen flex flex-col justify-center items-center text-center px-4 pt-20">
-            <div class="relative mb-8">
-                <div class="absolute inset-0 bg-rose-400 rounded-full blur-2xl opacity-40 animate-pulse"></div>
-                <img src="https://picsum.photos/id/1027/200/200" class="relative w-40 h-40 rounded-full border-4 border-white/80 shadow-2xl object-cover">
+        <section class="min-h-screen flex flex-col justify-center items-center text-center px-4 pt-20 overflow-hidden relative">
+            <div class="hero-anim relative mb-8 opacity-0 translate-y-10">
+                <div class="absolute inset-0 bg-rose-400 rounded-full blur-3xl opacity-30 animate-pulse"></div>
+                <img src="https://picsum.photos/id/1027/300/300" class="relative w-48 h-48 rounded-full border-4 border-white/80 shadow-2xl object-cover">
             </div>
             
-            <div class="glass-card px-8 py-6 rounded-3xl inline-block mb-6">
-                <h1 class="font-serif text-5xl md:text-8xl text-slate-900 mb-2">Happy Birthday</h1>
-                <p class="font-hand text-3xl text-rose-500">My Favorite Human</p>
+            <div class="hero-anim glass-card px-10 py-8 rounded-[2rem] inline-block mb-6 opacity-0 translate-y-10">
+                <h1 class="font-serif text-5xl md:text-8xl text-slate-900 mb-2 leading-tight">Happy Birthday</h1>
+                <p class="font-hand text-4xl text-rose-600">My Favorite Human</p>
             </div>
             
-            <div class="mt-8 animate-bounce text-slate-800">
-                <i class="fas fa-chevron-down text-2xl"></i>
+            <div class="hero-anim mt-12 text-slate-800 opacity-0 translate-y-10">
+                <i class="fas fa-chevron-down text-2xl animate-bounce"></i>
             </div>
         </section>
 
-        <section class="py-20 px-4 max-w-4xl mx-auto">
-            <div class="glass-card p-4 rounded-xl inline-block mb-16 relative left-1/2 -translate-x-1/2">
-                <h2 class="text-center font-serif text-3xl text-slate-800">Our Journey</h2>
+        <section class="py-24 px-4 max-w-5xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="font-serif text-4xl text-slate-800 bg-white/40 inline-block px-8 py-2 rounded-full backdrop-blur-sm">Our Journey</h2>
             </div>
             
-            <div class="relative timeline-line space-y-12">
-                <div class="relative flex md:justify-end items-center md:w-1/2 md:ml-auto pl-8 md:pl-0 opacity-0 translate-y-10 transition duration-700 reveal-on-scroll">
-                    <div class="absolute left-0 md:-left-3 w-6 h-6 bg-rose-500 rounded-full border-4 border-white shadow transform -translate-x-1/2"></div>
-                    <div class="glass-card p-6 rounded-2xl w-full md:ml-8 hover:scale-105 transition duration-300">
-                        <span class="text-rose-500 text-xs font-bold bg-white/50 px-2 py-1 rounded">CHAPTER 1</span>
-                        <h3 class="font-serif text-xl font-bold mt-2">The First Meet</h3>
-                        <p class="text-slate-700 text-sm mt-2">I was nervous, you were smiling. That coffee shop will always be my favorite place on earth.</p>
+            <div class="relative timeline-line space-y-24">
+                <div class="timeline-item relative flex md:justify-end items-center md:w-1/2 md:ml-auto pl-8 md:pl-0 opacity-0">
+                    <div class="hidden md:block absolute -left-3 w-6 h-6 bg-rose-500 rounded-full border-4 border-white shadow z-10"></div>
+                    <div class="glass-card p-8 rounded-2xl w-full md:ml-12 tilt-card hover:border-rose-300 transition duration-300">
+                        <span class="text-rose-600 text-xs font-bold bg-rose-50 px-3 py-1 rounded-full border border-rose-100">CHAPTER 1</span>
+                        <h3 class="font-serif text-2xl font-bold mt-3">The First Meet</h3>
+                        <p class="text-slate-700 text-base mt-2 leading-relaxed">I was nervous, you were smiling. That coffee shop will always be my favorite place on earth.</p>
                     </div>
                 </div>
-                <div class="relative flex md:justify-start items-center md:w-1/2 pr-8 md:pr-0 opacity-0 translate-y-10 transition duration-700 delay-200 reveal-on-scroll">
-                    <div class="absolute left-0 md:left-full w-6 h-6 bg-rose-500 rounded-full border-4 border-white shadow transform -translate-x-1/2"></div>
-                    <div class="glass-card p-6 rounded-2xl w-full md:mr-8 hover:scale-105 transition duration-300 text-right md:text-left">
-                        <span class="text-rose-500 text-xs font-bold bg-white/50 px-2 py-1 rounded">CHAPTER 2</span>
-                        <h3 class="font-serif text-xl font-bold mt-2">That Funny Moment</h3>
-                        <p class="text-slate-700 text-sm mt-2">Remember when we got lost in the rain and you laughed so hard? I fell in love right there.</p>
+
+                <div class="timeline-item relative flex md:justify-start items-center md:w-1/2 pr-8 md:pr-0 opacity-0">
+                    <div class="hidden md:block absolute left-full -translate-x-1/2 w-6 h-6 bg-rose-500 rounded-full border-4 border-white shadow z-10"></div>
+                    <div class="glass-card p-8 rounded-2xl w-full md:mr-12 tilt-card hover:border-rose-300 transition duration-300 text-right md:text-left">
+                        <span class="text-rose-600 text-xs font-bold bg-rose-50 px-3 py-1 rounded-full border border-rose-100">CHAPTER 2</span>
+                        <h3 class="font-serif text-2xl font-bold mt-3">That Funny Moment</h3>
+                        <p class="text-slate-700 text-base mt-2 leading-relaxed">Remember when we got lost in the rain and you laughed so hard? I fell in love right there.</p>
                     </div>
                 </div>
-                <div class="relative flex md:justify-end items-center md:w-1/2 md:ml-auto pl-8 md:pl-0 opacity-0 translate-y-10 transition duration-700 delay-400 reveal-on-scroll">
-                    <div class="absolute left-0 md:-left-3 w-6 h-6 bg-rose-500 rounded-full border-4 border-white shadow transform -translate-x-1/2"></div>
-                    <div class="glass-card p-6 rounded-2xl w-full md:ml-8 hover:scale-105 transition duration-300">
-                        <span class="text-rose-500 text-xs font-bold bg-white/50 px-2 py-1 rounded">CHAPTER 3</span>
-                        <h3 class="font-serif text-xl font-bold mt-2">Today</h3>
-                        <p class="text-slate-700 text-sm mt-2">Celebrating the day the universe decided to give me the best gift ever. You.</p>
+
+                <div class="timeline-item relative flex md:justify-end items-center md:w-1/2 md:ml-auto pl-8 md:pl-0 opacity-0">
+                    <div class="hidden md:block absolute -left-3 w-6 h-6 bg-rose-500 rounded-full border-4 border-white shadow z-10"></div>
+                    <div class="glass-card p-8 rounded-2xl w-full md:ml-12 tilt-card hover:border-rose-300 transition duration-300">
+                        <span class="text-rose-600 text-xs font-bold bg-rose-50 px-3 py-1 rounded-full border border-rose-100">CHAPTER 3</span>
+                        <h3 class="font-serif text-2xl font-bold mt-3">Today</h3>
+                        <p class="text-slate-700 text-base mt-2 leading-relaxed">Celebrating the day the universe decided to give me the best gift ever. You.</p>
                     </div>
                 </div>
             </div>
         </section>
 
         <section class="py-20 px-4">
-            <div class="max-w-md mx-auto">
-                <div class="text-center mb-10">
-                    <span class="glass-card px-4 py-2 rounded-full text-xs font-bold tracking-widest text-rose-600">AUDIO MESSAGE</span>
-                    <h2 class="font-serif text-3xl mt-3 text-slate-800">Listen closely... 🎧</h2>
+            <div class="max-w-md mx-auto transform hover:scale-105 transition duration-500">
+                <div class="text-center mb-8">
+                    <span class="bg-white/60 px-4 py-1 rounded-full text-xs font-bold tracking-widest text-rose-600 border border-white">AUDIO MESSAGE</span>
+                    <h2 class="font-serif text-3xl mt-4 text-slate-800">Listen closely... 🎧</h2>
                 </div>
 
-                <div class="glass-card p-4 rounded-3xl rounded-tl-none flex items-center gap-4">
-                    <button onclick="playVoiceNote()" id="voice-btn" class="w-12 h-12 bg-rose-500 rounded-full flex items-center justify-center text-white shadow-lg hover:scale-105 transition">
-                        <i class="fas fa-play pl-1"></i>
+                <div class="glass-card p-5 rounded-[2rem] rounded-tl-none flex items-center gap-5 shadow-2xl">
+                    <button onclick="playVoiceNote()" id="voice-btn" class="w-14 h-14 bg-gradient-to-br from-rose-400 to-rose-600 rounded-full flex items-center justify-center text-white shadow-lg hover:shadow-rose-500/30 transition transform active:scale-95">
+                        <i class="fas fa-play pl-1 text-xl"></i>
                     </button>
                     
                     <div class="flex-1">
-                        <div id="waveform" class="flex items-center gap-1 h-8">
+                        <div id="waveform" class="flex items-center gap-1 h-8 justify-center">
                             <div class="wave-bar h-3"></div><div class="wave-bar h-5"></div><div class="wave-bar h-2"></div>
                             <div class="wave-bar h-6"></div><div class="wave-bar h-3"></div><div class="wave-bar h-5"></div>
                             <div class="wave-bar h-2"></div><div class="wave-bar h-4"></div><div class="wave-bar h-3"></div>
@@ -199,48 +194,48 @@
                     
                     <span class="text-xs text-slate-500 font-bold">0:45</span>
                 </div>
-                <p class="text-center text-slate-600 text-xs mt-4">recorded just for you</p>
+                <p class="text-center text-slate-600 text-xs mt-4 font-medium tracking-wide">recorded just for you</p>
                 <audio id="voice-audio" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3"></audio>
             </div>
         </section>
 
-        <section class="py-20 px-4">
+        <section class="py-24 px-4">
             <div class="max-w-6xl mx-auto">
-                <div class="text-center mb-12">
-                    <span class="glass-card px-4 py-1 rounded-full text-xs font-bold tracking-widest text-rose-600 uppercase">Global Love</span>
-                    <h2 class="font-serif text-4xl mt-4 text-slate-900">20 Wishes from the World 🌍</h2>
-                    <p class="text-slate-600 mt-2">People from everywhere have something to say...</p>
+                <div class="text-center mb-16">
+                    <span class="bg-white/60 px-4 py-1 rounded-full text-xs font-bold tracking-widest text-rose-600 uppercase border border-white">Global Love</span>
+                    <h2 class="font-serif text-5xl mt-4 text-slate-900">20 Wishes from the World 🌍</h2>
                 </div>
 
-                <div id="video-grid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4"></div>
+                <div id="video-grid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                    </div>
             </div>
         </section>
 
         <section class="py-24 px-6 text-center">
-            <div class="glass-card max-w-2xl mx-auto p-10 rounded-3xl relative">
-                <i class="fas fa-quote-left text-4xl text-rose-500 mb-8 opacity-50 absolute top-6 left-6"></i>
+            <div class="glass-card max-w-3xl mx-auto p-12 rounded-[2.5rem] relative transform hover:-translate-y-2 transition duration-500">
+                <i class="fas fa-quote-left text-5xl text-rose-400 mb-8 opacity-30 absolute top-8 left-8"></i>
                 <div class="min-h-[200px] flex items-center justify-center">
-                    <p id="typewriter-text" class="font-serif text-2xl md:text-3xl leading-relaxed cursor text-slate-800"></p>
+                    <p id="typewriter-text" class="font-serif text-2xl md:text-4xl leading-relaxed cursor text-slate-800"></p>
                 </div>
-                <button onclick="startTyping()" id="start-type-btn" class="mt-8 px-8 py-3 bg-slate-900 text-white rounded-full text-sm hover:bg-slate-700 transition shadow-lg">
-                    Read My Heart
+                <button onclick="startTyping()" id="start-type-btn" class="mt-10 px-10 py-4 bg-slate-900 text-white rounded-full text-sm font-bold tracking-widest hover:bg-rose-500 transition shadow-xl transform hover:scale-105">
+                    READ MY HEART
                 </button>
             </div>
         </section>
 
         <section class="py-32 px-4 text-center overflow-hidden relative">
-            <p class="text-slate-800 font-bold text-sm mb-12 uppercase tracking-widest bg-white/40 inline-block px-4 py-1 rounded-full">Scroll to the end</p>
+            <p class="text-slate-600 font-bold text-xs mb-8 uppercase tracking-[0.2em] bg-white/50 inline-block px-4 py-2 rounded-full">Scroll to the end</p>
             
             <div class="relative max-w-lg mx-auto cursor-pointer group" onclick="revealSecret(this)">
-                <div class="absolute inset-0 z-10 flex items-center justify-center transition duration-500">
-                    <span class="glass-card px-6 py-3 rounded-full text-sm font-bold border border-white/40 pointer-events-none shadow-xl text-slate-900">
-                        <i class="fas fa-lock mr-2 text-rose-500"></i> TAP TO REVEAL SECRET
+                <div class="absolute inset-0 z-10 flex items-center justify-center transition duration-700 group-hover:opacity-0">
+                    <span class="glass-card px-8 py-4 rounded-full text-sm font-bold border border-white/40 pointer-events-none shadow-xl text-slate-900 flex items-center gap-3">
+                        <i class="fas fa-lock text-rose-500"></i> TAP TO REVEAL SECRET
                     </span>
                 </div>
                 
-                <div class="secret-blur p-10 glass-card rounded-2xl border border-white/40">
+                <div class="secret-blur p-12 glass-card rounded-[2rem] border border-white/40">
                     <h3 class="font-serif text-3xl text-rose-600 mb-4">One Last Thing...</h3>
-                    <p class="font-sans text-lg leading-relaxed text-slate-800">
+                    <p class="font-sans text-xl leading-relaxed text-slate-800">
                         I booked that restaurant you've always wanted to go to. Pick you up at 7 PM tonight. Wear that dress I love. <br><br>
                         I love you more than code, more than coffee, more than anything.
                     </p>
@@ -248,33 +243,34 @@
             </div>
         </section>
 
-        <footer class="py-6 text-center text-slate-700 text-xs font-bold">
-            Made with ❤️ by You
+        <footer class="py-10 text-center text-slate-500 text-xs font-bold tracking-widest">
+            MADE WITH ❤️ BY YOU
         </footer>
         
         <div id="video-modal" class="fixed inset-0 z-[200] bg-black/95 hidden flex-col items-center justify-center p-4 backdrop-blur-sm">
-            <button onclick="closeVideo()" class="absolute top-6 right-6 text-white/80 hover:text-white text-4xl transition">&times;</button>
-            <div class="w-full max-w-4xl aspect-video bg-black rounded-2xl overflow-hidden shadow-2xl border border-white/10">
+            <button onclick="closeVideo()" class="absolute top-6 right-6 text-white/80 hover:text-white text-4xl transition transform hover:rotate-90">&times;</button>
+            <div class="w-full max-w-5xl aspect-video bg-black rounded-3xl overflow-hidden shadow-2xl border border-white/10">
                 <iframe id="modal-iframe" class="w-full h-full" src="" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
             </div>
-            <p id="video-caption" class="text-white font-serif text-xl mt-6 text-center"></p>
+            <p id="video-caption" class="text-white font-serif text-2xl mt-8 text-center tracking-wide"></p>
         </div>
 
     </main>
 
     <script>
+        gsap.registerPlugin(ScrollTrigger);
+
         // --- 1. CONFIGURATION ---
         const PASSWORD = "love";
         const LETTER_TEXT = "Priya... words fail me when I look at you. You are the logic to my chaos, the CSS to my HTML, and the beat to my heart. Happy Birthday, my love.";
         
-        // --- VIDEO LIST (PASTE IDS HERE) ---
+        // --- VIDEO LIST ---
         const WISHES = [
             { id: "dQw4w9wgxcq", name: "Wish from Mom ❤️" },
             { id: "dQw4w9wgxcq", name: "Bestie Goals 👯‍♀️" },
             { id: "dQw4w9wgxcq", name: "Stranger in London 🇬🇧" },
             { id: "dQw4w9wgxcq", name: "Stranger in Paris 🇫🇷" },
             { id: "dQw4w9wgxcq", name: "College Gang 🎓" },
-            // Add more...
             { id: "dQw4w9wgxcq", name: "Wish #6" },
             { id: "dQw4w9wgxcq", name: "Wish #7" },
             { id: "dQw4w9wgxcq", name: "Wish #8" },
@@ -292,34 +288,71 @@
             { id: "dQw4w9wgxcq", name: "Wish #20" },
         ];
 
-        // --- 2. FUNCTIONS ---
+        // --- 2. UNLOCK & ANIMATE ---
         function unlock() {
             const input = document.getElementById('password').value.toLowerCase();
             if(input === PASSWORD) {
-                const gate = document.getElementById('gate');
-                const content = document.getElementById('content');
-                gate.style.opacity = '0';
-                setTimeout(() => {
-                    gate.style.display = 'none';
-                    content.style.opacity = '1';
-                    setupObserver();
-                }, 1000);
+                gsap.to("#gate", { opacity: 0, duration: 1, onComplete: () => {
+                    document.getElementById('gate').style.display = 'none';
+                    document.getElementById('content').style.opacity = '1';
+                    initAnimations();
+                }});
             } else {
+                gsap.fromTo("#password", {x: -10}, {x: 10, duration: 0.1, repeat: 5, yoyo: true});
                 document.getElementById('error-msg').classList.remove('hidden');
             }
         }
 
-        function setupObserver() {
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.remove('opacity-0', 'translate-y-10');
-                    }
-                });
+        // --- 3. GSAP ANIMATIONS ---
+        function initAnimations() {
+            // Hero
+            gsap.to(".hero-anim", {
+                y: 0, opacity: 1, duration: 1.5, stagger: 0.3, ease: "power4.out"
             });
-            document.querySelectorAll('.reveal-on-scroll').forEach((el) => observer.observe(el));
+
+            // Timeline Items
+            gsap.utils.toArray(".timeline-item").forEach((item, i) => {
+                gsap.fromTo(item, 
+                    { opacity: 0, y: 50 },
+                    {
+                        opacity: 1, y: 0, duration: 1, ease: "power3.out",
+                        scrollTrigger: { trigger: item, start: "top 80%" }
+                    }
+                );
+            });
+
+            // Video Grid Stagger
+            gsap.from(".video-card", {
+                scrollTrigger: { trigger: "#video-grid", start: "top 85%" },
+                y: 50, opacity: 0, duration: 0.8, stagger: 0.1, ease: "back.out(1.7)"
+            });
         }
 
+        // --- 4. RENDER GRID ---
+        function renderVideoGrid() {
+            const grid = document.getElementById('video-grid');
+            WISHES.forEach(video => {
+                const card = document.createElement('div');
+                card.className = "video-card group relative aspect-[3/4] rounded-2xl overflow-hidden cursor-pointer shadow-lg border border-white/40 bg-white/20 backdrop-blur-sm transform transition duration-300 hover:scale-105 hover:shadow-2xl";
+                card.onclick = () => playVideo(video.id, video.name);
+                
+                const thumbUrl = `https://img.youtube.com/vi/${video.id}/hqdefault.jpg`;
+                card.innerHTML = `
+                    <img src="${thumbUrl}" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition duration-500">
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <div class="w-14 h-14 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center group-hover:bg-rose-500 transition duration-300 shadow-inner border border-white/30">
+                            <i class="fas fa-play text-white ml-1 text-xl"></i>
+                        </div>
+                    </div>
+                    <div class="absolute bottom-0 w-full p-4 bg-gradient-to-t from-black/90 via-black/50 to-transparent">
+                        <p class="text-white text-sm font-bold truncate tracking-wide">${video.name}</p>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // --- 5. AUDIO & TYPEWRITER ---
         function playVoiceNote() {
             const audio = document.getElementById('voice-audio');
             const bgMusic = document.getElementById('bg-music');
@@ -329,15 +362,15 @@
             if (audio.paused) {
                 bgMusic.pause();
                 audio.play();
-                btn.innerHTML = '<i class="fas fa-pause pl-1"></i>';
+                btn.innerHTML = '<i class="fas fa-pause pl-1 text-xl"></i>';
                 waveform.classList.add('playing');
                 audio.onended = () => {
-                    btn.innerHTML = '<i class="fas fa-play pl-1"></i>';
+                    btn.innerHTML = '<i class="fas fa-play pl-1 text-xl"></i>';
                     waveform.classList.remove('playing');
                 };
             } else {
                 audio.pause();
-                btn.innerHTML = '<i class="fas fa-play pl-1"></i>';
+                btn.innerHTML = '<i class="fas fa-play pl-1 text-xl"></i>';
                 waveform.classList.remove('playing');
             }
         }
@@ -345,7 +378,8 @@
         function startTyping() {
             const btn = document.getElementById('start-type-btn');
             const container = document.getElementById('typewriter-text');
-            btn.style.display = 'none';
+            gsap.to(btn, {opacity: 0, duration: 0.5, onComplete: () => btn.style.display = 'none'});
+            
             let i = 0;
             const speed = 50;
             function type() {
@@ -363,43 +397,20 @@
             const icon = document.getElementById('music-icon');
             if (music.paused) {
                 music.play();
-                icon.className = 'fas fa-pause';
+                icon.className = 'fas fa-pause text-xl';
             } else {
                 music.pause();
-                icon.className = 'fas fa-music';
+                icon.className = 'fas fa-music text-xl';
             }
         }
 
         function revealSecret(element) {
             const overlay = element.querySelector('.absolute');
             const content = element.querySelector('.secret-blur');
-            overlay.style.opacity = '0';
+            gsap.to(overlay, {opacity: 0, duration: 0.5});
             overlay.style.pointerEvents = 'none';
             content.classList.remove('secret-blur');
             content.classList.add('secret-reveal');
-        }
-
-        function renderVideoGrid() {
-            const grid = document.getElementById('video-grid');
-            grid.innerHTML = ''; 
-            WISHES.forEach(video => {
-                const card = document.createElement('div');
-                card.className = "group relative aspect-[3/4] rounded-xl overflow-hidden cursor-pointer hover:scale-105 transition duration-300 shadow-lg border border-white/40 bg-white/20 backdrop-blur-sm";
-                card.onclick = () => playVideo(video.id, video.name);
-                const thumbUrl = `https://img.youtube.com/vi/${video.id}/hqdefault.jpg`;
-                card.innerHTML = `
-                    <img src="${thumbUrl}" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition duration-500">
-                    <div class="absolute inset-0 flex items-center justify-center">
-                        <div class="w-12 h-12 bg-white/30 backdrop-blur-md rounded-full flex items-center justify-center group-hover:bg-rose-500 transition duration-300">
-                            <i class="fas fa-play text-white ml-1"></i>
-                        </div>
-                    </div>
-                    <div class="absolute bottom-0 w-full p-3 bg-gradient-to-t from-black/80 to-transparent">
-                        <p class="text-white text-xs font-bold truncate">${video.name}</p>
-                    </div>
-                `;
-                grid.appendChild(card);
-            });
         }
 
         function playVideo(id, name) {
@@ -407,12 +418,13 @@
             const iframe = document.getElementById('modal-iframe');
             const caption = document.getElementById('video-caption');
             const bgMusic = document.getElementById('bg-music');
-            if(!bgMusic.paused) {
-                bgMusic.pause();
-                document.getElementById('music-icon').className = 'fas fa-music';
-            }
+            
+            if(!bgMusic.paused) { bgMusic.pause(); document.getElementById('music-icon').className = 'fas fa-music text-xl'; }
+            
             modal.classList.remove('hidden');
             modal.classList.add('flex');
+            gsap.fromTo(modal, {opacity: 0}, {opacity: 1, duration: 0.3});
+            
             iframe.src = `https://www.youtube.com/embed/${id}?autoplay=1&rel=0`;
             caption.innerText = name;
         }
@@ -420,9 +432,12 @@
         function closeVideo() {
             const modal = document.getElementById('video-modal');
             const iframe = document.getElementById('modal-iframe');
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
-            iframe.src = "";
+            
+            gsap.to(modal, {opacity: 0, duration: 0.3, onComplete: () => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+                iframe.src = "";
+            }});
         }
 
         window.addEventListener('load', renderVideoGrid);
