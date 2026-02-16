@@ -445,12 +445,35 @@
                     }, 1500);
                 });
             },
-            initScroll: function() {
-                gsap.utils.toArray('.scroll-reveal').forEach(elem => {
-                    gsap.to(elem, { y: 0, opacity: 1, duration: 1.5, ease: "power2.out", scrollTrigger: { trigger: elem, start: "top 85%" }});
-                });
+initScroll: function() {
+    // 1. Existing General Reveals (For headers, quotes, etc.)
+    gsap.utils.toArray('.scroll-reveal').forEach(elem => {
+        gsap.to(elem, { 
+            y: 0, 
+            opacity: 1, 
+            duration: 1.5, 
+            ease: "power2.out", 
+            scrollTrigger: { trigger: elem, start: "top 85%" }
+        });
+    });
+
+    // 2. NEW: Poetry Animation (The Ink Bleed Effect)
+    // This targets the specific lines of your rhyme
+    gsap.utils.toArray('.poetry-line').forEach((line) => {
+        gsap.to(line, {
+            opacity: 1,
+            y: 0,
+            filter: "blur(0px)",   // Removes the blur to make text sharp
+            duration: 2,           // Slower duration for a romantic feel
+            ease: "power4.out",    // Smooth easing
+            scrollTrigger: {
+                trigger: line,
+                start: "top 75%",  // Triggers when the line is 75% down the screen
+                toggleActions: "play none none reverse" // Fades out if they scroll back up
             }
-        };
+        });
+    });
+}
 
         // --- NAVIGATION FUNCTIONS ---
         window.enterPortal = () => {
