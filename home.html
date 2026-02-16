@@ -81,22 +81,24 @@
         <div class="cursor-dot hidden md:block"></div>
         <div class="cursor-outline hidden md:block"></div>
 
-<section id="intro-screen" class="fixed inset-0 z-[100] bg-black flex flex-col items-center justify-center cursor-pointer">
+<section id="intro-screen" class="fixed inset-0 z-[100] bg-[#0a0a0a] flex flex-col items-center justify-center cursor-pointer">
     
-    <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-30 animate-[spin_60s_linear_infinite]"></div>
+    <div class="relative z-10 text-center">
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-[#d4af37] rounded-full blur-[100px] opacity-20 animate-pulse"></div>
 
-    <div class="text-center space-y-2 px-4 z-10 mix-blend-screen">
-        <p class="text-xs tracking-[1em] text-cyan-400/70 uppercase fade-elem">System Ready</p>
-        
-        <h1 class="text-6xl md:text-9xl font-cinematic font-bold text-white tracking-[0.2em] fade-elem border-y border-white/10 py-4" style="text-shadow: 0 0 30px rgba(0, 255, 255, 0.4);">
+        <h1 class="relative text-7xl md:text-9xl font-cinematic font-bold text-[#1a1a1a] fade-elem tracking-widest" style="-webkit-text-stroke: 1px rgba(212, 175, 55, 0.5);">
             NITHYA
+            <span class="absolute inset-0 text-transparent bg-clip-text bg-gradient-to-b from-[#d4af37] to-transparent opacity-50 blur-sm">NITHYA</span>
         </h1>
-        
-        <p class="text-sm text-gray-400 font-mono fade-elem mt-6 tracking-[0.5em] uppercase">The Journey Begins</p>
-    </div>
 
-    <div class="absolute w-[500px] h-[500px] border border-white/5 rounded-full animate-ping opacity-20 pointer-events-none"></div>
+        <div class="mt-8 space-y-2 fade-elem">
+            <div class="w-full h-[1px] bg-gradient-to-r from-transparent via-[#d4af37] to-transparent"></div>
+            <p class="text-sm text-[#d4af37] tracking-[0.5em] uppercase font-light">Enter The Realm</p>
+        </div>
+    </div>
 </section>
+
+        
         <section class="relative h-screen flex items-center justify-center overflow-hidden bg-[#fff9f0]">
             <div class="absolute inset-0 z-0">
                 <img src="https://images.unsplash.com/photo-1490750967868-58cb75069ed6?q=80&w=2000&auto=format&fit=crop" class="w-full h-full object-cover opacity-20 scale-110 will-change-transform grayscale" id="hero-bg" alt="Hero">
