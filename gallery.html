@@ -3,326 +3,303 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Gallery | Nithya</title>
-    
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@300;400&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
+    <title>Birthday Girl Photo & Video Gallery ✨</title>
     <style>
-        /* CORE THEME */
-        :root { --gold: #d4af37; --bg: #050505; }
-        body { background-color: var(--bg); color: #fff; font-family: 'Montserrat', sans-serif; overflow-x: hidden; }
-        .font-cinematic { font-family: 'Cinzel', serif; }
-
-        /* HORIZONTAL SCROLL SECTION */
-        .reel-container {
-            display: flex;
-            flex-wrap: nowrap;
-            width: 400%; /* Width depends on number of items */
-            height: 80vh;
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #f0f8ff, #ffe4e1);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
         }
-        .reel-item {
-            width: 30vw;
-            height: 100%;
-            padding: 2rem;
-            flex-shrink: 0;
+        h1, h2 { text-align:center; margin-bottom:20px; color:#ff69b4; }
+        nav { text-align:center; margin-bottom:30px; }
+        nav button {
+            background:#ff69b4; color:white; border:none; padding:12px 24px;
+            margin:6px; cursor:pointer; border-radius:30px; font-weight:bold;
+            transition:all 0.3s;
+        }
+        nav button:hover { background:#ff1493; transform:translateY(-2px); }
+        nav button.active { background:#ff1493; box-shadow:0 4px 12px rgba(255,20,147,0.4); }
+        section { margin-bottom:60px; animation:fadeIn 1.2s ease-out; display:none; }
+        section.active { display:block; }
+        @keyframes fadeIn { from {opacity:0; transform:translateY(30px);} to {opacity:1; transform:translateY(0);} }
+        .gallery {
+            display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));
+            gap:25px; padding:0 10px;
+        }
+        .gallery-item {
+            position:relative; overflow:hidden; border-radius:16px;
+            box-shadow:0 6px 15px rgba(0,0,0,0.12); cursor:pointer;
+            transition:all 0.4s ease;
+        }
+        .gallery-item:hover {
+            transform:scale(1.04) translateY(-8px);
+            box-shadow:0 12px 30px rgba(0,0,0,0.18);
+        }
+        .gallery-item img, .gallery-item video {
+            width:100%; height:auto; display:block; transition:transform 0.6s ease;
+        }
+        .gallery-item:hover img, .gallery-item:hover video { transform:scale(1.08); }
+        .overlay {
+            position:absolute; bottom:0; left:0; right:0;
+            background:linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+            color:white; padding:15px 12px 12px; text-align:center;
+            transform:translateY(100%); transition:transform 0.4s ease;
+        }
+        .gallery-item:hover .overlay { transform:translateY(0); }
+
+        /* ─────────────── Lightbox ─────────────── */
+        #lightbox {
+            display:none; position:fixed; inset:0; background:rgba(0,0,0,0.92);
+            z-index:9999; align-items:center; justify-content:center; opacity:0;
+            transition:opacity 0.4s ease; touch-action:pan-y pinch-zoom;
+        }
+        #lightbox.active { display:flex; opacity:1; }
+        
+        .lightbox-wrapper {
+            position: relative;
+            width: 95vw;
+            max-width: 1200px;
+            height: 90vh;
+            overflow: hidden;
+            border-radius: 12px;
+        }
+
+        .lightbox-slider {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            transition: transform 0.45s cubic-bezier(0.32, 0.72, 0.1, 1);
+            will-change: transform;
+        }
+
+        .lightbox-slide {
+            flex: 0 0 100%;
             display: flex;
             align-items: center;
             justify-content: center;
-            position: relative;
-        }
-        .reel-img {
-            width: 100%; height: 80%; object-fit: cover;
-            border-radius: 8px;
-            filter: grayscale(100%);
-            transition: all 0.5s ease;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
-        .reel-item:hover .reel-img {
-            filter: grayscale(0%);
-            transform: scale(1.05);
-            box-shadow: 0 0 30px rgba(212, 175, 55, 0.4);
+            padding: 20px;
         }
 
-        /* MASONRY GRID */
-        .masonry-col { break-inside: avoid; margin-bottom: 2rem; }
-        
-        /* FILTERS */
-        .filter-btn {
-            border: 1px solid rgba(255,255,255,0.2);
-            padding: 8px 20px;
-            border-radius: 30px;
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            transition: all 0.3s;
-        }
-        .filter-btn.active, .filter-btn:hover {
-            background: var(--gold);
-            color: black;
-            border-color: var(--gold);
-        }
-
-        /* VIDEO CARDS */
-        .video-card {
-            position: relative;
-            overflow: hidden;
+        .lightbox-slide img, .lightbox-slide video {
+            max-width: 100%;
+            max-height: 85vh;
             border-radius: 12px;
-            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 0 40px rgba(0,0,0,0.6);
+            object-fit: contain;
+            transition: transform 0.4s ease;
         }
-        .play-overlay {
-            position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
-            background: rgba(0,0,0,0.4); opacity: 0; transition: opacity 0.3s;
-        }
-        .video-card:hover .play-overlay { opacity: 1; }
 
-        /* LIGHTBOX */
-        #lightbox { backdrop-filter: blur(20px); background: rgba(0,0,0,0.95); }
+        .close {
+            position:absolute; top:20px; right:25px; color:white;
+            font-size:48px; font-weight:bold; cursor:pointer;
+            text-shadow:0 0 10px black; transition:all 0.3s; z-index:10;
+        }
+        .close:hover { color:#ff69b4; transform:rotate(90deg); }
+
+        .nav-arrow {
+            position:absolute; top:50%; transform:translateY(-50%);
+            color:white; font-size:60px; cursor:pointer; user-select:none;
+            text-shadow:0 0 15px black; transition:all 0.3s; z-index:5;
+        }
+        .nav-arrow:hover { color:#ff69b4; transform:translateY(-50%) scale(1.15); }
+        #prev { left:20px; }
+        #next { right:20px; }
+
+        @media (max-width:768px) {
+            .close { top:15px; right:20px; font-size:40px; }
+            .nav-arrow { font-size:50px; }
+            #prev { left:10px; }
+            #next { right:10px; }
+        }
+        @media (max-width:600px) { .gallery { grid-template-columns:1fr; } }
     </style>
 </head>
 <body>
 
-    <nav class="fixed top-0 left-0 w-full z-50 p-6 flex justify-between items-center mix-blend-difference">
-        <a href="index.html" class="text-xs font-bold tracking-[0.3em] uppercase hover:text-[#d4af37] transition-colors">← Back</a>
-        <h1 class="font-cinematic text-xl text-[#d4af37]">The Collection</h1>
+    <h1>✨ Happy Birthday Gallery ✨</h1>
+
+    <nav id="filter-nav">
+        <button data-filter="all" class="active">All Memories</button>
+        <button data-filter="childhood">Childhood</button>
+        <button data-filter="teenage">Teen Years</button>
+        <button data-filter="recent">Recent Times</button>
+        <button data-filter="videos">Videos</button>
     </nav>
 
-    <header class="h-screen flex flex-col items-center justify-center text-center relative overflow-hidden">
-        <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-20"></div>
-        <h2 class="text-6xl md:text-9xl font-cinematic text-transparent bg-clip-text bg-gradient-to-b from-[#fff] to-[#444] tracking-tighter mb-4 opacity-0 animate-in">
-            MOMENTS
-        </h2>
-        <p class="text-[#d4af37] font-mono text-xs tracking-[0.5em] opacity-0 animate-in-delay">SCROLL TO EXPLORE</p>
-    </header>
-
-    <section id="reel-section" class="relative overflow-hidden bg-[#0a0a0a]">
-        <div class="absolute top-10 left-10 z-10">
-            <span class="font-cinematic text-2xl text-[#d4af37]">01. The Timeline</span>
-        </div>
-        
-        <div class="reel-container" id="reel-track">
-            <div class="reel-item group">
-                <img src="media/1.jpeg" class="reel-img cursor-pointer" onclick="openLightbox(this)">
-                <div class="absolute bottom-10 left-10 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <p class="font-cinematic text-xl">The Beginning</p>
-                    <p class="text-xs text-gray-400 font-mono">2023</p>
-                </div>
+    <!-- Example sections – replace with your real media -->
+    <section id="childhood" class="active">
+        <h2>Childhood Moments</h2>
+        <div class="gallery">
+            <div class="gallery-item" data-category="childhood">
+                <img src="https://via.placeholder.com/400x500?text=Childhood+1" alt="Childhood 1" data-type="image">
+                <div class="overlay">First steps & smiles</div>
             </div>
-            
-            <div class="reel-item group">
-                <img src="media/2.jpeg" class="reel-img cursor-pointer" onclick="openLightbox(this)">
-                <div class="absolute bottom-10 left-10 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <p class="font-cinematic text-xl">Best Day</p>
-                    <p class="text-xs text-gray-400 font-mono">Goa Trip</p>
-                </div>
+            <div class="gallery-item" data-category="childhood">
+                <img src="https://via.placeholder.com/400x500?text=Childhood+2" alt="Childhood 2" data-type="image">
+                <div class="overlay">Birthday cake disaster</div>
             </div>
-
-            <div class="reel-item group">
-                <img src="media/3.jpeg" class="reel-img cursor-pointer" onclick="openLightbox(this)">
-                <div class="absolute bottom-10 left-10 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <p class="font-cinematic text-xl">Smiles</p>
-                </div>
-            </div>
-            
-            <div class="reel-item group">
-                <img src="media/4.jpeg" class="reel-img cursor-pointer" onclick="openLightbox(this)">
-            </div>
-            
-             <div class="reel-item group">
-                <img src="media/5.jpeg" class="reel-img cursor-pointer" onclick="openLightbox(this)">
-            </div>
+            <!-- Add more items -->
         </div>
     </section>
 
-    <section class="py-24 px-6 md:px-20 bg-[#050505]">
-        <div class="mb-12 flex items-end justify-between border-b border-gray-800 pb-4">
-            <h3 class="font-cinematic text-4xl text-white">02. Motion Pictures</h3>
-            <span class="text-[#d4af37] text-xs tracking-widest">PRESS PLAY</span>
+    <!-- Add other sections (teenage, recent, videos) here -->
+
+    <!-- Lightbox -->
+    <div id="lightbox">
+        <span class="close" id="close">&times;</span>
+        <span class="nav-arrow" id="prev">&#10094;</span>
+        <div class="lightbox-wrapper">
+            <div class="lightbox-slider" id="lightbox-slider"></div>
         </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div class="video-card group cursor-pointer" onclick="openVideo('https://www.youtube.com/embed/dQw4w9WgXcQ')"> <div class="aspect-video bg-gray-900 relative">
-                    <img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=800" class="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity duration-500">
-                    <div class="play-overlay">
-                        <div class="w-16 h-16 rounded-full bg-[#d4af37] flex items-center justify-center text-black pl-1">
-                            <i class="fas fa-play"></i>
-                        </div>
-                    </div>
-                </div>
-                <div class="p-4 bg-[#111]">
-                    <h4 class="font-cinematic text-xl">Birthday Surprise</h4>
-                    <p class="text-xs text-gray-500 mt-1">02:14 • The Big Reveal</p>
-                </div>
-            </div>
-
-            <div class="video-card group cursor-pointer" onclick="openVideo('https://www.youtube.com/embed/dQw4w9WgXcQ')">
-                <div class="aspect-video bg-gray-900 relative">
-                    <img src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=800" class="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity duration-500">
-                    <div class="play-overlay">
-                        <div class="w-16 h-16 rounded-full bg-[#d4af37] flex items-center justify-center text-black pl-1">
-                            <i class="fas fa-play"></i>
-                        </div>
-                    </div>
-                </div>
-                <div class="p-4 bg-[#111]">
-                    <h4 class="font-cinematic text-xl">Road Trip Vlog</h4>
-                    <p class="text-xs text-gray-500 mt-1">05:30 • Making Memories</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="py-24 px-4 md:px-12 bg-[#080808]">
-        <div class="text-center mb-12">
-            <h3 class="font-cinematic text-4xl text-white mb-6">03. The Vault</h3>
-            
-            <div class="flex flex-wrap justify-center gap-4" id="filters">
-                <button class="filter-btn active" onclick="filterGallery('all')">All</button>
-                <button class="filter-btn" onclick="filterGallery('travel')">Travel</button>
-                <button class="filter-btn" onclick="filterGallery('candid')">Candid</button>
-                <button class="filter-btn" onclick="filterGallery('food')">Food</button>
-            </div>
-        </div>
-
-        <div class="columns-1 md:columns-3 gap-8 space-y-8" id="masonry-grid">
-            </div>
-    </section>
-
-    <div id="lightbox" class="fixed inset-0 z-[100] hidden flex items-center justify-center opacity-0 transition-opacity duration-300">
-        <button onclick="closeLightbox()" class="absolute top-6 right-6 text-white text-4xl hover:text-[#d4af37] transition-colors">&times;</button>
-        <div class="w-full h-full max-w-5xl max-h-[80vh] p-4 flex items-center justify-center relative">
-            <img id="lb-img" class="max-w-full max-h-full shadow-2xl hidden">
-            <iframe id="lb-vid" class="w-full h-full aspect-video hidden" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-        </div>
+        <span class="nav-arrow" id="next">&#10095;</span>
     </div>
 
     <script>
-        // --- DATA SETUP (PUT YOUR PHOTOS HERE) ---
-        // Categories: 'travel', 'candid', 'food', 'selfie'
-        const galleryData = [
-            { src: 'media/1.jpeg', category: 'candid', caption: 'Deep in thought' },
-            { src: 'media/2.jpeg', category: 'travel', caption: 'Exploring' },
-            { src: 'media/3.jpeg', category: 'selfie', caption: 'Sun kissed' },
-            // Add your 20-30 photos here. Use placeholders if you don't have enough yet.
-            { src: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=600', category: 'travel', caption: 'Paris Vibes' },
-            { src: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=600', category: 'candid', caption: 'Laughter' },
-            { src: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=600', category: 'food', caption: 'Best Coffee' },
-            { src: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600', category: 'travel', caption: 'Mountains' },
-            { src: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=600', category: 'candid', caption: 'Portrait' },
-            { src: 'https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=600', category: 'travel', caption: 'City Lights' },
-            { src: 'https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=600', category: 'candid', caption: 'Eyes' },
-            { src: 'https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?w=600', category: 'food', caption: 'Brunch' }
-        ];
+        // Filter logic
+        const buttons = document.querySelectorAll('#filter-nav button');
+        const sections = document.querySelectorAll('section');
 
-        // --- 1. RENDER MASONRY ---
-        const grid = document.getElementById('masonry-grid');
-        
-        function renderGallery(filter) {
-            grid.innerHTML = '';
-            
-            const items = filter === 'all' 
-                ? galleryData 
-                : galleryData.filter(item => item.category === filter);
-            
-            items.forEach((item, index) => {
-                const div = document.createElement('div');
-                div.className = 'masonry-col break-inside-avoid relative group cursor-pointer overflow-hidden rounded-lg';
-                div.innerHTML = `
-                    <img src="${item.src}" class="w-full h-auto transform transition-transform duration-700 group-hover:scale-110" loading="lazy">
-                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                        <span class="font-cinematic text-white tracking-widest uppercase border-b border-[#d4af37]">${item.caption}</span>
-                    </div>
-                `;
-                div.onclick = () => openLightbox(div.querySelector('img'));
-                grid.appendChild(div);
-                
-                // Stagger Animation
-                gsap.from(div, {
-                    y: 50, opacity: 0, duration: 0.8, delay: index * 0.05, ease: "power2.out"
+        buttons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                buttons.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                const filter = btn.dataset.filter;
+                sections.forEach(sec => {
+                    sec.classList.toggle('active', filter === 'all' || sec.id === filter);
                 });
+            });
+        });
+
+        // ─────────────── Lightbox with smooth swipe ───────────────
+        const lightbox = document.getElementById('lightbox');
+        const slider = document.getElementById('lightbox-slider');
+        const closeBtn = document.getElementById('close');
+        const prevBtn = document.getElementById('prev');
+        const nextBtn = document.getElementById('next');
+
+        let currentItems = [];
+        let currentIndex = 0;
+        let touchStartX = 0;
+        let touchEndX = 0;
+        let touchStartY = 0;
+        let touchDiffX = 0;
+        const SWIPE_THRESHOLD = 70;
+
+        function openLightbox(index, items) {
+            currentItems = items;
+            currentIndex = index;
+            renderSlides();
+            updatePosition();
+            lightbox.classList.add('active');
+        }
+
+        function renderSlides() {
+            slider.innerHTML = '';
+            currentItems.forEach((item, i) => {
+                const slide = document.createElement('div');
+                slide.className = 'lightbox-slide';
+
+                const isVideo = item.querySelector('video') || item.dataset.type === 'video';
+                let content = '';
+
+                if (isVideo) {
+                    const videoSrc = item.querySelector('source')?.src || item.querySelector('video')?.currentSrc || '';
+                    content = `<video controls autoplay loop>
+                        <source src="${videoSrc}" type="video/mp4">
+                        Your browser does not support video.
+                    </video>`;
+                } else {
+                    const imgSrc = item.querySelector('img').src;
+                    content = `<img src="${imgSrc}" alt="Full view">`;
+                }
+
+                slide.innerHTML = content;
+                slider.appendChild(slide);
             });
         }
 
-        // --- 2. FILTERS LOGIC ---
-        function filterGallery(category) {
-            // Update buttons
-            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
-            renderGallery(category);
+        function updatePosition() {
+            slider.style.transform = `translateX(-${currentIndex * 100}%)`;
         }
 
-        // --- 3. SCROLL ANIMATIONS ---
-        // Initialize Lenis
-        const lenis = new Lenis({ duration: 1.2, smooth: true });
-        function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
-        requestAnimationFrame(raf);
-
-        // Intro Animation
-        gsap.to('.animate-in', { opacity: 1, y: 0, duration: 1.5, delay: 0.5 });
-        gsap.to('.animate-in-delay', { opacity: 1, y: 0, duration: 1.5, delay: 1 });
-
-        // Horizontal Scroll (The Reel)
-        // We move the container to the left based on scroll position
-        const reelSection = document.getElementById('reel-section');
-        const reelTrack = document.getElementById('reel-track');
-        
-        // Calculate scroll amount: Width of track - viewport width
-        let scrollAmount = reelTrack.scrollWidth - window.innerWidth;
-        
-        // We use scrollTrigger to pin the section and scroll sideways
-        gsap.to(reelTrack, {
-            x: () => -(reelTrack.scrollWidth - window.innerWidth),
-            ease: "none",
-            scrollTrigger: {
-                trigger: reelSection,
-                start: "top top",
-                end: () => "+=" + (reelTrack.scrollWidth - window.innerWidth),
-                pin: true,
-                scrub: 1,
-                invalidateOnRefresh: true
+        function nextMedia() {
+            if (currentIndex < currentItems.length - 1) {
+                currentIndex++;
+                updatePosition();
             }
+        }
+
+        function prevMedia() {
+            if (currentIndex > 0) {
+                currentIndex--;
+                updatePosition();
+            }
+        }
+
+        // Open lightbox
+        document.querySelectorAll('.gallery-item').forEach(item => {
+            item.addEventListener('click', e => {
+                if (e.target.closest('video')) return;
+                const visibleSection = document.querySelector('section.active');
+                const visibleItems = visibleSection ? visibleSection.querySelectorAll('.gallery-item') : [];
+                const index = Array.from(visibleItems).indexOf(item);
+                openLightbox(index, visibleItems);
+            });
         });
 
-        // --- 4. LIGHTBOX LOGIC ---
-        const lb = document.getElementById('lightbox');
-        const lbImg = document.getElementById('lb-img');
-        const lbVid = document.getElementById('lb-vid');
+        // Controls
+        closeBtn.addEventListener('click', () => lightbox.classList.remove('active'));
+        lightbox.addEventListener('click', e => { if (e.target === lightbox) lightbox.classList.remove('active'); });
+        nextBtn.addEventListener('click', nextMedia);
+        prevBtn.addEventListener('click', prevMedia);
 
-        window.openLightbox = (element) => {
-            lb.classList.remove('hidden');
-            setTimeout(() => lb.classList.remove('opacity-0'), 10);
-            lbImg.classList.remove('hidden');
-            lbVid.classList.add('hidden');
-            lbImg.src = element.src;
-            lenis.stop();
-        };
+        // Keyboard
+        document.addEventListener('keydown', e => {
+            if (!lightbox.classList.contains('active')) return;
+            if (e.key === 'Escape') lightbox.classList.remove('active');
+            if (e.key === 'ArrowRight') nextMedia();
+            if (e.key === 'ArrowLeft') prevMedia();
+        });
 
-        window.openVideo = (url) => {
-            lb.classList.remove('hidden');
-            setTimeout(() => lb.classList.remove('opacity-0'), 10);
-            lbImg.classList.add('hidden');
-            lbVid.classList.remove('hidden');
-            lbVid.src = url;
-            lenis.stop();
-        };
+        // ─────────────── Swipe with smooth animation ───────────────
+        lightbox.addEventListener('touchstart', e => {
+            touchStartX = e.changedTouches[0].screenX;
+            touchStartY = e.changedTouches[0].screenY;
+            touchDiffX = 0;
+            slider.style.transition = 'none';
+        }, { passive: false });
 
-        window.closeLightbox = () => {
-            lb.classList.add('opacity-0');
-            setTimeout(() => {
-                lb.classList.add('hidden');
-                lbImg.src = '';
-                lbVid.src = '';
-            }, 300);
-            lenis.start();
-        };
+        lightbox.addEventListener('touchmove', e => {
+            touchDiffX = e.changedTouches[0].screenX - touchStartX;
+            const diffY = Math.abs(e.changedTouches[0].screenY - touchStartY);
 
-        // Initialize
-        renderGallery('all');
+            // Only allow horizontal swipe if movement is mostly horizontal
+            if (diffY < 40) {
+                e.preventDefault();
+                slider.style.transform = `translateX(calc(-${currentIndex * 100}% + ${touchDiffX}px))`;
+            }
+        }, { passive: false });
 
+        lightbox.addEventListener('touchend', e => {
+            touchEndX = e.changedTouches[0].screenX;
+            slider.style.transition = 'transform 0.45s cubic-bezier(0.32, 0.72, 0.1, 1)';
+
+            const diffX = touchStartX - touchEndX;
+
+            if (Math.abs(diffX) > SWIPE_THRESHOLD) {
+                if (diffX > 0) {
+                    nextMedia();
+                } else {
+                    prevMedia();
+                }
+            } else {
+                // Snap back if swipe was too small
+                updatePosition();
+            }
+        }, { passive: false });
     </script>
 </body>
 </html>
