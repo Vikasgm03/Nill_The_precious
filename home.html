@@ -237,7 +237,7 @@ body.scroll-locked {
             </div>
         </section>
 
-        <section class="min-h-screen relative flex items-center justify-center py-20 overflow-hidden bg-[#1a0b2e]">
+        <section id="timetravel-anchor" class="min-h-screen relative flex items-center justify-center py-20 overflow-hidden bg-[#1a0b2e]">
             <div class="w-full max-w-4xl px-4 text-center z-10 relative">
                 <h2 class="text-5xl md:text-6xl font-cinematic mb-4 text-white">The Sands of Time</h2>
                 <p class="text-purple-200/80 font-emotional text-2xl mb-16">Step through the gate to revisit the past</p>
@@ -480,6 +480,36 @@ body.scroll-locked {
         };
 
         window.addEventListener('DOMContentLoaded', () => app.init());
+
+        window.addEventListener('load', () => {
+    // Check if the URL has #timetravel-anchor
+    if (window.location.hash === '#timetravel-anchor') {
+        const target = document.getElementById('timetravel-anchor');
+        
+        if (target) {
+            // We wait for the user to click the "Enter" button on the intro screen
+            const intro = document.getElementById('intro-screen');
+            
+            intro.addEventListener('click', () => {
+                // Give the intro fade-out a tiny headstart
+                setTimeout(() => {
+                    if (typeof lenis !== 'undefined') {
+                        // Smoothly glide to the section
+                        lenis.scrollTo(target, { 
+                            offset: 0, 
+                            duration: 2,
+                            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t))
+                        });
+                    } else {
+                        // Fallback if lenis isn't loaded
+                        target.scrollIntoView({ behavior: 'smooth' });
+                    }
+                }, 800); 
+            });
+        }
+    }
+});
+        
     </script>
 </body>
 </html>
