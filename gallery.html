@@ -19,51 +19,56 @@
         .font-hand { font-family: 'Dancing Script', cursive; }
         .font-serif { font-family: 'Playfair Display', serif; }
 
-        /* --- CURSOR --- */
+        /* CURSOR */
         .cursor-dot, .cursor-outline { position: fixed; top: 0; left: 0; transform: translate(-50%, -50%); border-radius: 50%; z-index: 9999; pointer-events: none; }
         .cursor-dot { width: 8px; height: 8px; background: white; }
         .cursor-outline { width: 40px; height: 40px; border: 1px solid rgba(255,255,255,0.5); transition: width 0.2s, height 0.2s; }
 
-        /* --- 1. GOLDEN HOUR FILTER --- */
-        .filter-golden { position: relative; overflow: hidden; filter: contrast(105%) brightness(105%) sepia(20%) saturate(140%); transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1); }
-        .filter-golden:hover { transform: scale(1.02); }
-        .filter-golden::after { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(255,160,0,0.2), transparent 60%); mix-blend-mode: overlay; pointer-events: none; }
+        /* --- ATMOSPHERIC EFFECTS --- */
+        
+        /* 1. Fireflies (Golden Hour) */
+        .firefly { position: absolute; width: 4px; height: 4px; background: #ffd700; border-radius: 50%; opacity: 0; animation: fly 10s infinite; pointer-events: none; box-shadow: 0 0 10px #ffd700; }
+        @keyframes fly { 0% { transform: translate(0,0); opacity: 0; } 20% { opacity: 1; } 80% { opacity: 1; } 100% { transform: translate(100px, -100px); opacity: 0; } }
 
-        /* --- 2. BLACK & WHITE EMOTIONAL --- */
+        /* 2. Sparkles (Pastel) */
+        .sparkle { position: absolute; width: 2px; height: 2px; background: white; animation: twinkle 3s infinite; }
+        @keyframes twinkle { 0%, 100% { transform: scale(0); opacity: 0; } 50% { transform: scale(1.5); opacity: 1; box-shadow: 0 0 10px white; } }
+
+        /* 3. Film Grain (B&W/Polaroid) */
+        .film-grain { position: absolute; inset: 0; background: url('https://www.transparenttextures.com/patterns/stardust.png'); opacity: 0.1; animation: grain 0.5s steps(5) infinite; pointer-events: none; }
+        @keyframes grain { 0%, 100% { transform: translate(0, 0); } 10% { transform: translate(-2px, -2px); } 30% { transform: translate(2px, -2px); } 50% { transform: translate(-2px, 2px); } 70% { transform: translate(2px, 2px); } }
+
+        /* 4. Light Leak (Cinematic) */
+        .light-leak { position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle, rgba(255,100,50,0.1) 0%, transparent 60%); animation: leak 10s infinite alternate; pointer-events: none; mix-blend-mode: screen; }
+        @keyframes leak { 0% { transform: rotate(0deg) scale(1); opacity: 0.3; } 100% { transform: rotate(10deg) scale(1.1); opacity: 0.6; } }
+
+        /* --- STYLES --- */
+        .filter-golden { position: relative; overflow: hidden; filter: contrast(105%) brightness(105%) sepia(20%) saturate(140%); transition: transform 0.5s; }
+        .filter-golden:hover { transform: scale(1.02); }
+        
         .filter-bw { filter: grayscale(100%) contrast(120%) brightness(90%); transition: all 0.7s ease; }
         .filter-bw:hover { filter: grayscale(0%) contrast(100%); }
-        .grain-overlay { position: absolute; inset: 0; background-image: url("https://www.transparenttextures.com/patterns/stardust.png"); opacity: 0.3; mix-blend-mode: overlay; pointer-events: none; }
-
-        /* --- 3. DREAMY GLOW --- */
+        
         .filter-dreamy { transition: transform 0.5s; }
         .filter-dreamy:hover { transform: translateY(-10px); }
         .filter-dreamy img { filter: brightness(110%) saturate(90%) contrast(90%); }
         .filter-dreamy::before { content: ''; position: absolute; inset: 0; z-index: 10; box-shadow: inset 0 0 40px rgba(255,255,255,0.4); mix-blend-mode: soft-light; pointer-events: none; }
-        .bloom-effect { filter: blur(8px); opacity: 0.6; mix-blend-mode: screen; position: absolute; inset: 0; transform: scale(1.05); }
-
-        /* --- 4. POLAROID VINTAGE --- */
-        .polaroid-card { background: #fff; padding: 12px 12px 50px 12px; box-shadow: 5px 5px 15px rgba(0,0,0,0.5); transform: rotate(-2deg); transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        
+        .polaroid-card { background: #fff; padding: 12px 12px 50px 12px; box-shadow: 5px 5px 15px rgba(0,0,0,0.5); transform: rotate(-2deg); transition: transform 0.4s; }
         .polaroid-card:hover { transform: rotate(0deg) scale(1.1) !important; z-index: 20; box-shadow: 0 20px 40px rgba(0,0,0,0.6); }
         .polaroid-img { filter: sepia(30%) contrast(90%) brightness(110%) hue-rotate(-10deg); }
         .tape { position: absolute; top: -15px; left: 50%; transform: translateX(-50%); width: 100px; height: 30px; background: rgba(255,255,255,0.4); border: 1px solid rgba(255,255,255,0.2); backdrop-filter: blur(5px); transform: translateX(-50%) rotate(2deg); box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
 
-        /* --- 5. CINEMATIC MOVIE STYLE --- */
         .filter-cinematic { position: relative; filter: contrast(110%) saturate(120%) sepia(20%) hue-rotate(-10deg); overflow: hidden; }
-        .cinematic-shine { position: absolute; top: 0; left: -100%; width: 50%; height: 100%; background: linear-gradient(to right, transparent, rgba(255,255,255,0.1), transparent); transform: skewX(-20deg); transition: left 0.7s; pointer-events: none; z-index: 10; }
-        .group:hover .cinematic-shine { left: 150%; transition: left 1s ease-in-out; }
         .letterbox { position: absolute; left: 0; width: 100%; height: 10%; background: black; z-index: 20; transition: height 0.5s; }
-        .group:hover .letterbox { height: 0%; } /* Reveal full image on hover */
-        .lb-top { top: 0; }
-        .lb-bottom { bottom: 0; }
+        .group:hover .letterbox { height: 0%; } 
+        .lb-top { top: 0; } .lb-bottom { bottom: 0; }
 
-        /* --- 6. SCRAPBOOK COLLAGE --- */
         .scrap-item { position: relative; transition: all 0.3s; will-change: transform; }
         .scrap-item:hover { z-index: 50; transform: scale(1.1) !important; }
         .paper-texture { background-image: url('https://www.transparenttextures.com/patterns/notebook.png'); background-color: #fff9f0; }
 
         .section-title { font-family: 'Cinzel', serif; font-size: 3rem; margin-bottom: 2rem; text-align: center; color: var(--gold); opacity: 0; transform: translateY(30px); }
-        
-        /* Reveal Animation Class */
         .reveal-up { opacity: 0; transform: translateY(50px); transition: all 1s ease-out; }
         .reveal-up.active { opacity: 1; transform: translateY(0); }
     </style>
@@ -81,16 +86,21 @@
     <header class="h-screen flex items-center justify-center relative overflow-hidden">
         <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=1600')] bg-cover bg-center opacity-30 parallax-bg"></div>
         <div class="absolute inset-0 bg-gradient-to-t from-[#050505] via-transparent to-[#050505]"></div>
+        
+        <div id="starfield" class="absolute inset-0 pointer-events-none"></div>
+
         <div class="relative z-10 text-center">
             <h1 class="text-7xl md:text-9xl font-cinematic text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-500 reveal-up">MUSE</h1>
             <p class="text-[#d4af37] tracking-[1em] mt-4 text-xs reveal-up" style="transition-delay: 0.2s;">A LIFE IN FILTERS</p>
         </div>
     </header>
 
-    <section class="py-24 px-4 bg-[#0a0500]">
-        <h2 class="section-title text-orange-200">Golden Hour <span class="text-xs block font-mono text-gray-500 mt-2">TECHNIQUE: WARM OVERLAY + BLOOM</span></h2>
+    <section class="py-24 px-4 bg-[#0a0500] relative overflow-hidden">
+        <div id="fireflies" class="absolute inset-0 pointer-events-none z-0"></div>
         
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-6xl mx-auto">
+        <h2 class="section-title text-orange-200 relative z-10">Golden Hour <span class="text-xs block font-mono text-gray-500 mt-2">TECHNIQUE: WARM OVERLAY + BLOOM</span></h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-6xl mx-auto relative z-10">
             <div class="filter-golden h-[500px] rounded-lg group reveal-up">
                 <img src="media/1.jpeg" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110">
                 <div class="absolute bottom-4 left-4 font-serif italic text-orange-100 opacity-0 group-hover:opacity-100 transition-opacity transform translate-y-4 group-hover:translate-y-0 duration-500">Sunkissed</div>
@@ -106,27 +116,24 @@
 
     <section class="py-24 bg-[#111] overflow-hidden relative">
         <div class="absolute inset-0 opacity-10" style="background-image: url('https://www.transparenttextures.com/patterns/wood-pattern.png');"></div>
-        <h2 class="section-title text-white">Vintage Polaroids <span class="text-xs block font-mono text-gray-500 mt-2">TECHNIQUE: SEPIA + ROTATION + TAPE</span></h2>
+        <div class="film-grain"></div> <h2 class="section-title text-white relative z-10">Vintage Polaroids <span class="text-xs block font-mono text-gray-500 mt-2">TECHNIQUE: SEPIA + ROTATION + TAPE</span></h2>
 
-        <div class="flex flex-wrap justify-center gap-10 max-w-7xl mx-auto py-10">
+        <div class="flex flex-wrap justify-center gap-10 max-w-7xl mx-auto py-10 relative z-10">
             <div class="polaroid-card w-64 rotate-[-3deg] reveal-up">
                 <div class="tape"></div>
                 <img src="media/4.jpeg" class="polaroid-img w-full aspect-square object-cover mb-2">
                 <p class="text-black font-hand text-xl text-center">So candid!</p>
             </div>
-            
             <div class="polaroid-card w-64 rotate-[2deg] mt-12 reveal-up" style="transition-delay: 0.1s;">
                 <div class="tape"></div>
                 <img src="media/5.jpeg" class="polaroid-img w-full aspect-square object-cover mb-2">
                 <p class="text-black font-hand text-xl text-center">Favorite place</p>
             </div>
-
             <div class="polaroid-card w-64 rotate-[-1deg] reveal-up" style="transition-delay: 0.2s;">
                 <div class="tape"></div>
                 <img src="media/1.jpeg" class="polaroid-img w-full aspect-square object-cover mb-2">
                 <p class="text-black font-hand text-xl text-center">Summer '25</p>
             </div>
-
             <div class="polaroid-card w-64 rotate-[4deg] mt-8 reveal-up" style="transition-delay: 0.3s;">
                 <div class="tape"></div>
                 <img src="media/2.jpeg" class="polaroid-img w-full aspect-square object-cover mb-2">
@@ -135,15 +142,14 @@
         </div>
     </section>
 
-    <section class="py-24 bg-black">
-        <h2 class="section-title text-gray-300">Cinematic Mode <span class="text-xs block font-mono text-gray-500 mt-2">TECHNIQUE: LETTERBOX + TEAL/ORANGE GRADE</span></h2>
+    <section class="py-24 bg-black relative overflow-hidden">
+        <div class="light-leak"></div> <h2 class="section-title text-gray-300 relative z-10">Cinematic Mode <span class="text-xs block font-mono text-gray-500 mt-2">TECHNIQUE: LETTERBOX + TEAL/ORANGE GRADE</span></h2>
 
-        <div class="max-w-5xl mx-auto space-y-12">
+        <div class="max-w-5xl mx-auto space-y-12 relative z-10">
             <div class="relative w-full aspect-[21/9] overflow-hidden group shadow-2xl border border-gray-800 reveal-up">
                 <div class="letterbox lb-top"></div>
                 <div class="letterbox lb-bottom"></div>
                 <div class="filter-cinematic w-full h-full">
-                    <div class="cinematic-shine"></div>
                     <img src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=1200" class="w-full h-full object-cover transform transition-transform duration-[2s] group-hover:scale-105">
                 </div>
                 <div class="absolute bottom-[15%] left-0 w-full text-center opacity-0 group-hover:opacity-100 transition-opacity duration-1000 z-30">
@@ -155,7 +161,6 @@
                 <div class="letterbox lb-top"></div>
                 <div class="letterbox lb-bottom"></div>
                 <div class="filter-cinematic w-full h-full">
-                    <div class="cinematic-shine"></div>
                     <img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=1200" class="w-full h-full object-cover transform transition-transform duration-[2s] group-hover:scale-105">
                 </div>
                  <div class="absolute bottom-[15%] left-0 w-full text-center opacity-0 group-hover:opacity-100 transition-opacity duration-1000 z-30">
@@ -165,29 +170,24 @@
         </div>
     </section>
 
-    <section class="py-24 bg-rose-50 relative">
+    <section class="py-24 bg-rose-50 relative overflow-hidden">
         <div class="absolute inset-0 bg-gradient-to-b from-white to-rose-100"></div>
-        <h2 class="section-title text-pink-400 relative z-10">Dreamy Pastel <span class="text-xs block font-mono text-gray-400 mt-2">TECHNIQUE: SOFT LIGHT + BLUR GLOW</span></h2>
+        <div id="sparkles" class="absolute inset-0 pointer-events-none"></div> <h2 class="section-title text-pink-400 relative z-10">Dreamy Pastel <span class="text-xs block font-mono text-gray-400 mt-2">TECHNIQUE: SOFT LIGHT + BLUR GLOW</span></h2>
 
         <div class="grid grid-cols-2 gap-8 max-w-4xl mx-auto relative z-10 px-6">
             <div class="relative aspect-[4/5] filter-dreamy rounded-[50px] overflow-hidden shadow-xl border-4 border-white reveal-up">
                 <div class="bloom-effect bg-[url('media/3.jpeg')] bg-cover"></div>
                 <img src="media/3.jpeg" class="relative z-10 w-full h-full object-cover">
             </div>
-
              <div class="relative aspect-[4/5] filter-dreamy rounded-[50px] overflow-hidden shadow-xl border-4 border-white mt-12 reveal-up" style="transition-delay: 0.2s;">
                 <div class="bloom-effect bg-[url('media/4.jpeg')] bg-cover"></div>
                 <img src="media/4.jpeg" class="relative z-10 w-full h-full object-cover">
             </div>
         </div>
-        
-        <div class="absolute top-20 left-10 text-4xl animate-bounce">🌸</div>
-        <div class="absolute bottom-20 right-10 text-4xl animate-bounce delay-700">✨</div>
     </section>
 
     <section class="py-24 bg-[#050505]">
         <h2 class="section-title text-white">Monochrome <span class="text-xs block font-mono text-gray-500 mt-2">TECHNIQUE: HIGH CONTRAST B&W + GRAIN</span></h2>
-        
         <div class="flex flex-col md:flex-row h-[80vh] w-full">
             <div class="relative flex-1 overflow-hidden filter-bw group">
                 <div class="grain-overlay"></div>
@@ -207,129 +207,119 @@
     </section>
 
     <section class="py-24 bg-[#020202] relative overflow-hidden">
-    <div class="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_center,_rgba(120,50,255,0.1),transparent_70%)] pointer-events-none"></div>
-    
-    <div class="container mx-auto px-6 relative z-10">
-        <h2 class="section-title text-purple-300 mb-16">The Screening Room <span class="text-xs block font-mono text-gray-500 mt-2">PRESS PLAY TO WATCH</span></h2>
+        <div class="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_center,_rgba(120,50,255,0.15),transparent_70%)] pointer-events-none animate-pulse"></div>
+        
+        <div class="container mx-auto px-6 relative z-10">
+            <h2 class="section-title text-purple-300 mb-16">The Screening Room <span class="text-xs block font-mono text-gray-500 mt-2">PRESS PLAY TO WATCH</span></h2>
 
-        <div class="mb-20">
-            <div class="flex items-center gap-4 mb-8">
-                <div class="h-[1px] bg-purple-500 flex-grow opacity-50"></div>
-                <h3 class="font-cinematic text-2xl text-white tracking-[0.3em] uppercase">Dance Floor</h3>
-                <div class="h-[1px] bg-purple-500 flex-grow opacity-50"></div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div class="group relative aspect-video rounded-2xl overflow-hidden border border-purple-900/50 cursor-pointer shadow-[0_0_30px_rgba(147,51,234,0.1)] hover:shadow-[0_0_50px_rgba(147,51,234,0.4)] transition-all duration-500" onclick="openVideo('https://www.youtube.com/embed/dQw4w9WgXcQ')"> <img src="https://images.unsplash.com/photo-1547153760-18fc86324498?w=800" class="w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-90"></div>
-                    
-                    <div class="absolute inset-0 flex items-center justify-center">
-                        <div class="w-16 h-16 rounded-full border border-purple-400 flex items-center justify-center backdrop-blur-sm group-hover:bg-purple-500 group-hover:border-purple-500 transition-all duration-300">
-                            <i class="fas fa-play text-white pl-1"></i>
+            <div class="mb-20">
+                <div class="flex items-center gap-4 mb-8">
+                    <div class="h-[1px] bg-purple-500 flex-grow opacity-50"></div>
+                    <h3 class="font-cinematic text-2xl text-white tracking-[0.3em] uppercase">Dance Floor</h3>
+                    <div class="h-[1px] bg-purple-500 flex-grow opacity-50"></div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="group relative aspect-video rounded-2xl overflow-hidden border border-purple-900/50 cursor-pointer shadow-[0_0_30px_rgba(147,51,234,0.1)] hover:shadow-[0_0_50px_rgba(147,51,234,0.4)] transition-all duration-500" onclick="openVideo('https://www.youtube.com/embed/dQw4w9WgXcQ')">
+                        <img src="https://images.unsplash.com/photo-1547153760-18fc86324498?w=800" class="w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-90"></div>
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <div class="w-16 h-16 rounded-full border border-purple-400 flex items-center justify-center backdrop-blur-sm group-hover:bg-purple-500 group-hover:border-purple-500 transition-all duration-300"><i class="fas fa-play text-white pl-1"></i></div>
+                        </div>
+                        <div class="absolute bottom-6 left-6">
+                            <span class="text-purple-400 text-xs font-mono mb-1 block">CHOREOGRAPHY</span>
+                            <h4 class="font-cinematic text-xl text-white group-hover:translate-x-2 transition-transform">Traditional Vibes</h4>
                         </div>
                     </div>
-                    
-                    <div class="absolute bottom-6 left-6">
-                        <span class="text-purple-400 text-xs font-mono mb-1 block">CHOREOGRAPHY</span>
-                        <h4 class="font-cinematic text-xl text-white group-hover:translate-x-2 transition-transform">Traditional Vibes</h4>
-                    </div>
-                </div>
-
-                <div class="group relative aspect-video rounded-2xl overflow-hidden border border-purple-900/50 cursor-pointer shadow-[0_0_30px_rgba(147,51,234,0.1)] hover:shadow-[0_0_50px_rgba(147,51,234,0.4)] transition-all duration-500" onclick="openVideo('https://www.youtube.com/embed/dQw4w9WgXcQ')">
-                    <img src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=800" class="w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-90"></div>
-                    <div class="absolute inset-0 flex items-center justify-center">
-                        <div class="w-16 h-16 rounded-full border border-purple-400 flex items-center justify-center backdrop-blur-sm group-hover:bg-purple-500 group-hover:border-purple-500 transition-all duration-300">
-                            <i class="fas fa-play text-white pl-1"></i>
+                    <div class="group relative aspect-video rounded-2xl overflow-hidden border border-purple-900/50 cursor-pointer shadow-[0_0_30px_rgba(147,51,234,0.1)] hover:shadow-[0_0_50px_rgba(147,51,234,0.4)] transition-all duration-500" onclick="openVideo('https://www.youtube.com/embed/dQw4w9WgXcQ')">
+                        <img src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=800" class="w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-90"></div>
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <div class="w-16 h-16 rounded-full border border-purple-400 flex items-center justify-center backdrop-blur-sm group-hover:bg-purple-500 group-hover:border-purple-500 transition-all duration-300"><i class="fas fa-play text-white pl-1"></i></div>
+                        </div>
+                        <div class="absolute bottom-6 left-6">
+                            <span class="text-purple-400 text-xs font-mono mb-1 block">FREESTYLE</span>
+                            <h4 class="font-cinematic text-xl text-white group-hover:translate-x-2 transition-transform">College Fest</h4>
                         </div>
                     </div>
-                    <div class="absolute bottom-6 left-6">
-                        <span class="text-purple-400 text-xs font-mono mb-1 block">FREESTYLE</span>
-                        <h4 class="font-cinematic text-xl text-white group-hover:translate-x-2 transition-transform">College Fest</h4>
-                    </div>
                 </div>
+            </div>
+
+            <div>
+                <div class="flex items-center gap-4 mb-8">
+                    <div class="h-[1px] bg-yellow-500 flex-grow opacity-50"></div>
+                    <h3 class="font-cinematic text-2xl text-white tracking-[0.3em] uppercase">Bloopers & Laughs</h3>
+                    <div class="h-[1px] bg-yellow-500 flex-grow opacity-50"></div>
+                </div>
+                <div class="flex overflow-x-auto gap-6 pb-8 no-scrollbar snap-x">
+                    <div class="flex-none w-64 aspect-[9/16] relative rounded-xl overflow-hidden cursor-pointer group snap-center border border-gray-800" onclick="openVideo('https://www.youtube.com/embed/dQw4w9WgXcQ')">
+                        <img src="media/2.jpeg" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-colors"></div>
+                        <div class="absolute bottom-4 left-4 right-4 bg-white/10 backdrop-blur-md p-3 rounded-lg border border-white/10">
+                            <p class="text-sm font-bold text-white">Epic Fail 😂</p>
+                            <p class="text-[10px] text-gray-300">Wait for it...</p>
+                        </div>
+                        <i class="fas fa-play-circle absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-4xl text-white opacity-80 group-hover:scale-125 transition-transform"></i>
+                    </div>
+                    </div>
             </div>
         </div>
-
-        <div>
-            <div class="flex items-center gap-4 mb-8">
-                <div class="h-[1px] bg-yellow-500 flex-grow opacity-50"></div>
-                <h3 class="font-cinematic text-2xl text-white tracking-[0.3em] uppercase">Bloopers & Laughs</h3>
-                <div class="h-[1px] bg-yellow-500 flex-grow opacity-50"></div>
-            </div>
-
-            <div class="flex overflow-x-auto gap-6 pb-8 no-scrollbar snap-x">
-                
-                <div class="flex-none w-64 aspect-[9/16] relative rounded-xl overflow-hidden cursor-pointer group snap-center border border-gray-800" onclick="openVideo('https://www.youtube.com/embed/dQw4w9WgXcQ')">
-                    <img src="media/2.jpeg" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
-                    <div class="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-colors"></div>
-                    <div class="absolute bottom-4 left-4 right-4 bg-white/10 backdrop-blur-md p-3 rounded-lg border border-white/10">
-                        <p class="text-sm font-bold text-white">Epic Fail 😂</p>
-                        <p class="text-[10px] text-gray-300">Wait for it...</p>
-                    </div>
-                    <i class="fas fa-play-circle absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-4xl text-white opacity-80 group-hover:scale-125 transition-transform"></i>
-                </div>
-
-                <div class="flex-none w-64 aspect-[9/16] relative rounded-xl overflow-hidden cursor-pointer group snap-center border border-gray-800" onclick="openVideo('https://www.youtube.com/embed/dQw4w9WgXcQ')">
-                    <img src="media/3.jpeg" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
-                    <div class="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-colors"></div>
-                    <div class="absolute bottom-4 left-4 right-4 bg-white/10 backdrop-blur-md p-3 rounded-lg border border-white/10">
-                        <p class="text-sm font-bold text-white">Crazy Times</p>
-                        <p class="text-[10px] text-gray-300">With the gang</p>
-                    </div>
-                    <i class="fas fa-play-circle absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-4xl text-white opacity-80 group-hover:scale-125 transition-transform"></i>
-                </div>
-
-                <div class="flex-none w-64 aspect-[9/16] relative rounded-xl overflow-hidden cursor-pointer group snap-center border border-gray-800" onclick="openVideo('https://www.youtube.com/embed/dQw4w9WgXcQ')">
-                    <img src="media/4.jpeg" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
-                    <div class="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-colors"></div>
-                    <div class="absolute bottom-4 left-4 right-4 bg-white/10 backdrop-blur-md p-3 rounded-lg border border-white/10">
-                        <p class="text-sm font-bold text-white">Foodie Mode</p>
-                        <p class="text-[10px] text-gray-300">Only eating</p>
-                    </div>
-                    <i class="fas fa-play-circle absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-4xl text-white opacity-80 group-hover:scale-125 transition-transform"></i>
-                </div>
-
-            </div>
-        </div>
-    </div>
-</section>
-
-<style>
-    /* Hide scrollbar for reels */
-    .no-scrollbar::-webkit-scrollbar { display: none; }
-    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-</style>
+    </section>
 
     <section class="py-24 paper-texture overflow-hidden">
         <h2 class="section-title text-gray-800">Scrapbook <span class="text-xs block font-mono text-gray-500 mt-2">TECHNIQUE: STICKERS + CHAOS</span></h2>
-
         <div class="relative w-full h-[100vh] max-w-6xl mx-auto">
             <div class="scrap-item absolute top-10 left-10 md:left-20 w-64 p-2 bg-white shadow-lg rotate-[-5deg] float-item">
                 <img src="media/2.jpeg" class="w-full aspect-square object-cover">
                 <div class="text-center font-hand text-black text-xl mt-2">Cute!</div>
                 <img src="https://cdn-icons-png.flaticon.com/512/763/763815.png" class="absolute -top-4 -right-4 w-12 opacity-80">
             </div>
-
             <div class="scrap-item absolute top-40 right-10 md:right-40 w-56 p-2 bg-white shadow-lg rotate-[10deg] float-item" style="animation-delay: 1s;">
                 <img src="media/3.jpeg" class="w-full aspect-[3/4] object-cover">
                 <div class="absolute -top-3 left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-red-400 opacity-50"></div>
             </div>
-
             <div class="scrap-item absolute bottom-20 left-1/4 w-72 p-4 bg-white shadow-xl rotate-[-2deg] float-item" style="animation-delay: 2s;">
                 <img src="media/4.jpeg" class="w-full aspect-video object-cover grayscale hover:grayscale-0 transition-all">
                 <p class="font-hand text-2xl text-center mt-2">Memories...</p>
                 <div class="absolute -bottom-2 -right-2 font-mono text-xs bg-black text-white px-2">FEB 14</div>
             </div>
-
-             <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-9xl opacity-10 font-emotional text-gray-400 pointer-events-none">
-                 Love
-             </div>
+             <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-9xl opacity-10 font-emotional text-gray-400 pointer-events-none">Love</div>
         </div>
     </section>
 
+    <div id="video-modal" class="fixed inset-0 z-[100] hidden bg-black/95 backdrop-blur-xl flex items-center justify-center p-4 opacity-0 transition-opacity duration-300">
+        <button onclick="closeVideo()" class="absolute top-6 right-6 text-white/50 hover:text-white transition-colors z-50"><i class="fas fa-times text-4xl"></i></button>
+        <div class="w-full max-w-5xl aspect-video relative bg-black shadow-2xl rounded-lg overflow-hidden border border-white/10">
+            <iframe id="video-frame" class="w-full h-full" src="" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        </div>
+    </div>
+
     <script>
-        // --- CURSOR LOGIC ---
+        // --- 1. GENERATE ATMOSPHERIC ELEMENTS ---
+        
+        // Fireflies
+        const ffContainer = document.getElementById('fireflies');
+        for(let i=0; i<30; i++) {
+            const f = document.createElement('div');
+            f.className = 'firefly';
+            f.style.left = Math.random() * 100 + '%';
+            f.style.top = Math.random() * 100 + '%';
+            f.style.animationDelay = Math.random() * 5 + 's';
+            f.style.animationDuration = (Math.random() * 5 + 5) + 's';
+            ffContainer.appendChild(f);
+        }
+
+        // Sparkles
+        const spContainer = document.getElementById('sparkles');
+        for(let i=0; i<50; i++) {
+            const s = document.createElement('div');
+            s.className = 'sparkle';
+            s.style.left = Math.random() * 100 + '%';
+            s.style.top = Math.random() * 100 + '%';
+            s.style.animationDelay = Math.random() * 3 + 's';
+            spContainer.appendChild(s);
+        }
+
+        // --- 2. CORE LOGIC ---
         const dot = document.querySelector('.cursor-dot');
         const outline = document.querySelector('.cursor-outline');
         window.addEventListener('mousemove', e => {
@@ -338,88 +328,41 @@
             outline.animate({ left: e.clientX + 'px', top: e.clientY + 'px' }, { duration: 800, fill: "forwards" });
         });
 
-        // --- SMOOTH SCROLL ---
         const lenis = new Lenis({ duration: 1.2, smooth: true });
         function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
         requestAnimationFrame(raf);
-        // --- VIDEO PLAYER LOGIC ---
-const vidModal = document.getElementById('video-modal');
-const vidFrame = document.getElementById('video-frame');
 
-window.openVideo = (url) => {
-    vidModal.classList.remove('hidden');
-    // Small delay to allow display:block to apply before opacity transition
-    setTimeout(() => vidModal.classList.remove('opacity-0'), 10);
-    
-    // Add autoplay to URL if supported
-    vidFrame.src = url + "?autoplay=1&rel=0"; 
-    
-    // Stop background scroll
-    if(typeof lenis !== 'undefined') lenis.stop();
-};
+        // --- 3. VIDEO PLAYER ---
+        const vidModal = document.getElementById('video-modal');
+        const vidFrame = document.getElementById('video-frame');
+        window.openVideo = (url) => {
+            vidModal.classList.remove('hidden');
+            setTimeout(() => vidModal.classList.remove('opacity-0'), 10);
+            vidFrame.src = url + "?autoplay=1&rel=0";
+            if(typeof lenis !== 'undefined') lenis.stop();
+        };
+        window.closeVideo = () => {
+            vidModal.classList.add('opacity-0');
+            setTimeout(() => {
+                vidModal.classList.add('hidden');
+                vidFrame.src = "";
+            }, 300);
+            if(typeof lenis !== 'undefined') lenis.start();
+        };
+        document.addEventListener('keydown', (e) => { if(e.key === "Escape") closeVideo(); });
 
-window.closeVideo = () => {
-    vidModal.classList.add('opacity-0');
-    setTimeout(() => {
-        vidModal.classList.add('hidden');
-        vidFrame.src = ""; // Stop audio/video
-    }, 300);
-    
-    // Resume background scroll
-    if(typeof lenis !== 'undefined') lenis.start();
-};
-
-// Close on escape key
-document.addEventListener('keydown', (e) => {
-    if(e.key === "Escape") closeVideo();
-});
-
-        // --- GSAP REVEALS ---
+        // --- 4. ANIMATIONS ---
         gsap.utils.toArray('.section-title').forEach(title => {
-            gsap.to(title, {
-                opacity: 1, y: 0, duration: 1, ease: "power3.out",
-                scrollTrigger: { trigger: title, start: "top 80%" }
-            });
+            gsap.to(title, { opacity: 1, y: 0, duration: 1, ease: "power3.out", scrollTrigger: { trigger: title, start: "top 80%" } });
         });
-
         gsap.utils.toArray('.reveal-up').forEach(elem => {
-            ScrollTrigger.create({
-                trigger: elem,
-                start: "top 85%",
-                onEnter: () => elem.classList.add('active')
-            });
+            ScrollTrigger.create({ trigger: elem, start: "top 85%", onEnter: () => elem.classList.add('active') });
         });
-
-        // --- PARALLAX BACKGROUND ---
-        gsap.to('.parallax-bg', {
-            yPercent: 30,
-            ease: "none",
-            scrollTrigger: { trigger: "header", start: "top top", end: "bottom top", scrub: true }
-        });
-        
-        // --- SCRAPBOOK FLOATING ---
-        // Simple float animation using GSAP yoyo
+        gsap.to('.parallax-bg', { yPercent: 30, ease: "none", scrollTrigger: { trigger: "header", start: "top top", end: "bottom top", scrub: true } });
         gsap.utils.toArray('.float-item').forEach(item => {
-            gsap.to(item, {
-                y: -15,
-                duration: 2 + Math.random(),
-                yoyo: true,
-                repeat: -1,
-                ease: "sine.inOut"
-            });
+            gsap.to(item, { y: -15, duration: 2 + Math.random(), yoyo: true, repeat: -1, ease: "sine.inOut" });
         });
-
-        // --- PARALLAX FOR SCRAPBOOK ---
-        gsap.to('.scrap-item', {
-            y: (i) => (i + 1) * -50,
-            ease: "none",
-            scrollTrigger: {
-                trigger: ".paper-texture",
-                start: "top bottom",
-                end: "bottom top",
-                scrub: 1
-            }
-        });
+        gsap.to('.scrap-item', { y: (i) => (i + 1) * -50, ease: "none", scrollTrigger: { trigger: ".paper-texture", start: "top bottom", end: "bottom top", scrub: 1 } });
     </script>
 </body>
 </html>
