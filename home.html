@@ -407,193 +407,194 @@
     </div>
 
 <script>
-        // --- AUDIO SYSTEM ---
-        const audio = {
-            bg: document.getElementById('bg-music'),
-            btn: document.getElementById('music-control'),
-            icon: document.querySelector('#music-control i'),
-            isMuted: false,
-            init: function() {
-                this.bg.volume = 0.4;
-                this.btn.classList.remove('hidden');
-                this.btn.addEventListener('click', () => this.toggle());
-            },
-            toggle: function() {
-                this.isMuted = !this.isMuted;
-                this.bg.muted = this.isMuted;
-                this.icon.className = this.isMuted ? 'fas fa-volume-mute text-purple-900' : 'fas fa-music text-purple-900';
-            }
-        };
+    // --- AUDIO SYSTEM ---
+    const audio = {
+        bg: document.getElementById('bg-music'),
+        btn: document.getElementById('music-control'),
+        icon: document.querySelector('#music-control i'),
+        isMuted: false,
+        init: function() {
+            this.bg.volume = 0.4;
+            this.btn.classList.remove('hidden');
+            this.btn.addEventListener('click', () => this.toggle());
+        },
+        toggle: function() {
+            this.isMuted = !this.isMuted;
+            this.bg.muted = this.isMuted;
+            this.icon.className = this.isMuted ? 'fas fa-volume-mute text-purple-900' : 'fas fa-music text-purple-900';
+        }
+    };
 
-        // --- MAIN APP LOGIC ---
-        const app = {
-            init: function() {
-                // Cursor Logic
-                if (window.matchMedia("(hover: hover)").matches) {
-                    const dot = document.querySelector('.cursor-dot');
-                    const outline = document.querySelector('.cursor-outline');
-                    window.addEventListener('mousemove', e => {
-                        dot.style.left = outline.style.left = e.clientX + 'px';
-                        dot.style.top = outline.style.top = e.clientY + 'px';
-                        outline.animate({ left: e.clientX + 'px', top: e.clientY + 'px' }, { duration: 800, fill: "forwards" });
-                    });
-                }
-                
-                this.initIntro();
-                this.initStarMap();
-                this.initCake();
-                this.initScroll();
-                initPhotoStars: function() {
-    const container = document.getElementById('photo-universe');
-    if(!container) return;
-
-    // Use your own images here. Repeats are fine.
-    const images = [
-        'media/1.jpeg', 'media/2.jpeg', 'media/3.jpeg', 'media/4.jpeg', 'media/5.jpeg'
-    ];
-
-    // Create 20 floating photo stars
-    for(let i = 0; i < 20; i++) {
-        const div = document.createElement('div');
-        div.classList.add('photo-star');
-        
-        // Random Position
-        const left = Math.random() * 100;
-        const top = Math.random() * 100;
-        const size = Math.random() * 30 + 20; // Size between 20px and 50px
-        const delay = Math.random() * 5;      // Random delay
-        const duration = Math.random() * 10 + 10; // Slow float (10-20s)
-        const imgIndex = Math.floor(Math.random() * images.length);
-
-        div.style.left = `${left}%`;
-        div.style.top = `${top}%`;
-        div.style.width = `${size}px`;
-        div.style.height = `${size}px`; // Square tiny photos
-        div.style.backgroundImage = `url('${images[imgIndex]}')`;
-        div.style.backgroundSize = 'cover';
-        div.style.animationDuration = `${duration}s`;
-        div.style.animationDelay = `${delay}s`;
-
-        container.appendChild(div);
-    }
-},
-            },
-
-            initIntro: function() {
-                const intro = document.getElementById('intro-screen');
-                if(intro) {
-                    intro.addEventListener('click', () => {
-                        audio.bg.play().catch((e) => console.log("Audio autoplay blocked:", e));
-                        audio.init();
-                        
-                        gsap.to('.fade-elem', { y: -20, opacity: 0, stagger: 0.1 });
-                        gsap.to(intro, { opacity: 0, duration: 1.5, pointerEvents: 'none' });
-                        gsap.to(".hero-text", { y: 0, opacity: 1, duration: 2, stagger: 0.3, delay: 0.5, ease: "power2.out" });
-                        gsap.to("#hero-bg", { scale: 1, duration: 15 });
-                    });
-                }
-            },
-
-            initStarMap: function() {
-                const canvas = document.getElementById('star-canvas');
-                if(!canvas) return; 
-                const ctx = canvas.getContext('2d');
-                let w, h;
-                const stars = [];
-                const resize = () => { w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; };
-                window.addEventListener('resize', resize);
-                resize();
-                for(let i=0; i<150; i++) stars.push({ x: Math.random()*w, y: Math.random()*h, r: Math.random()*3, a: Math.random(), speed: Math.random() * 0.5 });
-                
-                const animate = () => {
-                    ctx.clearRect(0,0,w,h);
-                    ctx.fillStyle = "#fcf6ba"; 
-                    ctx.shadowBlur = 10;
-                    ctx.shadowColor = "#d4af37";
-                    stars.forEach(s => {
-                        s.y -= s.speed; 
-                        if(s.y < 0) s.y = h;
-                        ctx.globalAlpha = Math.abs(Math.sin(Date.now()/2000 * s.r + s.x));
-                        ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI*2); ctx.fill();
-                    });
-                    requestAnimationFrame(animate);
-                };
-                animate();
-            },
-
-            initCake: function() {
-                const flame = document.getElementById('flame');
-                if(flame) {
-                    flame.addEventListener('click', function() {
-                        this.classList.add('out');
-                        confetti({ particleCount: 150, spread: 100, colors: ['#FFD700', '#FF69B4', '#FFFFFF'], origin: { y: 0.6 } });
-                        gsap.to('#cake-section', { opacity: 0, duration: 1.5 });
-                        setTimeout(() => {
-                            document.getElementById('cake-section').style.display = 'none';
-                            const surprise = document.getElementById('surprise-section');
-                            surprise.style.opacity = '1';
-                            surprise.style.pointerEvents = 'auto';
-                            gsap.from('#surprise-section', { scale: 0.8, opacity: 0, duration: 1.5, ease: "back.out(1.7)" });
-                        }, 1500);
-                    });
-                }
-            },
-
-            initScroll: function() {
-                // 1. General Reveals
-                gsap.utils.toArray('.scroll-reveal').forEach(elem => {
-                    gsap.to(elem, { 
-                        y: 0, opacity: 1, duration: 1.5, ease: "power2.out", 
-                        scrollTrigger: { trigger: elem, start: "top 85%" }
-                    });
-                });
-
-                // 2. NEW: Glass Card Animation
-                gsap.from(".poetry-card", {
-                    scale: 0.9,
-                    opacity: 0,
-                    duration: 1.5,
-                    ease: "power3.out",
-                    scrollTrigger: { trigger: ".poetry-card", start: "top 80%" }
-                });
-
-                // Lines inside
-                gsap.utils.toArray('.poetry-line').forEach((line, i) => {
-                    gsap.to(line, {
-                        opacity: 1,
-                        y: 0,
-                        duration: 1,
-                        delay: i * 0.2, 
-                        ease: "back.out(1.7)",
-                        scrollTrigger: {
-                            trigger: ".poetry-card", 
-                            start: "top 70%"
-                        }
-                    });
+    // --- MAIN APP LOGIC ---
+    const app = {
+        init: function() {
+            // Cursor Logic
+            if (window.matchMedia("(hover: hover)").matches) {
+                const dot = document.querySelector('.cursor-dot');
+                const outline = document.querySelector('.cursor-outline');
+                window.addEventListener('mousemove', e => {
+                    dot.style.left = outline.style.left = e.clientX + 'px';
+                    dot.style.top = outline.style.top = e.clientY + 'px';
+                    outline.animate({ left: e.clientX + 'px', top: e.clientY + 'px' }, { duration: 800, fill: "forwards" });
                 });
             }
-        }; // <--- CLOSED THE APP OBJECT HERE
+            
+            this.initIntro();
+            this.initStarMap();
+            this.initCake();
+            this.initScroll();
+            this.initPhotoStars(); // <--- CALLING THE NEW FUNCTION HERE
+        },
 
-        // --- NAVIGATION FUNCTIONS ---
-        window.enterPortal = () => {
-            gsap.to('.portal-target', { scale: 50, opacity: 0, duration: 1.5 });
-            gsap.to("body", { backgroundColor: "#000", duration: 1.2, delay: 0.2 });
-            setTimeout(() => window.location.href = 'timetravel.html', 1200);
-        };
-        
-        window.enterMemories = () => {
-            gsap.to('.album-target', { rotateY: -10, scale: 1.5, opacity: 0, duration: 1 });
-            gsap.to("body", { backgroundColor: "#fff", duration: 1 });
-            setTimeout(() => window.location.href = 'memories.html', 1000);
-        };
-        
-        window.enterWishes = () => {
-            gsap.to('.wishes-target', { scale: 5, opacity: 0, duration: 1.5 });
-            gsap.to("body", { backgroundColor: "#000", duration: 1.2 });
-            setTimeout(() => window.location.href = 'wishes.html', 1200);
-        };
+        initIntro: function() {
+            const intro = document.getElementById('intro-screen');
+            if(intro) {
+                intro.addEventListener('click', () => {
+                    audio.bg.play().catch((e) => console.log("Audio autoplay blocked:", e));
+                    audio.init();
+                    
+                    gsap.to('.fade-elem', { y: -20, opacity: 0, stagger: 0.1 });
+                    gsap.to(intro, { opacity: 0, duration: 1.5, pointerEvents: 'none' });
+                    gsap.to(".hero-text", { y: 0, opacity: 1, duration: 2, stagger: 0.3, delay: 0.5, ease: "power2.out" });
+                    gsap.to("#hero-bg", { scale: 1, duration: 15 });
+                });
+            }
+        },
 
-        window.addEventListener('DOMContentLoaded', () => app.init());
-    </script>
+        initStarMap: function() {
+            const canvas = document.getElementById('star-canvas');
+            if(!canvas) return; 
+            const ctx = canvas.getContext('2d');
+            let w, h;
+            const stars = [];
+            const resize = () => { w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; };
+            window.addEventListener('resize', resize);
+            resize();
+            for(let i=0; i<150; i++) stars.push({ x: Math.random()*w, y: Math.random()*h, r: Math.random()*3, a: Math.random(), speed: Math.random() * 0.5 });
+            
+            const animate = () => {
+                ctx.clearRect(0,0,w,h);
+                ctx.fillStyle = "#fcf6ba"; 
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = "#d4af37";
+                stars.forEach(s => {
+                    s.y -= s.speed; 
+                    if(s.y < 0) s.y = h;
+                    ctx.globalAlpha = Math.abs(Math.sin(Date.now()/2000 * s.r + s.x));
+                    ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI*2); ctx.fill();
+                });
+                requestAnimationFrame(animate);
+            };
+            animate();
+        },
+
+        initCake: function() {
+            const flame = document.getElementById('flame');
+            if(flame) {
+                flame.addEventListener('click', function() {
+                    this.classList.add('out');
+                    confetti({ particleCount: 150, spread: 100, colors: ['#FFD700', '#FF69B4', '#FFFFFF'], origin: { y: 0.6 } });
+                    gsap.to('#cake-section', { opacity: 0, duration: 1.5 });
+                    setTimeout(() => {
+                        document.getElementById('cake-section').style.display = 'none';
+                        const surprise = document.getElementById('surprise-section');
+                        surprise.style.opacity = '1';
+                        surprise.style.pointerEvents = 'auto';
+                        gsap.from('#surprise-section', { scale: 0.8, opacity: 0, duration: 1.5, ease: "back.out(1.7)" });
+                    }, 1500);
+                });
+            }
+        },
+
+        initScroll: function() {
+            // 1. General Reveals
+            gsap.utils.toArray('.scroll-reveal').forEach(elem => {
+                gsap.to(elem, { 
+                    y: 0, opacity: 1, duration: 1.5, ease: "power2.out", 
+                    scrollTrigger: { trigger: elem, start: "top 85%" }
+                });
+            });
+
+            // 2. Glass Card Animation
+            gsap.from(".poetry-card", {
+                scale: 0.9,
+                opacity: 0,
+                duration: 1.5,
+                ease: "power3.out",
+                scrollTrigger: { trigger: ".poetry-card", start: "top 80%" }
+            });
+
+            // Lines inside
+            gsap.utils.toArray('.poetry-line').forEach((line, i) => {
+                gsap.to(line, {
+                    opacity: 1,
+                    y: 0,
+                    duration: 1,
+                    delay: i * 0.2, 
+                    ease: "back.out(1.7)",
+                    scrollTrigger: {
+                        trigger: ".poetry-card", 
+                        start: "top 70%"
+                    }
+                });
+            });
+        }, // <--- COMMA HERE IS IMPORTANT
+
+        // 3. NEW: Photo Stars Function (Correctly placed as a sibling)
+        initPhotoStars: function() {
+            const container = document.getElementById('photo-universe');
+            if(!container) return;
+
+            const images = [
+                'media/1.jpeg', 'media/2.jpeg', 'media/3.jpeg', 'media/4.jpeg', 'media/5.jpeg'
+            ];
+
+            for(let i = 0; i < 20; i++) {
+                const div = document.createElement('div');
+                div.classList.add('photo-star');
+                
+                const left = Math.random() * 100;
+                const top = Math.random() * 100;
+                const size = Math.random() * 30 + 20; 
+                const delay = Math.random() * 5;      
+                const duration = Math.random() * 10 + 10; 
+                const imgIndex = Math.floor(Math.random() * images.length);
+
+                div.style.left = `${left}%`;
+                div.style.top = `${top}%`;
+                div.style.width = `${size}px`;
+                div.style.height = `${size}px`; 
+                div.style.backgroundImage = `url('${images[imgIndex]}')`;
+                div.style.backgroundSize = 'cover';
+                div.style.animationDuration = `${duration}s`;
+                div.style.animationDelay = `${delay}s`;
+
+                container.appendChild(div);
+            }
+        }
+
+    }; // <--- END OF APP OBJECT
+
+    // --- NAVIGATION FUNCTIONS ---
+    window.enterPortal = () => {
+        gsap.to('.portal-target', { scale: 50, opacity: 0, duration: 1.5 });
+        gsap.to("body", { backgroundColor: "#000", duration: 1.2, delay: 0.2 });
+        setTimeout(() => window.location.href = 'timetravel.html', 1200);
+    };
+    
+    window.enterMemories = () => {
+        gsap.to('.album-target', { rotateY: -10, scale: 1.5, opacity: 0, duration: 1 });
+        gsap.to("body", { backgroundColor: "#fff", duration: 1 });
+        setTimeout(() => window.location.href = 'memories.html', 1000);
+    };
+    
+    window.enterWishes = () => {
+        gsap.to('.wishes-target', { scale: 5, opacity: 0, duration: 1.5 });
+        gsap.to("body", { backgroundColor: "#000", duration: 1.2 });
+        setTimeout(() => window.location.href = 'wishes.html', 1200);
+    };
+
+    window.addEventListener('DOMContentLoaded', () => app.init());
+</script>
 </body>
 </html>
