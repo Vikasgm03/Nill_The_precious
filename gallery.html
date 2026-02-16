@@ -458,7 +458,7 @@
     .transform-style-3d { transform-style: preserve-3d; }
 </style>
 
-   <script>
+  <script>
     // --- 1. GENERATE ATMOSPHERIC ELEMENTS ---
     
     // Fireflies (Golden Hour)
@@ -491,12 +491,15 @@
     // --- 2. CORE LOGIC (Cursor & Scroll) ---
     const dot = document.querySelector('.cursor-dot');
     const outline = document.querySelector('.cursor-outline');
-    window.addEventListener('mousemove', e => {
-        dot.style.left = outline.style.left = e.clientX + 'px';
-        dot.style.top = outline.style.top = e.clientY + 'px';
-        outline.animate({ left: e.clientX + 'px', top: e.clientY + 'px' }, { duration: 800, fill: "forwards" });
-    });
+    if(dot && outline) {
+        window.addEventListener('mousemove', e => {
+            dot.style.left = outline.style.left = e.clientX + 'px';
+            dot.style.top = outline.style.top = e.clientY + 'px';
+            outline.animate({ left: e.clientX + 'px', top: e.clientY + 'px' }, { duration: 800, fill: "forwards" });
+        });
+    }
 
+    // Smooth Scroll
     const lenis = new Lenis({ duration: 1.2, smooth: true });
     function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
     requestAnimationFrame(raf);
@@ -506,17 +509,19 @@
     const vidFrame = document.getElementById('video-frame');
 
     window.openVideo = (url) => {
+        if(!vidModal) return;
         vidModal.classList.remove('hidden');
         setTimeout(() => vidModal.classList.remove('opacity-0'), 10);
-        vidFrame.src = url + "?autoplay=1&rel=0";
+        if(vidFrame) vidFrame.src = url + "?autoplay=1&rel=0";
         if(typeof lenis !== 'undefined') lenis.stop();
     };
 
     window.closeVideo = () => {
+        if(!vidModal) return;
         vidModal.classList.add('opacity-0');
         setTimeout(() => {
             vidModal.classList.add('hidden');
-            vidFrame.src = "";
+            if(vidFrame) vidFrame.src = "";
         }, 300);
         if(typeof lenis !== 'undefined') lenis.start();
     };
@@ -540,31 +545,20 @@
 
     gsap.to('.scrap-item', { y: (i) => (i + 1) * -50, ease: "none", scrollTrigger: { trigger: ".paper-texture", start: "top bottom", end: "bottom top", scrub: 1 } });
 
-    // --- 5. GRAND FINALE 3D TILT LOGIC ---
-    const masterpiece = document.getElementById('masterpiece-card');
-    
-    if(masterpiece) {
-        // Mouse Move Effect (3D Tilt)
-        document.addEventListener('mousemove', (e) => {
-            // Calculate rotation based on mouse position relative to center
-            const xAxis = (window.innerWidth / 2 - e.pageX) / 25; 
-            const yAxis = (window.innerHeight / 2 - e.pageY) / 25;
-            
-            // Apply the transform
-            masterpiece.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
-        });
+    // --- 5. NEW: MASTERPIECE NAVIGATION ---
+    window.enterMasterpiece = () => {
+        // Stop scrolling
+        if(typeof lenis !== 'undefined') lenis.stop();
+        
+        // Fade out animation
+        gsap.to("body", { opacity: 0, duration: 1.5, ease: "power2.inOut" });
+        
+        // Redirect after animation
+        setTimeout(() => {
+            window.location.href = "masterpiece.html";
+        }, 1500);
+    };
 
-        // Reset Effect (Return to flat state when mouse leaves window)
-        document.addEventListener('mouseleave', () => {
-            masterpiece.style.transition = 'transform 0.5s ease'; // Add smooth transition for reset
-            masterpiece.style.transform = `rotateY(0deg) rotateX(0deg)`;
-            
-            // Remove transition after reset so mousemove is instant again
-            setTimeout(() => {
-                masterpiece.style.transition = 'none';
-            }, 500);
-        });
-    }
 </script>
 </body>
 </html>
