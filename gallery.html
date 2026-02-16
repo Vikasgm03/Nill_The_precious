@@ -3,220 +3,311 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Vault | Infinite Memories</title>
+    <title>The Gallery | Nithya</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@300&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@300;400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        body { background-color: #050505; color: #fff; font-family: 'Montserrat', sans-serif; overflow-x: hidden; }
-        
-        /* 1. The 3D Stream Container */
-        .gallery-stream {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 2vw;
-            padding: 10vh 4vw;
-            transform: rotateX(20deg) rotateZ(-10deg) scale(0.9); /* The 3D Tilt */
-            transform-style: preserve-3d;
-            will-change: transform;
-        }
+        /* CORE THEME */
+        :root { --gold: #d4af37; --bg: #050505; }
+        body { background-color: var(--bg); color: #fff; font-family: 'Montserrat', sans-serif; overflow-x: hidden; }
+        .font-cinematic { font-family: 'Cinzel', serif; }
 
-        /* 2. Photo Cards */
-        .photo-card {
+        /* HORIZONTAL SCROLL SECTION */
+        .reel-container {
+            display: flex;
+            flex-wrap: nowrap;
+            width: 400%; /* Width depends on number of items */
+            height: 80vh;
+        }
+        .reel-item {
+            width: 30vw;
+            height: 100%;
+            padding: 2rem;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             position: relative;
-            width: 100%;
-            aspect-ratio: 2/3;
+        }
+        .reel-img {
+            width: 100%; height: 80%; object-fit: cover;
             border-radius: 8px;
-            overflow: hidden;
-            filter: grayscale(100%) contrast(1.2) brightness(0.8);
+            filter: grayscale(100%);
             transition: all 0.5s ease;
-            cursor: pointer;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
+        .reel-item:hover .reel-img {
+            filter: grayscale(0%);
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.4);
+        }
+
+        /* MASONRY GRID */
+        .masonry-col { break-inside: avoid; margin-bottom: 2rem; }
         
-        /* Hover Effects */
-        .photo-card:hover {
-            filter: grayscale(0%) contrast(1) brightness(1);
-            transform: scale(1.05) translateZ(20px);
-            box-shadow: 0 20px 50px rgba(212, 175, 55, 0.2);
-            z-index: 10;
+        /* FILTERS */
+        .filter-btn {
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            transition: all 0.3s;
+        }
+        .filter-btn.active, .filter-btn:hover {
+            background: var(--gold);
+            color: black;
+            border-color: var(--gold);
         }
 
-        .photo-card img {
-            width: 100%; height: 100%; object-fit: cover;
-            transition: transform 1s ease;
+        /* VIDEO CARDS */
+        .video-card {
+            position: relative;
+            overflow: hidden;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.1);
         }
-        
-        .photo-card:hover img { transform: scale(1.1); }
-
-        /* 3. Parallax Columns */
-        .col-1 { margin-top: 0; }
-        .col-2 { margin-top: 20vh; }
-        .col-3 { margin-top: 10vh; }
-
-        /* 4. Lightbox */
-        #lightbox {
-            backdrop-filter: blur(20px);
-            background: rgba(0,0,0,0.95);
+        .play-overlay {
+            position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+            background: rgba(0,0,0,0.4); opacity: 0; transition: opacity 0.3s;
         }
+        .video-card:hover .play-overlay { opacity: 1; }
 
-        /* Loading Bar */
-        .progress-bar {
-            position: fixed; top: 0; left: 0; height: 3px; background: #d4af37; 
-            width: 0%; z-index: 100; transition: width 0.1s;
-        }
-
-        @media(max-width: 768px) {
-            .gallery-stream { grid-template-columns: repeat(2, 1fr); transform: none; gap: 4vw; }
-            .col-2 { margin-top: 5vh; }
-            .col-3 { display: none; } /* Hide 3rd column on mobile for performance */
-        }
+        /* LIGHTBOX */
+        #lightbox { backdrop-filter: blur(20px); background: rgba(0,0,0,0.95); }
     </style>
 </head>
 <body>
 
-    <div class="progress-bar" id="progress"></div>
-
     <nav class="fixed top-0 left-0 w-full z-50 p-6 flex justify-between items-center mix-blend-difference">
-        <a href="index.html" class="text-xs font-bold tracking-[0.3em] uppercase hover:text-[#d4af37] transition-colors">← Back to Realm</a>
-        <div class="text-right">
-            <h1 class="font-cinematic text-2xl">The Archives</h1>
-            <p class="text-[10px] opacity-60 font-mono" id="photo-count">LOADING...</p>
-        </div>
+        <a href="index.html" class="text-xs font-bold tracking-[0.3em] uppercase hover:text-[#d4af37] transition-colors">← Back</a>
+        <h1 class="font-cinematic text-xl text-[#d4af37]">The Collection</h1>
     </nav>
 
-    <main class="w-full relative perspective-[2000px]">
-        <div class="gallery-stream" id="gallery-grid">
-            <div class="flex flex-col gap-8 col-1" id="c1"></div>
-            <div class="flex flex-col gap-8 col-2" id="c2"></div>
-            <div class="flex flex-col gap-8 col-3" id="c3"></div>
-        </div>
-    </main>
+    <header class="h-screen flex flex-col items-center justify-center text-center relative overflow-hidden">
+        <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-20"></div>
+        <h2 class="text-6xl md:text-9xl font-cinematic text-transparent bg-clip-text bg-gradient-to-b from-[#fff] to-[#444] tracking-tighter mb-4 opacity-0 animate-in">
+            MOMENTS
+        </h2>
+        <p class="text-[#d4af37] font-mono text-xs tracking-[0.5em] opacity-0 animate-in-delay">SCROLL TO EXPLORE</p>
+    </header>
 
-    <div id="lightbox" class="fixed inset-0 z-[100] hidden flex flex-col items-center justify-center opacity-0 transition-opacity duration-500">
-        <button onclick="closeLightbox()" class="absolute top-6 right-6 text-white text-4xl hover:rotate-90 transition-transform">&times;</button>
-        
-        <div class="relative w-full max-w-4xl h-[80vh] p-4">
-            <img id="lb-img" src="" class="w-full h-full object-contain drop-shadow-2xl">
+    <section id="reel-section" class="relative overflow-hidden bg-[#0a0a0a]">
+        <div class="absolute top-10 left-10 z-10">
+            <span class="font-cinematic text-2xl text-[#d4af37]">01. The Timeline</span>
         </div>
         
-        <div class="absolute bottom-10 text-center">
-            <p class="font-cinematic text-[#d4af37] text-xl tracking-widest">MEMORY LOG #<span id="lb-id">001</span></p>
+        <div class="reel-container" id="reel-track">
+            <div class="reel-item group">
+                <img src="media/1.jpeg" class="reel-img cursor-pointer" onclick="openLightbox(this)">
+                <div class="absolute bottom-10 left-10 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <p class="font-cinematic text-xl">The Beginning</p>
+                    <p class="text-xs text-gray-400 font-mono">2023</p>
+                </div>
+            </div>
+            
+            <div class="reel-item group">
+                <img src="media/2.jpeg" class="reel-img cursor-pointer" onclick="openLightbox(this)">
+                <div class="absolute bottom-10 left-10 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <p class="font-cinematic text-xl">Best Day</p>
+                    <p class="text-xs text-gray-400 font-mono">Goa Trip</p>
+                </div>
+            </div>
+
+            <div class="reel-item group">
+                <img src="media/3.jpeg" class="reel-img cursor-pointer" onclick="openLightbox(this)">
+                <div class="absolute bottom-10 left-10 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <p class="font-cinematic text-xl">Smiles</p>
+                </div>
+            </div>
+            
+            <div class="reel-item group">
+                <img src="media/4.jpeg" class="reel-img cursor-pointer" onclick="openLightbox(this)">
+            </div>
+            
+             <div class="reel-item group">
+                <img src="media/5.jpeg" class="reel-img cursor-pointer" onclick="openLightbox(this)">
+            </div>
+        </div>
+    </section>
+
+    <section class="py-24 px-6 md:px-20 bg-[#050505]">
+        <div class="mb-12 flex items-end justify-between border-b border-gray-800 pb-4">
+            <h3 class="font-cinematic text-4xl text-white">02. Motion Pictures</h3>
+            <span class="text-[#d4af37] text-xs tracking-widest">PRESS PLAY</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="video-card group cursor-pointer" onclick="openVideo('https://www.youtube.com/embed/dQw4w9WgXcQ')"> <div class="aspect-video bg-gray-900 relative">
+                    <img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=800" class="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity duration-500">
+                    <div class="play-overlay">
+                        <div class="w-16 h-16 rounded-full bg-[#d4af37] flex items-center justify-center text-black pl-1">
+                            <i class="fas fa-play"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-4 bg-[#111]">
+                    <h4 class="font-cinematic text-xl">Birthday Surprise</h4>
+                    <p class="text-xs text-gray-500 mt-1">02:14 • The Big Reveal</p>
+                </div>
+            </div>
+
+            <div class="video-card group cursor-pointer" onclick="openVideo('https://www.youtube.com/embed/dQw4w9WgXcQ')">
+                <div class="aspect-video bg-gray-900 relative">
+                    <img src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=800" class="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity duration-500">
+                    <div class="play-overlay">
+                        <div class="w-16 h-16 rounded-full bg-[#d4af37] flex items-center justify-center text-black pl-1">
+                            <i class="fas fa-play"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-4 bg-[#111]">
+                    <h4 class="font-cinematic text-xl">Road Trip Vlog</h4>
+                    <p class="text-xs text-gray-500 mt-1">05:30 • Making Memories</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-24 px-4 md:px-12 bg-[#080808]">
+        <div class="text-center mb-12">
+            <h3 class="font-cinematic text-4xl text-white mb-6">03. The Vault</h3>
+            
+            <div class="flex flex-wrap justify-center gap-4" id="filters">
+                <button class="filter-btn active" onclick="filterGallery('all')">All</button>
+                <button class="filter-btn" onclick="filterGallery('travel')">Travel</button>
+                <button class="filter-btn" onclick="filterGallery('candid')">Candid</button>
+                <button class="filter-btn" onclick="filterGallery('food')">Food</button>
+            </div>
+        </div>
+
+        <div class="columns-1 md:columns-3 gap-8 space-y-8" id="masonry-grid">
+            </div>
+    </section>
+
+    <div id="lightbox" class="fixed inset-0 z-[100] hidden flex items-center justify-center opacity-0 transition-opacity duration-300">
+        <button onclick="closeLightbox()" class="absolute top-6 right-6 text-white text-4xl hover:text-[#d4af37] transition-colors">&times;</button>
+        <div class="w-full h-full max-w-5xl max-h-[80vh] p-4 flex items-center justify-center relative">
+            <img id="lb-img" class="max-w-full max-h-full shadow-2xl hidden">
+            <iframe id="lb-vid" class="w-full h-full aspect-video hidden" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
         </div>
     </div>
 
     <script>
-        // --- 1. CONFIGURATION ---
-        // REPLACE THIS ARRAY WITH YOUR REAL PHOTO PATHS
-        // Example: const realPhotos = ['media/nithya1.jpg', 'media/trip/img2.jpg', ...];
-        const realPhotos = []; 
+        // --- DATA SETUP (PUT YOUR PHOTOS HERE) ---
+        // Categories: 'travel', 'candid', 'food', 'selfie'
+        const galleryData = [
+            { src: 'media/1.jpeg', category: 'candid', caption: 'Deep in thought' },
+            { src: 'media/2.jpeg', category: 'travel', caption: 'Exploring' },
+            { src: 'media/3.jpeg', category: 'selfie', caption: 'Sun kissed' },
+            // Add your 20-30 photos here. Use placeholders if you don't have enough yet.
+            { src: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=600', category: 'travel', caption: 'Paris Vibes' },
+            { src: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=600', category: 'candid', caption: 'Laughter' },
+            { src: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=600', category: 'food', caption: 'Best Coffee' },
+            { src: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600', category: 'travel', caption: 'Mountains' },
+            { src: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=600', category: 'candid', caption: 'Portrait' },
+            { src: 'https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=600', category: 'travel', caption: 'City Lights' },
+            { src: 'https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=600', category: 'candid', caption: 'Eyes' },
+            { src: 'https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?w=600', category: 'food', caption: 'Brunch' }
+        ];
+
+        // --- 1. RENDER MASONRY ---
+        const grid = document.getElementById('masonry-grid');
         
-        // If array is empty, we generate placeholders for demo
-        const TOTAL_PHOTOS = 210; 
-
-        // --- 2. GENERATE GALLERY ---
-        const c1 = document.getElementById('c1');
-        const c2 = document.getElementById('c2');
-        const c3 = document.getElementById('c3');
-        const columns = [c1, c2, c3];
-
-        function initGallery() {
-            document.getElementById('photo-count').innerText = `${TOTAL_PHOTOS} FILES FOUND`;
-
-            for(let i = 1; i <= TOTAL_PHOTOS; i++) {
-                // Determine Source
-                let src;
-                if(realPhotos.length > 0) {
-                    src = realPhotos[(i-1) % realPhotos.length]; // Cycle through real photos
-                } else {
-                    // Placeholder logic
-                    const w = 400 + Math.floor(Math.random() * 200);
-                    const h = 600 + Math.floor(Math.random() * 200);
-                    src = `https://source.unsplash.com/random/${w}x${h}?woman,portrait,fashion&sig=${i}`;
-                    // Fallback to picsum if unsplash source is slow
-                    src = `https://picsum.photos/${w}/${h}?random=${i}`;
-                }
-
-                // Create Card
-                const card = document.createElement('div');
-                card.className = 'photo-card group';
-                card.innerHTML = `
-                    <div class="absolute inset-0 bg-[#d4af37] opacity-0 group-hover:opacity-10 transition-opacity z-20 mix-blend-overlay"></div>
-                    <img src="${src}" loading="lazy" alt="Memory ${i}">
-                    <div class="absolute bottom-4 left-4 z-30 opacity-0 group-hover:opacity-100 transition-opacity duration-500 translate-y-4 group-hover:translate-y-0">
-                        <span class="text-[10px] font-mono bg-black/50 backdrop-blur px-2 py-1 rounded text-[#d4af37]">IMG_0${i}</span>
+        function renderGallery(filter) {
+            grid.innerHTML = '';
+            
+            const items = filter === 'all' 
+                ? galleryData 
+                : galleryData.filter(item => item.category === filter);
+            
+            items.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.className = 'masonry-col break-inside-avoid relative group cursor-pointer overflow-hidden rounded-lg';
+                div.innerHTML = `
+                    <img src="${item.src}" class="w-full h-auto transform transition-transform duration-700 group-hover:scale-110" loading="lazy">
+                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                        <span class="font-cinematic text-white tracking-widest uppercase border-b border-[#d4af37]">${item.caption}</span>
                     </div>
                 `;
+                div.onclick = () => openLightbox(div.querySelector('img'));
+                grid.appendChild(div);
                 
-                // Click Event
-                card.onclick = () => openLightbox(src, i);
-
-                // Append to random column or sequential
-                columns[(i-1) % 3].appendChild(card);
-            }
-
-            // Animate In
-            gsap.from('.photo-card', {
-                y: 100,
-                opacity: 0,
-                duration: 1,
-                stagger: 0.02,
-                ease: "power3.out",
-                scrollTrigger: {
-                    trigger: ".gallery-stream",
-                    start: "top 90%"
-                }
+                // Stagger Animation
+                gsap.from(div, {
+                    y: 50, opacity: 0, duration: 0.8, delay: index * 0.05, ease: "power2.out"
+                });
             });
         }
 
-        // --- 3. SMOOTH SCROLL (LENIS) ---
-        const lenis = new Lenis({
-            duration: 1.2,
-            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-            direction: 'vertical',
-            gestureDirection: 'vertical',
-            smooth: true,
-            mouseMultiplier: 1,
-            smoothTouch: false,
-            touchMultiplier: 2,
-        });
-
-        function raf(time) {
-            lenis.raf(time);
-            requestAnimationFrame(raf);
+        // --- 2. FILTERS LOGIC ---
+        function filterGallery(category) {
+            // Update buttons
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            renderGallery(category);
         }
+
+        // --- 3. SCROLL ANIMATIONS ---
+        // Initialize Lenis
+        const lenis = new Lenis({ duration: 1.2, smooth: true });
+        function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
         requestAnimationFrame(raf);
 
-        // --- 4. PARALLAX EFFECT ---
-        // Move columns at different speeds
-        lenis.on('scroll', ({ scroll, limit, velocity }) => {
-            // Update Progress Bar
-            const p = scroll / limit;
-            document.getElementById('progress').style.width = `${p * 100}%`;
+        // Intro Animation
+        gsap.to('.animate-in', { opacity: 1, y: 0, duration: 1.5, delay: 0.5 });
+        gsap.to('.animate-in-delay', { opacity: 1, y: 0, duration: 1.5, delay: 1 });
 
-            // Parallax logic
-            c1.style.transform = `translateY(${scroll * -0.05}px)`; // Slow
-            c2.style.transform = `translateY(${scroll * -0.15}px)`; // Fast
-            c3.style.transform = `translateY(${scroll * -0.08}px)`; // Medium
+        // Horizontal Scroll (The Reel)
+        // We move the container to the left based on scroll position
+        const reelSection = document.getElementById('reel-section');
+        const reelTrack = document.getElementById('reel-track');
+        
+        // Calculate scroll amount: Width of track - viewport width
+        let scrollAmount = reelTrack.scrollWidth - window.innerWidth;
+        
+        // We use scrollTrigger to pin the section and scroll sideways
+        gsap.to(reelTrack, {
+            x: () => -(reelTrack.scrollWidth - window.innerWidth),
+            ease: "none",
+            scrollTrigger: {
+                trigger: reelSection,
+                start: "top top",
+                end: () => "+=" + (reelTrack.scrollWidth - window.innerWidth),
+                pin: true,
+                scrub: 1,
+                invalidateOnRefresh: true
+            }
         });
 
-        // --- 5. LIGHTBOX LOGIC ---
+        // --- 4. LIGHTBOX LOGIC ---
         const lb = document.getElementById('lightbox');
         const lbImg = document.getElementById('lb-img');
-        const lbId = document.getElementById('lb-id');
+        const lbVid = document.getElementById('lb-vid');
 
-        window.openLightbox = (src, id) => {
-            lbImg.src = src;
-            lbId.innerText = id.toString().padStart(3, '0');
+        window.openLightbox = (element) => {
             lb.classList.remove('hidden');
-            // Slight delay to allow display:block to apply before opacity
             setTimeout(() => lb.classList.remove('opacity-0'), 10);
-            lenis.stop(); // Stop scrolling
+            lbImg.classList.remove('hidden');
+            lbVid.classList.add('hidden');
+            lbImg.src = element.src;
+            lenis.stop();
+        };
+
+        window.openVideo = (url) => {
+            lb.classList.remove('hidden');
+            setTimeout(() => lb.classList.remove('opacity-0'), 10);
+            lbImg.classList.add('hidden');
+            lbVid.classList.remove('hidden');
+            lbVid.src = url;
+            lenis.stop();
         };
 
         window.closeLightbox = () => {
@@ -224,12 +315,13 @@
             setTimeout(() => {
                 lb.classList.add('hidden');
                 lbImg.src = '';
-            }, 500);
-            lenis.start(); // Resume scrolling
+                lbVid.src = '';
+            }, 300);
+            lenis.start();
         };
 
         // Initialize
-        initGallery();
+        renderGallery('all');
 
     </script>
 </body>
