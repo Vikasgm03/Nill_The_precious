@@ -94,7 +94,57 @@
             .masked-text-premium { animation: none; background: #d4af37; -webkit-background-clip: text; }
             #particle-layer { display: none; } /* Hide parallax particles on mobile for speed */
         }
+
+        /* --- SCROLL LOCK --- */
+body.scroll-locked {
+    overflow: hidden !important;
+    height: 100vh !important;
+    touch-action: none; /* Prevents touch scrolling on mobile */
+}
+
+/* --- INTRO SCREEN DESIGN --- */
+#intro-screen {
+    background: radial-gradient(circle at center, #1a0b2e 0%, #000000 80%); /* Deep luxurious purple-black */
+}
+
+/* Animated Spotlight behind text */
+.intro-spotlight {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 150vw; height: 150vw;
+    background: conic-gradient(from 0deg, transparent 0%, rgba(212, 175, 55, 0.05) 15%, transparent 30%);
+    animation: rotateSpotlight 20s linear infinite;
+    pointer-events: none;
+}
+
+@keyframes rotateSpotlight {
+    from { transform: translate(-50%, -50%) rotate(0deg); }
+    to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+.enter-btn {
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    padding: 15px 40px;
+    border-radius: 50px;
+    transition: all 0.5s ease;
+    background: rgba(0,0,0,0.5);
+    backdrop-filter: blur(5px);
+}
+
+.enter-btn:hover {
+    background: #d4af37;
+    border-color: #d4af37;
+    box-shadow: 0 0 30px rgba(212, 175, 55, 0.4);
+}
+
+.enter-btn:hover span {
+    color: #000;
+}
+        
     </style>
+
+    
 </head>
 <body>
 
@@ -102,19 +152,29 @@
         <div class="cursor-dot hidden md:block"></div>
         <div class="cursor-outline hidden md:block"></div>
 
-        <section id="intro-screen" class="fixed inset-0 z-[100] bg-[#0a0a0a] flex flex-col items-center justify-center cursor-pointer">
-            <div class="relative z-10 text-center px-4">
-                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-[#d4af37] rounded-full blur-[100px] opacity-20 animate-pulse"></div>
-                <h1 class="relative text-6xl md:text-9xl font-cinematic font-bold text-[#1a1a1a] fade-elem tracking-widest" style="-webkit-text-stroke: 1px rgba(212, 175, 55, 0.5);">
-                    NITHYA
-                    <span class="absolute inset-0 text-transparent bg-clip-text bg-gradient-to-b from-[#d4af37] to-transparent opacity-50 blur-sm">NITHYA</span>
-                </h1>
-                <div class="mt-8 space-y-2 fade-elem">
-                    <div class="w-full h-[1px] bg-gradient-to-r from-transparent via-[#d4af37] to-transparent"></div>
-                    <p class="text-xs md:text-sm text-[#d4af37] tracking-[0.5em] uppercase font-light">Enter The Realm</p>
-                </div>
-            </div>
-        </section>
+       <section id="intro-screen" class="fixed inset-0 z-[9999] flex flex-col items-center justify-center cursor-pointer transition-colors duration-700">
+    
+    <div class="intro-spotlight"></div>
+    <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-20 animate-pulse"></div>
+
+    <div class="relative z-10 text-center px-4">
+        <h1 class="relative text-7xl md:text-9xl font-cinematic font-bold text-transparent bg-clip-text bg-gradient-to-b from-[#d4af37] via-[#fcf6ba] to-[#8a6219] fade-elem tracking-widest drop-shadow-[0_0_15px_rgba(212,175,55,0.2)]">
+            WELCOME
+        </h1>
+
+        <p class="font-emotional text-2xl text-purple-200/50 mt-4 mb-12 fade-elem tracking-wide">The Queen's Birthday</p>
+
+        <div class="fade-elem enter-btn group">
+            <span class="text-xs md:text-sm text-[#d4af37] tracking-[0.4em] uppercase font-cinematic transition-colors duration-300 group-hover:font-bold">
+                Enter The Realm
+            </span>
+        </div>
+    </div>
+    
+    <div class="absolute bottom-10 opacity-30 text-[#d4af37] text-[10px] tracking-widest animate-bounce">
+        TAP ANYWHERE
+    </div>
+</section>
 
         <section class="relative h-screen flex items-center justify-center overflow-hidden bg-[#050505] perspective-container group">
             <div class="absolute inset-0 bg-cover bg-center opacity-20 grayscale" style="background-image: url('https://images.unsplash.com/photo-1536630596259-22a7442a537d?w=1000');"></div>
