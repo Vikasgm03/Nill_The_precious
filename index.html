@@ -16,7 +16,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,600;1,400&family=Great+Vibes&family=Montserrat:wght@300;400&display=swap" rel="stylesheet">
 
     <style>
-        /* --- CORE STYLES (Magical Theme) --- */
+        /* --- CORE STYLES --- */
         :root { 
             --gold: #d4af37; 
             --rose: #fce7f3; 
@@ -35,8 +35,8 @@
         img { display: block; max-width: 100%; height: auto; }
         
         /* --- UTILS --- */
-        .font-cinematic { font-family: 'Cormorant Garamond', serif; } /* Replaces Cinzel */
-        .font-emotional { font-family: 'Great Vibes', cursive; } /* Replaces Playfair/Inter for emotional text */
+        .font-cinematic { font-family: 'Cormorant Garamond', serif; }
+        .font-emotional { font-family: 'Great Vibes', cursive; }
         
         .text-gradient { 
             background: linear-gradient(to right, #d4af37, #b08d55, #d4af37); 
@@ -45,51 +45,10 @@
             color: transparent; 
         }
 
-        /* --- MAGIC MIRROR (Formerly HUD Scanner) --- */
-        .hud-container { 
-            position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; 
-            background: radial-gradient(circle at center, #2e1065 0%, #0f0518 100%); 
-            z-index: 9999; 
-            font-family: 'Cormorant Garamond', serif; 
-            color: #e9d5ff; 
-        }
+        /* --- SITE WRAPPER (FIXED: Visible by default) --- */
+        #site-wrapper { opacity: 1; transition: opacity 1s ease; }
         
-        .scan-frame { 
-            width: 320px; height: 380px; 
-            border: 8px double rgba(212, 175, 55, 0.6); 
-            border-radius: 50% / 40%; /* Oval Mirror Shape */
-            position: relative; 
-            box-shadow: 0 0 50px rgba(212, 175, 55, 0.3), inset 0 0 30px rgba(0,0,0,0.5); 
-            background: #000;
-        }
-
-        /* Ornamental brackets */
-        .bracket { position: absolute; width: 20px; height: 20px; border-radius: 50%; background: var(--gold); box-shadow: 0 0 10px var(--gold); transition: all 1s ease; }
-        .tl { top: 10px; left: 50%; transform: translateX(-50%); } 
-        .bl { bottom: 10px; left: 50%; transform: translateX(-50%); }
-        /* Hide side brackets for oval shape */
-        .tr, .br { display: none; }
-
-        .scan-line { 
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
-            background: linear-gradient(to bottom, transparent 40%, rgba(255, 255, 255, 0.3) 50%, transparent 60%); 
-            opacity: 0; will-change: top, opacity; 
-            mix-blend-mode: overlay;
-        }
-
-        .sparkle-bg { 
-            position: absolute; inset: 0; 
-            background-image: radial-gradient(white 1px, transparent 1px); 
-            background-size: 30px 30px; 
-            opacity: 0.3; 
-            animation: twinkle 4s infinite;
-        }
-        @keyframes twinkle { 0%, 100% { opacity: 0.3; } 50% { opacity: 0.6; } }
-        
-        /* --- SITE WRAPPER --- */
-        #site-wrapper { opacity: 0; transition: opacity 2s ease; will-change: opacity; }
-        
-        /* --- CUSTOM CURSOR (Fairy Dust) --- */
+        /* --- CUSTOM CURSOR --- */
         @media (hover: hover) and (pointer: fine) {
             .cursor-dot { position: fixed; width: 8px; height: 8px; background-color: var(--gold); border-radius: 50%; z-index: 10000; pointer-events: none; transform: translate(-50%, -50%); box-shadow: 0 0 10px var(--gold); }
             .cursor-outline { position: fixed; width: 40px; height: 40px; border: 1px dashed rgba(212, 175, 55, 0.5); border-radius: 50%; z-index: 10000; pointer-events: none; transform: translate(-50%, -50%); transition: width 0.2s, height 0.2s; animation: spin 10s linear infinite; }
@@ -97,16 +56,6 @@
         }
         @keyframes spin { 100% { transform: translate(-50%, -50%) rotate(360deg); } }
 
-        /* --- INTERACTIVE ELEMENTS --- */
-        .video-card { 
-            min-width: 280px; height: 400px; border-radius: 12px; 
-            transition: transform 0.3s ease; position: relative; overflow: hidden; cursor: pointer; 
-            box-shadow: 0 10px 30px -10px rgba(0,0,0,0.3);
-            border: 4px solid #fff;
-        }
-        .video-card:hover { transform: translateY(-10px) rotate(2deg); z-index: 20; }
-        .netflix-scroll { display: flex; overflow-x: auto; gap: 2rem; padding: 3rem 1rem; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
-        
         /* --- CAKE --- */
         .cake-stage { position: relative; width: 300px; height: 300px; margin: 0 auto; }
         .cake-body { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 200px; height: 140px; background: #fff; border-radius: 10px 10px 0 0; box-shadow: inset 0 -20px 0 #fce7f3; }
@@ -115,47 +64,17 @@
         .flame { position: absolute; top: -25px; left: 50%; transform: translateX(-50%); width: 14px; height: 26px; background: #FFD700; border-radius: 50% 50% 20% 20%; animation: flicker 0.8s infinite alternate; box-shadow: 0 0 10px #FFD700, 0 0 30px #FF4500; cursor: pointer; transform-origin: bottom center; }
         .flame.out { display: none; }
         
-        /* --- FEATURES --- */
-        .time-slider { 
-            position: relative; overflow: hidden; border-radius: 200px 200px 0 0; /* Arch shape */
-            border: 8px solid #fff; 
-            box-shadow: 0 20px 40px rgba(46, 16, 101, 0.2); 
-        }
-        .time-overlay { position: absolute; inset: 0; clip-path: inset(0 50% 0 0); will-change: clip-path; }
-        
-        .globe { transform-style: preserve-3d; will-change: transform; border-radius: 50%; box-shadow: 0 0 60px rgba(212, 175, 55, 0.2); }
-        
-        .key { 
-            transition: transform 0.3s, opacity 0.3s; cursor: pointer; filter: drop-shadow(0 0 5px gold);
-        }
-        .key.collected { opacity: 0; pointer-events: none; transform: scale(2) rotate(45deg); }
-        
-        .vault-door { will-change: transform; background-image: url("https://www.transparenttextures.com/patterns/wood-pattern.png"); }
-
-        /* Polaroid Frames for Memories */
-        .parallax-container {
-            border: 10px solid #fff;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-            background: #fff;
-        }
-
-        /* Mobile specific adjustments */
-        @media (max-width: 640px) {
-            .scan-frame { width: 260px; height: 320px; }
-            .cake-stage { transform: scale(0.8); }
-        }
+        /* --- PORTAL STYLES --- */
+        .perspective-1000 { perspective: 1000px; }
     </style>
 </head>
 <body>
 
-    <audio id="sfx-scan" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" preload="auto"></audio> 
-    <audio id="sfx-success" src="https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3" preload="auto"></audio>
     <audio id="bg-music" loop preload="auto"><source src="https://cdn.pixabay.com/audio/2022/05/27/audio_1808fbf07a.mp3" type="audio/mp3"></audio>
 
     <div id="music-control" class="fixed bottom-6 right-6 z-[200] w-12 h-12 bg-white/50 backdrop-blur-md rounded-full flex items-center justify-center cursor-pointer border border-white hover:bg-white transition-all hidden shadow-lg text-purple-900">
         <i class="fas fa-music"></i>
     </div>
-
 
     <div id="site-wrapper">
         
@@ -202,168 +121,81 @@
                     <span class="text-xl">✨</span><span class="font-cinematic text-sm tracking-[3px] text-pink-200">CELESTIAL ALIGNMENT</span>
                 </div>
                 <h2 class="text-5xl md:text-7xl font-cinematic leading-none mb-4 text-[#fce7f3]">THE STARS<br>ALIGNED</h2>
-                <p class="text-3xl font-emotional text-[#d4af37]" id="birth-date-display">July 22, 1995</p>
+                <p class="text-3xl font-emotional text-[#d4af37]" id="birth-date-display">March 22, 2004</p>
             </div>
         </section>
 
-<section class="min-h-screen bg-[#fff9f0] flex items-center justify-center py-20 relative overflow-hidden">
-    <div class="absolute top-0 left-0 w-64 h-64 bg-purple-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob"></div>
-    <div class="absolute top-0 right-0 w-64 h-64 bg-yellow-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000"></div>
+        <section class="min-h-screen bg-[#fff9f0] flex items-center justify-center py-20 relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-64 h-64 bg-purple-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob"></div>
+            <div class="absolute top-0 right-0 w-64 h-64 bg-yellow-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000"></div>
 
-    <div class="w-full max-w-4xl px-4 text-center z-10">
-        <h2 class="text-5xl font-cinematic mb-4 text-gray-800">The Sands of Time</h2>
-        <p class="text-gray-500 font-emotional text-2xl mb-12">Step through the gate to revisit the past</p>
-        
-        <div class="relative group cursor-pointer inline-block" onclick="enterPortal()">
-            <div class="absolute inset-0 border-[4px] border-dashed border-[#d4af37]/30 rounded-full w-[320px] h-[320px] -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 animate-[spin_10s_linear_infinite]"></div>
-            <div class="absolute inset-0 border-[2px] border-dotted border-[#2e1065]/20 rounded-full w-[360px] h-[360px] -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 animate-[spin_15s_linear_infinite_reverse]"></div>
-
-            <div class="relative w-[280px] h-[280px] rounded-full overflow-hidden border-8 border-[#d4af37] shadow-[0_0_50px_rgba(212,175,55,0.4)] transition-all duration-700 group-hover:scale-105 group-hover:shadow-[0_0_80px_rgba(212,175,55,0.8)]">
-                <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1465101162946-4377e57745c3?q=80&w=1000')] bg-cover opacity-60 group-hover:opacity-80 transition-opacity duration-700 animate-[pulse_4s_ease-in-out_infinite]"></div>
+            <div class="w-full max-w-4xl px-4 text-center z-10">
+                <h2 class="text-5xl font-cinematic mb-4 text-gray-800">The Sands of Time</h2>
+                <p class="text-gray-500 font-emotional text-2xl mb-12">Step through the gate to revisit the past</p>
                 
-                <div class="absolute inset-0 flex flex-col items-center justify-center bg-black/20 group-hover:bg-transparent transition-colors">
-                    <span class="text-4xl filter drop-shadow-lg group-hover:scale-125 transition-transform duration-500">⏳</span>
-                    <span class="mt-2 font-cinematic text-white tracking-[0.3em] text-sm uppercase group-hover:tracking-[0.5em] transition-all">Enter</span>
+                <div class="relative group cursor-pointer inline-block" onclick="enterPortal()">
+                    <div class="absolute inset-0 border-[4px] border-dashed border-[#d4af37]/30 rounded-full w-[320px] h-[320px] -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 animate-[spin_10s_linear_infinite]"></div>
+                    <div class="absolute inset-0 border-[2px] border-dotted border-[#2e1065]/20 rounded-full w-[360px] h-[360px] -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 animate-[spin_15s_linear_infinite_reverse]"></div>
+
+                    <div class="relative w-[280px] h-[280px] rounded-full overflow-hidden border-8 border-[#d4af37] shadow-[0_0_50px_rgba(212,175,55,0.4)] transition-all duration-700 group-hover:scale-105 group-hover:shadow-[0_0_80px_rgba(212,175,55,0.8)] portal-target">
+                        <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1465101162946-4377e57745c3?q=80&w=1000')] bg-cover opacity-60 group-hover:opacity-80 transition-opacity duration-700 animate-[pulse_4s_ease-in-out_infinite]"></div>
+                        <div class="absolute inset-0 flex flex-col items-center justify-center bg-black/20 group-hover:bg-transparent transition-colors">
+                            <span class="text-4xl filter drop-shadow-lg group-hover:scale-125 transition-transform duration-500">⏳</span>
+                            <span class="mt-2 font-cinematic text-white tracking-[0.3em] text-sm uppercase group-hover:tracking-[0.5em] transition-all">Enter</span>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
-</section>
-
-<script>
-    function enterPortal() {
-        // Transition Effect
-        const portal = document.querySelector('.group');
-        gsap.to(portal, { scale: 50, opacity: 0, duration: 1.5, ease: "power2.in" });
-        gsap.to("body", { backgroundColor: "#000", duration: 1.2 });
-        
-        setTimeout(() => {
-            window.location.href = 'timetravel.html';
-        }, 1200);
-    }
-</script>
+        </section>
 
         <section class="min-h-screen bg-[#f4f1ea] flex items-center justify-center py-20 relative overflow-hidden">
-    <div class="absolute inset-0 pointer-events-none">
-        <div class="absolute top-10 left-10 text-2xl animate-[float_10s_ease-in-out_infinite]">🌸</div>
-        <div class="absolute bottom-20 right-20 text-xl animate-[float_12s_ease-in-out_infinite_reverse]">🌸</div>
-        <div class="absolute top-1/2 left-1/3 text-3xl animate-[float_15s_ease-in-out_infinite] opacity-50">✨</div>
-    </div>
-
-    <div class="w-full max-w-4xl px-4 text-center z-10">
-        <h2 class="text-5xl font-cinematic mb-4 text-gray-800">The Memory Garden</h2>
-        <p class="text-gray-500 font-emotional text-2xl mb-12">Open the album to relive the magic</p>
-        
-        <div class="relative group cursor-pointer inline-block perspective-1000" onclick="enterMemories()">
-            <div class="absolute top-2 left-2 w-full h-full bg-[#8b5a2b] rounded-r-lg shadow-2xl transform rotate-3 group-hover:rotate-6 transition-transform duration-500"></div>
-            
-            <div class="relative w-[300px] h-[400px] bg-[#2e1065] rounded-r-lg shadow-inner border-l-8 border-[#d4af37] flex flex-col items-center justify-center overflow-hidden transition-transform duration-500 transform group-hover:-translate-y-2 group-hover:-translate-x-1">
-                
-                <div class="absolute inset-4 border-2 border-[#d4af37] opacity-30 rounded-r-md"></div>
-                <div class="absolute inset-6 border border-[#d4af37] opacity-20 rounded-r-md"></div>
-                
-                <div class="w-48 h-48 rounded-full overflow-hidden border-4 border-[#d4af37] mb-6 shadow-lg sepia group-hover:sepia-0 transition-all duration-700">
-                    <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=400" class="w-full h-full object-cover">
-                </div>
-                
-                <h3 class="font-cinematic text-[#d4af37] text-3xl tracking-widest uppercase">Memories</h3>
-                <p class="font-emotional text-white/60 text-lg mt-2">Vol. I</p>
-                
-                <div class="absolute bottom-4 text-white/40 text-xs tracking-[0.3em] uppercase opacity-0 group-hover:opacity-100 transition-opacity">Click to Open</div>
+            <div class="absolute inset-0 pointer-events-none">
+                <div class="absolute top-10 left-10 text-2xl animate-[float_10s_ease-in-out_infinite]">🌸</div>
+                <div class="absolute bottom-20 right-20 text-xl animate-[float_12s_ease-in-out_infinite_reverse]">🌸</div>
             </div>
-        </div>
-    </div>
-</section>
 
-<script>
-    function enterMemories() {
-        // Book Opening Animation Effect
-        const book = document.querySelector('.perspective-1000');
-        gsap.to(book, { rotateY: -10, scale: 1.5, opacity: 0, duration: 1, ease: "power2.in" });
-        gsap.to("body", { backgroundColor: "#fff", duration: 1 });
-        
-        setTimeout(() => {
-            window.location.href = 'memories.html';
-        }, 1000);
-    }
-</script>
-
-
-<section class="min-h-screen bg-[#2e1065] flex items-center justify-center py-20 relative overflow-hidden">
-    <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-20 animate-pulse"></div>
-    
-    <div class="w-full max-w-4xl px-4 text-center z-10">
-        <h2 class="text-5xl font-cinematic mb-4 text-[#fce7f3] drop-shadow-lg">Echoes of Love</h2>
-        <p class="text-purple-300 font-emotional text-2xl mb-12">Voices from near and far have gathered here</p>
-        
-        <div class="relative group cursor-pointer inline-block" onclick="enterWishes()">
-            <div class="absolute inset-0 border-[1px] border-[#d4af37]/50 rounded-full w-[350px] h-[350px] -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 animate-[spin_8s_linear_infinite]"></div>
-            <div class="absolute inset-0 border-[1px] border-[#fce7f3]/30 rounded-full w-[400px] h-[400px] -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 animate-[spin_12s_linear_infinite_reverse]"></div>
-
-            <div class="relative w-[300px] h-[300px] rounded-full overflow-hidden shadow-[0_0_80px_rgba(212,175,55,0.5)] transition-all duration-700 group-hover:shadow-[0_0_120px_rgba(212,175,55,0.8)] group-hover:scale-105">
-                <div class="absolute inset-0 bg-gradient-to-tr from-[#4c1d95] via-[#d4af37]/20 to-[#4c1d95] opacity-80 group-hover:opacity-100 transition-opacity duration-700"></div>
+            <div class="w-full max-w-4xl px-4 text-center z-10">
+                <h2 class="text-5xl font-cinematic mb-4 text-gray-800">The Memory Garden</h2>
+                <p class="text-gray-500 font-emotional text-2xl mb-12">Open the album to relive the magic</p>
                 
-                <div class="absolute inset-0 flex flex-col items-center justify-center z-20">
-                    <div class="w-16 h-16 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center border border-white/50 group-hover:scale-110 transition-transform">
-                        <i class="fas fa-play text-2xl text-white ml-1"></i>
+                <div class="relative group cursor-pointer inline-block perspective-1000" onclick="enterMemories()">
+                    <div class="absolute top-2 left-2 w-full h-full bg-[#8b5a2b] rounded-r-lg shadow-2xl transform rotate-3 group-hover:rotate-6 transition-transform duration-500"></div>
+                    <div class="relative w-[300px] h-[400px] bg-[#2e1065] rounded-r-lg shadow-inner border-l-8 border-[#d4af37] flex flex-col items-center justify-center overflow-hidden transition-transform duration-500 transform group-hover:-translate-y-2 group-hover:-translate-x-1 album-target">
+                        <div class="absolute inset-4 border-2 border-[#d4af37] opacity-30 rounded-r-md"></div>
+                        <div class="w-48 h-48 rounded-full overflow-hidden border-4 border-[#d4af37] mb-6 shadow-lg sepia group-hover:sepia-0 transition-all duration-700">
+                            <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=400" class="w-full h-full object-cover">
+                        </div>
+                        <h3 class="font-cinematic text-[#d4af37] text-3xl tracking-widest uppercase">Memories</h3>
+                        <p class="font-emotional text-white/60 text-lg mt-2">Vol. I</p>
+                        <div class="absolute bottom-4 text-white/40 text-xs tracking-[0.3em] uppercase opacity-0 group-hover:opacity-100 transition-opacity">Click to Open</div>
                     </div>
-                    <span class="mt-4 font-cinematic text-[#fce7f3] tracking-[0.2em] text-sm uppercase group-hover:text-white transition-colors">Watch Wishes</span>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<script>
-    function enterWishes() {
-        // Portal Activation Animation
-        const orb = document.querySelector('.group');
-        gsap.to(orb, { scale: 5, opacity: 0, duration: 1.5, ease: "power2.in" });
-        gsap.to("body", { backgroundColor: "#000", duration: 1.2 });
-        
-        setTimeout(() => {
-            window.location.href = 'wishes.html';
-        }, 1200);
-    }
-</script>
-
-        <section class="py-20 bg-[#fff9f0]">
-            <div class="px-8 md:px-16 mb-6">
-                <h3 class="text-3xl text-gray-800 font-cinematic mb-1 border-l-4 border-[#d4af37] pl-4">Heartfelt Messages</h3>
-            </div>
-            <div class="netflix-scroll px-8 md:px-16">
-                <div class="video-card flex-shrink-0 bg-black group">
-                    <img src="https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?w=400" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" alt="Video 1">
-                    <div class="absolute bottom-0 left-0 w-full p-4 bg-gradient-to-t from-black/80 to-transparent"><h4 class="font-cinematic text-white text-xl">Mom & Dad</h4></div>
-                </div>
-                 <div class="video-card flex-shrink-0 bg-black group">
-                    <img src="https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=400" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" alt="Video 2">
-                    <div class="absolute bottom-0 left-0 w-full p-4 bg-gradient-to-t from-black/80 to-transparent"><h4 class="font-cinematic text-white text-xl">Besties</h4></div>
                 </div>
             </div>
         </section>
 
-        <div id="vault-screen" class="hidden fixed inset-0 bg-[#1a0b2e]/90 backdrop-blur-sm z-[200] flex items-center justify-center">
-            <div class="relative w-full max-w-lg px-6">
-                <div class="flex h-[400px] relative overflow-hidden rounded-t-full border-4 border-[#d4af37] shadow-2xl">
-                    <div id="door-left" class="vault-door w-1/2 h-full bg-[#2e1065] border-r border-[#d4af37] flex items-center justify-center"><span class="text-6xl filter drop-shadow-lg">⚜️</span></div>
-                    <div id="door-right" class="vault-door w-1/2 h-full bg-[#2e1065] border-l border-[#d4af37] flex items-center justify-center"><span class="text-6xl filter drop-shadow-lg">⚜️</span></div>
-                </div>
-                <div id="vault-content" class="absolute inset-0 flex flex-col items-center justify-center hidden">
-                    <h2 class="text-4xl font-emotional text-[#fce7f3] mb-4 drop-shadow-lg">A Gift Awaits</h2>
-                    <div class="relative w-[300px] h-[200px] bg-white rounded-xl overflow-hidden shadow-2xl rotate-1">
-                        <div class="absolute inset-0 flex items-center justify-center p-4 text-center text-black font-bold bg-[#fff9f0]">
-                            <div>
-                                <h3 class="text-3xl font-cinematic mb-2 text-[#d4af37]">PARIS TRIP! ✈️</h3>
-                                <p class="text-sm text-gray-600 font-serif italic">"Pack your bags for next weekend."</p>
+        <section class="min-h-screen bg-[#2e1065] flex items-center justify-center py-20 relative overflow-hidden">
+            <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-20 animate-pulse"></div>
+            
+            <div class="w-full max-w-4xl px-4 text-center z-10">
+                <h2 class="text-5xl font-cinematic mb-4 text-[#fce7f3] drop-shadow-lg">Echoes of Love</h2>
+                <p class="text-purple-300 font-emotional text-2xl mb-12">Voices from near and far have gathered here</p>
+                
+                <div class="relative group cursor-pointer inline-block" onclick="enterWishes()">
+                    <div class="absolute inset-0 border-[1px] border-[#d4af37]/50 rounded-full w-[350px] h-[350px] -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 animate-[spin_8s_linear_infinite]"></div>
+                    <div class="absolute inset-0 border-[1px] border-[#fce7f3]/30 rounded-full w-[400px] h-[400px] -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 animate-[spin_12s_linear_infinite_reverse]"></div>
+
+                    <div class="relative w-[300px] h-[300px] rounded-full overflow-hidden shadow-[0_0_80px_rgba(212,175,55,0.5)] transition-all duration-700 group-hover:shadow-[0_0_120px_rgba(212,175,55,0.8)] group-hover:scale-105 wishes-target">
+                        <div class="absolute inset-0 bg-gradient-to-tr from-[#4c1d95] via-[#d4af37]/20 to-[#4c1d95] opacity-80 group-hover:opacity-100 transition-opacity duration-700"></div>
+                        <div class="absolute inset-0 flex flex-col items-center justify-center z-20">
+                            <div class="w-16 h-16 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center border border-white/50 group-hover:scale-110 transition-transform">
+                                <i class="fas fa-play text-2xl text-white ml-1"></i>
                             </div>
+                            <span class="mt-4 font-cinematic text-[#fce7f3] tracking-[0.2em] text-sm uppercase group-hover:text-white transition-colors">Watch Wishes</span>
                         </div>
-                        <canvas id="scratch-canvas" width="300" height="200" class="absolute inset-0 cursor-crosshair touch-none"></canvas>
                     </div>
-                    <button onclick="location.reload()" class="mt-8 text-sm text-[#fcf6ba] uppercase tracking-widest hover:text-white transition-colors">Replay Journey</button>
                 </div>
             </div>
-        </div>
+        </section>
 
         <section class="min-h-screen flex flex-col items-center justify-center bg-[#fff0f5] relative overflow-hidden py-20">
             <div id="cake-section" class="z-20 text-center transition-all duration-1000">
@@ -373,7 +205,7 @@
                     <div class="candle"><div class="flame" id="flame"></div></div>
                 </div>
             </div>
-            <div id="surprise-section" class="absolute inset-0 flex flex-col items-center justify-center z-30 gift-wrapper">
+            <div id="surprise-section" class="absolute inset-0 flex flex-col items-center justify-center z-30 gift-wrapper" style="opacity: 0; pointer-events: none;">
                 <div class="text-center">
                     <i class="fas fa-gift text-7xl text-[#d4af37] mb-6 animate-bounce"></i>
                     <h2 class="text-7xl font-emotional text-gray-800">Happy Birthday!</h2>
@@ -384,25 +216,10 @@
 
     </div>
 
-    <div id="video-modal" class="hidden fixed inset-0 bg-black/90 z-[250] flex items-center justify-center p-4">
-        <div class="w-full max-w-2xl bg-black rounded-lg overflow-hidden relative shadow-2xl border border-gray-800">
-            <button onclick="document.getElementById('video-modal').classList.add('hidden'); document.getElementById('modal-frame').src=''" class="absolute top-2 right-4 text-3xl text-white hover:text-red-500 transition-colors">&times;</button>
-            <div class="aspect-video">
-                <iframe id="modal-frame" class="w-full h-full" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-            </div>
-        </div>
-    </div>
-
     <script>
-        // --- DATA ---
-        const CONFIG = { name: "NITHYA", birthDate: "MARCH 22, 2004" };
-        document.getElementById('birth-date-display').textContent = CONFIG.birthDate;
-
         // --- AUDIO SYSTEM ---
         const audio = {
             bg: document.getElementById('bg-music'),
-            scan: document.getElementById('sfx-scan'),
-            success: document.getElementById('sfx-success'),
             btn: document.getElementById('music-control'),
             icon: document.querySelector('#music-control i'),
             isMuted: false,
@@ -418,12 +235,9 @@
             }
         };
 
-        
-
         // --- MAIN APP LOGIC ---
         const app = {
             init: function() {
-                hud.init();
                 // Cursor Logic
                 if (window.matchMedia("(hover: hover)").matches) {
                     const dot = document.querySelector('.cursor-dot');
@@ -434,13 +248,9 @@
                         outline.animate({ left: e.clientX + 'px', top: e.clientY + 'px' }, { duration: 800, fill: "forwards" });
                     });
                 }
-            },
-            initFeatures: function() {
+                
                 this.initIntro();
                 this.initStarMap();
-                this.initSlider();
-                this.initKeys();
-                this.initGlobe();
                 this.initCake();
                 this.initScroll();
             },
@@ -456,7 +266,6 @@
                 });
             },
             initStarMap: function() {
-                // Modified to look like Fireflies
                 const canvas = document.getElementById('star-canvas');
                 const ctx = canvas.getContext('2d');
                 let w, h;
@@ -468,11 +277,11 @@
                 
                 const animate = () => {
                     ctx.clearRect(0,0,w,h);
-                    ctx.fillStyle = "#fcf6ba"; // Firefly Yellow
+                    ctx.fillStyle = "#fcf6ba"; 
                     ctx.shadowBlur = 10;
                     ctx.shadowColor = "#d4af37";
                     stars.forEach(s => {
-                        s.y -= s.speed; // Float up
+                        s.y -= s.speed; 
                         if(s.y < 0) s.y = h;
                         ctx.globalAlpha = Math.abs(Math.sin(Date.now()/2000 * s.r + s.x));
                         ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI*2); ctx.fill();
@@ -481,76 +290,6 @@
                 };
                 animate();
             },
-            initSlider: function() {
-                const range = document.getElementById('time-range');
-                const overlay = document.getElementById('baby-overlay');
-                range.addEventListener('input', (e) => {
-                    overlay.style.clipPath = `inset(0 ${100 - e.target.value}% 0 0)`;
-                });
-            },
-            initKeys: function() {
-                let count = 0;
-                const total = 4;
-                window.collectKey = (el) => {
-                    if(el.classList.contains('collected')) return;
-                    el.classList.add('collected');
-                    count++;
-                    const bar = document.getElementById('keys-bar');
-                    bar.classList.remove('hidden');
-                    const icon = document.createElement('div');
-                    icon.innerHTML = '🗝️';
-                    document.getElementById('keys-container').appendChild(icon);
-                    confetti({ particleCount: 30, spread: 50, colors: ['#d4af37', '#fcf6ba'], origin: { y: 0.8 } });
-                    if(count >= total) setTimeout(this.openVault, 1000);
-                };
-            },
-            openVault: function() {
-                const screen = document.getElementById('vault-screen');
-                screen.classList.remove('hidden');
-                // Door Animation
-                gsap.to('#door-left', { x: '-100%', rotateY: -15, duration: 2.5, ease: 'power2.inOut' });
-                gsap.to('#door-right', { x: '100%', rotateY: 15, duration: 2.5, ease: 'power2.inOut', onComplete: () => {
-                    document.getElementById('vault-content').classList.remove('hidden');
-                    app.initScratch();
-                }});
-            },
-            initScratch: function() {
-                const canvas = document.getElementById('scratch-canvas');
-                const ctx = canvas.getContext('2d');
-                ctx.fillStyle = "#d4af37"; // Gold scratch card
-                ctx.fillRect(0,0,300,200);
-                ctx.fillStyle = "#fff";
-                ctx.font = "24px serif";
-                ctx.fillText("SCRATCH HERE", 60, 110);
-                let isDrawing = false;
-                const scratch = (e) => {
-                    if(!isDrawing) return;
-                    const rect = canvas.getBoundingClientRect();
-                    const x = (e.clientX || e.touches[0].clientX) - rect.left;
-                    const y = (e.clientY || e.touches[0].clientY) - rect.top;
-                    ctx.globalCompositeOperation = "destination-out";
-                    ctx.beginPath(); ctx.arc(x,y,25,0,Math.PI*2); ctx.fill();
-                };
-                canvas.addEventListener('mousedown', () => isDrawing = true);
-                canvas.addEventListener('touchstart', (e) => { isDrawing = true; scratch(e); });
-                window.addEventListener('mouseup', () => isDrawing = false);
-                window.addEventListener('touchend', () => isDrawing = false);
-                canvas.addEventListener('mousemove', scratch);
-                canvas.addEventListener('touchmove', scratch);
-            },
-            initGlobe: function() {
-                const globe = document.getElementById('globe');
-                let rotation = 0;
-                setInterval(() => {
-                    rotation += 0.1;
-                    globe.style.transform = `rotateY(${rotation}deg)`;
-                }, 50);
-                window.openVideo = (url) => {
-                    const modal = document.getElementById('video-modal');
-                    modal.classList.remove('hidden');
-                    document.getElementById('modal-frame').src = url;
-                };
-            },
             initCake: function() {
                 document.getElementById('flame').addEventListener('click', function() {
                     this.classList.add('out');
@@ -558,19 +297,36 @@
                     gsap.to('#cake-section', { opacity: 0, duration: 1.5 });
                     setTimeout(() => {
                         document.getElementById('cake-section').style.display = 'none';
-                        document.getElementById('surprise-section').classList.add('active');
+                        document.getElementById('surprise-section').style.opacity = '1';
+                         document.getElementById('surprise-section').style.pointerEvents = 'auto';
                         gsap.from('#surprise-section', { scale: 0.8, opacity: 0, duration: 1.5, ease: "back.out(1.7)" });
                     }, 1500);
                 });
             },
             initScroll: function() {
-                gsap.utils.toArray('.parallax-img').forEach(img => {
-                    gsap.to(img, { y: "20%", ease: "none", scrollTrigger: { trigger: img.parentElement, start: "top bottom", end: "bottom top", scrub: true }});
-                });
                 gsap.utils.toArray('.scroll-reveal').forEach(elem => {
                     gsap.to(elem, { y: 0, opacity: 1, duration: 1.5, ease: "power2.out", scrollTrigger: { trigger: elem, start: "top 85%" }});
                 });
             }
+        };
+
+        // --- NAVIGATION FUNCTIONS ---
+        window.enterPortal = () => {
+            gsap.to('.portal-target', { scale: 50, opacity: 0, duration: 1.5 });
+            gsap.to("body", { backgroundColor: "#000", duration: 1.2, delay: 0.2 });
+            setTimeout(() => window.location.href = 'timetravel.html', 1200);
+        };
+        
+        window.enterMemories = () => {
+            gsap.to('.album-target', { rotateY: -10, scale: 1.5, opacity: 0, duration: 1 });
+            gsap.to("body", { backgroundColor: "#fff", duration: 1 });
+            setTimeout(() => window.location.href = 'memories.html', 1000);
+        };
+        
+        window.enterWishes = () => {
+            gsap.to('.wishes-target', { scale: 5, opacity: 0, duration: 1.5 });
+            gsap.to("body", { backgroundColor: "#000", duration: 1.2 });
+            setTimeout(() => window.location.href = 'wishes.html', 1200);
         };
 
         window.addEventListener('DOMContentLoaded', () => app.init());
