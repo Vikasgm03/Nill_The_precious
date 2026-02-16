@@ -293,6 +293,96 @@
         </div>
     </div>
 
+    <section class="relative h-screen w-full flex items-center justify-center overflow-hidden bg-black perspective-2000 group">
+    
+    <div class="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#2e1065]/20 to-[#050505] z-0"></div>
+    <div class="absolute top-[-50%] left-[-50%] w-[200%] h-[200%] bg-[radial-gradient(circle,rgba(212,175,55,0.05)_0%,transparent_60%)] animate-slow-spin pointer-events-none"></div>
+
+    <div class="gold-dust"></div>
+
+    <div class="relative z-10 w-[90vw] md:w-[600px] aspect-[3/4] md:aspect-[4/5] transition-transform duration-700 ease-out transform-style-3d hover:scale-105" id="masterpiece-card">
+        
+        <div class="absolute inset-0 overflow-hidden rounded-[2px] shadow-[0_0_100px_rgba(212,175,55,0.15)] border border-white/10 filter-masterpiece">
+            
+            <img src="media/5.jpeg" class="w-full h-full object-cover animate-breath">
+            
+            <div class="absolute inset-0 bg-gradient-to-tr from-[#2e1065] to-[#d4af37] mix-blend-overlay opacity-40"></div> <div class="absolute inset-0 bg-radial-gradient mix-blend-multiply opacity-80"></div> <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-20 mix-blend-screen"></div> <div class="light-sweep"></div>
+        </div>
+
+        <div class="absolute bottom-10 left-0 w-full text-center z-20 mix-blend-difference">
+            <p class="text-[#d4af37] text-xs font-mono tracking-[0.5em] mb-2 opacity-0 animate-fade-up" style="animation-delay: 0.5s;">CELEBRATING YOU</p>
+            <h1 class="text-5xl md:text-7xl font-hand text-white leading-none opacity-0 animate-fade-up" style="animation-delay: 1s;">
+                Happy Birthday<br>
+                <span class="text-6xl md:text-8xl font-cinematic text-[#d4af37]">Nithya</span>
+            </h1>
+        </div>
+
+        <div class="absolute top-4 left-4 w-full h-full border border-white/20 rounded-[2px] -z-10 translate-x-4 translate-y-4"></div>
+        <div class="absolute top-4 left-4 w-4 h-4 border-t-2 border-l-2 border-[#d4af37]"></div>
+        <div class="absolute bottom-4 right-4 w-4 h-4 border-b-2 border-r-2 border-[#d4af37]"></div>
+
+    </div>
+</section>
+
+<style>
+    /* --- CSS ONLY PHOTO EDITING --- */
+    .filter-masterpiece img {
+        /* This combination creates a high-end magazine look */
+        filter: contrast(110%) brightness(105%) saturate(110%) sepia(10%);
+    }
+    
+    /* Vignette Gradient */
+    .bg-radial-gradient {
+        background: radial-gradient(circle at center, transparent 40%, black 120%);
+    }
+
+    /* Breathing Animation (Makes photo feel alive) */
+    @keyframes breath {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.03); }
+    }
+    .animate-breath { animation: breath 10s ease-in-out infinite; }
+
+    /* Light Sweep Effect */
+    .light-sweep {
+        position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+        background: linear-gradient(to right, transparent, rgba(255,255,255,0.1), transparent);
+        transform: rotate(45deg);
+        animation: sweep 6s ease-in-out infinite;
+        pointer-events: none;
+    }
+    @keyframes sweep { 0% { transform: rotate(45deg) translateY(-100%); } 100% { transform: rotate(45deg) translateY(100%); } }
+
+    /* Text Reveal */
+    @keyframes fadeUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade-up { animation: fadeUp 1.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
+
+    /* Slow Background Spin */
+    @keyframes slowSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    .animate-slow-spin { animation: slowSpin 60s linear infinite; }
+
+    /* --- CSS ONLY GOLD DUST --- */
+    .gold-dust {
+        position: absolute; top: 0; left: 0; width: 1px; height: 1px;
+        background: transparent;
+        /* Creating stars using box-shadow to avoid 100 divs */
+        box-shadow: 
+            10vw 20vh 2px #d4af37, 30vw 10vh 1px #fff, 80vw 40vh 2px #d4af37,
+            20vw 80vh 1px #fff, 50vw 50vh 2px #d4af37, 90vw 10vh 1px #fff,
+            10vw 90vh 2px #d4af37, 60vw 30vh 1px #fff, 40vw 70vh 2px #d4af37;
+        animation: floatDust 20s linear infinite;
+        opacity: 0.6; z-index: 1;
+    }
+    @keyframes floatDust { from { transform: translateY(0); } to { transform: translateY(-100px); } }
+
+    /* 3D Transform Utilities */
+    .perspective-2000 { perspective: 2000px; }
+    .transform-style-3d { transform-style: preserve-3d; }
+</style>
+
     <script>
         // --- 1. GENERATE ATMOSPHERIC ELEMENTS ---
         
@@ -364,5 +454,14 @@
         });
         gsap.to('.scrap-item', { y: (i) => (i + 1) * -50, ease: "none", scrollTrigger: { trigger: ".paper-texture", start: "top bottom", end: "bottom top", scrub: 1 } });
     </script>
+    // Add this to your script
+const masterpiece = document.getElementById('masterpiece-card');
+if(masterpiece) {
+    document.addEventListener('mousemove', (e) => {
+        const x = (window.innerWidth / 2 - e.pageX) / 25;
+        const y = (window.innerHeight / 2 - e.pageY) / 25;
+        masterpiece.style.transform = `rotateY(${x}deg) rotateX(${y}deg)`;
+    });
+}
 </body>
 </html>
