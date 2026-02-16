@@ -322,17 +322,43 @@
 </script>
 
 
-        <section class="min-h-screen bg-[#2e1065] relative flex flex-col items-center justify-center overflow-hidden py-20">
-            <h2 class="text-5xl font-emotional text-[#fce7f3] mb-2 z-10">Global Wishes</h2>
-            <p class="text-purple-300 mb-10 z-10 font-cinematic">Touch the world to hear love</p>
-            <div id="globe-wrapper" class="relative w-[300px] h-[300px] md:w-[450px] md:h-[450px]">
-                <div id="globe" class="globe w-full h-full rounded-full relative shadow-[0_0_80px_rgba(252,231,243,0.3)]">
-                    <div class="absolute inset-0 bg-[url('https://picsum.photos/id/1015/1000/500')] bg-cover opacity-80 rounded-full grayscale hover:grayscale-0 transition-all duration-1000"></div>
-                    <div onclick="openVideo('https://www.youtube.com/embed/9bZkp7q19f0')" class="absolute top-[30%] left-[30%] w-10 h-10 bg-rose-400 rounded-full flex items-center justify-center cursor-pointer hover:scale-125 transition-transform z-20 shadow-lg border-2 border-white text-white">❤️</div>
-                    <div onclick="openVideo('https://www.youtube.com/embed/3JZ_D3ELwOQ')" class="absolute top-[50%] left-[70%] w-10 h-10 bg-indigo-400 rounded-full flex items-center justify-center cursor-pointer hover:scale-125 transition-transform z-20 shadow-lg border-2 border-white text-white">💌</div>
+<section class="min-h-screen bg-[#2e1065] flex items-center justify-center py-20 relative overflow-hidden">
+    <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-20 animate-pulse"></div>
+    
+    <div class="w-full max-w-4xl px-4 text-center z-10">
+        <h2 class="text-5xl font-cinematic mb-4 text-[#fce7f3] drop-shadow-lg">Echoes of Love</h2>
+        <p class="text-purple-300 font-emotional text-2xl mb-12">Voices from near and far have gathered here</p>
+        
+        <div class="relative group cursor-pointer inline-block" onclick="enterWishes()">
+            <div class="absolute inset-0 border-[1px] border-[#d4af37]/50 rounded-full w-[350px] h-[350px] -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 animate-[spin_8s_linear_infinite]"></div>
+            <div class="absolute inset-0 border-[1px] border-[#fce7f3]/30 rounded-full w-[400px] h-[400px] -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 animate-[spin_12s_linear_infinite_reverse]"></div>
+
+            <div class="relative w-[300px] h-[300px] rounded-full overflow-hidden shadow-[0_0_80px_rgba(212,175,55,0.5)] transition-all duration-700 group-hover:shadow-[0_0_120px_rgba(212,175,55,0.8)] group-hover:scale-105">
+                <div class="absolute inset-0 bg-gradient-to-tr from-[#4c1d95] via-[#d4af37]/20 to-[#4c1d95] opacity-80 group-hover:opacity-100 transition-opacity duration-700"></div>
+                
+                <div class="absolute inset-0 flex flex-col items-center justify-center z-20">
+                    <div class="w-16 h-16 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center border border-white/50 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-play text-2xl text-white ml-1"></i>
+                    </div>
+                    <span class="mt-4 font-cinematic text-[#fce7f3] tracking-[0.2em] text-sm uppercase group-hover:text-white transition-colors">Watch Wishes</span>
                 </div>
             </div>
-        </section>
+        </div>
+    </div>
+</section>
+
+<script>
+    function enterWishes() {
+        // Portal Activation Animation
+        const orb = document.querySelector('.group');
+        gsap.to(orb, { scale: 5, opacity: 0, duration: 1.5, ease: "power2.in" });
+        gsap.to("body", { backgroundColor: "#000", duration: 1.2 });
+        
+        setTimeout(() => {
+            window.location.href = 'wishes.html';
+        }, 1200);
+    }
+</script>
 
         <section class="py-20 bg-[#fff9f0]">
             <div class="px-8 md:px-16 mb-6">
