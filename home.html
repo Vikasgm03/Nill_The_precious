@@ -394,11 +394,9 @@
                 const intro = document.getElementById('intro-screen');
                 if(intro) {
                     intro.addEventListener('click', () => {
-                        // Attempt audio play with error catching
                         audio.bg.play().catch((e) => console.log("Audio autoplay blocked:", e));
                         audio.init();
                         
-                        // GSAP Animations
                         gsap.to('.fade-elem', { y: -20, opacity: 0, stagger: 0.1 });
                         gsap.to(intro, { opacity: 0, duration: 1.5, pointerEvents: 'none' });
                         gsap.to(".hero-text", { y: 0, opacity: 1, duration: 2, stagger: 0.3, delay: 0.5, ease: "power2.out" });
@@ -409,7 +407,7 @@
 
             initStarMap: function() {
                 const canvas = document.getElementById('star-canvas');
-                if(!canvas) return; // Safety check
+                if(!canvas) return; 
                 const ctx = canvas.getContext('2d');
                 let w, h;
                 const stars = [];
@@ -452,40 +450,40 @@
                 }
             },
 
-initScroll: function() {
-    // 1. General Reveals
-    gsap.utils.toArray('.scroll-reveal').forEach(elem => {
-        gsap.to(elem, { 
-            y: 0, opacity: 1, duration: 1.5, ease: "power2.out", 
-            scrollTrigger: { trigger: elem, start: "top 85%" }
-        });
-    });
+            initScroll: function() {
+                // 1. General Reveals
+                gsap.utils.toArray('.scroll-reveal').forEach(elem => {
+                    gsap.to(elem, { 
+                        y: 0, opacity: 1, duration: 1.5, ease: "power2.out", 
+                        scrollTrigger: { trigger: elem, start: "top 85%" }
+                    });
+                });
 
-    // 2. NEW: Glass Card Animation
-    // First, animate the card popping up
-    gsap.from(".poetry-card", {
-        scale: 0.9,
-        opacity: 0,
-        duration: 1.5,
-        ease: "power3.out",
-        scrollTrigger: { trigger: ".poetry-card", start: "top 80%" }
-    });
+                // 2. NEW: Glass Card Animation
+                gsap.from(".poetry-card", {
+                    scale: 0.9,
+                    opacity: 0,
+                    duration: 1.5,
+                    ease: "power3.out",
+                    scrollTrigger: { trigger: ".poetry-card", start: "top 80%" }
+                });
 
-    // Then, animate the lines inside
-    gsap.utils.toArray('.poetry-line').forEach((line, i) => {
-        gsap.to(line, {
-            opacity: 1,
-            y: 0,
-            duration: 1,
-            delay: i * 0.2, // Stagger effect: each line waits 0.2s
-            ease: "back.out(1.7)",
-            scrollTrigger: {
-                trigger: ".poetry-card", // Trigger when the CARD is visible
-                start: "top 70%"
+                // Lines inside
+                gsap.utils.toArray('.poetry-line').forEach((line, i) => {
+                    gsap.to(line, {
+                        opacity: 1,
+                        y: 0,
+                        duration: 1,
+                        delay: i * 0.2, 
+                        ease: "back.out(1.7)",
+                        scrollTrigger: {
+                            trigger: ".poetry-card", 
+                            start: "top 70%"
+                        }
+                    });
+                });
             }
-        });
-    });
-}
+        }; // <--- CLOSED THE APP OBJECT HERE
 
         // --- NAVIGATION FUNCTIONS ---
         window.enterPortal = () => {
