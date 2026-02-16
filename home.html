@@ -455,6 +455,42 @@
     </div>
 </section>
 
+        <section class="min-h-screen relative flex items-center justify-center overflow-hidden bg-black perspective-1000">
+    
+    <div id="mosaic-grid" class="absolute inset-0 grid grid-cols-6 md:grid-cols-12 opacity-30 gap-1 transform rotate-x-12 scale-125">
+        </div>
+
+    <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black z-10"></div>
+
+    <div class="relative z-20 text-center space-y-8">
+        <h2 class="text-6xl md:text-9xl font-cinematic text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-800 tracking-tighter mix-blend-overlay">
+            THE VAULT
+        </h2>
+        
+        <div class="w-[1px] h-24 bg-gradient-to-b from-transparent via-[#d4af37] to-transparent mx-auto"></div>
+        
+        <p class="text-[#d4af37] font-mono text-xs tracking-[1em] uppercase">200+ Moments Captured</p>
+
+        <button onclick="enterGallery()" class="group relative px-12 py-4 bg-transparent overflow-hidden rounded-full border border-white/20 hover:border-[#d4af37] transition-colors duration-500">
+            <div class="absolute inset-0 w-0 bg-[#d4af37] transition-all duration-[250ms] ease-out group-hover:w-full opacity-10"></div>
+            <span class="relative text-white group-hover:text-[#d4af37] font-cinematic tracking-widest uppercase transition-colors">Open The Archives</span>
+        </button>
+    </div>
+</section>
+
+<style>
+    .perspective-1000 { perspective: 1000px; }
+    .mosaic-tile {
+        background-color: #222;
+        transition: background-color 0.5s, transform 0.5s;
+    }
+    .mosaic-tile.active {
+        background-color: #d4af37;
+        box-shadow: 0 0 15px #d4af37;
+        transform: scale(0.9);
+    }
+</style>
+
 <section class="min-h-screen relative flex flex-col items-center justify-center overflow-hidden bg-black">
     
     <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-20"></div>
@@ -588,6 +624,36 @@
                 });
             }
         },
+
+        // Add inside app.init():
+this.initMosaic();
+
+// Add as a new function inside 'app':
+initMosaic: function() {
+    const grid = document.getElementById('mosaic-grid');
+    if(!grid) return;
+    
+    // Create 100 tiles
+    for(let i=0; i<100; i++) {
+        const div = document.createElement('div');
+        div.classList.add('mosaic-tile', 'w-full', 'h-16', 'md:h-24', 'opacity-20');
+        grid.appendChild(div);
+    }
+
+    // Randomly flash tiles
+    setInterval(() => {
+        const tiles = document.querySelectorAll('.mosaic-tile');
+        const randomTile = tiles[Math.floor(Math.random() * tiles.length)];
+        randomTile.classList.add('active');
+        setTimeout(() => randomTile.classList.remove('active'), 500);
+    }, 100);
+},
+
+// Add to Navigation Functions:
+window.enterGallery = () => {
+    gsap.to("body", { backgroundColor: "#000", opacity: 0, duration: 1.5 });
+    setTimeout(() => window.location.href = 'gallery.html', 1500);
+};
 
         initScroll: function() {
             // 1. General Reveals
