@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Precious Memories</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,600;1,400&family=Great+Vibes&display=swap" rel="stylesheet">
+    
+    <style>
+        :root { --gold: #d4af37; --paper: #f4f1ea; }
+        body { background-color: var(--paper); font-family: 'Cormorant Garamond', serif; overflow-x: hidden; }
+        .font-emotional { font-family: 'Great Vibes', cursive; }
+        
+        /* Polaroid Styling */
+        .parallax-container {
+            background: #fff;
+            padding: 1rem 1rem 4rem 1rem; /* Extra bottom padding for caption */
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transform-origin: center;
+        }
+        .parallax-container:hover {
+            z-index: 50;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+            transform: scale(1.02) !important; /* Override rotation on hover */
+        }
+        
+        /* Key Animation */
+        .key { cursor: pointer; filter: drop-shadow(0 0 5px gold); transition: all 0.3s; }
+        .key.collected { opacity: 0; pointer-events: none; transform: scale(2) rotate(45deg); }
+
+        /* Smooth Scroll Container */
+        .scroll-content { width: 100%; overflow: hidden; }
+    </style>
+</head>
+<body>
+
+    <a href="index.html" class="fixed top-8 left-8 z-50 text-gray-500 hover:text-[#d4af37] transition-colors flex items-center gap-2 cursor-pointer bg-white/80 backdrop-blur px-4 py-2 rounded-full shadow-sm">
+        <span>←</span> <span class="tracking-widest text-xs uppercase">Close Album</span>
+    </a>
+
+    <div id="keys-bar" class="fixed bottom-8 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-md border border-gray-200 px-8 py-4 rounded-full flex items-center gap-4 z-40 hidden shadow-2xl transition-all">
+        <span class="text-xs font-cinematic tracking-widest text-gray-500">SECRET KEYS:</span>
+        <div id="keys-container" class="flex gap-2 text-2xl"></div>
+    </div>
+
+    <section class="min-h-screen py-24 px-4 relative">
+        
+        <div class="text-center mb-20">
+            <h1 class="text-6xl md:text-8xl font-emotional text-gray-800 mb-4 opacity-0" id="title">Precious Moments</h1>
+            <p class="text-xl text-[#d4af37] tracking-widest uppercase font-cinematic opacity-0" id="subtitle">Collection 2024 - Forever</p>
+        </div>
+
+        <div class="max-w-[1400px] mx-auto grid grid-cols-1 md:grid-cols-12 gap-12 px-4 md:px-8">
+            
+            <div class="md:col-span-4 h-[600px] relative mt-10 md:mt-0 transform rotate-[-3deg] hover:rotate-0 transition-transform duration-500 photo-card">
+                <div class="w-full h-full parallax-container group overflow-hidden relative">
+                     <div class="w-full h-[85%] overflow-hidden relative">
+                         <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=600" class="w-full h-[120%] object-cover absolute top-0 parallax-img opacity-90 group-hover:opacity-100 transition-opacity" alt="Memory 1">
+                     </div>
+                     <p class="absolute bottom-4 left-0 w-full text-center font-emotional text-3xl text-gray-600">Pure Joy</p>
+                     <div class="absolute top-4 right-4 text-4xl opacity-50 hover:opacity-100 key animate-bounce" onclick="collectKey(this)">🗝️</div>
+                </div>
+            </div>
+
+            <div class="md:col-span-4 md:col-start-5 h-[550px] mt-20 md:mt-32 relative transform rotate-[2deg] hover:rotate-0 transition-transform duration-500 photo-card">
+                 <div class="w-full h-full parallax-container group overflow-hidden relative">
+                     <div class="w-full h-[85%] overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=600" class="w-full h-[120%] object-cover absolute top-0 parallax-img opacity-90 group-hover:opacity-100 transition-opacity" alt="Memory 2">
+                    </div>
+                    <p class="absolute bottom-4 left-0 w-full text-center font-emotional text-3xl text-gray-600">Adventure</p>
+                    <div class="absolute top-4 right-4 text-4xl opacity-50 hover:opacity-100 key animate-bounce" onclick="collectKey(this)">🗝️</div>
+                 </div>
+            </div>
+
+            <div class="md:col-span-4 md:col-start-9 h-[600px] mt-10 md:mt-10 relative transform rotate-[-2deg] hover:rotate-0 transition-transform duration-500 photo-card">
+                <div class="w-full h-full parallax-container group overflow-hidden relative">
+                    <div class="w-full h-[85%] overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=600" class="w-full h-[120%] object-cover absolute top-0 parallax-img opacity-90 group-hover:opacity-100 transition-opacity" alt="Memory 3">
+                    </div>
+                    <p class="absolute bottom-4 left-0 w-full text-center font-emotional text-3xl text-gray-600">Laughter</p>
+                    <div class="absolute top-4 right-4 text-4xl opacity-50 hover:opacity-100 key animate-bounce" onclick="collectKey(this)">🗝️</div>
+                </div>
+            </div>
+
+            <div class="md:col-span-6 h-[500px] mt-20 relative transform rotate-[1deg] hover:rotate-0 transition-transform duration-500 photo-card">
+                <div class="w-full h-full parallax-container group overflow-hidden relative">
+                    <div class="w-full h-[85%] overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800" class="w-full h-[120%] object-cover absolute top-0 parallax-img opacity-90 group-hover:opacity-100 transition-opacity" alt="Memory 4">
+                    </div>
+                    <p class="absolute bottom-4 left-0 w-full text-center font-emotional text-3xl text-gray-600">Wild Spirit</p>
+                    <div class="absolute top-4 right-4 text-4xl opacity-50 hover:opacity-100 key animate-bounce" onclick="collectKey(this)">🗝️</div>
+                </div>
+            </div>
+            
+             <div class="md:col-span-6 h-[500px] mt-32 relative transform rotate-[-1deg] hover:rotate-0 transition-transform duration-500 photo-card">
+                <div class="w-full h-full parallax-container group overflow-hidden relative">
+                    <div class="w-full h-[85%] overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=800" class="w-full h-[120%] object-cover absolute top-0 parallax-img opacity-90 group-hover:opacity-100 transition-opacity" alt="Memory 5">
+                    </div>
+                    <p class="absolute bottom-4 left-0 w-full text-center font-emotional text-3xl text-gray-600">Best Friends</p>
+                    <div class="absolute top-4 right-4 text-4xl opacity-50 hover:opacity-100 key animate-bounce" onclick="collectKey(this)">🗝️</div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="text-center mt-32 pb-20 opacity-0" id="footer-msg">
+            <p class="font-emotional text-4xl text-gray-400">"Every picture tells a story..."</p>
+        </div>
+
+    </section>
+
+    <script>
+        gsap.registerPlugin(ScrollTrigger);
+
+        // --- INIT ANIMATIONS ---
+        window.onload = () => {
+            
+            // Header Fade In
+            gsap.to("#title", { opacity: 1, y: 0, duration: 1.5, delay: 0.2, ease: "power3.out" });
+            gsap.to("#subtitle", { opacity: 1, y: 0, duration: 1.5, delay: 0.5, ease: "power3.out" });
+
+            // Photo Cards Reveal on Scroll
+            gsap.utils.toArray('.photo-card').forEach((card, i) => {
+                gsap.from(card, {
+                    y: 100,
+                    opacity: 0,
+                    rotation: Math.random() * 10 - 5,
+                    duration: 1.2,
+                    ease: "power3.out",
+                    scrollTrigger: {
+                        trigger: card,
+                        start: "top 80%"
+                    }
+                });
+            });
+
+            // Parallax Effect for Images inside cards
+            gsap.utils.toArray('.parallax-img').forEach(img => {
+                gsap.to(img, {
+                    y: "20%", 
+                    ease: "none",
+                    scrollTrigger: {
+                        trigger: img.parentElement,
+                        start: "top bottom",
+                        end: "bottom top",
+                        scrub: true
+                    }
+                });
+            });
+            
+            // Footer Reveal
+            gsap.to("#footer-msg", {
+                opacity: 1,
+                scrollTrigger: {
+                    trigger: "body",
+                    start: "bottom bottom",
+                }
+            });
+        };
+
+        // --- KEY COLLECTION LOGIC (Standalone for this page) ---
+        let count = 0;
+        const total = 5;
+        
+        window.collectKey = (el) => {
+            if(el.classList.contains('collected')) return;
+            el.classList.add('collected');
+            count++;
+            
+            // Show Bar
+            const bar = document.getElementById('keys-bar');
+            bar.classList.remove('hidden');
+            
+            // Add Icon
+            const icon = document.createElement('div');
+            icon.innerHTML = '🗝️';
+            document.getElementById('keys-container').appendChild(icon);
+            
+            // Confetti
+            confetti({ particleCount: 30, spread: 50, colors: ['#d4af37', '#f4f1ea'], origin: { y: 0.8 } });
+            
+            // Completion Check (Optional: Could unlock something on this page too)
+            if(count >= total) {
+                // maybe show a special message
+                alert("You've unlocked all memory fragments! ❤️");
+            }
+        };
+    </script>
+</body>
+</html>
