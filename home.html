@@ -358,7 +358,7 @@
 
     </div>
 
-    <script>
+<script>
         // --- AUDIO SYSTEM ---
         const audio = {
             bg: document.getElementById('bg-music'),
@@ -396,19 +396,27 @@
                 this.initCake();
                 this.initScroll();
             },
+
             initIntro: function() {
                 const intro = document.getElementById('intro-screen');
-                intro.addEventListener('click', () => {
-                    audio.bg.play().catch(() => {});
-                    audio.init();
-                    gsap.to('.fade-elem', { y: -20, opacity: 0, stagger: 0.1 });
-                    gsap.to(intro, { opacity: 0, duration: 1.5, pointerEvents: 'none' });
-                    gsap.to(".hero-text", { y: 0, opacity: 1, duration: 2, stagger: 0.3, delay: 0.5, ease: "power2.out" });
-                    gsap.to("#hero-bg", { scale: 1, duration: 15 });
-                });
+                if(intro) {
+                    intro.addEventListener('click', () => {
+                        // Attempt audio play with error catching
+                        audio.bg.play().catch((e) => console.log("Audio autoplay blocked:", e));
+                        audio.init();
+                        
+                        // GSAP Animations
+                        gsap.to('.fade-elem', { y: -20, opacity: 0, stagger: 0.1 });
+                        gsap.to(intro, { opacity: 0, duration: 1.5, pointerEvents: 'none' });
+                        gsap.to(".hero-text", { y: 0, opacity: 1, duration: 2, stagger: 0.3, delay: 0.5, ease: "power2.out" });
+                        gsap.to("#hero-bg", { scale: 1, duration: 15 });
+                    });
+                }
             },
+
             initStarMap: function() {
                 const canvas = document.getElementById('star-canvas');
+                if(!canvas) return; // Safety check
                 const ctx = canvas.getContext('2d');
                 let w, h;
                 const stars = [];
@@ -432,48 +440,54 @@
                 };
                 animate();
             },
-            initCake: function() {
-                document.getElementById('flame').addEventListener('click', function() {
-                    this.classList.add('out');
-                    confetti({ particleCount: 150, spread: 100, colors: ['#FFD700', '#FF69B4', '#FFFFFF'], origin: { y: 0.6 } });
-                    gsap.to('#cake-section', { opacity: 0, duration: 1.5 });
-                    setTimeout(() => {
-                        document.getElementById('cake-section').style.display = 'none';
-                        document.getElementById('surprise-section').style.opacity = '1';
-                         document.getElementById('surprise-section').style.pointerEvents = 'auto';
-                        gsap.from('#surprise-section', { scale: 0.8, opacity: 0, duration: 1.5, ease: "back.out(1.7)" });
-                    }, 1500);
-                });
-            },
-initScroll: function() {
-    // 1. Existing General Reveals (For headers, quotes, etc.)
-    gsap.utils.toArray('.scroll-reveal').forEach(elem => {
-        gsap.to(elem, { 
-            y: 0, 
-            opacity: 1, 
-            duration: 1.5, 
-            ease: "power2.out", 
-            scrollTrigger: { trigger: elem, start: "top 85%" }
-        });
-    });
 
-    // 2. NEW: Poetry Animation (The Ink Bleed Effect)
-    // This targets the specific lines of your rhyme
-    gsap.utils.toArray('.poetry-line').forEach((line) => {
-        gsap.to(line, {
-            opacity: 1,
-            y: 0,
-            filter: "blur(0px)",   // Removes the blur to make text sharp
-            duration: 2,           // Slower duration for a romantic feel
-            ease: "power4.out",    // Smooth easing
-            scrollTrigger: {
-                trigger: line,
-                start: "top 75%",  // Triggers when the line is 75% down the screen
-                toggleActions: "play none none reverse" // Fades out if they scroll back up
+            initCake: function() {
+                const flame = document.getElementById('flame');
+                if(flame) {
+                    flame.addEventListener('click', function() {
+                        this.classList.add('out');
+                        confetti({ particleCount: 150, spread: 100, colors: ['#FFD700', '#FF69B4', '#FFFFFF'], origin: { y: 0.6 } });
+                        gsap.to('#cake-section', { opacity: 0, duration: 1.5 });
+                        setTimeout(() => {
+                            document.getElementById('cake-section').style.display = 'none';
+                            const surprise = document.getElementById('surprise-section');
+                            surprise.style.opacity = '1';
+                            surprise.style.pointerEvents = 'auto';
+                            gsap.from('#surprise-section', { scale: 0.8, opacity: 0, duration: 1.5, ease: "back.out(1.7)" });
+                        }, 1500);
+                    });
+                }
+            },
+
+            initScroll: function() {
+                // 1. Existing General Reveals
+                gsap.utils.toArray('.scroll-reveal').forEach(elem => {
+                    gsap.to(elem, { 
+                        y: 0, 
+                        opacity: 1, 
+                        duration: 1.5, 
+                        ease: "power2.out", 
+                        scrollTrigger: { trigger: elem, start: "top 85%" }
+                    });
+                });
+
+                // 2. Poetry Animation
+                gsap.utils.toArray('.poetry-line').forEach((line) => {
+                    gsap.to(line, {
+                        opacity: 1,
+                        y: 0,
+                        filter: "blur(0px)",
+                        duration: 2,
+                        ease: "power4.out",
+                        scrollTrigger: {
+                            trigger: line,
+                            start: "top 75%",
+                            toggleActions: "play none none reverse"
+                        }
+                    });
+                });
             }
-        });
-    });
-}
+        }; // <--- THIS WAS MISSING IN YOUR CODE
 
         // --- NAVIGATION FUNCTIONS ---
         window.enterPortal = () => {
