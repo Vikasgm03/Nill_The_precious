@@ -676,6 +676,11 @@
         gsap.to("body", { backgroundColor: "#000", duration: 1.2 });
         setTimeout(() => window.location.href = 'wishes.html', 1200);
     };
+    window.enterCake = () => {
+    gsap.to('.cake-target', { scale: 50, rotate: 360, opacity: 0, duration: 2, ease: "power4.in" });
+    gsap.to("body", { backgroundColor: "#000", duration: 1.5 });
+    setTimeout(() => window.location.href = 'cake.html', 1500);
+};
 
     window.addEventListener('DOMContentLoaded', () => app.init());
 </script>
