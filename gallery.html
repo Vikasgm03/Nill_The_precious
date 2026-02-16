@@ -3,303 +3,288 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Birthday Girl Photo & Video Gallery ✨</title>
+    <title>The Art of Memories | Nithya</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Dancing+Script&family=Montserrat:wght@300;400&family=Playfair+Display:ital@0;1&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <style>
-        * { margin:0; padding:0; box-sizing:border-box; }
-        body {
-            font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #f0f8ff, #ffe4e1);
-            color: #333;
-            line-height: 1.6;
-            padding: 20px;
-        }
-        h1, h2 { text-align:center; margin-bottom:20px; color:#ff69b4; }
-        nav { text-align:center; margin-bottom:30px; }
-        nav button {
-            background:#ff69b4; color:white; border:none; padding:12px 24px;
-            margin:6px; cursor:pointer; border-radius:30px; font-weight:bold;
-            transition:all 0.3s;
-        }
-        nav button:hover { background:#ff1493; transform:translateY(-2px); }
-        nav button.active { background:#ff1493; box-shadow:0 4px 12px rgba(255,20,147,0.4); }
-        section { margin-bottom:60px; animation:fadeIn 1.2s ease-out; display:none; }
-        section.active { display:block; }
-        @keyframes fadeIn { from {opacity:0; transform:translateY(30px);} to {opacity:1; transform:translateY(0);} }
-        .gallery {
-            display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));
-            gap:25px; padding:0 10px;
-        }
-        .gallery-item {
-            position:relative; overflow:hidden; border-radius:16px;
-            box-shadow:0 6px 15px rgba(0,0,0,0.12); cursor:pointer;
-            transition:all 0.4s ease;
-        }
-        .gallery-item:hover {
-            transform:scale(1.04) translateY(-8px);
-            box-shadow:0 12px 30px rgba(0,0,0,0.18);
-        }
-        .gallery-item img, .gallery-item video {
-            width:100%; height:auto; display:block; transition:transform 0.6s ease;
-        }
-        .gallery-item:hover img, .gallery-item:hover video { transform:scale(1.08); }
-        .overlay {
-            position:absolute; bottom:0; left:0; right:0;
-            background:linear-gradient(to top, rgba(0,0,0,0.7), transparent);
-            color:white; padding:15px 12px 12px; text-align:center;
-            transform:translateY(100%); transition:transform 0.4s ease;
-        }
-        .gallery-item:hover .overlay { transform:translateY(0); }
+        :root { --gold: #d4af37; --bg: #050505; }
+        body { background-color: var(--bg); color: #fff; font-family: 'Montserrat', sans-serif; overflow-x: hidden; }
+        .font-cinematic { font-family: 'Cinzel', serif; }
+        .font-hand { font-family: 'Dancing Script', cursive; }
+        .font-serif { font-family: 'Playfair Display', serif; }
 
-        /* ─────────────── Lightbox ─────────────── */
-        #lightbox {
-            display:none; position:fixed; inset:0; background:rgba(0,0,0,0.92);
-            z-index:9999; align-items:center; justify-content:center; opacity:0;
-            transition:opacity 0.4s ease; touch-action:pan-y pinch-zoom;
+        /* --- 1. GOLDEN HOUR FILTER --- */
+        .filter-golden {
+            position: relative; overflow: hidden;
+            filter: contrast(105%) brightness(105%) sepia(20%) saturate(140%);
         }
-        #lightbox.active { display:flex; opacity:1; }
-        
-        .lightbox-wrapper {
+        .filter-golden::after {
+            content: ''; position: absolute; inset: 0;
+            background: linear-gradient(135deg, rgba(255,160,0,0.2), transparent 60%);
+            mix-blend-mode: overlay; pointer-events: none;
+        }
+
+        /* --- 2. BLACK & WHITE EMOTIONAL --- */
+        .filter-bw {
+            filter: grayscale(100%) contrast(120%) brightness(90%);
+            transition: filter 0.5s ease;
+        }
+        .filter-bw:hover { filter: grayscale(0%) contrast(100%); }
+        .grain-overlay {
+            position: absolute; inset: 0; 
+            background-image: url("https://www.transparenttextures.com/patterns/stardust.png");
+            opacity: 0.3; mix-blend-mode: overlay; pointer-events: none;
+        }
+
+        /* --- 3. DREAMY GLOW --- */
+        .filter-dreamy img {
+            filter: brightness(110%) saturate(90%) contrast(90%);
+        }
+        .filter-dreamy::before {
+            content: ''; position: absolute; inset: 0; z-index: 10;
+            box-shadow: inset 0 0 40px rgba(255,255,255,0.4);
+            mix-blend-mode: soft-light; pointer-events: none;
+        }
+        .bloom-effect {
+            filter: blur(8px); opacity: 0.6; mix-blend-mode: screen;
+            position: absolute; inset: 0; transform: scale(1.05);
+        }
+
+        /* --- 4. POLAROID VINTAGE --- */
+        .polaroid-card {
+            background: #fff; padding: 12px 12px 50px 12px;
+            box-shadow: 5px 5px 15px rgba(0,0,0,0.5);
+            transform: rotate(-2deg); transition: transform 0.3s;
+        }
+        .polaroid-card:hover { transform: rotate(0deg) scale(1.05); z-index: 10; }
+        .polaroid-img {
+            filter: sepia(30%) contrast(90%) brightness(110%) hue-rotate(-10deg);
+        }
+        .tape {
+            position: absolute; top: -15px; left: 50%; transform: translateX(-50%);
+            width: 100px; height: 30px; background: rgba(255,255,255,0.4);
+            border: 1px solid rgba(255,255,255,0.2); backdrop-filter: blur(5px);
+            transform: translateX(-50%) rotate(2deg); box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        /* --- 5. CINEMATIC MOVIE STYLE --- */
+        .filter-cinematic {
             position: relative;
-            width: 95vw;
-            max-width: 1200px;
-            height: 90vh;
-            overflow: hidden;
-            border-radius: 12px;
+            filter: contrast(110%) saturate(120%) sepia(20%) hue-rotate(-10deg);
+        }
+        .letterbox {
+            position: absolute; left: 0; width: 100%; height: 10%;
+            background: black; z-index: 20;
+        }
+        .lb-top { top: 0; }
+        .lb-bottom { bottom: 0; }
+
+        /* --- 6. SCRAPBOOK COLLAGE --- */
+        .scrap-item { position: relative; transition: all 0.3s; }
+        .scrap-item:hover { z-index: 50; transform: scale(1.1) !important; }
+        .paper-texture {
+            background-image: url('https://www.transparenttextures.com/patterns/notebook.png');
+            background-color: #fff9f0;
         }
 
-        .lightbox-slider {
-            position: absolute;
-            inset: 0;
-            display: flex;
-            transition: transform 0.45s cubic-bezier(0.32, 0.72, 0.1, 1);
-            will-change: transform;
+        /* UTILS */
+        .section-title {
+            font-family: 'Cinzel', serif; font-size: 3rem; margin-bottom: 2rem;
+            text-align: center; color: var(--gold);
         }
-
-        .lightbox-slide {
-            flex: 0 0 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .lightbox-slide img, .lightbox-slide video {
-            max-width: 100%;
-            max-height: 85vh;
-            border-radius: 12px;
-            box-shadow: 0 0 40px rgba(0,0,0,0.6);
-            object-fit: contain;
-            transition: transform 0.4s ease;
-        }
-
-        .close {
-            position:absolute; top:20px; right:25px; color:white;
-            font-size:48px; font-weight:bold; cursor:pointer;
-            text-shadow:0 0 10px black; transition:all 0.3s; z-index:10;
-        }
-        .close:hover { color:#ff69b4; transform:rotate(90deg); }
-
-        .nav-arrow {
-            position:absolute; top:50%; transform:translateY(-50%);
-            color:white; font-size:60px; cursor:pointer; user-select:none;
-            text-shadow:0 0 15px black; transition:all 0.3s; z-index:5;
-        }
-        .nav-arrow:hover { color:#ff69b4; transform:translateY(-50%) scale(1.15); }
-        #prev { left:20px; }
-        #next { right:20px; }
-
-        @media (max-width:768px) {
-            .close { top:15px; right:20px; font-size:40px; }
-            .nav-arrow { font-size:50px; }
-            #prev { left:10px; }
-            #next { right:10px; }
-        }
-        @media (max-width:600px) { .gallery { grid-template-columns:1fr; } }
     </style>
 </head>
 <body>
 
-    <h1>✨ Happy Birthday Gallery ✨</h1>
-
-    <nav id="filter-nav">
-        <button data-filter="all" class="active">All Memories</button>
-        <button data-filter="childhood">Childhood</button>
-        <button data-filter="teenage">Teen Years</button>
-        <button data-filter="recent">Recent Times</button>
-        <button data-filter="videos">Videos</button>
+    <nav class="fixed top-0 left-0 w-full z-50 p-6 flex justify-between items-center mix-blend-difference text-white">
+        <a href="index.html" class="text-xs font-bold tracking-[0.3em] hover:text-[#d4af37]">← HOME</a>
+        <h1 class="font-cinematic text-xl">The Aesthetic Gallery</h1>
     </nav>
 
-    <!-- Example sections – replace with your real media -->
-    <section id="childhood" class="active">
-        <h2>Childhood Moments</h2>
-        <div class="gallery">
-            <div class="gallery-item" data-category="childhood">
-                <img src="https://via.placeholder.com/400x500?text=Childhood+1" alt="Childhood 1" data-type="image">
-                <div class="overlay">First steps & smiles</div>
+    <header class="h-screen flex items-center justify-center relative overflow-hidden">
+        <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=1600')] bg-cover bg-center opacity-30"></div>
+        <div class="absolute inset-0 bg-gradient-to-t from-[#050505] via-transparent to-[#050505]"></div>
+        <div class="relative z-10 text-center">
+            <h1 class="text-7xl md:text-9xl font-cinematic text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-500">MUSE</h1>
+            <p class="text-[#d4af37] tracking-[1em] mt-4 text-xs">A LIFE IN FILTERS</p>
+        </div>
+    </header>
+
+    <section class="py-24 px-4 bg-[#0a0500]">
+        <h2 class="section-title text-orange-200">Golden Hour <span class="text-xs block font-mono text-gray-500 mt-2">TECHNIQUE: WARM OVERLAY + BLOOM</span></h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-6xl mx-auto">
+            <div class="filter-golden h-[500px] rounded-lg group">
+                <img src="media/1.jpeg" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                <div class="absolute bottom-4 left-4 font-serif italic text-orange-100 opacity-0 group-hover:opacity-100 transition-opacity">Sunkissed</div>
             </div>
-            <div class="gallery-item" data-category="childhood">
-                <img src="https://via.placeholder.com/400x500?text=Childhood+2" alt="Childhood 2" data-type="image">
-                <div class="overlay">Birthday cake disaster</div>
+            <div class="filter-golden h-[500px] rounded-lg group md:mt-12">
+                <img src="media/2.jpeg" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
             </div>
-            <!-- Add more items -->
+            <div class="filter-golden h-[500px] rounded-lg group">
+                <img src="media/3.jpeg" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+            </div>
         </div>
     </section>
 
-    <!-- Add other sections (teenage, recent, videos) here -->
+    <section class="py-24 bg-[#111] overflow-hidden relative">
+        <div class="absolute inset-0 opacity-10" style="background-image: url('https://www.transparenttextures.com/patterns/wood-pattern.png');"></div>
+        <h2 class="section-title text-white">Vintage Polaroids <span class="text-xs block font-mono text-gray-500 mt-2">TECHNIQUE: SEPIA + ROTATION + TAPE</span></h2>
 
-    <!-- Lightbox -->
-    <div id="lightbox">
-        <span class="close" id="close">&times;</span>
-        <span class="nav-arrow" id="prev">&#10094;</span>
-        <div class="lightbox-wrapper">
-            <div class="lightbox-slider" id="lightbox-slider"></div>
+        <div class="flex flex-wrap justify-center gap-10 max-w-7xl mx-auto py-10">
+            <div class="polaroid-card w-64 rotate-[-3deg]">
+                <div class="tape"></div>
+                <img src="media/4.jpeg" class="polaroid-img w-full aspect-square object-cover mb-2">
+                <p class="text-black font-hand text-xl text-center">So candid!</p>
+            </div>
+            
+            <div class="polaroid-card w-64 rotate-[2deg] mt-12">
+                <div class="tape"></div>
+                <img src="media/5.jpeg" class="polaroid-img w-full aspect-square object-cover mb-2">
+                <p class="text-black font-hand text-xl text-center">Favorite place</p>
+            </div>
+
+            <div class="polaroid-card w-64 rotate-[-1deg]">
+                <div class="tape"></div>
+                <img src="media/1.jpeg" class="polaroid-img w-full aspect-square object-cover mb-2">
+                <p class="text-black font-hand text-xl text-center">Summer '25</p>
+            </div>
+
+            <div class="polaroid-card w-64 rotate-[4deg] mt-8">
+                <div class="tape"></div>
+                <img src="media/2.jpeg" class="polaroid-img w-full aspect-square object-cover mb-2">
+                <p class="text-black font-hand text-xl text-center">Forever</p>
+            </div>
         </div>
-        <span class="nav-arrow" id="next">&#10095;</span>
-    </div>
+    </section>
+
+    <section class="py-24 bg-black">
+        <h2 class="section-title text-gray-300">Cinematic Mode <span class="text-xs block font-mono text-gray-500 mt-2">TECHNIQUE: LETTERBOX + TEAL/ORANGE GRADE</span></h2>
+
+        <div class="max-w-5xl mx-auto space-y-12">
+            <div class="relative w-full aspect-[21/9] overflow-hidden group shadow-2xl border border-gray-800">
+                <div class="letterbox lb-top"></div>
+                <div class="letterbox lb-bottom"></div>
+                <div class="filter-cinematic w-full h-full">
+                    <img src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=1200" class="w-full h-full object-cover">
+                </div>
+                <div class="absolute bottom-[15%] left-0 w-full text-center opacity-0 group-hover:opacity-100 transition-opacity duration-1000 z-30">
+                    <p class="font-cinematic text-yellow-400 text-sm tracking-[0.2em] shadow-black drop-shadow-md">SCENE 24 • "THE JOURNEY"</p>
+                </div>
+            </div>
+
+            <div class="relative w-full aspect-[21/9] overflow-hidden group shadow-2xl border border-gray-800">
+                <div class="letterbox lb-top"></div>
+                <div class="letterbox lb-bottom"></div>
+                <div class="filter-cinematic w-full h-full">
+                    <img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=1200" class="w-full h-full object-cover">
+                </div>
+                 <div class="absolute bottom-[15%] left-0 w-full text-center opacity-0 group-hover:opacity-100 transition-opacity duration-1000 z-30">
+                    <p class="font-cinematic text-yellow-400 text-sm tracking-[0.2em] shadow-black drop-shadow-md">SCENE 25 • "HAPPINESS"</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-24 bg-rose-50 relative">
+        <div class="absolute inset-0 bg-gradient-to-b from-white to-rose-100"></div>
+        <h2 class="section-title text-pink-400 relative z-10">Dreamy Pastel <span class="text-xs block font-mono text-gray-400 mt-2">TECHNIQUE: SOFT LIGHT + BLUR GLOW</span></h2>
+
+        <div class="grid grid-cols-2 gap-8 max-w-4xl mx-auto relative z-10 px-6">
+            <div class="relative aspect-[4/5] filter-dreamy rounded-[50px] overflow-hidden shadow-xl border-4 border-white">
+                <div class="bloom-effect bg-[url('media/3.jpeg')] bg-cover"></div>
+                <img src="media/3.jpeg" class="relative z-10 w-full h-full object-cover">
+            </div>
+
+             <div class="relative aspect-[4/5] filter-dreamy rounded-[50px] overflow-hidden shadow-xl border-4 border-white mt-12">
+                <div class="bloom-effect bg-[url('media/4.jpeg')] bg-cover"></div>
+                <img src="media/4.jpeg" class="relative z-10 w-full h-full object-cover">
+            </div>
+        </div>
+        
+        <div class="absolute top-20 left-10 text-4xl animate-bounce">🌸</div>
+        <div class="absolute bottom-20 right-10 text-4xl animate-bounce delay-700">✨</div>
+    </section>
+
+    <section class="py-24 bg-[#050505]">
+        <h2 class="section-title text-white">Monochrome <span class="text-xs block font-mono text-gray-500 mt-2">TECHNIQUE: HIGH CONTRAST B&W + GRAIN</span></h2>
+        
+        <div class="flex flex-col md:flex-row h-[80vh] w-full">
+            <div class="relative flex-1 overflow-hidden filter-bw group">
+                <div class="grain-overlay"></div>
+                <img src="media/5.jpeg" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                    <p class="font-serif italic text-3xl">Timeless</p>
+                </div>
+            </div>
+            <div class="relative flex-1 overflow-hidden filter-bw group border-l border-gray-800">
+                <div class="grain-overlay"></div>
+                <img src="media/1.jpeg" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                 <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                    <p class="font-serif italic text-3xl">Elegance</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-24 paper-texture overflow-hidden">
+        <h2 class="section-title text-gray-800">Scrapbook <span class="text-xs block font-mono text-gray-500 mt-2">TECHNIQUE: STICKERS + CHAOS</span></h2>
+
+        <div class="relative w-full h-[100vh] max-w-6xl mx-auto">
+            <div class="scrap-item absolute top-10 left-10 md:left-20 w-64 p-2 bg-white shadow-lg rotate-[-5deg]">
+                <img src="media/2.jpeg" class="w-full aspect-square object-cover">
+                <div class="text-center font-hand text-black text-xl mt-2">Cute!</div>
+                <img src="https://cdn-icons-png.flaticon.com/512/763/763815.png" class="absolute -top-4 -right-4 w-12 opacity-80">
+            </div>
+
+            <div class="scrap-item absolute top-40 right-10 md:right-40 w-56 p-2 bg-white shadow-lg rotate-[10deg]">
+                <img src="media/3.jpeg" class="w-full aspect-[3/4] object-cover">
+                <div class="absolute -top-3 left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-red-400 opacity-50"></div>
+            </div>
+
+            <div class="scrap-item absolute bottom-20 left-1/4 w-72 p-4 bg-white shadow-xl rotate-[-2deg]">
+                <img src="media/4.jpeg" class="w-full aspect-video object-cover grayscale hover:grayscale-0 transition-all">
+                <p class="font-hand text-2xl text-center mt-2">Memories...</p>
+                <div class="absolute -bottom-2 -right-2 font-mono text-xs bg-black text-white px-2">FEB 14</div>
+            </div>
+
+             <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-9xl opacity-10 font-emotional text-gray-400 pointer-events-none">
+                 Love
+             </div>
+        </div>
+    </section>
 
     <script>
-        // Filter logic
-        const buttons = document.querySelectorAll('#filter-nav button');
-        const sections = document.querySelectorAll('section');
+        // Initialize Smooth Scroll
+        const lenis = new Lenis({ duration: 1.2, smooth: true });
+        function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+        requestAnimationFrame(raf);
 
-        buttons.forEach(btn => {
-            btn.addEventListener('click', () => {
-                buttons.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                const filter = btn.dataset.filter;
-                sections.forEach(sec => {
-                    sec.classList.toggle('active', filter === 'all' || sec.id === filter);
-                });
+        // GSAP Animations
+        gsap.utils.toArray('section').forEach(section => {
+            gsap.from(section.querySelector('h2'), {
+                y: 50, opacity: 0, duration: 1,
+                scrollTrigger: { trigger: section, start: "top 70%" }
             });
         });
-
-        // ─────────────── Lightbox with smooth swipe ───────────────
-        const lightbox = document.getElementById('lightbox');
-        const slider = document.getElementById('lightbox-slider');
-        const closeBtn = document.getElementById('close');
-        const prevBtn = document.getElementById('prev');
-        const nextBtn = document.getElementById('next');
-
-        let currentItems = [];
-        let currentIndex = 0;
-        let touchStartX = 0;
-        let touchEndX = 0;
-        let touchStartY = 0;
-        let touchDiffX = 0;
-        const SWIPE_THRESHOLD = 70;
-
-        function openLightbox(index, items) {
-            currentItems = items;
-            currentIndex = index;
-            renderSlides();
-            updatePosition();
-            lightbox.classList.add('active');
-        }
-
-        function renderSlides() {
-            slider.innerHTML = '';
-            currentItems.forEach((item, i) => {
-                const slide = document.createElement('div');
-                slide.className = 'lightbox-slide';
-
-                const isVideo = item.querySelector('video') || item.dataset.type === 'video';
-                let content = '';
-
-                if (isVideo) {
-                    const videoSrc = item.querySelector('source')?.src || item.querySelector('video')?.currentSrc || '';
-                    content = `<video controls autoplay loop>
-                        <source src="${videoSrc}" type="video/mp4">
-                        Your browser does not support video.
-                    </video>`;
-                } else {
-                    const imgSrc = item.querySelector('img').src;
-                    content = `<img src="${imgSrc}" alt="Full view">`;
-                }
-
-                slide.innerHTML = content;
-                slider.appendChild(slide);
-            });
-        }
-
-        function updatePosition() {
-            slider.style.transform = `translateX(-${currentIndex * 100}%)`;
-        }
-
-        function nextMedia() {
-            if (currentIndex < currentItems.length - 1) {
-                currentIndex++;
-                updatePosition();
+        
+        // Parallax for Scrapbook Items
+        gsap.to('.scrap-item', {
+            y: (i) => (i + 1) * -30,
+            ease: "none",
+            scrollTrigger: {
+                trigger: ".paper-texture",
+                start: "top bottom",
+                end: "bottom top",
+                scrub: 1
             }
-        }
-
-        function prevMedia() {
-            if (currentIndex > 0) {
-                currentIndex--;
-                updatePosition();
-            }
-        }
-
-        // Open lightbox
-        document.querySelectorAll('.gallery-item').forEach(item => {
-            item.addEventListener('click', e => {
-                if (e.target.closest('video')) return;
-                const visibleSection = document.querySelector('section.active');
-                const visibleItems = visibleSection ? visibleSection.querySelectorAll('.gallery-item') : [];
-                const index = Array.from(visibleItems).indexOf(item);
-                openLightbox(index, visibleItems);
-            });
         });
-
-        // Controls
-        closeBtn.addEventListener('click', () => lightbox.classList.remove('active'));
-        lightbox.addEventListener('click', e => { if (e.target === lightbox) lightbox.classList.remove('active'); });
-        nextBtn.addEventListener('click', nextMedia);
-        prevBtn.addEventListener('click', prevMedia);
-
-        // Keyboard
-        document.addEventListener('keydown', e => {
-            if (!lightbox.classList.contains('active')) return;
-            if (e.key === 'Escape') lightbox.classList.remove('active');
-            if (e.key === 'ArrowRight') nextMedia();
-            if (e.key === 'ArrowLeft') prevMedia();
-        });
-
-        // ─────────────── Swipe with smooth animation ───────────────
-        lightbox.addEventListener('touchstart', e => {
-            touchStartX = e.changedTouches[0].screenX;
-            touchStartY = e.changedTouches[0].screenY;
-            touchDiffX = 0;
-            slider.style.transition = 'none';
-        }, { passive: false });
-
-        lightbox.addEventListener('touchmove', e => {
-            touchDiffX = e.changedTouches[0].screenX - touchStartX;
-            const diffY = Math.abs(e.changedTouches[0].screenY - touchStartY);
-
-            // Only allow horizontal swipe if movement is mostly horizontal
-            if (diffY < 40) {
-                e.preventDefault();
-                slider.style.transform = `translateX(calc(-${currentIndex * 100}% + ${touchDiffX}px))`;
-            }
-        }, { passive: false });
-
-        lightbox.addEventListener('touchend', e => {
-            touchEndX = e.changedTouches[0].screenX;
-            slider.style.transition = 'transform 0.45s cubic-bezier(0.32, 0.72, 0.1, 1)';
-
-            const diffX = touchStartX - touchEndX;
-
-            if (Math.abs(diffX) > SWIPE_THRESHOLD) {
-                if (diffX > 0) {
-                    nextMedia();
-                } else {
-                    prevMedia();
-                }
-            } else {
-                // Snap back if swipe was too small
-                updatePosition();
-            }
-        }, { passive: false });
     </script>
 </body>
 </html>
