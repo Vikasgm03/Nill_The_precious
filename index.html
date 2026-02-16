@@ -3,50 +3,311 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Initialize</title>
+    <title>The Celestial Decree</title>
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@300;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <style>
-        body { background: #000; color: #0ff; overflow: hidden; font-family: monospace; }
-        .ring { 
-            position: absolute; border: 1px solid rgba(0, 255, 255, 0.3); border-radius: 50%;
-            top: 50%; left: 50%; transform: translate(-50%, -50%);
+        /* --- THEME VARIABLES --- */
+        :root {
+            --gold: #d4af37;
+            --gold-glow: #ffd700;
+            --space-dark: #050505;
+            --glass-bg: rgba(20, 10, 30, 0.6);
+            --glass-border: rgba(212, 175, 55, 0.3);
         }
-        .core {
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            width: 100px; height: 100px; background: #0ff; border-radius: 50%;
-            box-shadow: 0 0 50px #0ff; opacity: 0.5; cursor: pointer; transition: all 0.3s;
+
+        body {
+            background-color: var(--space-dark);
+            color: white;
+            font-family: 'Montserrat', sans-serif;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
         }
-        .core:hover { transform: translate(-50%, -50%) scale(1.1); opacity: 0.8; }
-        .core:active { transform: translate(-50%, -50%) scale(0.9); }
+
+        /* --- BACKGROUND --- */
+        #star-canvas {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+        }
+
+        /* --- THE ARTIFACT (The Invitation) --- */
+        .artifact-container {
+            perspective: 1000px;
+            z-index: 10;
+        }
+
+        .celestial-tablet {
+            width: 320px;
+            /* Initial closed height */
+            height: 200px; 
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-top: 4px solid var(--gold);
+            border-bottom: 4px solid var(--gold);
+            border-radius: 4px;
+            box-shadow: 0 0 40px rgba(0,0,0,0.8), 0 0 15px rgba(212, 175, 55, 0.2);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: height 1s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s ease;
+            overflow: hidden;
+        }
+
+        .celestial-tablet::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, transparent 40%);
+            pointer-events: none;
+        }
+
+        /* --- THE COSMIC LOCK (The Seal) --- */
+        .cosmic-lock {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 2px solid var(--gold);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 20;
+            background: radial-gradient(circle, #2e1065 0%, #000 100%);
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+            transition: all 0.5s ease;
+        }
+
+        .cosmic-lock:hover {
+            box-shadow: 0 0 40px var(--gold-glow);
+            transform: translate(-50%, -50%) scale(1.1);
+        }
+
+        .rune-ring {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 1px dashed var(--gold);
+            animation: spin 10s linear infinite;
+        }
+
+        .lock-icon {
+            font-size: 24px;
+            color: var(--gold);
+            transition: opacity 0.3s;
+        }
+
+        /* --- THE HIDDEN MESSAGE --- */
+        .message-content {
+            opacity: 0;
+            transform: translateY(20px);
+            text-align: center;
+            padding: 20px;
+            display: flex;
+            flex-col;
+            align-items: center;
+            pointer-events: none; /* Disabled until open */
+            width: 100%;
+        }
+
+        .royal-title {
+            font-family: 'Cinzel', serif;
+            color: var(--gold);
+            font-size: 1.8rem;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .royal-text {
+            font-size: 0.9rem;
+            color: #e0e0e0;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .warp-btn {
+            background: transparent;
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            padding: 10px 30px;
+            font-family: 'Cinzel', serif;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .warp-btn:hover {
+            background: var(--gold);
+            color: #000;
+            box-shadow: 0 0 20px var(--gold);
+        }
+
+        /* --- ANIMATIONS --- */
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
+        /* State Classes */
+        .unlocked .cosmic-lock {
+            opacity: 0;
+            pointer-events: none;
+            transform: translate(-50%, -50%) scale(0);
+        }
+
+        .unlocked .celestial-tablet {
+            height: 450px; /* Expands */
+            border-color: #fff;
+            box-shadow: 0 0 60px rgba(212, 175, 55, 0.3);
+        }
+        
+        .unlocked .message-content {
+            pointer-events: auto;
+        }
     </style>
 </head>
 <body>
-    
-    <div class="ring w-[300px] h-[300px] animate-[spin_10s_linear_infinite]"></div>
-    <div class="ring w-[500px] h-[500px] animate-[spin_15s_linear_infinite_reverse] border-dashed"></div>
-    <div class="ring w-[700px] h-[700px] animate-[spin_20s_linear_infinite] opacity-30"></div>
 
-    <div class="absolute bottom-20 w-full text-center">
-        <p id="status" class="tracking-[0.5em] text-xs">TOUCH THE CORE TO INITIALIZE</p>
+    <canvas id="star-canvas"></canvas>
+
+    <div class="artifact-container">
+        
+        <div class="celestial-tablet" id="tablet">
+            
+            <div class="cosmic-lock" onclick="unlockDecree()">
+                <div class="rune-ring"></div>
+                <div class="rune-ring" style="width: 70%; height: 70%; animation-direction: reverse; border-style: dotted;"></div>
+                <i class="fas fa-fingerprint lock-icon"></i>
+            </div>
+
+            <div class="message-content" id="message">
+                <div class="mb-4 text-xs tracking-[0.3em] text-gray-400 uppercase">Incoming Transmission</div>
+                <h1 class="royal-title">The Stars<br>Await You</h1>
+                <div class="w-16 h-1 bg-gradient-to-r from-transparent via-[#d4af37] to-transparent mb-6"></div>
+                <p class="royal-text">
+                    Identity Verified.<br>
+                    Timeline Synchronized.<br>
+                    The portal to the celebration is ready.
+                </p>
+                <button class="warp-btn" onclick="engageWarp()">
+                    ENTER REALITY
+                </button>
+            </div>
+        </div>
     </div>
 
-    <div class="core flex items-center justify-center text-black font-bold tracking-widest" onclick="warpSpeed()">
-        GO
+    <div class="absolute bottom-10 text-center opacity-50" id="hint">
+        <p class="text-[10px] tracking-[0.5em] text-[#d4af37]">TOUCH THE SEAL TO DECRYPT</p>
     </div>
 
     <script>
-        function warpSpeed() {
-            const core = document.querySelector('.core');
-            const status = document.getElementById('status');
-            
-            status.innerText = "ACCELERATING...";
-            
-            // Animation sequence
-            gsap.to(core, { scale: 50, duration: 2, ease: "expo.in" });
-            gsap.to(".ring", { opacity: 0, scale: 0.1, duration: 1 });
-            gsap.to("body", { backgroundColor: "#fff", delay: 1.8, duration: 0.2 });
+        // --- STARFIELD BACKGROUND (Sci-Fi) ---
+        const canvas = document.getElementById('star-canvas');
+        const ctx = canvas.getContext('2d');
+        let w, h;
+        const stars = [];
 
+        function resize() {
+            w = canvas.width = window.innerWidth;
+            h = canvas.height = window.innerHeight;
+        }
+        
+        function initStars() {
+            resize();
+            for(let i=0; i<200; i++) {
+                stars.push({
+                    x: Math.random() * w,
+                    y: Math.random() * h,
+                    size: Math.random() * 2,
+                    blink: Math.random()
+                });
+            }
+        }
+
+        function animateStars() {
+            ctx.clearRect(0, 0, w, h);
+            ctx.fillStyle = "white";
+            
+            stars.forEach(star => {
+                ctx.globalAlpha = Math.abs(Math.sin(Date.now() / 1000 * star.blink));
+                ctx.beginPath();
+                ctx.arc(star.x, star.y, star.size, 0, Math.PI*2);
+                ctx.fill();
+            });
+            requestAnimationFrame(animateStars);
+        }
+
+        window.addEventListener('resize', resize);
+        initStars();
+        animateStars();
+
+        // --- INTERACTION LOGIC ---
+        
+        function unlockDecree() {
+            const tablet = document.getElementById('tablet');
+            const message = document.getElementById('message');
+            const hint = document.getElementById('hint');
+            const lockIcon = document.querySelector('.lock-icon');
+
+            // 1. Lock Animation (Spin faster and unlock)
+            gsap.to('.rune-ring', { rotation: 720, duration: 1, ease: "back.in(1.7)" });
+            gsap.to(lockIcon, { opacity: 0, duration: 0.5 });
+            
+            // 2. Expand Tablet
+            setTimeout(() => {
+                document.body.classList.add('unlocked');
+                gsap.to(hint, { opacity: 0 });
+                
+                // 3. Reveal Text
+                gsap.to(message, { 
+                    opacity: 1, 
+                    y: 0, 
+                    duration: 1.5, 
+                    delay: 0.8, 
+                    ease: "power3.out" 
+                });
+            }, 800);
+        }
+
+        function engageWarp() {
+            // Sci-Fi Warp Effect
+            const btn = document.querySelector('.warp-btn');
+            
+            // 1. Text changes
+            btn.innerHTML = "INITIATING...";
+            
+            // 2. Fly into camera
+            gsap.to('.artifact-container', { 
+                scale: 50, 
+                opacity: 0, 
+                duration: 1.5, 
+                ease: "expo.in" 
+            });
+
+            // 3. Screen Flash
+            gsap.to('body', { 
+                backgroundColor: "#fff9f0", 
+                duration: 1.5, 
+                delay: 1 
+            });
+
+            // 4. Redirect
             setTimeout(() => {
                 window.location.href = 'home.html';
             }, 2000);
