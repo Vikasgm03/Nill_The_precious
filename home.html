@@ -314,241 +314,206 @@ body.scroll-locked {
         </section>
     </div>
 
-    <script>
-        const app = {
-            init: function() {
-                // 1. Mobile Detection
-                const isMobile = window.innerWidth < 768;
+const app = {
+    init: function() {
+        const isMobile = window.innerWidth < 768;
 
-                // 2. Initialize Lenis ONLY on Desktop
-                if (!isMobile) {
-                    const lenis = new Lenis({
-                        duration: 1.2,
-                        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-                        direction: 'vertical',
-                        smooth: true
-                    });
-                    function raf(time) {
-                        lenis.raf(time);
-                        requestAnimationFrame(raf);
-                    }
-                    requestAnimationFrame(raf);
-                }
-
-                // 3. Cursor (Desktop Only)
-                if (!isMobile && window.matchMedia("(hover: hover)").matches) {
-                    const dot = document.querySelector('.cursor-dot');
-                    const outline = document.querySelector('.cursor-outline');
-                    window.addEventListener('mousemove', e => {
-                        gsap.to(dot, { x: e.clientX, y: e.clientY, duration: 0.1 });
-                        gsap.to(outline, { x: e.clientX, y: e.clientY, duration: 0.15 });
-                    });
-                }
-                
-                this.initIntro();
-                this.initStarMap(isMobile); // Pass mobile flag
-                this.initScroll();
-                
-                // Only run heavy particle systems on desktop
-                if(!isMobile) {
-                    this.initPhotoStars(); 
-                }
-                this.initMosaic(isMobile); 
-            },
-
-           initIntro: function() {
-    const intro = document.getElementById('intro-screen');
-    const urlParams = new URLSearchParams(window.location.search);
-    const skipIntro = urlParams.get('skipIntro');
-
-    // 1. CHECK IF WE SHOULD SKIP THE WELCOME SCREEN
-    if (skipIntro === 'true') {
-        if (intro) intro.style.display = 'none'; // Hide intro immediately
-        document.body.classList.remove('scroll-locked'); // Unlock scroll
-        
-        // Ensure hero elements are visible immediately
-        gsap.set(".hero-text", { y: 0, opacity: 1 });
-        
-        // Handle the smooth scroll to the anchor
-        if (window.location.hash) {
-            const target = document.querySelector(window.location.hash);
-            if (target) {
-                // Wait a tiny moment for the browser to render
-                setTimeout(() => {
-                    if (typeof lenis !== 'undefined') {
-                        lenis.scrollTo(target, { offset: 0, duration: 0 }); // Instant jump
-                    } else {
-                        target.scrollIntoView();
-                    }
-                }, 100);
-            }
-        }
-        return; // Stop the rest of the intro logic from running
-    }
-
-    // 2. NORMAL FLOW (If not returning from a sub-page)
-    document.body.classList.add('scroll-locked');
-    if(typeof lenis !== 'undefined') lenis.stop();
-
-    if(intro) {
-        intro.addEventListener('click', () => {
-            // ... your existing click-to-enter code ...
-            gsap.to(intro, { 
-                opacity: 0, 
-                duration: 1.5, 
-                onComplete: () => {
-                    intro.style.display = 'none';
-                    document.body.classList.remove('scroll-locked');
-                    if(typeof lenis !== 'undefined') lenis.start();
-                }
+        // 1. Initialize Lenis (Desktop Only)
+        if (!isMobile) {
+            window.lenis = new Lenis({
+                duration: 1.2,
+                easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+                smooth: true
             });
+            function raf(time) {
+                lenis.raf(time);
+                requestAnimationFrame(raf);
+            }
+            requestAnimationFrame(raf);
+        }
+
+        // 2. Cursor (Desktop Only)
+        if (!isMobile && window.matchMedia("(hover: hover)").matches) {
+            const dot = document.querySelector('.cursor-dot');
+            const outline = document.querySelector('.cursor-outline');
+            window.addEventListener('mousemove', e => {
+                gsap.to(dot, { x: e.clientX, y: e.clientY, duration: 0.1 });
+                gsap.to(outline, { x: e.clientX, y: e.clientY, duration: 0.15 });
+            });
+        }
+
+        this.initIntro();
+        this.initStarMap(isMobile);
+        this.initScroll();
+        this.initMosaic(isMobile);
+
+        if (!isMobile) {
+            this.initPhotoStars();
+        }
+    },
+
+    initIntro: function() {
+        const intro = document.getElementById('intro-screen');
+        const urlParams = new URLSearchParams(window.location.search);
+        const skipIntro = urlParams.get('skipIntro');
+        const hash = window.location.hash;
+
+        // LOCK SCROLL IMMEDIATELY
+        document.body.classList.add('scroll-locked');
+        if (window.lenis) lenis.stop();
+
+        // 1. SKIP INTRO LOGIC (For "Return to Realm" buttons)
+        if (skipIntro === 'true') {
+            if (intro) intro.style.display = 'none';
+            document.body.classList.remove('scroll-locked');
+            gsap.set(".hero-text", { y: 0, opacity: 1 });
+
+            if (hash) {
+                const target = document.querySelector(hash);
+                if (target) {
+                    setTimeout(() => {
+                        if (window.lenis) {
+                            lenis.start();
+                            lenis.scrollTo(target, { offset: 0, duration: 0 });
+                        } else {
+                            target.scrollIntoView();
+                        }
+                    }, 100);
+                }
+            }
+            return;
+        }
+
+        // 2. NORMAL FLOW
+        if (intro) {
+            const enterRealm = () => {
+                gsap.to('.fade-elem', { y: -20, opacity: 0, stagger: 0.1, duration: 0.8 });
+                gsap.to(intro, {
+                    opacity: 0,
+                    duration: 1.2,
+                    ease: "power2.inOut",
+                    onComplete: () => {
+                        intro.style.display = 'none';
+                        document.body.classList.remove('scroll-locked');
+                        if (window.lenis) {
+                            window.lenis.start();
+                            // If user refreshed on a hash but didn't skip intro
+                            if (hash) {
+                                const target = document.querySelector(hash);
+                                if (target) lenis.scrollTo(target, { offset: 0, duration: 2 });
+                            }
+                        }
+                    }
+                });
+            };
+            intro.addEventListener('click', enterRealm);
+        }
+    },
+
+    initStarMap: function(isMobile) {
+        const canvas = document.getElementById('star-canvas');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        let w, h;
+        const stars = [];
+        const resize = () => { w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; };
+        window.addEventListener('resize', resize);
+        resize();
+
+        const starCount = isMobile ? 30 : 100;
+        for (let i = 0; i < starCount; i++) {
+            stars.push({ x: Math.random() * w, y: Math.random() * h, r: Math.random() * 2, speed: Math.random() * 0.5 });
+        }
+
+        const animate = () => {
+            ctx.clearRect(0, 0, w, h);
+            ctx.fillStyle = "#fcf6ba";
+            stars.forEach(s => {
+                s.y -= s.speed;
+                if (s.y < 0) s.y = h;
+                ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2); ctx.fill();
+            });
+            requestAnimationFrame(animate);
+        };
+        animate();
+    },
+
+    initScroll: function() {
+        gsap.utils.toArray('.scroll-reveal').forEach(elem => {
+            gsap.to(elem, { y: 0, opacity: 1, duration: 1.5, scrollTrigger: { trigger: elem, start: "top 85%" } });
         });
-    }
-}
+        gsap.from(".poetry-card", { scale: 0.95, opacity: 0, duration: 1, scrollTrigger: { trigger: ".poetry-card", start: "top 80%" } });
+        gsap.utils.toArray('.poetry-line').forEach((line, i) => {
+            gsap.to(line, { opacity: 1, y: 0, duration: 1, delay: i * 0.1, scrollTrigger: { trigger: ".poetry-card", start: "top 70%" } });
+        });
+    },
 
-            initStarMap: function(isMobile) {
-                const canvas = document.getElementById('star-canvas');
-                if(!canvas) return; 
-                const ctx = canvas.getContext('2d');
-                let w, h;
-                const stars = [];
-                const resize = () => { w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; };
-                window.addEventListener('resize', resize);
-                resize();
-                
-                // drastically reduce stars on mobile
-                const starCount = isMobile ? 30 : 100;
-                
-                for(let i=0; i<starCount; i++) stars.push({ x: Math.random()*w, y: Math.random()*h, r: Math.random()*2, speed: Math.random() * 0.5 });
-                
-                const animate = () => {
-                    ctx.clearRect(0,0,w,h);
-                    ctx.fillStyle = "#fcf6ba"; 
-                    stars.forEach(s => {
-                        s.y -= s.speed; 
-                        if(s.y < 0) s.y = h;
-                        ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI*2); ctx.fill();
-                    });
-                    requestAnimationFrame(animate);
-                };
-                animate();
-            },
-
-            initScroll: function() {
-                // Simplified scroll animations
-                gsap.utils.toArray('.scroll-reveal').forEach(elem => {
-                    gsap.to(elem, { y: 0, opacity: 1, duration: 1.5, scrollTrigger: { trigger: elem, start: "top 85%" } });
-                });
-                
-                gsap.from(".poetry-card", { scale: 0.95, opacity: 0, duration: 1, scrollTrigger: { trigger: ".poetry-card", start: "top 80%" } });
-                
-                gsap.utils.toArray('.poetry-line').forEach((line, i) => {
-                    gsap.to(line, { opacity: 1, y: 0, duration: 1, delay: i * 0.1, scrollTrigger: { trigger: ".poetry-card", start: "top 70%" } });
-                });
-            },
-
-            initPhotoStars: function() {
-                // Desktop only feature
-                const container = document.getElementById('photo-universe');
-                if(!container) return;
-                const images = ['media/1.jpeg', 'media/2.jpeg', 'media/3.jpeg', 'media/4.jpeg'];
-                const fragment = document.createDocumentFragment(); 
-                for(let i = 0; i < 12; i++) { 
-                    const div = document.createElement('div');
-                    div.classList.add('photo-star');
-                    const size = Math.random() * 20 + 20; 
-                    const duration = Math.random() * 10 + 10; 
-                    div.style.left = `${Math.random() * 100}%`;
-                    div.style.top = `${Math.random() * 100}%`;
-                    div.style.width = `${size}px`;
-                    div.style.height = `${size}px`; 
-                    div.style.backgroundImage = `url('${images[Math.floor(Math.random() * images.length)]}')`;
-                    div.style.backgroundSize = 'cover';
-                    div.style.animationDuration = `${duration}s`;
-                    fragment.appendChild(div);
-                }
-                container.appendChild(fragment);
-            },
-
-            initMosaic: function(isMobile) {
-                const grid = document.getElementById('mosaic-grid');
-                if(!grid) return;
-                // Reduce tiles on mobile
-                const tileCount = isMobile ? 30 : 80;
-                
-                const fragment = document.createDocumentFragment();
-                for(let i=0; i<tileCount; i++) { 
-                    const div = document.createElement('div');
-                    div.classList.add('mosaic-tile', 'w-full', 'h-16', 'md:h-24', 'opacity-20');
-                    fragment.appendChild(div);
-                }
-                grid.appendChild(fragment);
-                
-                // Optimized Loop
-                const tiles = Array.from(grid.children);
-                setInterval(() => {
-                    if (tiles.length > 0) {
-                        const randomTile = tiles[Math.floor(Math.random() * tiles.length)];
-                        randomTile.classList.add('active');
-                        setTimeout(() => randomTile.classList.remove('active'), 500);
-                    }
-                }, 200); // Slower interval
-            }
-        }; 
-
-        // --- NAVIGATION ---
-        window.enterPortal = () => {
-            gsap.to("body", { backgroundColor: "#000", duration: 0.5 });
-            setTimeout(() => window.location.href = 'timetravel.html', 500);
-        };
-        window.enterMemories = () => {
-            gsap.to("body", { backgroundColor: "#fff", duration: 0.5 });
-            setTimeout(() => window.location.href = 'memories.html', 500);
-        };
-        window.enterWishes = () => {
-            gsap.to("body", { backgroundColor: "#000", duration: 0.5 });
-            setTimeout(() => window.location.href = 'wishes.html', 500);
-        };
-        window.enterGallery = () => {
-            gsap.to("body", { backgroundColor: "#000", opacity: 0, duration: 0.5 });
-            setTimeout(() => window.location.href = 'gallery.html', 500);
-        };
-        window.enterCake = () => {
-            gsap.to('.cake-target', { scale: 50, opacity: 0, duration: 1 });
-            setTimeout(() => window.location.href = 'cake.html', 1000);
-        };
-
-        window.addEventListener('DOMContentLoaded', () => app.init());
-
-        window.addEventListener('load', () => {
-    // Check if the URL has #timetravel-anchor
-    if (window.location.hash === '#timetravel-anchor') {
-        const target = document.getElementById('timetravel-anchor');
-        
-        if (target) {
-            // We wait for the user to click the "Enter" button on the intro screen
-            const intro = document.getElementById('intro-screen');
-            
-            intro.addEventListener('click', () => {
-                // Give the intro fade-out a tiny headstart
-                setTimeout(() => {
-                    if (typeof lenis !== 'undefined') {
-                        // Smoothly glide to the section
-                        lenis.scrollTo(target, { 
-                            offset: 0, 
-                            duration: 2,
-                            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t))
-                        });
-                    } else {
-                        // Fallback if lenis isn't loaded
-                        target.scrollIntoView({ behavior: 'smooth' });
-                    }
-                }, 800); 
-            });
+    initPhotoStars: function() {
+        const container = document.getElementById('photo-universe');
+        if (!container) return;
+        const images = ['media/1.jpeg', 'media/2.jpeg', 'media/3.jpeg', 'media/4.jpeg'];
+        const fragment = document.createDocumentFragment();
+        for (let i = 0; i < 12; i++) {
+            const div = document.createElement('div');
+            div.classList.add('photo-star');
+            const size = Math.random() * 20 + 20;
+            div.style.left = `${Math.random() * 100}%`;
+            div.style.top = `${Math.random() * 100}%`;
+            div.style.width = `${size}px`;
+            div.style.height = `${size}px`;
+            div.style.backgroundImage = `url('${images[Math.floor(Math.random() * images.length)]}')`;
+            div.style.backgroundSize = 'cover';
+            div.style.animationDuration = `${Math.random() * 10 + 10}s`;
+            fragment.appendChild(div);
         }
+        container.appendChild(fragment);
+    },
+
+    initMosaic: function(isMobile) {
+        const grid = document.getElementById('mosaic-grid');
+        if (!grid) return;
+        const tileCount = isMobile ? 30 : 80;
+        const fragment = document.createDocumentFragment();
+        for (let i = 0; i < tileCount; i++) {
+            const div = document.createElement('div');
+            div.classList.add('mosaic-tile', 'w-full', 'h-16', 'md:h-24', 'opacity-20');
+            fragment.appendChild(div);
+        }
+        grid.appendChild(fragment);
+
+        const tiles = Array.from(grid.children);
+        setInterval(() => {
+            if (tiles.length > 0) {
+                const randomTile = tiles[Math.floor(Math.random() * tiles.length)];
+                randomTile.classList.add('active');
+                setTimeout(() => randomTile.classList.remove('active'), 500);
+            }
+        }, 300);
     }
-});
-        
-    </script>
+};
+
+// --- NAVIGATION ---
+window.enterPortal = () => {
+    gsap.to("body", { backgroundColor: "#000", duration: 0.5 });
+    setTimeout(() => window.location.href = 'timetravel.html', 500);
+};
+window.enterMemories = () => {
+    gsap.to("body", { backgroundColor: "#fff", duration: 0.5 });
+    setTimeout(() => window.location.href = 'memories.html', 500);
+};
+window.enterWishes = () => {
+    gsap.to("body", { backgroundColor: "#000", duration: 0.5 });
+    setTimeout(() => window.location.href = 'wishes.html', 500);
+};
+window.enterGallery = () => {
+    gsap.to("body", { backgroundColor: "#000", opacity: 0, duration: 0.5 });
+    setTimeout(() => window.location.href = 'gallery.html', 500);
+};
+window.enterCake = () => {
+    gsap.to('.cake-target', { scale: 50, opacity: 0, duration: 1 });
+    setTimeout(() => window.location.href = 'cake.html', 1000);
+};
+
+window.addEventListener('DOMContentLoaded', () => app.init());
 </body>
 </html>
