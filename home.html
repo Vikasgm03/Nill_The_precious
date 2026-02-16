@@ -191,68 +191,61 @@
     }
 </style>
 
-<section class="min-h-screen bg-[#fff9f0] relative flex items-center justify-center py-24 overflow-hidden">
+<section class="min-h-screen relative flex items-center justify-center overflow-hidden bg-[#0f0c29]">
     
-    <div class="absolute inset-0 opacity-40 pointer-events-none" 
-         style="background-image: url('https://www.transparenttextures.com/patterns/cream-paper.png'); mix-blend-mode: multiply;"></div>
+    <div class="absolute inset-0 bg-gradient-to-br from-[#0f0c29] via-[#302b63] to-[#24243e]"></div>
+    <div class="absolute top-[-50%] left-[-50%] w-[200%] h-[200%] bg-[radial-gradient(circle_at_center,rgba(212,175,55,0.15)_0%,transparent_50%)] animate-[spin_60s_linear_infinite]"></div>
     
-    <div class="absolute top-20 left-10 w-64 h-64 bg-pink-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
-    <div class="absolute bottom-20 right-10 w-64 h-64 bg-yellow-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
+    <div class="absolute inset-0 opacity-30" style="background-image: url('https://www.transparenttextures.com/patterns/stardust.png');"></div>
 
-    <div class="max-w-3xl mx-auto px-6 relative z-10">
+    <div class="relative z-10 mx-6 p-1 rounded-3xl bg-gradient-to-b from-white/20 to-transparent shadow-[0_0_50px_rgba(0,0,0,0.5)] backdrop-blur-sm poetry-card transform transition-transform duration-700 hover:scale-[1.02]">
         
-        <div class="text-center mb-16 scroll-reveal opacity-0">
-            <span class="text-xs font-mono tracking-[0.5em] text-gray-400 uppercase">From the Heart</span>
-            <div class="w-[1px] h-12 bg-gray-300 mx-auto mt-4 mb-4"></div>
-            <i class="fas fa-feather-alt text-3xl text-[#d4af37]"></i>
-        </div>
-
-        <div class="space-y-12 text-center">
+        <div class="bg-[#0a0a0a]/80 backdrop-blur-xl rounded-[22px] p-8 md:p-16 text-center border border-white/10 relative overflow-hidden">
             
-            <div class="poetry-line opacity-0 translate-y-8 blur-sm transition-all duration-1000">
-                <p class="text-3xl md:text-5xl font-['Dancing_Script'] text-gray-800 leading-relaxed">
-                    "Nill, agbedi nivu <span class="text-pink-400">dull</span>,"
-                </p>
+            <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-1 bg-gradient-to-r from-transparent via-[#d4af37] to-transparent shadow-[0_0_20px_#d4af37]"></div>
+
+            <i class="fas fa-quote-left text-3xl text-white/10 mb-8 block"></i>
+
+            <div class="space-y-10">
+                <div class="poetry-line opacity-0 translate-y-10">
+                    <p class="text-2xl md:text-4xl font-light text-gray-300 font-sans tracking-wide">
+                        "Nill, agbedi nivu <span class="text-white font-bold drop-shadow-[0_0_10px_white]">dull</span>,"
+                    </p>
+                </div>
+
+                <div class="poetry-line opacity-0 translate-y-10">
+                    <p class="text-2xl md:text-4xl font-light text-gray-300 font-sans tracking-wide">
+                        Nimna nodudhee baruthhe <span class="text-[#d4af37] font-bold font-emotional text-4xl md:text-5xl">smile</span>,
+                    </p>
+                </div>
+
+                <div class="poetry-line opacity-0 translate-y-10">
+                    <p class="text-2xl md:text-4xl font-light text-gray-300 font-sans tracking-wide">
+                        Nim smile alle madthira <span class="text-red-500 font-bold drop-shadow-[0_0_15px_red]">kill</span>,
+                    </p>
+                </div>
+
+                <div class="poetry-line opacity-0 translate-y-10 pt-6">
+                    <p class="text-xl md:text-3xl text-gray-400 mb-2">Nimna nodthidhre kunyutthe...</p>
+                    <div class="relative inline-block">
+                        <h2 class="text-5xl md:text-7xl font-cinematic font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#d4af37] via-[#fff] to-[#d4af37] animate-gradient-text">
+                            NANNA DILL
+                        </h2>
+                        <i class="fas fa-heart text-2xl text-red-500 absolute -top-4 -right-8 animate-bounce"></i>
+                    </div>
+                </div>
             </div>
 
-            <div class="poetry-line opacity-0 translate-y-8 blur-sm transition-all duration-1000 delay-200">
-                <p class="text-3xl md:text-5xl font-['Dancing_Script'] text-gray-800 leading-relaxed">
-                    Nimna nodudhee baruthhe <span class="text-[#d4af37]">smile</span>,
-                </p>
-            </div>
-
-            <div class="poetry-line opacity-0 translate-y-8 blur-sm transition-all duration-1000 delay-400">
-                <p class="text-3xl md:text-5xl font-['Dancing_Script'] text-gray-800 leading-relaxed">
-                    Nim smile alle madthira <span class="text-red-400">kill</span>,
-                </p>
-            </div>
-
-            <div class="poetry-line opacity-0 translate-y-8 blur-sm transition-all duration-1000 delay-600">
-                <p class="text-4xl md:text-6xl font-['Dancing_Script'] font-bold text-gray-900 leading-relaxed scale-110">
-                    Nimna nodthidhre kunyutthe... <br>
-                    <span class="text-[#d4af37] text-5xl md:text-7xl">nanna dill. ❤️</span>
-                </p>
-            </div>
+            <i class="fas fa-quote-right text-3xl text-white/10 mt-12 block"></i>
 
         </div>
-
-        <div class="mt-24 text-center opacity-0 scroll-reveal">
-            <p class="font-mono text-xs text-gray-400 tracking-widest uppercase mb-4">- Written just for you -</p>
-        </div>
-
     </div>
 </section>
 
 <style>
-    /* Slow blob animation for background */
-    @keyframes blob {
-        0% { transform: translate(0px, 0px) scale(1); }
-        33% { transform: translate(30px, -50px) scale(1.1); }
-        66% { transform: translate(-20px, 20px) scale(0.9); }
-        100% { transform: translate(0px, 0px) scale(1); }
-    }
-    .animate-blob { animation: blob 7s infinite; }
-    .animation-delay-2000 { animation-delay: 2s; }
+    @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    .animate-gradient-text { background-size: 200% auto; animation: textShine 3s linear infinite; }
+    @keyframes textShine { to { background-position: 200% center; } }
 </style>
 
         <section class="relative h-screen bg-[#1a0b2e] flex items-center justify-center overflow-hidden">
