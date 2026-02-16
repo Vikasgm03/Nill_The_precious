@@ -356,16 +356,55 @@ body.scroll-locked {
                 this.initMosaic(isMobile); 
             },
 
-            initIntro: function() {
-                const intro = document.getElementById('intro-screen');
-                if(intro) {
-                    intro.addEventListener('click', () => {
-                        gsap.to('.fade-elem', { y: -20, opacity: 0, stagger: 0.1 });
-                        gsap.to(intro, { opacity: 0, duration: 1.5, pointerEvents: 'none' });
-                        gsap.to(".hero-text", { y: 0, opacity: 1, duration: 2, stagger: 0.3, delay: 0.5, ease: "power2.out" });
-                    });
+           initIntro: function() {
+    const intro = document.getElementById('intro-screen');
+    const urlParams = new URLSearchParams(window.location.search);
+    const skipIntro = urlParams.get('skipIntro');
+
+    // 1. CHECK IF WE SHOULD SKIP THE WELCOME SCREEN
+    if (skipIntro === 'true') {
+        if (intro) intro.style.display = 'none'; // Hide intro immediately
+        document.body.classList.remove('scroll-locked'); // Unlock scroll
+        
+        // Ensure hero elements are visible immediately
+        gsap.set(".hero-text", { y: 0, opacity: 1 });
+        
+        // Handle the smooth scroll to the anchor
+        if (window.location.hash) {
+            const target = document.querySelector(window.location.hash);
+            if (target) {
+                // Wait a tiny moment for the browser to render
+                setTimeout(() => {
+                    if (typeof lenis !== 'undefined') {
+                        lenis.scrollTo(target, { offset: 0, duration: 0 }); // Instant jump
+                    } else {
+                        target.scrollIntoView();
+                    }
+                }, 100);
+            }
+        }
+        return; // Stop the rest of the intro logic from running
+    }
+
+    // 2. NORMAL FLOW (If not returning from a sub-page)
+    document.body.classList.add('scroll-locked');
+    if(typeof lenis !== 'undefined') lenis.stop();
+
+    if(intro) {
+        intro.addEventListener('click', () => {
+            // ... your existing click-to-enter code ...
+            gsap.to(intro, { 
+                opacity: 0, 
+                duration: 1.5, 
+                onComplete: () => {
+                    intro.style.display = 'none';
+                    document.body.classList.remove('scroll-locked');
+                    if(typeof lenis !== 'undefined') lenis.start();
                 }
-            },
+            });
+        });
+    }
+}
 
             initStarMap: function(isMobile) {
                 const canvas = document.getElementById('star-canvas');
