@@ -3,264 +3,269 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Masterpiece | Nithya</title>
+    <title>The Queen | Nithya</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Great+Vibes&family=Montserrat:wght@300&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Pinyon+Script&family=Montserrat:wght@300&display=swap" rel="stylesheet">
     
     <style>
-        body { background: #000; overflow: hidden; height: 100vh; font-family: 'Montserrat', sans-serif; }
+        body { background: #0a0005; overflow: hidden; height: 100vh; font-family: 'Montserrat', sans-serif; }
         
-        /* --- 1. BACKGROUND LAYERS --- */
-        .nebula-bg {
+        /* --- 1. ATMOSPHERE --- */
+        .royal-bg {
             position: absolute; inset: 0;
-            background: radial-gradient(circle at center, #240b36 0%, #000 80%); /* Warmer, purpler background */
+            background: radial-gradient(circle at 50% 50%, #3d0318 0%, #1a0008 50%, #000000 100%);
             z-index: 0;
         }
         
-        .stars {
-            position: absolute; inset: 0;
-            background-image: url("https://www.transparenttextures.com/patterns/stardust.png");
-            opacity: 0.4; animation: pulseStars 4s infinite alternate; z-index: 1;
+        /* Moving Light Spotlights */
+        .spotlight {
+            position: absolute; width: 100vw; height: 100vh;
+            background: radial-gradient(circle at 50% 50%, rgba(255, 0, 80, 0.15), transparent 60%);
+            animation: moveSpotlight 10s infinite alternate ease-in-out;
+            pointer-events: none; z-index: 1;
         }
-        @keyframes pulseStars { 0% { opacity: 0.2; } 100% { opacity: 0.6; } }
+        @keyframes moveSpotlight { 0% { transform: translate(-20%, -20%); } 100% { transform: translate(20%, 20%); } }
 
-        /* --- 2. FLOATING TINY MEMORIES --- */
-        #floating-memories {
-            position: absolute; inset: 0; pointer-events: none; z-index: 5;
-            overflow: hidden;
-        }
-        .mini-photo {
-            position: absolute;
-            width: 50px; height: 60px;
+        /* --- 2. FLOATING MEMORY BUBBLES --- */
+        #bubble-container { position: absolute; inset: 0; pointer-events: none; z-index: 5; }
+        .bubble {
+            position: absolute; border-radius: 50%;
             background-size: cover; background-position: center;
-            border-radius: 4px;
-            box-shadow: 0 0 15px rgba(212, 175, 55, 0.4); /* Gold Glow */
-            filter: blur(2px) sepia(30%); /* Blurry & Dreamy */
-            opacity: 0;
-            animation: floatUp linear infinite;
+            box-shadow: inset 0 0 10px rgba(255,255,255,0.5), 0 0 15px rgba(255,105,180,0.4);
+            opacity: 0; animation: floatBubble linear infinite;
+            filter: blur(1px); border: 1px solid rgba(255,255,255,0.3);
         }
-        @keyframes floatUp {
-            0% { transform: translateY(110vh) rotate(0deg) scale(0.8); opacity: 0; }
-            20% { opacity: 0.5; }
-            80% { opacity: 0.5; }
-            100% { transform: translateY(-10vh) rotate(20deg) scale(1); opacity: 0; }
+        @keyframes floatBubble {
+            0% { transform: translateY(110vh) scale(0.5); opacity: 0; }
+            20% { opacity: 0.6; }
+            80% { opacity: 0.6; }
+            100% { transform: translateY(-20vh) scale(1); opacity: 0; }
         }
 
-        /* --- 3. THE STAGE --- */
+        /* --- 3. FALLING PETALS --- */
+        #petal-container { position: absolute; inset: 0; pointer-events: none; z-index: 4; }
+        .petal {
+            position: absolute; width: 10px; height: 10px;
+            background: linear-gradient(to bottom right, #ff9a9e, #fecfef);
+            border-radius: 100% 0 100% 0;
+            opacity: 0; animation: fallPetal linear infinite;
+        }
+        @keyframes fallPetal {
+            0% { transform: translateY(-10vh) rotate(0deg) translateX(0); opacity: 0; }
+            10% { opacity: 0.8; }
+            100% { transform: translateY(110vh) rotate(720deg) translateX(50px); opacity: 0; }
+        }
+
+        /* --- 4. THE CRYSTAL FRAME --- */
         .stage {
-            position: relative; z-index: 20;
+            position: relative; z-index: 20; height: 100%; width: 100%;
             display: flex; flex-col; align-items: center; justify-content: center;
-            height: 100%; width: 100%;
+            perspective: 2000px;
         }
 
-        /* Halo Ring */
-        .halo-ring {
-            position: absolute; width: 650px; height: 650px;
-            border: 1px dashed rgba(255, 215, 0, 0.2);
-            border-radius: 50%;
-            animation: spinHalo 40s linear infinite;
+        .crystal-card {
+            position: relative; width: 85vw; max-width: 480px; aspect-ratio: 4/5;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 
+                0 0 0 1px rgba(255, 255, 255, 0.1),
+                0 20px 60px rgba(0, 0, 0, 0.8),
+                0 0 80px rgba(255, 0, 85, 0.2); /* Pink Glow */
+            transform-style: preserve-3d;
+            animation: floating 6s ease-in-out infinite;
         }
-        .halo-ring::after {
-            content: ''; position: absolute; inset: -20px; border-radius: 50%;
-            border: 1px dotted rgba(255, 215, 0, 0.1);
-            animation: spinHalo 30s linear infinite reverse;
-        }
-        @keyframes spinHalo { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        @keyframes floating { 0%, 100% { transform: translateY(0) rotateX(0); } 50% { transform: translateY(-15px) rotateX(2deg); } }
 
-        /* The Main Card */
-        .photo-card {
-            position: relative;
-            width: 85vw; max-width: 450px; aspect-ratio: 4/5;
-            padding: 12px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(212, 175, 55, 0.4);
-            backdrop-filter: blur(8px);
-            box-shadow: 0 0 60px rgba(212, 175, 55, 0.15);
-            animation: levitate 6s ease-in-out infinite;
+        /* The Prismatic Borders */
+        .prism-border {
+            position: absolute; inset: -15px; border: 1px solid rgba(255, 215, 0, 0.3);
+            z-index: -1; transform: translateZ(-20px);
+            animation: pulseBorder 4s infinite alternate;
         }
-        @keyframes levitate { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-25px); } }
+        .prism-border-2 {
+            position: absolute; inset: -30px; border: 1px solid rgba(255, 0, 85, 0.2);
+            z-index: -2; transform: translateZ(-40px);
+        }
+        @keyframes pulseBorder { 0% { opacity: 0.3; transform: translateZ(-20px) scale(1); } 100% { opacity: 0.8; transform: translateZ(-20px) scale(1.02); } }
 
-        .photo-inner {
+        .photo-container {
             position: relative; width: 100%; height: 100%; overflow: hidden;
-            border: 1px solid rgba(212, 175, 55, 0.2);
+            background: #000;
         }
-
-        .photo-inner img {
+        .photo-container img {
             width: 100%; height: 100%; object-fit: cover;
-            filter: contrast(115%) brightness(110%) saturate(110%);
-            animation: breatheZoom 12s ease-in-out infinite alternate;
+            filter: contrast(110%) brightness(110%) saturate(120%);
+            animation: slowZoom 20s linear infinite alternate;
         }
-        @keyframes breatheZoom { 0% { transform: scale(1); } 100% { transform: scale(1.15); } }
+        @keyframes slowZoom { from { transform: scale(1); } to { transform: scale(1.15); } }
 
-        /* Sheen */
-        .sheen {
-            position: absolute; top: 0; left: -150%; width: 50%; height: 100%;
-            background: linear-gradient(to right, transparent, rgba(255,255,255,0.4), transparent);
-            transform: skewX(-25deg);
-            animation: shinePass 6s infinite; pointer-events: none; z-index: 20; mix-blend-mode: overlay;
+        /* Diamond Sheen */
+        .diamond-sheen {
+            position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+            background: linear-gradient(135deg, transparent 40%, rgba(255,255,255,0.4) 50%, transparent 60%);
+            animation: sheenMove 5s infinite; pointer-events: none; z-index: 10; mix-blend-mode: overlay;
         }
-        @keyframes shinePass { 0%, 40% { left: -150%; } 100% { left: 250%; } }
+        @keyframes sheenMove { 0% { transform: translate(-50%, -50%); } 100% { transform: translate(50%, 50%); } }
 
-        /* --- 4. TEXT --- */
-        .text-wrapper {
-            position: absolute; bottom: 8%; text-align: center; z-index: 30;
-            width: 100%; text-shadow: 0 10px 30px black;
+        /* --- 5. TEXT --- */
+        .text-overlay {
+            position: absolute; bottom: -50px; left: 0; width: 100%; text-align: center;
+            z-index: 50; transform: translateZ(50px);
         }
-        
-        .crown-icon { font-size: 2.5rem; color: #d4af37; margin-bottom: 5px; display: block; animation: floatCrown 3s ease-in-out infinite; filter: drop-shadow(0 0 10px gold); }
-        @keyframes floatCrown { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-5px) scale(1.1); } }
-
-        .title-bday {
-            font-family: 'Great Vibes', cursive;
-            font-size: 4rem; color: #fff; line-height: 1;
-            opacity: 0; transform: translateY(20px);
-            text-shadow: 0 0 20px rgba(212,175,55,0.5);
+        .label-text {
+            font-family: 'Montserrat', sans-serif; font-size: 0.7rem; letter-spacing: 0.6em;
+            color: #ffb7b2; text-transform: uppercase; margin-bottom: 10px;
+            text-shadow: 0 0 10px rgba(255, 105, 180, 0.8);
         }
-        
-        .title-name {
-            font-family: 'Cinzel', serif;
-            font-size: 3.5rem; font-weight: 700;
-            background: linear-gradient(to right, #fff, #ffd700, #fff);
-            -webkit-background-clip: text; color: transparent;
-            letter-spacing: 0.2em; margin-top: 10px;
-            opacity: 0; transform: scale(0.9);
-            filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.8));
+        .main-title {
+            font-family: 'Cinzel Decorative', serif; font-size: 3.5rem; line-height: 0.9;
+            background: linear-gradient(to bottom, #fff, #ffc0cb); -webkit-background-clip: text; color: transparent;
+            filter: drop-shadow(0 0 20px rgba(255, 20, 147, 0.6));
+        }
+        .sub-title {
+            font-family: 'Pinyon Script', cursive; font-size: 2.5rem; color: #d4af37;
+            margin-top: -10px; text-shadow: 0 2px 5px #000;
         }
 
-        /* --- 5. UTILS --- */
+        /* --- UTILS --- */
         .back-btn {
-            position: fixed; top: 30px; left: 30px;
-            color: rgba(255,255,255,0.4); font-size: 0.8rem; letter-spacing: 0.2em;
-            text-transform: uppercase; cursor: pointer; transition: 0.3s; z-index: 100;
-            border: 1px solid rgba(255,255,255,0.2); padding: 10px 20px; border-radius: 30px;
+            position: fixed; top: 30px; left: 30px; z-index: 100; cursor: pointer;
+            width: 40px; height: 40px; border: 1px solid rgba(255,255,255,0.3); border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; color: white; transition: 0.3s;
         }
-        .back-btn:hover { color: #fff; border-color: #d4af37; background: rgba(212, 175, 55, 0.1); }
+        .back-btn:hover { background: white; color: black; }
 
     </style>
 </head>
 <body>
 
-    <div class="back-btn" onclick="history.back()">← Gallery</div>
+    <div class="back-btn" onclick="history.back()"><i class="fas fa-arrow-left">←</i></div>
 
-    <div class="nebula-bg"></div>
-    <div class="stars"></div>
-    
-    <div id="floating-memories"></div>
+    <div class="royal-bg"></div>
+    <div class="spotlight"></div>
+    <div id="petal-container"></div>
+    <div id="bubble-container"></div>
 
     <div class="stage">
         
-        <div class="halo-ring"></div>
-
-        <div class="photo-card" id="card">
-            <div class="absolute top-0 left-0 w-6 h-6 border-t-2 border-l-2 border-[#d4af37]"></div>
-            <div class="absolute top-0 right-0 w-6 h-6 border-t-2 border-r-2 border-[#d4af37]"></div>
-            <div class="absolute bottom-0 left-0 w-6 h-6 border-b-2 border-l-2 border-[#d4af37]"></div>
-            <div class="absolute bottom-0 right-0 w-6 h-6 border-b-2 border-r-2 border-[#d4af37]"></div>
-
-            <div class="photo-inner">
-                <div class="sheen"></div>
-                <div class="absolute inset-0 bg-[radial-gradient(circle,transparent_40%,rgba(0,0,0,0.8)_100%)] z-10"></div>
-                
-                <img src="media/5.jpeg" alt="Masterpiece">
+        <div class="crystal-card" id="main-card">
+            <div class="prism-border"></div>
+            <div class="prism-border-2"></div>
+            
+            <div class="photo-container">
+                <div class="diamond-sheen"></div>
+                <img src="media/5.jpeg" alt="The Queen">
             </div>
+
+            <div class="absolute top-2 left-2 w-8 h-8 border-t-2 border-l-2 border-[#d4af37]"></div>
+            <div class="absolute top-2 right-2 w-8 h-8 border-t-2 border-r-2 border-[#d4af37]"></div>
+            <div class="absolute bottom-2 left-2 w-8 h-8 border-b-2 border-l-2 border-[#d4af37]"></div>
+            <div class="absolute bottom-2 right-2 w-8 h-8 border-b-2 border-r-2 border-[#d4af37]"></div>
         </div>
 
-        <div class="text-wrapper">
-            <span class="crown-icon">👑</span>
-            <div class="title-bday">Happy Birthday</div>
-            <div class="title-name">NITHYA</div>
+        <div class="text-overlay">
+            <div class="label-text">Today is for</div>
+            <div class="main-title">NITHYA</div>
+            <div class="sub-title">Happy Birthday</div>
         </div>
 
     </div>
 
     <script>
-        // --- 1. FLOATING MEMORY GENERATOR ---
-        // This creates the "Tiny blurry photos" effect
-        const memoryContainer = document.getElementById('floating-memories');
-        
-        // Add your photo paths here. It's okay to repeat them.
-        const memoryImages = [
-            'media/1.jpeg', 'media/2.jpeg', 'media/3.jpeg', 'media/4.jpeg'
-        ];
+        // --- 1. FLOATING BUBBLES (Tiny Photos) ---
+        const bubbleContainer = document.getElementById('bubble-container');
+        const memoryImages = ['media/1.jpeg', 'media/2.jpeg', 'media/3.jpeg', 'media/4.jpeg']; // Use your paths
 
-        function createFloatingMemory() {
-            if(!memoryContainer) return;
-            const count = 20; // Number of floating items
-
-            for(let i=0; i<count; i++) {
-                const div = document.createElement('div');
-                div.classList.add('mini-photo');
-                
-                // Random Image
-                const img = memoryImages[Math.floor(Math.random() * memoryImages.length)];
-                div.style.backgroundImage = `url('${img}')`;
-                
-                // Random Position & Speed
-                div.style.left = Math.random() * 100 + '%';
-                div.style.animationDuration = (Math.random() * 10 + 10) + 's'; // 10-20s float
-                div.style.animationDelay = (Math.random() * 5) + 's';
-                
-                // Random Size variation
-                const scale = Math.random() * 0.5 + 0.5; // 0.5 to 1.0 scale
-                div.style.transform = `scale(${scale})`;
-
-                memoryContainer.appendChild(div);
-            }
+        function createBubble() {
+            const b = document.createElement('div');
+            b.classList.add('bubble');
+            
+            const size = Math.random() * 40 + 30; // 30px to 70px
+            const img = memoryImages[Math.floor(Math.random() * memoryImages.length)];
+            const left = Math.random() * 100;
+            const duration = Math.random() * 10 + 10;
+            
+            b.style.width = `${size}px`;
+            b.style.height = `${size}px`;
+            b.style.backgroundImage = `url('${img}')`;
+            b.style.left = `${left}%`;
+            b.style.animationDuration = `${duration}s`;
+            
+            bubbleContainer.appendChild(b);
+            setTimeout(() => b.remove(), duration * 1000);
         }
-        createFloatingMemory();
+        setInterval(createBubble, 800); // New bubble every 800ms
 
+        // --- 2. FALLING PETALS ---
+        const petalContainer = document.getElementById('petal-container');
+        function createPetal() {
+            const p = document.createElement('div');
+            p.classList.add('petal');
+            
+            const left = Math.random() * 100;
+            const duration = Math.random() * 5 + 5;
+            const size = Math.random() * 5 + 5;
+            
+            p.style.left = `${left}%`;
+            p.style.width = `${size}px`;
+            p.style.height = `${size}px`;
+            p.style.animationDuration = `${duration}s`;
+            
+            petalContainer.appendChild(p);
+            setTimeout(() => p.remove(), duration * 1000);
+        }
+        setInterval(createPetal, 200); // Lots of petals
 
-        // --- 2. FIREWORKS (CRACKERS) LOGIC ---
-        function launchFireworks() {
-            var duration = 5 * 1000;
-            var animationEnd = Date.now() + duration;
-            var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 50 };
+        // --- 3. GRAND FIREWORKS ---
+        function launchRoyalFireworks() {
+            const duration = 4000;
+            const end = Date.now() + duration;
 
-            function randomInRange(min, max) {
-                return Math.random() * (max - min) + min;
-            }
+            (function frame() {
+                // Pink & Gold Colors
+                const colors = ['#ff0055', '#d4af37', '#ffffff', '#ffcad4'];
+                
+                confetti({
+                    particleCount: 4,
+                    angle: 60,
+                    spread: 55,
+                    origin: { x: 0 },
+                    colors: colors
+                });
+                confetti({
+                    particleCount: 4,
+                    angle: 120,
+                    spread: 55,
+                    origin: { x: 1 },
+                    colors: colors
+                });
 
-            var interval = setInterval(function() {
-                var timeLeft = animationEnd - Date.now();
-
-                if (timeLeft <= 0) {
-                    return clearInterval(interval);
+                if (Date.now() < end) {
+                    requestAnimationFrame(frame);
                 }
-
-                var particleCount = 50 * (timeLeft / duration);
-                
-                // Golden & sparkly colors
-                confetti(Object.assign({}, defaults, { 
-                    particleCount, 
-                    origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 },
-                    colors: ['#ffd700', '#ffa500', '#ffffff']
-                }));
-                confetti(Object.assign({}, defaults, { 
-                    particleCount, 
-                    origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 },
-                    colors: ['#ffd700', '#d4af37', '#ffffff'] 
-                }));
-            }, 250);
+            }());
         }
 
-
-        // --- 3. ENTRANCE ANIMATIONS (GSAP) ---
+        // --- 4. GSAP ENTRANCE ---
         const tl = gsap.timeline();
 
-        // Setup
-        gsap.set('#card', { scale: 0, rotation: 10, opacity: 0 });
-        gsap.set('.halo-ring', { scale: 0, opacity: 0 });
+        // Hide initially
+        gsap.set('#main-card', { scale: 0, rotationY: 180, opacity: 0 });
+        gsap.set('.text-overlay', { y: 50, opacity: 0 });
 
-        // Sequence
-        tl.to('.halo-ring', { duration: 2, scale: 1, opacity: 1, ease: "power4.out" })
-          .to('#card', { duration: 2.5, scale: 1, rotation: 0, opacity: 1, ease: "elastic.out(1, 0.7)" }, "-=1.5")
-          .call(launchFireworks, [], "-=1") // Launch crackers when card appears
-          .to('.title-bday', { duration: 1, y: 0, opacity: 1, ease: "power2.out" }, "-=1")
-          .to('.title-name', { duration: 1.5, scale: 1, opacity: 1, ease: "back.out(1.5)" }, "-=0.8");
+        // Animate
+        tl.to('#main-card', { 
+            duration: 2.5, scale: 1, rotationY: 0, opacity: 1, 
+            ease: "elastic.out(1, 0.7)" 
+        })
+        .call(launchRoyalFireworks, [], "-=1.5") // Fireworks explode as card settles
+        .to('.text-overlay', { 
+            duration: 1.5, y: 0, opacity: 1, ease: "power3.out" 
+        }, "-=1");
 
     </script>
 </body>
