@@ -452,35 +452,40 @@
                 }
             },
 
-            initScroll: function() {
-                // 1. Existing General Reveals
-                gsap.utils.toArray('.scroll-reveal').forEach(elem => {
-                    gsap.to(elem, { 
-                        y: 0, 
-                        opacity: 1, 
-                        duration: 1.5, 
-                        ease: "power2.out", 
-                        scrollTrigger: { trigger: elem, start: "top 85%" }
-                    });
-                });
+initScroll: function() {
+    // 1. General Reveals
+    gsap.utils.toArray('.scroll-reveal').forEach(elem => {
+        gsap.to(elem, { 
+            y: 0, opacity: 1, duration: 1.5, ease: "power2.out", 
+            scrollTrigger: { trigger: elem, start: "top 85%" }
+        });
+    });
 
-                // 2. Poetry Animation
-                gsap.utils.toArray('.poetry-line').forEach((line) => {
-                    gsap.to(line, {
-                        opacity: 1,
-                        y: 0,
-                        filter: "blur(0px)",
-                        duration: 2,
-                        ease: "power4.out",
-                        scrollTrigger: {
-                            trigger: line,
-                            start: "top 75%",
-                            toggleActions: "play none none reverse"
-                        }
-                    });
-                });
+    // 2. NEW: Glass Card Animation
+    // First, animate the card popping up
+    gsap.from(".poetry-card", {
+        scale: 0.9,
+        opacity: 0,
+        duration: 1.5,
+        ease: "power3.out",
+        scrollTrigger: { trigger: ".poetry-card", start: "top 80%" }
+    });
+
+    // Then, animate the lines inside
+    gsap.utils.toArray('.poetry-line').forEach((line, i) => {
+        gsap.to(line, {
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            delay: i * 0.2, // Stagger effect: each line waits 0.2s
+            ease: "back.out(1.7)",
+            scrollTrigger: {
+                trigger: ".poetry-card", // Trigger when the CARD is visible
+                start: "top 70%"
             }
-        }; // <--- THIS WAS MISSING IN YOUR CODE
+        });
+    });
+}
 
         // --- NAVIGATION FUNCTIONS ---
         window.enterPortal = () => {
