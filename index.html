@@ -239,23 +239,42 @@
             </div>
         </section>
 
-        <section class="min-h-screen bg-[#fff9f0] flex items-center justify-center py-20">
-            <div class="w-full max-w-4xl px-4 text-center">
-                <h2 class="text-5xl font-cinematic mb-2 text-gray-800">Time Travel</h2>
-                <p class="text-gray-500 font-emotional text-xl mb-12">Swipe to see how you've bloomed</p>
-                <div class="time-slider max-w-[500px] mx-auto aspect-[4/5] relative shadow-2xl">
-                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=600" class="w-full h-full object-cover grayscale-[20%]" alt="Now">
-                    <div id="baby-overlay" class="time-overlay bg-sepia">
-                        <img src="https://images.unsplash.com/photo-1519689680058-324335c77eba?w=600" class="w-full h-full object-cover sepia" alt="Baby">
-                    </div>
-                    <div class="absolute inset-0 pointer-events-none flex items-center justify-center">
-                        <div class="w-1 h-full bg-white shadow-lg"></div>
-                        <div class="absolute w-8 h-8 bg-white rounded-full shadow-lg flex items-center justify-center text-gray-400">↔</div>
-                    </div>
-                    <input type="range" id="time-range" min="0" max="100" value="50" class="absolute inset-0 w-full h-full opacity-0 cursor-ew-resize z-20">
+<section class="min-h-screen bg-[#fff9f0] flex items-center justify-center py-20 relative overflow-hidden">
+    <div class="absolute top-0 left-0 w-64 h-64 bg-purple-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob"></div>
+    <div class="absolute top-0 right-0 w-64 h-64 bg-yellow-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000"></div>
+
+    <div class="w-full max-w-4xl px-4 text-center z-10">
+        <h2 class="text-5xl font-cinematic mb-4 text-gray-800">The Sands of Time</h2>
+        <p class="text-gray-500 font-emotional text-2xl mb-12">Step through the gate to revisit the past</p>
+        
+        <div class="relative group cursor-pointer inline-block" onclick="enterPortal()">
+            <div class="absolute inset-0 border-[4px] border-dashed border-[#d4af37]/30 rounded-full w-[320px] h-[320px] -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 animate-[spin_10s_linear_infinite]"></div>
+            <div class="absolute inset-0 border-[2px] border-dotted border-[#2e1065]/20 rounded-full w-[360px] h-[360px] -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 animate-[spin_15s_linear_infinite_reverse]"></div>
+
+            <div class="relative w-[280px] h-[280px] rounded-full overflow-hidden border-8 border-[#d4af37] shadow-[0_0_50px_rgba(212,175,55,0.4)] transition-all duration-700 group-hover:scale-105 group-hover:shadow-[0_0_80px_rgba(212,175,55,0.8)]">
+                <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1465101162946-4377e57745c3?q=80&w=1000')] bg-cover opacity-60 group-hover:opacity-80 transition-opacity duration-700 animate-[pulse_4s_ease-in-out_infinite]"></div>
+                
+                <div class="absolute inset-0 flex flex-col items-center justify-center bg-black/20 group-hover:bg-transparent transition-colors">
+                    <span class="text-4xl filter drop-shadow-lg group-hover:scale-125 transition-transform duration-500">⏳</span>
+                    <span class="mt-2 font-cinematic text-white tracking-[0.3em] text-sm uppercase group-hover:tracking-[0.5em] transition-all">Enter</span>
                 </div>
             </div>
-        </section>
+        </div>
+    </div>
+</section>
+
+<script>
+    function enterPortal() {
+        // Transition Effect
+        const portal = document.querySelector('.group');
+        gsap.to(portal, { scale: 50, opacity: 0, duration: 1.5, ease: "power2.in" });
+        gsap.to("body", { backgroundColor: "#000", duration: 1.2 });
+        
+        setTimeout(() => {
+            window.location.href = 'timetravel.html';
+        }, 1200);
+    }
+</script>
 
         <section class="py-24 bg-[#f4f1ea]">
             <div class="px-8 md:px-16 mb-12 flex justify-between items-end border-b border-gray-300 pb-6">
