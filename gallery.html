@@ -293,36 +293,128 @@
         </div>
     </div>
 
-    <section class="relative h-screen w-full flex items-center justify-center overflow-hidden bg-black perspective-2000 group">
+<section class="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-black perspective-2000 group">
     
-    <div class="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#2e1065]/20 to-[#050505] z-0"></div>
-    <div class="absolute top-[-50%] left-[-50%] w-[200%] h-[200%] bg-[radial-gradient(circle,rgba(212,175,55,0.05)_0%,transparent_60%)] animate-slow-spin pointer-events-none"></div>
+    <div class="absolute inset-0 z-0">
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_#2e1065_0%,_#000_70%)] animate-pulse-slow"></div>
+        <div class="star-warp"></div> </div>
 
-    <div class="gold-dust"></div>
+    <div class="particles-container">
+        <div class="ember"></div><div class="ember"></div><div class="ember"></div>
+        <div class="ember"></div><div class="ember"></div><div class="ember"></div>
+    </div>
 
-    <div class="relative z-10 w-[90vw] md:w-[600px] aspect-[3/4] md:aspect-[4/5] transition-transform duration-700 ease-out transform-style-3d hover:scale-105" id="masterpiece-card">
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150%] h-[150%] z-0 pointer-events-none">
+        <div class="ray ray-1"></div>
+        <div class="ray ray-2"></div>
+        <div class="ray ray-3"></div>
+    </div>
+
+    <div class="relative z-20 w-[85vw] md:w-[500px] aspect-[4/5] transform-style-3d transition-transform duration-100 ease-out" id="masterpiece-card">
         
-        <div class="absolute inset-0 overflow-hidden rounded-[2px] shadow-[0_0_100px_rgba(212,175,55,0.15)] border border-white/10 filter-masterpiece">
+        <div class="absolute inset-[-20px] border border-[#d4af37]/30 rounded-lg animate-spin-slow pointer-events-none"></div>
+        <div class="absolute inset-[-20px] border border-purple-500/20 rounded-lg animate-spin-slow-reverse pointer-events-none"></div>
+
+        <div class="absolute inset-0 rounded-lg overflow-hidden shadow-[0_0_100px_rgba(212,175,55,0.3)] border border-white/20 filter-masterpiece bg-black">
             
-            <img src="media/5.jpeg" class="w-full h-full object-cover animate-breath">
+            <img src="media/5.jpeg" class="w-full h-full object-cover animate-breathe">
             
-            <div class="absolute inset-0 bg-gradient-to-tr from-[#2e1065] to-[#d4af37] mix-blend-overlay opacity-40"></div> <div class="absolute inset-0 bg-radial-gradient mix-blend-multiply opacity-80"></div> <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-20 mix-blend-screen"></div> <div class="light-sweep"></div>
+            <div class="sheen-overlay"></div>
+            
+            <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/90 opacity-90"></div>
+            <div class="absolute inset-0 bg-[#d4af37] mix-blend-overlay opacity-10"></div>
         </div>
 
-        <div class="absolute bottom-10 left-0 w-full text-center z-20 mix-blend-difference">
-            <p class="text-[#d4af37] text-xs font-mono tracking-[0.5em] mb-2 opacity-0 animate-fade-up" style="animation-delay: 0.5s;">CELEBRATING YOU</p>
-            <h1 class="text-5xl md:text-7xl font-hand text-white leading-none opacity-0 animate-fade-up" style="animation-delay: 1s;">
+        <div class="absolute -bottom-10 left-1/2 -translate-x-1/2 w-full text-center z-30 transform translate-z-50">
+            
+            <div class="text-4xl mb-4 animate-float text-[#d4af37] drop-shadow-[0_0_20px_#d4af37]">👑</div>
+            
+            <h2 class="text-xs font-mono text-purple-300 tracking-[0.8em] uppercase mb-2 animate-fade-in-up">The Star of the Show</h2>
+            
+            <h1 class="text-6xl md:text-8xl font-hand text-transparent bg-clip-text bg-gradient-to-r from-[#ffd700] via-[#fff] to-[#ffd700] drop-shadow-[0_0_30px_rgba(212,175,55,0.6)] animate-shimmer-text leading-tight">
                 Happy Birthday<br>
-                <span class="text-6xl md:text-8xl font-cinematic text-[#d4af37]">Nithya</span>
+                <span class="font-cinematic text-7xl md:text-9xl text-white block mt-2 scale-110">NITHYA</span>
             </h1>
         </div>
 
-        <div class="absolute top-4 left-4 w-full h-full border border-white/20 rounded-[2px] -z-10 translate-x-4 translate-y-4"></div>
-        <div class="absolute top-4 left-4 w-4 h-4 border-t-2 border-l-2 border-[#d4af37]"></div>
-        <div class="absolute bottom-4 right-4 w-4 h-4 border-b-2 border-r-2 border-[#d4af37]"></div>
+        <div class="absolute -top-10 -left-10 text-6xl opacity-20 animate-float-slow text-[#d4af37]">✨</div>
+        <div class="absolute top-1/2 -right-12 text-4xl opacity-20 animate-float-slow delay-700 text-purple-400">✦</div>
 
     </div>
 </section>
+
+<style>
+    /* --- ANIMATIONS & FX --- */
+
+    /* 1. Warp Speed Background */
+    .star-warp {
+        position: absolute; inset: 0;
+        background-image: 
+            radial-gradient(2px 2px at 20px 30px, #eee, rgba(0,0,0,0)),
+            radial-gradient(2px 2px at 40px 70px, #fff, rgba(0,0,0,0)),
+            radial-gradient(2px 2px at 50px 160px, #ddd, rgba(0,0,0,0)),
+            radial-gradient(2px 2px at 90px 40px, #fff, rgba(0,0,0,0));
+        background-repeat: repeat;
+        background-size: 200px 200px;
+        animation: warp 10s linear infinite;
+        opacity: 0.3;
+    }
+    @keyframes warp { from { transform: scale(1); opacity: 0.3; } to { transform: scale(2); opacity: 0; } }
+
+    /* 2. God Rays */
+    .ray {
+        position: absolute; top: 50%; left: 50%; width: 50%; height: 2px;
+        background: linear-gradient(90deg, rgba(212,175,55,0.5), transparent);
+        transform-origin: left center;
+        filter: blur(5px);
+    }
+    .ray-1 { animation: rotateRay 10s infinite linear; }
+    .ray-2 { animation: rotateRay 15s infinite linear reverse; opacity: 0.5; width: 60%; }
+    .ray-3 { animation: rotateRay 20s infinite linear; opacity: 0.3; width: 70%; }
+    @keyframes rotateRay { from { transform: translate(-50%, -50%) rotate(0deg); } to { transform: translate(-50%, -50%) rotate(360deg); } }
+
+    /* 3. Sheen Overlay */
+    .sheen-overlay {
+        position: absolute; inset: 0;
+        background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,0.2) 40%, transparent 50%);
+        background-size: 200% 100%;
+        animation: sheen 4s infinite linear;
+        mix-blend-mode: overlay;
+    }
+    @keyframes sheen { 0% { background-position: 100% 0; } 100% { background-position: -100% 0; } }
+
+    /* 4. Embers */
+    .ember {
+        position: absolute; bottom: -10px; width: 4px; height: 4px; background: #d4af37;
+        border-radius: 50%; box-shadow: 0 0 10px #d4af37;
+        animation: rise 5s infinite ease-in;
+    }
+    .ember:nth-child(1) { left: 20%; animation-duration: 6s; }
+    .ember:nth-child(2) { left: 50%; animation-duration: 4s; animation-delay: 1s; }
+    .ember:nth-child(3) { left: 80%; animation-duration: 7s; animation-delay: 2s; }
+    @keyframes rise { 0% { transform: translateY(0); opacity: 1; } 100% { transform: translateY(-100vh); opacity: 0; } }
+
+    /* 5. Text Shimmer */
+    @keyframes shimmer-text { 
+        0% { background-position: 200% center; } 
+        100% { background-position: -200% center; } 
+    }
+    .animate-shimmer-text { background-size: 200% auto; animation: shimmer-text 5s linear infinite; }
+
+    /* Utils */
+    .perspective-2000 { perspective: 2000px; }
+    .transform-style-3d { transform-style: preserve-3d; }
+    .translate-z-50 { transform: translateZ(50px); }
+    .animate-spin-slow { animation: spin 20s linear infinite; }
+    .animate-spin-slow-reverse { animation: spin 25s linear infinite reverse; }
+    .animate-breathe { animation: breathe 8s ease-in-out infinite; }
+    @keyframes breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+    @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
+    .animate-float { animation: float 4s ease-in-out infinite; }
+    .animate-float-slow { animation: float 8s ease-in-out infinite; }
+    
+    .filter-masterpiece img { filter: contrast(115%) brightness(110%) saturate(110%); }
+</style>
 
 <style>
     /* --- CSS ONLY PHOTO EDITING --- */
@@ -383,11 +475,12 @@
     .transform-style-3d { transform-style: preserve-3d; }
 </style>
 
-    <script>
-        // --- 1. GENERATE ATMOSPHERIC ELEMENTS ---
-        
-        // Fireflies
-        const ffContainer = document.getElementById('fireflies');
+   <script>
+    // --- 1. GENERATE ATMOSPHERIC ELEMENTS ---
+    
+    // Fireflies (Golden Hour)
+    const ffContainer = document.getElementById('fireflies');
+    if (ffContainer) {
         for(let i=0; i<30; i++) {
             const f = document.createElement('div');
             f.className = 'firefly';
@@ -397,9 +490,11 @@
             f.style.animationDuration = (Math.random() * 5 + 5) + 's';
             ffContainer.appendChild(f);
         }
+    }
 
-        // Sparkles
-        const spContainer = document.getElementById('sparkles');
+    // Sparkles (Pastel)
+    const spContainer = document.getElementById('sparkles');
+    if (spContainer) {
         for(let i=0; i<50; i++) {
             const s = document.createElement('div');
             s.className = 'sparkle';
@@ -408,60 +503,85 @@
             s.style.animationDelay = Math.random() * 3 + 's';
             spContainer.appendChild(s);
         }
+    }
 
-        // --- 2. CORE LOGIC ---
-        const dot = document.querySelector('.cursor-dot');
-        const outline = document.querySelector('.cursor-outline');
-        window.addEventListener('mousemove', e => {
-            dot.style.left = outline.style.left = e.clientX + 'px';
-            dot.style.top = outline.style.top = e.clientY + 'px';
-            outline.animate({ left: e.clientX + 'px', top: e.clientY + 'px' }, { duration: 800, fill: "forwards" });
-        });
-
-        const lenis = new Lenis({ duration: 1.2, smooth: true });
-        function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
-        requestAnimationFrame(raf);
-
-        // --- 3. VIDEO PLAYER ---
-        const vidModal = document.getElementById('video-modal');
-        const vidFrame = document.getElementById('video-frame');
-        window.openVideo = (url) => {
-            vidModal.classList.remove('hidden');
-            setTimeout(() => vidModal.classList.remove('opacity-0'), 10);
-            vidFrame.src = url + "?autoplay=1&rel=0";
-            if(typeof lenis !== 'undefined') lenis.stop();
-        };
-        window.closeVideo = () => {
-            vidModal.classList.add('opacity-0');
-            setTimeout(() => {
-                vidModal.classList.add('hidden');
-                vidFrame.src = "";
-            }, 300);
-            if(typeof lenis !== 'undefined') lenis.start();
-        };
-        document.addEventListener('keydown', (e) => { if(e.key === "Escape") closeVideo(); });
-
-        // --- 4. ANIMATIONS ---
-        gsap.utils.toArray('.section-title').forEach(title => {
-            gsap.to(title, { opacity: 1, y: 0, duration: 1, ease: "power3.out", scrollTrigger: { trigger: title, start: "top 80%" } });
-        });
-        gsap.utils.toArray('.reveal-up').forEach(elem => {
-            ScrollTrigger.create({ trigger: elem, start: "top 85%", onEnter: () => elem.classList.add('active') });
-        });
-        gsap.to('.parallax-bg', { yPercent: 30, ease: "none", scrollTrigger: { trigger: "header", start: "top top", end: "bottom top", scrub: true } });
-        gsap.utils.toArray('.float-item').forEach(item => {
-            gsap.to(item, { y: -15, duration: 2 + Math.random(), yoyo: true, repeat: -1, ease: "sine.inOut" });
-        });
-        gsap.to('.scrap-item', { y: (i) => (i + 1) * -50, ease: "none", scrollTrigger: { trigger: ".paper-texture", start: "top bottom", end: "bottom top", scrub: 1 } });
-    </script>
-    // Add this to your script
-const masterpiece = document.getElementById('masterpiece-card');
-if(masterpiece) {
-    document.addEventListener('mousemove', (e) => {
-        const x = (window.innerWidth / 2 - e.pageX) / 25;
-        const y = (window.innerHeight / 2 - e.pageY) / 25;
-        masterpiece.style.transform = `rotateY(${x}deg) rotateX(${y}deg)`;
+    // --- 2. CORE LOGIC (Cursor & Scroll) ---
+    const dot = document.querySelector('.cursor-dot');
+    const outline = document.querySelector('.cursor-outline');
+    window.addEventListener('mousemove', e => {
+        dot.style.left = outline.style.left = e.clientX + 'px';
+        dot.style.top = outline.style.top = e.clientY + 'px';
+        outline.animate({ left: e.clientX + 'px', top: e.clientY + 'px' }, { duration: 800, fill: "forwards" });
     });
-}
+
+    const lenis = new Lenis({ duration: 1.2, smooth: true });
+    function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+    requestAnimationFrame(raf);
+
+    // --- 3. VIDEO PLAYER LOGIC ---
+    const vidModal = document.getElementById('video-modal');
+    const vidFrame = document.getElementById('video-frame');
+
+    window.openVideo = (url) => {
+        vidModal.classList.remove('hidden');
+        setTimeout(() => vidModal.classList.remove('opacity-0'), 10);
+        vidFrame.src = url + "?autoplay=1&rel=0";
+        if(typeof lenis !== 'undefined') lenis.stop();
+    };
+
+    window.closeVideo = () => {
+        vidModal.classList.add('opacity-0');
+        setTimeout(() => {
+            vidModal.classList.add('hidden');
+            vidFrame.src = "";
+        }, 300);
+        if(typeof lenis !== 'undefined') lenis.start();
+    };
+    
+    document.addEventListener('keydown', (e) => { if(e.key === "Escape") closeVideo(); });
+
+    // --- 4. ANIMATIONS (GSAP) ---
+    gsap.utils.toArray('.section-title').forEach(title => {
+        gsap.to(title, { opacity: 1, y: 0, duration: 1, ease: "power3.out", scrollTrigger: { trigger: title, start: "top 80%" } });
+    });
+
+    gsap.utils.toArray('.reveal-up').forEach(elem => {
+        ScrollTrigger.create({ trigger: elem, start: "top 85%", onEnter: () => elem.classList.add('active') });
+    });
+
+    gsap.to('.parallax-bg', { yPercent: 30, ease: "none", scrollTrigger: { trigger: "header", start: "top top", end: "bottom top", scrub: true } });
+
+    gsap.utils.toArray('.float-item').forEach(item => {
+        gsap.to(item, { y: -15, duration: 2 + Math.random(), yoyo: true, repeat: -1, ease: "sine.inOut" });
+    });
+
+    gsap.to('.scrap-item', { y: (i) => (i + 1) * -50, ease: "none", scrollTrigger: { trigger: ".paper-texture", start: "top bottom", end: "bottom top", scrub: 1 } });
+
+    // --- 5. GRAND FINALE 3D TILT LOGIC ---
+    const masterpiece = document.getElementById('masterpiece-card');
+    
+    if(masterpiece) {
+        // Mouse Move Effect (3D Tilt)
+        document.addEventListener('mousemove', (e) => {
+            // Calculate rotation based on mouse position relative to center
+            const xAxis = (window.innerWidth / 2 - e.pageX) / 25; 
+            const yAxis = (window.innerHeight / 2 - e.pageY) / 25;
+            
+            // Apply the transform
+            masterpiece.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+        });
+
+        // Reset Effect (Return to flat state when mouse leaves window)
+        document.addEventListener('mouseleave', () => {
+            masterpiece.style.transition = 'transform 0.5s ease'; // Add smooth transition for reset
+            masterpiece.style.transform = `rotateY(0deg) rotateX(0deg)`;
+            
+            // Remove transition after reset so mousemove is instant again
+            setTimeout(() => {
+                masterpiece.style.transition = 'none';
+            }, 500);
+        });
+    }
+</script>
 </body>
 </html>
