@@ -276,21 +276,50 @@
     }
 </script>
 
-        <section class="py-24 bg-[#f4f1ea]">
-            <div class="px-8 md:px-16 mb-12 flex justify-between items-end border-b border-gray-300 pb-6">
-                <h2 class="text-5xl font-emotional text-gray-800">Precious Memories</h2>
-                <span class="text-gray-500 font-cinematic hidden md:block tracking-widest">CHAPTER 01 / COLLECTION</span>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-12 gap-10 px-4 md:px-16 min-h-[100vh]">
-                <div class="md:col-span-4 h-[600px] relative transform rotate-[-2deg] hover:rotate-0 transition-transform duration-500">
-                    <div class="absolute inset-0 bg-white shadow-xl p-4 pb-16 flex flex-col parallax-container group overflow-hidden">
-                         <div class="w-full h-full overflow-hidden relative">
-                             <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=600" class="w-full h-[120%] object-cover absolute top-0 parallax-img opacity-90 group-hover:opacity-100 transition-opacity" alt="Memory 1">
-                         </div>
-                         <p class="absolute bottom-4 left-0 w-full text-center font-emotional text-2xl text-gray-600">Pure Joy</p>
-                         <div class="absolute top-8 right-8 text-4xl opacity-50 hover:opacity-100 key animate-bounce" onclick="collectKey(this)">🗝️</div>
-                    </div>
+        <section class="min-h-screen bg-[#f4f1ea] flex items-center justify-center py-20 relative overflow-hidden">
+    <div class="absolute inset-0 pointer-events-none">
+        <div class="absolute top-10 left-10 text-2xl animate-[float_10s_ease-in-out_infinite]">🌸</div>
+        <div class="absolute bottom-20 right-20 text-xl animate-[float_12s_ease-in-out_infinite_reverse]">🌸</div>
+        <div class="absolute top-1/2 left-1/3 text-3xl animate-[float_15s_ease-in-out_infinite] opacity-50">✨</div>
+    </div>
+
+    <div class="w-full max-w-4xl px-4 text-center z-10">
+        <h2 class="text-5xl font-cinematic mb-4 text-gray-800">The Memory Garden</h2>
+        <p class="text-gray-500 font-emotional text-2xl mb-12">Open the album to relive the magic</p>
+        
+        <div class="relative group cursor-pointer inline-block perspective-1000" onclick="enterMemories()">
+            <div class="absolute top-2 left-2 w-full h-full bg-[#8b5a2b] rounded-r-lg shadow-2xl transform rotate-3 group-hover:rotate-6 transition-transform duration-500"></div>
+            
+            <div class="relative w-[300px] h-[400px] bg-[#2e1065] rounded-r-lg shadow-inner border-l-8 border-[#d4af37] flex flex-col items-center justify-center overflow-hidden transition-transform duration-500 transform group-hover:-translate-y-2 group-hover:-translate-x-1">
+                
+                <div class="absolute inset-4 border-2 border-[#d4af37] opacity-30 rounded-r-md"></div>
+                <div class="absolute inset-6 border border-[#d4af37] opacity-20 rounded-r-md"></div>
+                
+                <div class="w-48 h-48 rounded-full overflow-hidden border-4 border-[#d4af37] mb-6 shadow-lg sepia group-hover:sepia-0 transition-all duration-700">
+                    <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=400" class="w-full h-full object-cover">
                 </div>
+                
+                <h3 class="font-cinematic text-[#d4af37] text-3xl tracking-widest uppercase">Memories</h3>
+                <p class="font-emotional text-white/60 text-lg mt-2">Vol. I</p>
+                
+                <div class="absolute bottom-4 text-white/40 text-xs tracking-[0.3em] uppercase opacity-0 group-hover:opacity-100 transition-opacity">Click to Open</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    function enterMemories() {
+        // Book Opening Animation Effect
+        const book = document.querySelector('.perspective-1000');
+        gsap.to(book, { rotateY: -10, scale: 1.5, opacity: 0, duration: 1, ease: "power2.in" });
+        gsap.to("body", { backgroundColor: "#fff", duration: 1 });
+        
+        setTimeout(() => {
+            window.location.href = 'memories.html';
+        }, 1000);
+    }
+</script>
                 <div class="md:col-span-4 md:col-start-5 h-[500px] mt-[10%] relative transform rotate-[3deg] hover:rotate-0 transition-transform duration-500">
                      <div class="absolute inset-0 bg-white shadow-xl p-4 pb-16 flex flex-col parallax-container group overflow-hidden">
                          <div class="w-full h-full overflow-hidden relative">
