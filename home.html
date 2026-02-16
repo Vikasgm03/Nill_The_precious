@@ -99,41 +99,44 @@
 </section>
 
         
-<section id="hero-scene" class="relative h-screen flex items-center justify-center overflow-hidden bg-[#050505] perspective-container">
+<section class="relative h-screen flex items-center justify-center overflow-hidden bg-[#050505] perspective-container group">
     
-    <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1536630596259-22a7442a537d?w=2000')] bg-cover bg-center opacity-20 grayscale mix-blend-luminosity"></div>
-    <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_transparent_0%,_#000_90%)]"></div>
+    <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1536630596259-22a7442a537d?w=2000')] bg-cover bg-center opacity-20 grayscale mix-blend-luminosity animate-[slowZoom_30s_linear_infinite_alternate]"></div>
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_transparent_0%,_#000_95%)]"></div>
+    <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-20 animate-pulse"></div>
 
-    <div id="particle-layer" class="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+    <div class="absolute inset-0 flex items-center justify-center z-10 pointer-events-none select-none overflow-hidden">
+        <h2 class="text-[18vw] md:text-[20vw] font-emotional text-[#d4af37] leading-none opacity-20 blur-[3px] animate-[pulseGlow_4s_ease-in-out_infinite]"
+            style="text-shadow: 0 0 50px rgba(212,175,55,0.5); transform: rotate(-5deg) translateY(-20px);">
+            Happy Birthday
+        </h2>
+    </div>
+
+    <div id="particle-layer" class="absolute inset-0 z-10 overflow-hidden pointer-events-none">
         
-        <div class="parallax-item absolute top-[15%] left-[10%] w-28 h-36 bg-cover bg-center rounded-xl opacity-40 blur-[3px]"
-             data-speed="40"
-             style="background-image: url('https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200'); box-shadow: 0 0 20px rgba(212,175,55,0.2);">
+        <div class="parallax-item absolute top-[15%] left-[10%] w-28 h-36 bg-cover bg-center rounded-xl opacity-50 blur-[2px] animate-[floatCustom_14s_ease-in-out_infinite] group-hover:paused"
+             style="background-image: url('https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200'); box-shadow: 0 0 20px rgba(212,175,55,0.15);">
         </div>
         
-        <div class="parallax-item absolute bottom-[20%] right-[15%] w-40 h-52 bg-cover bg-center rounded-xl opacity-30 blur-[6px]"
-             data-speed="-20"
+        <div class="parallax-item absolute bottom-[20%] right-[15%] w-40 h-52 bg-cover bg-center rounded-xl opacity-40 blur-[4px] animate-[floatCustom_18s_ease-in-out_infinite_reverse] group-hover:paused"
              style="background-image: url('https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=200'); box-shadow: 0 0 30px rgba(212,175,55,0.1);">
         </div>
 
-         <div class="parallax-item absolute top-[60%] left-[5%] w-24 h-28 bg-cover bg-center rounded-lg opacity-50 blur-[2px]"
-              data-speed="25"
+         <div class="parallax-item absolute top-[60%] left-[5%] w-24 h-28 bg-cover bg-center rounded-lg opacity-40 blur-[2px] animate-[floatCustom_12s_ease-in-out_infinite] delay-1000 group-hover:paused"
               style="background-image: url('https://images.unsplash.com/photo-1517841905240-472988babdf9?w=200');">
         </div>
 
-        <div class="parallax-item absolute top-[25%] right-[25%] w-20 h-20 bg-cover bg-center rounded-lg opacity-40 blur-[4px]"
-             data-speed="-10"
+        <div class="parallax-item absolute top-[25%] right-[25%] w-20 h-20 bg-cover bg-center rounded-lg opacity-30 blur-[3px] animate-[floatCustom_20s_ease-in-out_infinite_reverse] delay-2000 group-hover:paused"
              style="background-image: url('https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200');">
        </div>
 
-       <div class="parallax-item absolute top-1/4 left-1/2 w-2 h-2 bg-[#d4af37] rounded-full blur-[1px]" data-speed="60"></div>
-       <div class="parallax-item absolute bottom-1/3 left-1/4 w-1 h-1 bg-white rounded-full blur-[1px]" data-speed="30"></div>
-       <div class="parallax-item absolute top-1/2 right-1/3 w-1.5 h-1.5 bg-[#d4af37] rounded-full blur-[1px]" data-speed="50"></div>
+       <div class="parallax-item absolute top-1/4 left-1/2 w-2 h-2 bg-[#d4af37] rounded-full blur-[1px] animate-[floatCustom_10s_linear_infinite] group-hover:paused"></div>
+       <div class="parallax-item absolute bottom-1/3 left-1/4 w-1.5 h-1.5 bg-white rounded-full blur-[1px] animate-[floatCustom_15s_linear_infinite_reverse] group-hover:paused"></div>
     </div>
 
-    <div class="relative z-20 text-center w-full px-4" id="text-layer">
+    <div class="relative z-20 text-center w-full px-4 mix-blend-normal">
         
-        <p class="font-cinematic text-[#d4af37]/80 tracking-[1em] text-xs md:text-sm mb-6 animate-[fadeIn_2s_ease-out] drop-shadow-lg">
+        <p class="font-cinematic text-[#d4af37]/90 tracking-[1em] text-xs md:text-sm mb-6 animate-[fadeIn_2s_ease-out] drop-shadow-lg">
             THE ONE & ONLY
         </p>
 
@@ -142,14 +145,14 @@
             NITHYA
         </h1>
 
-        <div class="mt-12 flex items-center justify-center gap-6 opacity-0 animate-[slideUp_1s_ease-out_1s_forwards] mix-blend-screen">
+        <div class="mt-12 flex items-center justify-center gap-6 opacity-0 animate-[slideUp_1s_ease-out_1s_forwards]">
             <div class="h-[1px] w-16 md:w-32 bg-gradient-to-r from-transparent to-[#d4af37]"></div>
-            <p class="text-xl md:text-4xl font-emotional text-[#d4af37] drop-shadow-[0_0_10px_rgba(212,175,55,0.8)]">The Golden Era Begins</p>
+            <p class="text-xl md:text-4xl font-emotional text-[#fce7f3] drop-shadow-[0_0_15px_rgba(212,175,55,0.8)]">The Golden Era Begins</p>
             <div class="h-[1px] w-16 md:w-32 bg-gradient-to-l from-transparent to-[#d4af37]"></div>
         </div>
     </div>
     
-    <div class="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-50 animate-bounce">
+    <div class="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-50 animate-bounce z-30 pointer-events-none">
         <span class="text-[10px] tracking-[0.3em] text-[#d4af37] uppercase">Explore</span>
         <i class="fas fa-chevron-down text-[#d4af37]"></i>
     </div>
@@ -167,33 +170,25 @@
         filter: drop-shadow(0 10px 20px rgba(0,0,0,0.8)) drop-shadow(0 0 30px rgba(212,175,55,0.3));
     }
 
-    /* 2. Animations */
+    /* 2. Pause Utility */
+    .group:hover .group-hover\:paused {
+        animation-play-state: paused;
+    }
+
+    /* 3. Custom Animations */
     @keyframes goldShimmer { to { background-position: 200% center; } }
     @keyframes slideUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes slowZoom { 0% { transform: scale(1); } 100% { transform: scale(1.15); } }
+    @keyframes pulseGlow { 0%, 100% { opacity: 0.2; transform: rotate(-5deg) scale(1); } 50% { opacity: 0.4; transform: rotate(-5deg) scale(1.02); } }
     
-    /* Note: We removed the floatPhoto animation because JS will handle the movement now for smoother control */
+    /* Smooth Ambient Float */
+    @keyframes floatCustom { 
+        0% { transform: translate(0, 0) rotate(0deg); }
+        33% { transform: translate(10px, -15px) rotate(2deg); }
+        66% { transform: translate(-5px, 10px) rotate(-2deg); }
+        100% { transform: translate(0, 0) rotate(0deg); }
+    }
 </style>
-
-<script>
-    document.addEventListener('mousemove', (e) => {
-        const scene = document.getElementById('hero-scene');
-        const particles = document.querySelectorAll('.parallax-item');
-        
-        // Calculate mouse position relative to center (from -1 to 1)
-        const x = (e.clientX / window.innerWidth - 0.5) * 2;
-        const y = (e.clientY / window.innerHeight - 0.5) * 2;
-
-        particles.forEach(el => {
-            const speed = el.getAttribute('data-speed');
-            // Move opposite to mouse for depth effect
-            const xMove = x * speed;
-            const yMove = y * speed;
-            
-            el.style.transform = `translate(${xMove}px, ${yMove}px)`;
-            el.style.transition = "transform 0.1s ease-out"; // Smoothness
-        });
-    });
-</script>
 
         <section class="min-h-screen bg-[#fff9f0] flex items-center justify-center py-20 relative">
             <div class="max-w-4xl mx-auto px-6 text-center space-y-32">
