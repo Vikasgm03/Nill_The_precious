@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>The Enchanted Journey | Celebration</title>
     
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -190,17 +191,69 @@
     }
 </style>
 
-        <section class="min-h-screen bg-[#fff9f0] flex items-center justify-center py-20 relative">
-            <div class="max-w-4xl mx-auto px-6 text-center space-y-32">
-                <div class="scroll-reveal opacity-0 translate-y-10">
-                    <i class="fas fa-heart text-2xl text-pink-300 mb-6"></i>
-                    <p class="text-4xl md:text-6xl font-emotional leading-tight text-gray-800">Your laughter is the soundtrack<br>to our happiest memories.</p>
-                </div>
-                <div class="scroll-reveal opacity-0 translate-y-10">
-                    <p class="text-3xl md:text-5xl font-light font-cinematic text-gray-600">"To the world you are one person,<br><span class="text-[#d4af37] italic">but to me, you are the world.</span>"</p>
-                </div>
+<section class="min-h-screen bg-[#fff9f0] relative flex items-center justify-center py-24 overflow-hidden">
+    
+    <div class="absolute inset-0 opacity-40 pointer-events-none" 
+         style="background-image: url('https://www.transparenttextures.com/patterns/cream-paper.png'); mix-blend-mode: multiply;"></div>
+    
+    <div class="absolute top-20 left-10 w-64 h-64 bg-pink-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
+    <div class="absolute bottom-20 right-10 w-64 h-64 bg-yellow-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
+
+    <div class="max-w-3xl mx-auto px-6 relative z-10">
+        
+        <div class="text-center mb-16 scroll-reveal opacity-0">
+            <span class="text-xs font-mono tracking-[0.5em] text-gray-400 uppercase">From the Heart</span>
+            <div class="w-[1px] h-12 bg-gray-300 mx-auto mt-4 mb-4"></div>
+            <i class="fas fa-feather-alt text-3xl text-[#d4af37]"></i>
+        </div>
+
+        <div class="space-y-12 text-center">
+            
+            <div class="poetry-line opacity-0 translate-y-8 blur-sm transition-all duration-1000">
+                <p class="text-3xl md:text-5xl font-['Dancing_Script'] text-gray-800 leading-relaxed">
+                    "Nill, agbedi nivu <span class="text-pink-400">dull</span>,"
+                </p>
             </div>
-        </section>
+
+            <div class="poetry-line opacity-0 translate-y-8 blur-sm transition-all duration-1000 delay-200">
+                <p class="text-3xl md:text-5xl font-['Dancing_Script'] text-gray-800 leading-relaxed">
+                    Nimna nodudhee baruthhe <span class="text-[#d4af37]">smile</span>,
+                </p>
+            </div>
+
+            <div class="poetry-line opacity-0 translate-y-8 blur-sm transition-all duration-1000 delay-400">
+                <p class="text-3xl md:text-5xl font-['Dancing_Script'] text-gray-800 leading-relaxed">
+                    Nim smile alle madthira <span class="text-red-400">kill</span>,
+                </p>
+            </div>
+
+            <div class="poetry-line opacity-0 translate-y-8 blur-sm transition-all duration-1000 delay-600">
+                <p class="text-4xl md:text-6xl font-['Dancing_Script'] font-bold text-gray-900 leading-relaxed scale-110">
+                    Nimna nodthidhre kunyutthe... <br>
+                    <span class="text-[#d4af37] text-5xl md:text-7xl">nanna dill. ❤️</span>
+                </p>
+            </div>
+
+        </div>
+
+        <div class="mt-24 text-center opacity-0 scroll-reveal">
+            <p class="font-mono text-xs text-gray-400 tracking-widest uppercase mb-4">- Written just for you -</p>
+        </div>
+
+    </div>
+</section>
+
+<style>
+    /* Slow blob animation for background */
+    @keyframes blob {
+        0% { transform: translate(0px, 0px) scale(1); }
+        33% { transform: translate(30px, -50px) scale(1.1); }
+        66% { transform: translate(-20px, 20px) scale(0.9); }
+        100% { transform: translate(0px, 0px) scale(1); }
+    }
+    .animate-blob { animation: blob 7s infinite; }
+    .animation-delay-2000 { animation-delay: 2s; }
+</style>
 
         <section class="relative h-screen bg-[#1a0b2e] flex items-center justify-center overflow-hidden">
             <canvas id="star-canvas" class="absolute inset-0 w-full h-full"></canvas>
