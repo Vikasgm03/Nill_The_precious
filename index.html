@@ -323,14 +323,16 @@
             }
         };
 
-        // --- HUD SCANNER ---
+// --- HUD SCANNER ---
         const hud = {
             el: document.getElementById('hud-layer'),
             startBtn: document.getElementById('start-btn'),
             scanLine: document.querySelector('.scan-line'),
+            
             init: function() {
                 this.startBtn.addEventListener('click', () => this.start());
             },
+            
             start: function() {
                 this.startBtn.style.display = 'none';
                 audio.scan.play();
@@ -351,41 +353,58 @@
                 
                 // Scan Animation
                 gsap.to(this.scanLine, { opacity: 1, duration: 0.2 });
-                gsap.to(this.scanLine, { top: '100%', duration: 2, ease: "power2.inOut", repeat: 1, yoyo: true, onComplete: () => this.success() });
+                gsap.to(this.scanLine, { 
+                    top: '100%', 
+                    duration: 2, 
+                    ease: "power2.inOut", 
+                    repeat: 1, 
+                    yoyo: true, 
+                    onComplete: () => this.success() 
+                });
             },
-           success: function() {
+            
+            success: function() {
                 audio.scan.pause();
                 audio.success.play();
                 
-                // 1. Change Text to Green
+                // 1. Update Status Text to Green
                 const status = document.getElementById('status');
                 status.innerText = "IDENTITY CONFIRMED";
                 status.style.color = "#0f0";
-                status.style.textShadow = "0 0 20px #0f0";
-                document.querySelector('.scan-frame').style.borderColor = "#0f0";
-                document.querySelector('.scan-frame').style.boxShadow = "0 0 30px #0f0, inset 0 0 20px #0f0";
-
-                // 2. Animate: Hide Icon -> Reveal Photo
-                gsap.to('#scan-icon', { opacity: 0, scale: 0.5, duration: 0.2 });
+                status.style.textShadow = "0 0 15px #0f0";
                 
-                // Reveal photo and remove the green "hacker" filter to show true colors
+                // 2. Turn Frame Green
+                const frame = document.querySelector('.scan-frame');
+                frame.style.borderColor = "#0f0";
+                frame.style.boxShadow = "0 0 30px #0f0, inset 0 0 10px #0f0";
+
+                // 3. Switch Icon to Photo
+                // Hide the icon
+                gsap.to('#scan-icon-container', { opacity: 0, scale: 0.5, duration: 0.2 });
+                
+                // Show the photo
                 const photo = document.getElementById('id-photo');
-                gsap.to(photo, { opacity: 1, duration: 0.5, delay: 0.1 });
-                
-                // Optional: Flash the photo normal colors after a split second
-                setTimeout(() => {
-                    photo.style.filter = "none"; // Remove green tint
-                    photo.style.boxShadow = "0 0 20px #0f0"; // Add glow
-                }, 400);
+                if(photo) {
+                    gsap.to(photo, { opacity: 1, duration: 0.5, delay: 0.1 });
+                    
+                    // Remove "Hacker Green" filter after a moment to show true colors
+                    setTimeout(() => {
+                        photo.style.filter = "none"; 
+                    }, 500);
+                }
 
-                // 3. Transition to Main Site
+                // 4. Transition to Main Site
                 setTimeout(() => {
-                    gsap.to(this.el, { opacity: 0, duration: 1, onComplete: () => {
-                        this.el.style.display = 'none';
-                        gsap.to('#site-wrapper', { opacity: 1, duration: 1 });
-                        app.initFeatures();
-                    }});
-                }, 2500); // Wait 2.5s so she can see her photo
+                    gsap.to(this.el, { 
+                        opacity: 0, 
+                        duration: 1, 
+                        onComplete: () => {
+                            this.el.style.display = 'none';
+                            gsap.to('#site-wrapper', { opacity: 1, duration: 1 });
+                            app.initFeatures();
+                        }
+                    });
+                }, 2500); // 2.5 second delay to let her see her photo match
             }
         };
 
