@@ -95,13 +95,22 @@
             <div id="data-stream-left">INITIALIZING...</div>
         </div>
         <div class="flex flex-col items-center gap-6 relative z-10 p-4">
-            <div class="scan-frame" id="scanner">
-                <div class="bracket tl"></div> <div class="bracket tr"></div>
-                <div class="bracket bl"></div> <div class="bracket br"></div>
-                <div class="scan-line"></div>
-                <div class="absolute inset-0 flex items-center justify-center opacity-30">
-                    <i class="fas fa-user-circle text-9xl" id="face-icon"></i>
-                </div>
+<div class="scan-frame" id="scanner">
+    <div class="bracket tl"></div> <div class="bracket tr"></div>
+    <div class="bracket bl"></div> <div class="bracket br"></div>
+    
+    <div class="scan-line"></div>
+    
+    <div id="scan-icon" class="absolute inset-0 flex items-center justify-center opacity-30">
+        <i class="fas fa-fingerprint text-9xl animate-pulse"></i>
+    </div>
+
+    <img id="id-photo" 
+         src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400" 
+         class="absolute inset-0 w-full h-full object-cover opacity-0 p-2" 
+         style="filter: sepia(100%) hue-rotate(90deg) saturate(200%) brightness(0.8);"
+         alt="Identity Match">
+</div>
             </div>
             <div class="text-center space-y-2">
                 <h2 id="status" class="text-2xl font-bold tracking-widest" style="text-shadow: 0 0 5px #0ff;">SYSTEM LOCKED</h2>
@@ -291,7 +300,7 @@
 
     <script>
         // --- DATA ---
-        const CONFIG = { name: "SARAH", birthDate: "July 22, 1995" };
+        const CONFIG = { name: "NITHYA", birthDate: "MARCH 22, 2004" };
         document.getElementById('birth-date-display').textContent = CONFIG.birthDate;
 
         // --- AUDIO SYSTEM ---
@@ -344,20 +353,39 @@
                 gsap.to(this.scanLine, { opacity: 1, duration: 0.2 });
                 gsap.to(this.scanLine, { top: '100%', duration: 2, ease: "power2.inOut", repeat: 1, yoyo: true, onComplete: () => this.success() });
             },
-            success: function() {
+           success: function() {
                 audio.scan.pause();
                 audio.success.play();
-                document.getElementById('status').innerText = "ACCESS GRANTED";
-                document.getElementById('status').style.color = "#0f0";
-                document.querySelector('.scan-frame').style.borderColor = "#0f0";
                 
+                // 1. Change Text to Green
+                const status = document.getElementById('status');
+                status.innerText = "IDENTITY CONFIRMED";
+                status.style.color = "#0f0";
+                status.style.textShadow = "0 0 20px #0f0";
+                document.querySelector('.scan-frame').style.borderColor = "#0f0";
+                document.querySelector('.scan-frame').style.boxShadow = "0 0 30px #0f0, inset 0 0 20px #0f0";
+
+                // 2. Animate: Hide Icon -> Reveal Photo
+                gsap.to('#scan-icon', { opacity: 0, scale: 0.5, duration: 0.2 });
+                
+                // Reveal photo and remove the green "hacker" filter to show true colors
+                const photo = document.getElementById('id-photo');
+                gsap.to(photo, { opacity: 1, duration: 0.5, delay: 0.1 });
+                
+                // Optional: Flash the photo normal colors after a split second
+                setTimeout(() => {
+                    photo.style.filter = "none"; // Remove green tint
+                    photo.style.boxShadow = "0 0 20px #0f0"; // Add glow
+                }, 400);
+
+                // 3. Transition to Main Site
                 setTimeout(() => {
                     gsap.to(this.el, { opacity: 0, duration: 1, onComplete: () => {
                         this.el.style.display = 'none';
                         gsap.to('#site-wrapper', { opacity: 1, duration: 1 });
                         app.initFeatures();
                     }});
-                }, 1500);
+                }, 2500); // Wait 2.5s so she can see her photo
             }
         };
 
