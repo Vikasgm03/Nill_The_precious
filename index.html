@@ -3,115 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clear the Path</title>
+    <title>You Are Invited</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        body { margin: 0; overflow: hidden; background: url('https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?q=80&w=2000') no-repeat center center fixed; background-size: cover; }
-        canvas { position: absolute; top: 0; left: 0; cursor: crosshair; touch-action: none; }
-        
-        .hidden-content {
-            position: absolute; inset: 0; display: flex; flex-col; align-items: center; justify-content: center;
-            z-index: 0; pointer-events: none; /* Initially allow clicks to pass through to canvas? No, canvas is on top */
+        body { background: #1a0b2e; overflow: hidden; font-family: 'Cormorant Garamond', serif; }
+        .envelope-container { perspective: 1000px; }
+        .envelope {
+            width: 300px; height: 200px; background: #f4f1ea; position: relative;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5); transform-style: preserve-3d;
+            transition: transform 1s; cursor: pointer;
         }
-        
-        .enter-btn {
-            padding: 15px 40px; background: white; color: black; font-family: sans-serif;
-            text-transform: uppercase; letter-spacing: 4px; border-radius: 50px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3); cursor: pointer; pointer-events: auto;
-            opacity: 0; transition: opacity 0.5s; font-weight: bold;
+        .flap {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: #e6e2d8; clip-path: polygon(0 0, 50% 50%, 100% 0);
+            transform-origin: top; transition: transform 0.8s 0.5s; z-index: 10;
         }
+        .letter {
+            position: absolute; top: 10px; left: 10px; width: 280px; height: 180px;
+            background: #fff; padding: 20px; text-align: center;
+            transform: translateY(0); transition: transform 1s 1s; z-index: 5;
+            display: flex; flex-col; align-items: center; justify-content: center;
+        }
+        .wax-seal {
+            position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%);
+            width: 60px; height: 60px; background: #d94848; border-radius: 50%;
+            border: 4px solid #b93838; box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            z-index: 20; display: flex; align-items: center; justify-content: center;
+            font-family: 'Great Vibes', cursive; color: #5a1a1a; font-size: 24px;
+            cursor: pointer; transition: transform 0.3s;
+        }
+        .wax-seal:hover { transform: translate(-50%, -50%) scale(1.1); }
+        .pocket {
+            position: absolute; bottom: 0; left: 0; width: 100%; height: 100%;
+            background: #f4f1ea; clip-path: polygon(0 100%, 50% 50%, 100% 100%);
+            z-index: 15;
+        }
+        .opened .flap { transform: rotateX(180deg); z-index: 1; }
+        .opened .letter { transform: translateY(-120px); z-index: 25; }
+        .opened .wax-seal { opacity: 0; pointer-events: none; }
     </style>
 </head>
-<body>
+<body class="flex items-center justify-center h-screen">
 
-    <div class="hidden-content">
-        <h1 class="text-white text-4xl mb-8 font-bold drop-shadow-md">It's Time</h1>
-        <button class="enter-btn" id="enterBtn" onclick="goToHome()">Enter Party</button>
+    <div class="text-center absolute top-20 text-[#d4af37] opacity-60">
+        <p class="tracking-[0.5em] text-xs uppercase">A message awaits</p>
     </div>
 
-    <canvas id="fog"></canvas>
-    
-    <div class="absolute bottom-10 w-full text-center pointer-events-none">
-        <p class="text-white/70 tracking-widest text-sm uppercase drop-shadow-md">Wipe the screen to reveal</p>
+    <div class="envelope-container" onclick="openEnvelope()">
+        <div class="envelope" id="env">
+            <div class="flap"></div>
+            <div class="pocket"></div>
+            <div class="wax-seal" id="seal">N</div>
+            
+            <div class="letter shadow-xl">
+                <p class="font-bold text-gray-800 uppercase tracking-widest text-xs mb-2">Exclusive Access</p>
+                <h2 class="font-[Great_Vibes] text-4xl text-[#d4af37] mb-4">Nithya</h2>
+                <button onclick="enterParty(event)" class="bg-[#1a0b2e] text-white px-6 py-2 rounded-full text-sm hover:bg-[#d4af37] transition-colors">Enter Celebration</button>
+            </div>
+        </div>
     </div>
 
     <script>
-        const canvas = document.getElementById('fog');
-        const ctx = canvas.getContext('2d');
-        const btn = document.getElementById('enterBtn');
-        let width, height;
-
-        function resize() {
-            width = canvas.width = window.innerWidth;
-            height = canvas.height = window.innerHeight;
-            resetFog();
-        }
-
-        function resetFog() {
-            ctx.fillStyle = "rgba(200, 200, 200, 0.95)"; // The fog color
-            ctx.fillRect(0, 0, width, height);
-            ctx.font = "20px Arial";
-            ctx.fillStyle = "rgba(0,0,0,0.1)";
-        }
-
-        function scratch(x, y) {
-            ctx.globalCompositeOperation = 'destination-out';
-            ctx.beginPath();
-            ctx.arc(x, y, 50, 0, Math.PI * 2); // Brush size
-            ctx.fill();
-            checkReveal();
-        }
-
-        // Check how much is cleared
-        let revealed = false;
-        function checkReveal() {
-            if(revealed) return;
-            // Simple logic: After some interaction, show button
-            // In a real app we'd count pixels, but let's just use a timer or rough estimate
-        }
-        
-        // Show button after 1 second of interaction for better UX
-        let interactionStarted = false;
-        function startInteraction() {
-            if(!interactionStarted) {
-                interactionStarted = true;
-                setTimeout(() => {
-                    btn.style.opacity = 1;
-                    revealed = true;
-                    // Fade out canvas slowly
-                    canvas.style.transition = "opacity 2s";
-                    canvas.style.opacity = 0;
-                    setTimeout(() => canvas.style.display = 'none', 2000);
-                }, 1000);
+        function openEnvelope() {
+            const env = document.getElementById('env');
+            if (!env.classList.contains('opened')) {
+                env.classList.add('opened');
+                // Play paper sound if you have one
             }
         }
 
-        window.addEventListener('resize', resize);
-        resize();
-
-        // Mouse Events
-        let isDrawing = false;
-        canvas.addEventListener('mousedown', () => isDrawing = true);
-        window.addEventListener('mouseup', () => isDrawing = false);
-        canvas.addEventListener('mousemove', (e) => {
-            if(isDrawing) {
-                scratch(e.clientX, e.clientY);
-                startInteraction();
-            }
-        });
-
-        // Touch Events
-        canvas.addEventListener('touchstart', (e) => { isDrawing = true; scratch(e.touches[0].clientX, e.touches[0].clientY); startInteraction(); });
-        canvas.addEventListener('touchmove', (e) => {
-            if(isDrawing) {
-                scratch(e.touches[0].clientX, e.touches[0].clientY);
-                e.preventDefault();
-            }
-        });
-
-        function goToHome() {
-            window.location.href = 'home.html';
+        function enterParty(e) {
+            e.stopPropagation();
+            gsap.to(".letter", { scale: 50, opacity: 0, duration: 1.5, ease: "power2.in" });
+            gsap.to("body", { backgroundColor: "#fff9f0", duration: 1.2 });
+            setTimeout(() => {
+                window.location.href = 'home.html';
+            }, 1200);
         }
     </script>
 </body>
