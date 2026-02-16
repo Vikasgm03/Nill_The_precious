@@ -135,11 +135,21 @@
 
     </div>
 
-    <div class="h-[50vh] flex flex-col items-center justify-center">
-        <p class="text-gray-500 font-emotional text-2xl">The story continues...</p>
-        <a href="home.html" class="mt-8 px-8 py-3 border border-[#d4af37] text-[#d4af37] hover:bg-[#d4af37] hover:text-black transition-all rounded-full uppercase tracking-widest text-xs">Return Home</a>
-    </div>
-
+   <div class="h-[60vh] flex flex-col items-center justify-center relative overflow-hidden bg-black">
+    <div class="absolute w-[300px] h-[300px] bg-[#d4af37]/5 rounded-full blur-[100px]"></div>
+    
+    <p class="text-gray-400 font-emotional text-3xl mb-8 opacity-60">The story continues...</p>
+    
+    <a href="home.html#vault-anchor" 
+       class="group relative px-10 py-4 border border-[#d4af37]/30 text-[#d4af37] transition-all rounded-full uppercase tracking-[0.4em] text-[10px] overflow-hidden">
+        
+        <div class="absolute inset-0 bg-[#d4af37] translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out"></div>
+        
+        <span class="relative z-10 group-hover:text-black font-bold">Return to Realm</span>
+    </a>
+    
+    <div class="mt-12 h-24 w-px bg-gradient-to-b from-[#d4af37]/50 to-transparent"></div>
+</div>
     <script>
         gsap.registerPlugin(ScrollTrigger);
 
