@@ -99,46 +99,48 @@
 </section>
 
         
-<section class="relative h-screen flex items-center justify-center overflow-hidden">
+<section class="relative h-screen flex items-center justify-center overflow-hidden bg-black">
     
-    <div class="absolute inset-0 z-0">
-        <img src="https://images.unsplash.com/photo-1513201099705-a9746e1e201f?q=80&w=2000&auto=format&fit=crop" 
-             class="w-full h-full object-cover animate-[zoomIn_20s_infinite_alternate]" 
-             id="hero-bg" 
-             alt="Hero">
-        <div class="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-[#fff9f0]"></div>
-    </div>
+    <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1536630596259-22a7442a537d?w=2000')] bg-cover bg-center opacity-30 grayscale"></div>
+    <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/80"></div>
 
-    <div class="absolute inset-0 z-0 pointer-events-none">
-        <div class="absolute top-1/4 left-1/4 w-2 h-2 bg-white rounded-full blur-[2px] animate-[float_6s_ease-in-out_infinite] opacity-60"></div>
-        <div class="absolute top-3/4 left-3/4 w-3 h-3 bg-[#d4af37] rounded-full blur-[4px] animate-[float_8s_ease-in-out_infinite_reverse] opacity-50"></div>
-        <div class="absolute top-1/2 left-1/2 w-1 h-1 bg-white rounded-full blur-[1px] animate-[pulse_4s_infinite] opacity-80"></div>
-    </div>
+    <div class="relative z-10 text-center w-full">
+        
+        <p class="font-cinematic text-[#fce7f3] tracking-[1em] text-xs mb-4 animate-[fadeIn_2s_ease-out]">
+            EST. 2004
+        </p>
 
-    <div class="relative z-10 text-center px-6">
-        <div class="backdrop-blur-sm bg-white/5 border border-white/20 p-8 md:p-12 rounded-2xl shadow-[0_0_40px_rgba(0,0,0,0.1)] transform hover:scale-[1.02] transition-transform duration-700">
-            
-            <h2 class="text-xl md:text-2xl font-cinematic text-white/90 mb-4 tracking-[0.2em] uppercase drop-shadow-md">
-                Today, the stars sing for
-            </h2>
-            
-            <h1 class="text-6xl md:text-9xl font-emotional font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#fff] via-[#fcf6ba] to-[#d4af37] drop-shadow-lg animate-[shimmer_3s_linear_infinite] bg-[length:200%_auto]">
-                NITHYA
-            </h1>
-            
-            <div class="w-24 h-1 bg-gradient-to-r from-transparent via-[#d4af37] to-transparent mx-auto my-6"></div>
+        <h1 class="masked-text text-[15vw] leading-none font-bold font-cinematic uppercase tracking-tighter cursor-default transition-all duration-500 hover:tracking-wide">
+            NITHYA
+        </h1>
 
-            <p class="text-lg md:text-2xl font-cinematic text-gray-100 max-w-2xl mx-auto italic leading-relaxed">
-                "Another year bolder, another year wiser,<br>another year of being infinite."
-            </p>
+        <div class="mt-8 flex items-center justify-center gap-4 opacity-0 animate-[slideUp_1s_ease-out_1s_forwards]">
+            <div class="h-[1px] w-20 bg-[#d4af37]"></div>
+            <p class="text-xl md:text-3xl font-emotional text-[#d4af37]">The Golden Chapter</p>
+            <div class="h-[1px] w-20 bg-[#d4af37]"></div>
         </div>
     </div>
+
+    <div class="absolute inset-0 pointer-events-none">
+        <div class="absolute top-1/3 left-1/4 w-1 h-1 bg-[#d4af37] rounded-full animate-ping"></div>
+        <div class="absolute bottom-1/3 right-1/4 w-1 h-1 bg-white rounded-full animate-ping delay-700"></div>
+    </div>
+
 </section>
 
 <style>
-    @keyframes zoomIn { 0% { transform: scale(1); } 100% { transform: scale(1.1); } }
-    @keyframes shimmer { to { background-position: 200% center; } }
-    @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
+    /* This creates the video-inside-text effect */
+    .masked-text {
+        background-image: url('https://media.giphy.com/media/26tn720obx6X2G1EY/giphy.gif'); /* Gold Texture GIF */
+        /* Alternatively, use a static gold gradient: linear-gradient(to bottom, #cfc09f 22%,#634f2c 24%, #cfc09f 26%, #cfc09f 27%,#ffecb3 40%,#3a2c0f 78%) */
+        background-size: cover;
+        background-position: center;
+        -webkit-background-clip: text;
+        color: transparent;
+        filter: drop-shadow(0 0 30px rgba(212,175,55,0.2));
+    }
+    
+    @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 </style>
 
         <section class="min-h-screen bg-[#fff9f0] flex items-center justify-center py-20 relative">
