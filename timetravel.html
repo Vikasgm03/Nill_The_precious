@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The River of Time</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,600;1,400&family=Great+Vibes&display=swap" rel="stylesheet">
+    
+    <style>
+        :root { --gold: #d4af37; --deep: #0f0518; }
+        body { background-color: var(--deep); color: #fff; font-family: 'Cormorant Garamond', serif; overflow-x: hidden; }
+        .font-emotional { font-family: 'Great Vibes', cursive; }
+        
+        /* Floating Dust Particles */
+        .dust { position: fixed; background: #fff; border-radius: 50%; pointer-events: none; opacity: 0; }
+        
+        /* The Timeline Line */
+        .timeline-line { 
+            position: fixed; left: 50%; top: 0; bottom: 0; width: 2px; 
+            background: linear-gradient(to bottom, transparent, var(--gold), transparent); 
+            transform: translateX(-50%); z-index: 0; opacity: 0.3;
+        }
+
+        /* Glass Cards */
+        .memory-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            box-shadow: 0 0 30px rgba(0,0,0,0.5);
+            transition: transform 0.5s ease;
+        }
+        
+        /* Clock Face Background */
+        .clock-bg {
+            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 80vw; height: 80vw; max-width: 600px; max-height: 600px;
+            border: 2px solid rgba(255,255,255,0.05); border-radius: 50%;
+            pointer-events: none; z-index: -1;
+        }
+        
+        /* Loader */
+        #loader { position: fixed; inset: 0; background: #000; z-index: 100; display: flex; align-items: center; justify-content: center; }
+        .hands { transform-origin: bottom center; }
+    </style>
+</head>
+<body>
+
+    <audio id="time-music" loop>
+        <source src="https://cdn.pixabay.com/audio/2022/10/05/audio_68629e7695.mp3" type="audio/mp3">
+    </audio>
+
+    <div id="loader">
+        <div class="relative w-20 h-20 border-4 border-gray-800 rounded-full flex items-center justify-center">
+            <div class="absolute w-1 h-8 bg-[#d4af37] top-2 left-[calc(50%-2px)] origin-bottom animate-[spin_2s_linear_infinite]"></div>
+            <div class="absolute w-1 h-6 bg-white top-4 left-[calc(50%-2px)] origin-bottom animate-[spin_6s_linear_infinite]"></div>
+        </div>
+        <p class="absolute mt-32 text-[#d4af37] tracking-[0.5em] text-xs uppercase">Calibrating...</p>
+    </div>
+
+    <div class="timeline-line"></div>
+    <div class="clock-bg">
+        <div class="absolute inset-0 border border-white/5 rounded-full scale-75"></div>
+        <div class="absolute inset-0 border border-white/5 rounded-full scale-50"></div>
+    </div>
+
+    <a href="index.html" class="fixed top-8 left-8 z-50 text-white/50 hover:text-[#d4af37] transition-colors flex items-center gap-2 mix-blend-difference cursor-pointer">
+        <span>←</span> <span class="tracking-widest text-xs uppercase">Return to Now</span>
+    </a>
+
+    <div class="relative pt-[50vh] pb-[50vh]">
+        
+        <div class="h-screen flex flex-col items-center justify-center text-center sticky top-0 -z-10 opacity-100" id="header-section">
+            <h1 class="text-6xl md:text-9xl text-transparent bg-clip-text bg-gradient-to-b from-[#d4af37] to-transparent font-bold">CHRONICLE</h1>
+            <p class="text-2xl font-emotional text-purple-200 mt-4">Scroll to unwind the clock</p>
+        </div>
+
+        <div class="min-h-screen flex items-center justify-center py-20 era-trigger">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 w-full max-w-5xl px-6 items-center">
+                <div class="order-2 md:order-1 text-right space-y-4 reveal-text">
+                    <span class="text-[#d4af37] tracking-[0.4em] text-sm uppercase">The Present</span>
+                    <h2 class="text-5xl font-emotional">Blooming & Bold</h2>
+                    <p class="text-gray-400 leading-relaxed">Standing tall in the garden of life. Full of dreams, ambition, and the beauty of becoming exactly who you are meant to be.</p>
+                </div>
+                <div class="order-1 md:order-2 memory-card p-4 rotate-3 hover:rotate-0 rounded-xl relative reveal-img">
+                    <img src="https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?w=600" class="w-full h-[400px] object-cover grayscale hover:grayscale-0 transition-all duration-700">
+                    <div class="absolute -bottom-6 -right-6 text-6xl text-[#d4af37] opacity-20 font-bold">2026</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="min-h-screen flex items-center justify-center py-20 era-trigger">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 w-full max-w-5xl px-6 items-center">
+                <div class="memory-card p-4 -rotate-2 hover:rotate-0 rounded-xl relative reveal-img">
+                    <img src="https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=600" class="w-full h-[400px] object-cover grayscale hover:grayscale-0 transition-all duration-700">
+                    <div class="absolute -bottom-6 -left-6 text-6xl text-[#d4af37] opacity-20 font-bold">2018</div>
+                </div>
+                <div class="space-y-4 reveal-text">
+                    <span class="text-[#d4af37] tracking-[0.4em] text-sm uppercase">The Discovery</span>
+                    <h2 class="text-5xl font-emotional">Wild & Free</h2>
+                    <p class="text-gray-400 leading-relaxed">School days, endless laughter, and the friendships that shaped the soul. A time of color, chaos, and pure joy.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="min-h-screen flex items-center justify-center py-20 era-trigger">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 w-full max-w-5xl px-6 items-center">
+                <div class="order-2 md:order-1 text-right space-y-4 reveal-text">
+                    <span class="text-[#d4af37] tracking-[0.4em] text-sm uppercase">The Wonder</span>
+                    <h2 class="text-5xl font-emotional">Small Steps</h2>
+                    <p class="text-gray-400 leading-relaxed">The world was giant, and every day was a new magic trick. Skinned knees, ice cream smiles, and infinite imagination.</p>
+                </div>
+                <div class="order-1 md:order-2 memory-card p-4 rotate-2 hover:rotate-0 rounded-xl relative reveal-img">
+                    <img src="https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=600" class="w-full h-[400px] object-cover grayscale hover:grayscale-0 transition-all duration-700">
+                    <div class="absolute -bottom-6 -right-6 text-6xl text-[#d4af37] opacity-20 font-bold">2010</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="min-h-screen flex items-center justify-center py-20 era-trigger">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 w-full max-w-5xl px-6 items-center">
+                <div class="memory-card p-4 -rotate-3 hover:rotate-0 rounded-xl relative reveal-img">
+                    <img src="https://images.unsplash.com/photo-1519689680058-324335c77eba?w=600" class="w-full h-[400px] object-cover sepia transition-all duration-700">
+                    <div class="absolute -bottom-6 -left-6 text-6xl text-[#d4af37] opacity-20 font-bold">2004</div>
+                </div>
+                <div class="space-y-4 reveal-text">
+                    <span class="text-[#d4af37] tracking-[0.4em] text-sm uppercase">The Beginning</span>
+                    <h2 class="text-5xl font-emotional">A Star is Born</h2>
+                    <p class="text-gray-400 leading-relaxed">Where the story began. A tiny spark that would grow to light up the world.</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="h-[50vh] flex flex-col items-center justify-center">
+        <p class="text-gray-500 font-emotional text-2xl">The story continues...</p>
+        <a href="index.html" class="mt-8 px-8 py-3 border border-[#d4af37] text-[#d4af37] hover:bg-[#d4af37] hover:text-black transition-all rounded-full uppercase tracking-widest text-xs">Return Home</a>
+    </div>
+
+    <script>
+        gsap.registerPlugin(ScrollTrigger);
+
+        // --- LOADER ---
+        window.addEventListener('load', () => {
+            const music = document.getElementById('time-music');
+            
+            // Try to play audio (user interaction might be needed usually, but we try)
+            document.body.addEventListener('click', () => music.play(), {once:true});
+
+            gsap.to('#loader', {
+                opacity: 0,
+                duration: 1.5,
+                delay: 1,
+                onComplete: () => {
+                    document.getElementById('loader').style.display = 'none';
+                    initAnimations();
+                }
+            });
+        });
+
+        function initAnimations() {
+            // Header fade out
+            gsap.to("#header-section", {
+                opacity: 0,
+                scale: 0.8,
+                scrollTrigger: {
+                    trigger: "body",
+                    start: "top top",
+                    end: "20% top",
+                    scrub: true
+                }
+            });
+
+            // Clock BG Rotation
+            gsap.to(".clock-bg", {
+                rotation: 360,
+                scrollTrigger: {
+                    trigger: "body",
+                    start: "top top",
+                    end: "bottom bottom",
+                    scrub: 2
+                }
+            });
+
+            // Era Reveals
+            document.querySelectorAll('.era-trigger').forEach((section) => {
+                const text = section.querySelector('.reveal-text');
+                const img = section.querySelector('.reveal-img');
+
+                gsap.from(text, {
+                    y: 100,
+                    opacity: 0,
+                    duration: 1.5,
+                    ease: "power3.out",
+                    scrollTrigger: {
+                        trigger: section,
+                        start: "top 70%",
+                    }
+                });
+
+                gsap.from(img, {
+                    y: 150,
+                    opacity: 0,
+                    scale: 0.8,
+                    rotation: Math.random() * 10 - 5,
+                    duration: 1.5,
+                    ease: "power3.out",
+                    scrollTrigger: {
+                        trigger: section,
+                        start: "top 60%",
+                    }
+                });
+            });
+
+            // Create Dust Particles
+            const colors = ['#d4af37', '#ffffff', '#8b5cf6'];
+            for(let i=0; i<50; i++) {
+                let div = document.createElement('div');
+                div.classList.add('dust');
+                document.body.appendChild(div);
+                
+                const size = Math.random() * 4;
+                gsap.set(div, {
+                    x: Math.random() * window.innerWidth,
+                    y: Math.random() * window.innerHeight,
+                    width: size,
+                    height: size,
+                    backgroundColor: colors[Math.floor(Math.random() * colors.length)]
+                });
+
+                gsap.to(div, {
+                    y: "-=100", // Float up
+                    opacity: Math.random(),
+                    duration: Math.random() * 3 + 2,
+                    repeat: -1,
+                    yoyo: true,
+                    ease: "sine.inOut"
+                });
+            }
+        }
+    </script>
+</body>
+</html>
