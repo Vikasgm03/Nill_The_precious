@@ -89,41 +89,39 @@
         <i class="fas fa-volume-high text-white"></i>
     </div>
 
-<div id="hud-layer" class="hud-container">
-    <div class="grid-bg"></div>
-    
-    <div class="absolute left-4 top-1/2 -translate-y-1/2 hidden md:block text-[10px] opacity-60">
-        <div id="data-stream-left">INITIALIZING...</div>
-    </div>
-
-    <div class="flex flex-col items-center gap-6 relative z-10 p-4">
-        <div class="scan-frame relative overflow-hidden" id="scanner">
-            <div class="bracket tl"></div> <div class="bracket tr"></div>
-            <div class="bracket bl"></div> <div class="bracket br"></div>
+    <div id="hud-layer" class="hud-container">
+        <div class="grid-bg"></div>
+        <div class="absolute left-4 top-1/2 -translate-y-1/2 hidden md:block text-[10px] opacity-60">
+            <div id="data-stream-left">INITIALIZING...</div>
+        </div>
+        <div class="flex flex-col items-center gap-6 relative z-10 p-4">
             
-            <img id="media/4.jpeg" 
-                 src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400" 
-                 class="absolute inset-0 w-full h-full object-cover opacity-0 transition-all duration-500"
-                 style="filter: grayscale(100%) sepia(100%) hue-rotate(90deg) brightness(0.8) contrast(1.2);" 
-                 alt="Target Identity">
+            <div class="scan-frame relative overflow-hidden" id="scanner">
+                <div class="bracket tl"></div> <div class="bracket tr"></div>
+                <div class="bracket bl"></div> <div class="bracket br"></div>
+                
+                <img id="id-photo" 
+                     src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400" 
+                     class="absolute inset-0 w-full h-full object-cover opacity-0 transition-all duration-500"
+                     style="filter: grayscale(100%) sepia(100%) hue-rotate(90deg) brightness(0.8) contrast(1.2);" 
+                     alt="Target Identity">
 
-            <div class="scan-line z-20"></div>
+                <div class="scan-line z-20"></div>
+            </div>
+
+            <div class="text-center space-y-2">
+                <h2 id="status" class="text-2xl font-bold tracking-widest text-[#0ff]" style="text-shadow: 0 0 5px #0ff;">SYSTEM LOCKED</h2>
+                <p id="sub-status" class="text-xs opacity-70">BIOMETRIC AUTHENTICATION REQUIRED</p>
+            </div>
+            
+            <button id="start-btn" class="mt-8 px-8 py-3 border border-[#0ff] hover:bg-[#0ff] hover:text-black transition-colors tracking-[0.3em] uppercase text-sm animate-pulse">
+                Initiate Scan
+            </button>
         </div>
-
-        <div class="text-center space-y-2">
-            <h2 id="status" class="text-2xl font-bold tracking-widest text-[#0ff]" style="text-shadow: 0 0 5px #0ff;">SYSTEM LOCKED</h2>
-            <p id="sub-status" class="text-xs opacity-70">BIOMETRIC AUTHENTICATION REQUIRED</p>
+        <div class="absolute right-4 top-1/2 -translate-y-1/2 hidden md:block text-[10px] opacity-60 text-right">
+            <div id="data-stream-right">WAITING INPUT...</div>
         </div>
-
-        <button id="start-btn" class="mt-8 px-8 py-3 border border-[#0ff] text-[#0ff] hover:bg-[#0ff] hover:text-black transition-colors tracking-[0.3em] uppercase text-sm animate-pulse">
-            Initiate Scan
-        </button>
     </div>
-
-    <div class="absolute right-4 top-1/2 -translate-y-1/2 hidden md:block text-[10px] opacity-60 text-right">
-        <div id="data-stream-right">WAITING INPUT...</div>
-    </div>
-</div>
 
     <div id="site-wrapper">
         
@@ -140,7 +138,7 @@
 
         <section class="relative h-screen flex items-center justify-center overflow-hidden">
             <div class="absolute inset-0 z-0">
-                <img src="media/4.jpeg" class="w-full h-full object-cover opacity-30 scale-110 will-change-transform" id="hero-bg" alt="Hero">
+                <img src="https://images.unsplash.com/photo-1513201099705-a9746e1e201f?q=80&w=2000&auto=format&fit=crop" class="w-full h-full object-cover opacity-30 scale-110 will-change-transform" id="hero-bg" alt="Hero">
                 <div class="absolute inset-0 bg-gradient-to-b from-black/20 via-black/60 to-[#050505]"></div>
             </div>
             <div class="relative z-10 text-center px-4">
@@ -323,7 +321,7 @@
             }
         };
 
-// --- HUD SCANNER LOGIC ---
+        // --- HUD SCANNER LOGIC ---
         const hud = {
             el: document.getElementById('hud-layer'),
             startBtn: document.getElementById('start-btn'),
@@ -331,31 +329,22 @@
             photo: document.getElementById('id-photo'),
             
             init: function() {
-                // SAFETY CHECK: Make sure button exists
                 if (this.startBtn) {
                     this.startBtn.addEventListener('click', () => this.start());
-                    console.log("Scanner initialized");
-                } else {
-                    console.error("Start button not found!");
                 }
             },
             
             start: function() {
-                console.log("Scan started...");
-                
-                // 1. Hide Button & Play Sound
                 this.startBtn.style.display = 'none';
-                
-                // Try playing audio, catch error if user hasn't interacted enough
                 if(audio.scan) audio.scan.play().catch(e => console.log("Audio play failed:", e));
 
-                // 2. Reveal the "Hologram" Photo Immediately (Green Filter)
+                // Reveal Hologram Photo (Green)
                 if(this.photo) {
-                    this.photo.style.opacity = "0.8"; // Make visible
+                    this.photo.style.opacity = "0.8"; 
                     this.photo.style.filter = "grayscale(100%) sepia(100%) hue-rotate(90deg) brightness(0.8) contrast(1.2)";
                 }
 
-                // 3. Text Scramble Effect
+                // Text Scramble
                 const statusEl = document.getElementById('status');
                 if(statusEl) {
                     let idx = 0;
@@ -368,30 +357,22 @@
                     }, 30);
                 }
                 
-                // 4. Move the Laser Line
+                // Scan Laser
                 if(this.scanLine) {
                     gsap.to(this.scanLine, { opacity: 1, duration: 0.2 });
                     gsap.to(this.scanLine, { 
-                        top: '100%', 
-                        duration: 2, 
-                        ease: "power2.inOut", 
-                        repeat: 1, 
-                        yoyo: true, 
+                        top: '100%', duration: 2, ease: "power2.inOut", repeat: 1, yoyo: true, 
                         onComplete: () => this.success() 
                     });
                 } else {
-                    // Fallback if GSAP fails or element missing
                     setTimeout(() => this.success(), 2000);
                 }
             },
             
             success: function() {
-                console.log("Access Granted");
-                
                 if(audio.scan) audio.scan.pause();
                 if(audio.success) audio.success.play().catch(e => console.log(e));
                 
-                // 1. Update Status to Green
                 const status = document.getElementById('status');
                 if(status) {
                     status.innerText = "IDENTITY CONFIRMED";
@@ -399,30 +380,25 @@
                     status.style.textShadow = "0 0 20px #0f0";
                 }
                 
-                // 2. Turn Frame Green
                 const frame = document.querySelector('.scan-frame');
                 if(frame) {
                     frame.style.borderColor = "#0f0";
                     frame.style.boxShadow = "0 0 30px #0f0, inset 0 0 10px #0f0";
                 }
 
-                // 3. Reveal True Color Photo (Remove Green Filter)
+                // Show True Color Photo
                 if(this.photo) {
                     this.photo.style.transition = "filter 0.5s ease, opacity 0.5s ease";
                     this.photo.style.filter = "none";
                     this.photo.style.opacity = "1";
                 }
                 
-                // 4. Transition to Main Site
+                // Enter Site
                 setTimeout(() => {
                     gsap.to(this.el, { opacity: 0, duration: 1, onComplete: () => {
                         this.el.style.display = 'none';
                         gsap.to('#site-wrapper', { opacity: 1, duration: 1 });
-                        
-                        // Start other features if they exist
-                        if(typeof app !== 'undefined' && app.initFeatures) {
-                            app.initFeatures();
-                        }
+                        if(typeof app !== 'undefined' && app.initFeatures) app.initFeatures();
                     }});
                 }, 2000);
             }
@@ -455,11 +431,10 @@
             initIntro: function() {
                 const intro = document.getElementById('intro-screen');
                 intro.addEventListener('click', () => {
-                    audio.bg.play().catch(() => {}); // Attempt play
+                    audio.bg.play().catch(() => {});
                     audio.init();
                     gsap.to('.fade-elem', { y: -20, opacity: 0, stagger: 0.1 });
                     gsap.to(intro, { opacity: 0, duration: 1, pointerEvents: 'none' });
-                    // Trigger Hero Animation
                     gsap.to(".hero-text", { y: 0, opacity: 1, duration: 1.5, stagger: 0.2, delay: 0.5 });
                     gsap.to("#hero-bg", { scale: 1, duration: 10 });
                 });
@@ -469,15 +444,10 @@
                 const ctx = canvas.getContext('2d');
                 let w, h;
                 const stars = [];
-                
                 const resize = () => { w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; };
                 window.addEventListener('resize', resize);
                 resize();
-
-                // Generate Stars
                 for(let i=0; i<800; i++) stars.push({ x: Math.random()*w, y: Math.random()*h, r: Math.random()*1.5, a: Math.random() });
-
-                // Render Loop (Optimized)
                 const animate = () => {
                     ctx.clearRect(0,0,w,h);
                     ctx.fillStyle = "white";
@@ -503,16 +473,12 @@
                     if(el.classList.contains('collected')) return;
                     el.classList.add('collected');
                     count++;
-                    
-                    // Update UI
                     const bar = document.getElementById('keys-bar');
                     bar.classList.remove('hidden');
                     const icon = document.createElement('div');
                     icon.innerHTML = '🔑';
                     document.getElementById('keys-container').appendChild(icon);
-                    
                     confetti({ particleCount: 30, spread: 50, origin: { y: 0.8 } });
-
                     if(count >= total) setTimeout(this.openVault, 1000);
                 };
             },
@@ -528,12 +494,11 @@
             initScratch: function() {
                 const canvas = document.getElementById('scratch-canvas');
                 const ctx = canvas.getContext('2d');
-                ctx.fillStyle = "#C0C0C0"; // Silver
+                ctx.fillStyle = "#C0C0C0";
                 ctx.fillRect(0,0,300,200);
                 ctx.fillStyle = "#000";
                 ctx.font = "20px Arial";
                 ctx.fillText("SCRATCH ME", 85, 110);
-                
                 let isDrawing = false;
                 const scratch = (e) => {
                     if(!isDrawing) return;
@@ -543,7 +508,6 @@
                     ctx.globalCompositeOperation = "destination-out";
                     ctx.beginPath(); ctx.arc(x,y,20,0,Math.PI*2); ctx.fill();
                 };
-                
                 canvas.addEventListener('mousedown', () => isDrawing = true);
                 canvas.addEventListener('touchstart', (e) => { isDrawing = true; scratch(e); });
                 window.addEventListener('mouseup', () => isDrawing = false);
@@ -554,12 +518,10 @@
             initGlobe: function() {
                 const globe = document.getElementById('globe');
                 let rotation = 0;
-                // Simple auto-rotate
                 setInterval(() => {
                     rotation += 0.2;
                     globe.style.transform = `rotateY(${rotation}deg)`;
                 }, 50);
-                
                 window.openVideo = (url) => {
                     const modal = document.getElementById('video-modal');
                     modal.classList.remove('hidden');
@@ -579,26 +541,16 @@
                 });
             },
             initScroll: function() {
-                // Parallax Images
                 gsap.utils.toArray('.parallax-img').forEach(img => {
-                    gsap.to(img, {
-                        y: "20%", ease: "none",
-                        scrollTrigger: { trigger: img.parentElement, start: "top bottom", end: "bottom top", scrub: true }
-                    });
+                    gsap.to(img, { y: "20%", ease: "none", scrollTrigger: { trigger: img.parentElement, start: "top bottom", end: "bottom top", scrub: true }});
                 });
-                // Reveal Text
                 gsap.utils.toArray('.scroll-reveal').forEach(elem => {
-                    gsap.to(elem, {
-                        y: 0, opacity: 1, duration: 1,
-                        scrollTrigger: { trigger: elem, start: "top 80%" }
-                    });
+                    gsap.to(elem, { y: 0, opacity: 1, duration: 1, scrollTrigger: { trigger: elem, start: "top 80%" }});
                 });
             }
         };
 
-        // Boot
         window.addEventListener('DOMContentLoaded', () => app.init());
-
     </script>
 </body>
 </html>
