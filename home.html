@@ -99,48 +99,84 @@
 </section>
 
         
-<section class="relative h-screen flex items-center justify-center overflow-hidden bg-black">
+<section class="relative h-screen flex items-center justify-center overflow-hidden bg-[#050505] perspective-container">
     
-    <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1536630596259-22a7442a537d?w=2000')] bg-cover bg-center opacity-30 grayscale"></div>
-    <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/80"></div>
+    <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1536630596259-22a7442a537d?w=2000')] bg-cover bg-center opacity-20 grayscale mix-blend-luminosity"></div>
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_transparent_0%,_#000_80%)]"></div>
 
-    <div class="relative z-10 text-center w-full">
+    <div class="absolute inset-0 z-0 pointer-events-none overflow-hidden">
         
-        <p class="font-cinematic text-[#fce7f3] tracking-[1em] text-xs mb-4 animate-[fadeIn_2s_ease-out]">
-            EST. 2004
+        <div class="absolute top-[15%] left-[10%] w-24 h-32 bg-cover bg-center rounded-xl opacity-40 blur-[4px] animate-[floatPhoto_12s_ease-in-out_infinite_alternate]"
+             style="background-image: url('https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200'); box-shadow: 0 0 20px rgba(212,175,55,0.2);">
+             </div>
+        
+        <div class="absolute bottom-[20%] right-[15%] w-32 h-40 bg-cover bg-center rounded-xl opacity-30 blur-[8px] animate-[floatPhoto_15s_ease-in-out_infinite_alternate-reverse]"
+             style="background-image: url('https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=200'); box-shadow: 0 0 30px rgba(212,175,55,0.1);">
+             </div>
+
+         <div class="absolute top-[60%] left-[5%] w-20 h-24 bg-cover bg-center rounded-lg opacity-50 blur-[2px] animate-[floatPhoto_10s_ease-in-out_infinite_alternate]"
+         style="background-image: url('https://images.unsplash.com/photo-1517841905240-472988babdf9?w=200');">
+            </div>
+
+        <div class="absolute top-[25%] right-[25%] w-16 h-16 bg-cover bg-center rounded-lg opacity-40 blur-[5px] animate-[floatPhoto_18s_ease-in-out_infinite_alternate-reverse]"
+        style="background-image: url('https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200');">
+           </div>
+    </div>
+
+    <div class="relative z-20 text-center w-full px-4">
+        
+        <p class="font-cinematic text-[#d4af37]/80 tracking-[1em] text-xs md:text-sm mb-6 animate-[fadeIn_2s_ease-out] drop-shadow-lg">
+            THE ONE & ONLY
         </p>
 
-        <h1 class="masked-text text-[15vw] leading-none font-bold font-cinematic uppercase tracking-tighter cursor-default transition-all duration-500 hover:tracking-wide">
+        <h1 class="masked-text-premium text-[15vw] leading-[0.9] font-bold font-cinematic uppercase tracking-tighter cursor-default transition-all duration-700 hover:tracking-normal"
+            style="transform-style: preserve-3d;">
             NITHYA
         </h1>
 
-        <div class="mt-8 flex items-center justify-center gap-4 opacity-0 animate-[slideUp_1s_ease-out_1s_forwards]">
-            <div class="h-[1px] w-20 bg-[#d4af37]"></div>
-            <p class="text-xl md:text-3xl font-emotional text-[#d4af37]">The Golden Chapter</p>
-            <div class="h-[1px] w-20 bg-[#d4af37]"></div>
+        <div class="mt-12 flex items-center justify-center gap-6 opacity-0 animate-[slideUp_1s_ease-out_1s_forwards] mix-blend-screen">
+            <div class="h-[1px] w-16 md:w-32 bg-gradient-to-r from-transparent to-[#d4af37]"></div>
+            <p class="text-xl md:text-4xl font-emotional text-[#d4af37] drop-shadow-[0_0_10px_rgba(212,175,55,0.8)]">The Golden Era Begins</p>
+            <div class="h-[1px] w-16 md:w-32 bg-gradient-to-l from-transparent to-[#d4af37]"></div>
         </div>
     </div>
-
-    <div class="absolute inset-0 pointer-events-none">
-        <div class="absolute top-1/3 left-1/4 w-1 h-1 bg-[#d4af37] rounded-full animate-ping"></div>
-        <div class="absolute bottom-1/3 right-1/4 w-1 h-1 bg-white rounded-full animate-ping delay-700"></div>
+    
+    <div class="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-50 animate-bounce">
+        <span class="text-[10px] tracking-[0.3em] text-[#d4af37] uppercase">Explore</span>
+        <i class="fas fa-chevron-down text-[#d4af37]"></i>
     </div>
 
 </section>
 
 <style>
-    /* This creates the video-inside-text effect */
-    .masked-text {
-        background-image: url('https://media.giphy.com/media/26tn720obx6X2G1EY/giphy.gif'); /* Gold Texture GIF */
-        /* Alternatively, use a static gold gradient: linear-gradient(to bottom, #cfc09f 22%,#634f2c 24%, #cfc09f 26%, #cfc09f 27%,#ffecb3 40%,#3a2c0f 78%) */
-        background-size: cover;
-        background-position: center;
+    /*Premium Shimmering Gold Gradient Mask */
+    .masked-text-premium {
+        /* The golden gradient */
+        background: linear-gradient(to right, #8a6219, #e4c47d, #d4af37, #fcf6ba, #d4af37, #e4c47d, #8a6219);
+        background-size: 200% auto;
         -webkit-background-clip: text;
         color: transparent;
-        filter: drop-shadow(0 0 30px rgba(212,175,55,0.2));
+        
+        /* Animation */
+        animation: goldShimmer 6s linear infinite;
+        
+        /* Depth shadows */
+        filter: drop-shadow(0 10px 20px rgba(0,0,0,0.8)) drop-shadow(0 0 30px rgba(212,175,55,0.3));
+    }
+
+    /* 3D Hover Effect */
+    .masked-text-premium:hover {
+        transform: perspective(1000px) rotateX(10deg) scale(1.02);
+        filter: drop-shadow(0 20px 30px rgba(0,0,0,1)) drop-shadow(0 0 50px rgba(212,175,55,0.5));
     }
     
-    @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    /* Keyframes */
+    @keyframes goldShimmer { to { background-position: 200% center; } }
+    @keyframes slideUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes floatPhoto { 
+        0% { transform: translateY(0) rotate(0deg); } 
+        100% { transform: translateY(-30px) rotate(5deg); } 
+    }
 </style>
 
         <section class="min-h-screen bg-[#fff9f0] flex items-center justify-center py-20 relative">
