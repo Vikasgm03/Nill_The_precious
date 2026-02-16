@@ -10,101 +10,127 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Great+Vibes&family=Montserrat:wght@300&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Great+Vibes&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
     
     <style>
-        /* --- DESIGN UPDATE --- */
+        /* --- DARK LUXURY THEME --- */
         body { 
             margin: 0; overflow: hidden; 
-            background: radial-gradient(circle at center, #2e1065 0%, #050505 100%); /* Deep Violet Gradient */
+            background: #05020a; /* Almost pure black */
             color: white; 
             font-family: 'Montserrat', sans-serif; 
         }
         
         #cake-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 10; cursor: crosshair; }
         
-        /* Ambient Particles */
+        /* Subtle Gold Dust Background */
         .bg-particles {
             position: absolute; inset: 0; pointer-events: none;
-            background-image: url("https://www.transparenttextures.com/patterns/stardust.png");
-            opacity: 0.3; animation: pulseBg 4s infinite alternate;
+            background-image: radial-gradient(circle, #d4af37 1px, transparent 1px);
+            background-size: 50px 50px;
+            opacity: 0.1; animation: twinkle 5s infinite alternate;
         }
-        @keyframes pulseBg { 0% { opacity: 0.2; } 100% { opacity: 0.4; } }
+        @keyframes twinkle { 0% { opacity: 0.05; } 100% { opacity: 0.15; } }
 
-        /* UI Layer */
+        /* --- UI ELEMENTS --- */
         .ui-layer { 
             position: absolute; z-index: 20; pointer-events: none; 
             width: 100%; height: 100%; 
             display: flex; flex-direction: column; justify-content: space-between; align-items: center; 
-            padding: 2rem; 
+            padding: 3rem 1rem; 
         }
         
         .title h1 { 
             font-family: 'Cinzel', serif; 
-            text-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
+            color: #d4af37;
+            text-shadow: 0 0 30px rgba(212, 175, 55, 0.4);
+            letter-spacing: 0.1em;
             opacity: 0; transform: translateY(-20px); 
         }
         
+        /* Instruction Badge */
         .instruction-pill { 
             position: absolute; bottom: 15%; left: 50%; transform: translateX(-50%);
-            background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px);
-            border: 1px solid rgba(212, 175, 55, 0.3);
-            padding: 10px 25px; border-radius: 50px;
-            font-family: 'Montserrat', sans-serif; color: #fce7f3; letter-spacing: 0.1em; font-size: 0.8rem;
-            text-transform: uppercase; opacity: 0; pointer-events: none;
-            box-shadow: 0 0 15px rgba(0,0,0,0.5);
+            background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(8px);
+            border: 1px solid rgba(212, 175, 55, 0.5);
+            padding: 12px 30px; border-radius: 50px;
+            font-family: 'Cinzel', serif; color: #fff; font-size: 0.9rem;
+            text-transform: uppercase; letter-spacing: 0.1em;
+            opacity: 0; pointer-events: none;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.1);
         }
-        .hand-icon { display: inline-block; animation: swipeHint 1.5s infinite; margin-left: 8px; }
-        
+        .hand-icon { display: inline-block; animation: swipeHint 1.5s infinite ease-in-out; margin-left: 10px; filter: grayscale(100%) brightness(200%); }
         @keyframes swipeHint { 0% { transform: translateX(-5px); } 50% { transform: translateX(5px); } 100% { transform: translateX(-5px); } }
 
         /* Glowing Knife Line */
         #knife-line {
             position: absolute; top: 0; left: 0; width: 0; height: 3px;
-            background: linear-gradient(90deg, transparent, #fff, transparent);
-            box-shadow: 0 0 15px #fff, 0 0 30px #d4af37;
+            background: #fff;
+            box-shadow: 0 0 15px #d4af37, 0 0 30px #d4af37;
             transform-origin: left center; opacity: 0; pointer-events: none; z-index: 30;
-            mix-blend-mode: screen;
         }
 
-        /* Celebration Text */
+        /* --- CELEBRATION TEXT (High Visibility) --- */
         .celebration-text {
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.5);
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.8);
             text-align: center; opacity: 0; pointer-events: none; z-index: 40;
             width: 100%;
+            text-shadow: 0 10px 50px black; /* Deep shadow for contrast */
         }
         
-        /* Back Button Style */
+        .bday-msg {
+            font-family: 'Great Vibes', cursive;
+            font-size: clamp(4rem, 15vw, 9rem); /* Responsive giant text */
+            line-height: 1.1;
+            background: linear-gradient(to bottom, #fff 20%, #ffd700 80%);
+            -webkit-background-clip: text;
+            color: transparent;
+            filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.8));
+        }
+
+        .bday-name {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(1.5rem, 5vw, 3rem);
+            letter-spacing: 0.5em;
+            color: white;
+            margin-top: 20px;
+            text-shadow: 0 0 20px rgba(255,255,255,0.5);
+        }
+        
+        /* Back Button */
         .back-btn {
             position: fixed; top: 30px; left: 30px; z-index: 50; cursor: pointer; pointer-events: auto;
-            color: rgba(255,255,255,0.6); font-size: 0.8rem; letter-spacing: 0.2em;
+            color: #d4af37; font-size: 0.8rem; letter-spacing: 0.2em;
             text-transform: uppercase; transition: 0.3s;
-            border: 1px solid rgba(255,255,255,0.2); padding: 8px 16px; border-radius: 30px;
+            border: 1px solid rgba(212, 175, 55, 0.3); padding: 10px 20px; border-radius: 4px;
+            background: rgba(0,0,0,0.5);
         }
-        .back-btn:hover { color: #d4af37; border-color: #d4af37; background: rgba(0,0,0,0.5); }
+        .back-btn:hover { background: #d4af37; color: #000; }
 
     </style>
 </head>
 <body>
 
-    <a href="index.html" class="back-btn">← Back</a>
+    <audio id="bday-audio" preload="auto">
+        <source src="https://cdn.pixabay.com/audio/2023/04/11/audio_0346bf8e72.mp3" type="audio/mp3">
+    </audio>
+
+    <a href="index.html" class="back-btn">Return</a>
     <div class="bg-particles"></div>
 
     <div class="ui-layer">
         <div class="title mt-8">
-            <h1 class="text-4xl md:text-6xl text-transparent bg-clip-text bg-gradient-to-b from-[#d4af37] to-[#fcf6ba]">Make a Wish</h1>
-            <p class="text-xs text-purple-200 tracking-[0.3em] mt-2 font-light opacity-80 uppercase">Close your eyes</p>
+            <h1 class="text-4xl md:text-6xl">Make a Wish</h1>
         </div>
-        
         <div class="instruction-pill" id="hint-text">
-            Swipe across to cut <span class="hand-icon">👆</span>
+            Cut The Cake <span class="hand-icon">👉</span>
         </div>
     </div>
 
     <div class="celebration-text">
-        <h1 class="text-7xl md:text-9xl font-['Great_Vibes'] text-[#ffcad4] drop-shadow-[0_0_30px_rgba(255,20,147,0.6)]">Happy Birthday!</h1>
-        <div class="w-32 h-1 bg-[#d4af37] mx-auto my-4 shadow-[0_0_10px_#d4af37]"></div>
-        <p class="text-2xl md:text-4xl font-['Cinzel'] tracking-widest text-[#d4af37]">NITHYA</p>
+        <h1 class="bday-msg">Happy Birthday</h1>
+        <div class="w-24 h-[2px] bg-[#d4af37] mx-auto my-6 shadow-[0_0_15px_#d4af37]"></div>
+        <p class="bday-name">NITHYA</p>
     </div>
 
     <div id="cake-container"></div>
@@ -114,114 +140,112 @@
         // --- 1. SETUP SCENE ---
         const container = document.getElementById('cake-container');
         const scene = new THREE.Scene();
-        // Warm purple fog for depth
-        scene.fog = new THREE.FogExp2(0x2e1065, 0.02);
+        // Dark atmosphere
+        scene.fog = new THREE.FogExp2(0x05020a, 0.03);
 
         const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
-        camera.position.set(0, 4, 9); // Slightly lower angle for grandeur
+        camera.position.set(0, 4, 8);
         camera.lookAt(0, 0.5, 0);
 
         const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         renderer.shadowMap.enabled = true;
-        renderer.shadowMap.type = THREE.PCFSoftShadowMap; // Softer shadows
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
         container.appendChild(renderer.domElement);
 
-        // --- 2. ENHANCED LIGHTING ---
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+        // --- 2. DRAMATIC LIGHTING ---
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.3); // Dim ambient
         scene.add(ambientLight);
 
-        // Main Gold Spotlight
-        const spotLight = new THREE.SpotLight(0xffd700, 2);
-        spotLight.position.set(5, 10, 5);
+        // Main Golden Spotlight (Sharp shadows)
+        const spotLight = new THREE.SpotLight(0xffd700, 2.5);
+        spotLight.position.set(5, 12, 5);
         spotLight.castShadow = true;
-        spotLight.shadow.mapSize.width = 1024;
-        spotLight.shadow.mapSize.height = 1024;
+        spotLight.angle = 0.5;
+        spotLight.penumbra = 0.3;
         scene.add(spotLight);
         
-        // Rim Light (Pink/Purple) for cinematic edge
-        const rimLight = new THREE.SpotLight(0xff00ff, 1);
-        rimLight.position.set(-5, 5, -5);
-        scene.add(rimLight);
+        // Backlight (Blue/Purple) for depth
+        const backLight = new THREE.SpotLight(0x4c1d95, 2);
+        backLight.position.set(-5, 2, -10);
+        scene.add(backLight);
 
-        // Candle Glow
-        const candleLight = new THREE.PointLight(0xffaa00, 1.5, 8);
-        candleLight.position.set(0, 3, 0);
+        // Candle Glow (Warm)
+        const candleLight = new THREE.PointLight(0xffaa00, 1.5, 6);
+        candleLight.position.set(0, 3.2, 0);
         scene.add(candleLight);
 
-        // --- 3. BUILD THE CAKE (Redesigned) ---
+        // --- 3. BUILD THE LUXURY CAKE ---
         const cakeGroup = new THREE.Group();
         scene.add(cakeGroup);
 
-        // Materials
-        const spongeMat = new THREE.MeshStandardMaterial({ 
-            color: 0xffcad4, // Pink Sponge
-            roughness: 0.6 
+        // Materials (Dark Chocolate & Gold)
+        const chocolateMat = new THREE.MeshStandardMaterial({ 
+            color: 0x3e2723, // Dark Brown
+            roughness: 0.7 
         }); 
-        const creamMat = new THREE.MeshStandardMaterial({ 
-            color: 0xffffff, // White Cream
-            roughness: 0.4,
+        const goldMat = new THREE.MeshStandardMaterial({ 
+            color: 0xffd700, 
+            roughness: 0.1, 
+            metalness: 0.8
+        });
+        const darkGanacheMat = new THREE.MeshStandardMaterial({ 
+            color: 0x1a0f0d, // Nearly black
+            roughness: 0.2,
             metalness: 0.1
         });
-        const goldMat = new THREE.MeshStandardMaterial({ 
-            color: 0xd4af37, 
-            roughness: 0.2, 
-            metalness: 0.9 
-        });
 
-        // Bottom Tier (Pink)
-        const tier1Geo = new THREE.CylinderGeometry(2.2, 2.2, 1.2, 64);
-        const tier1 = new THREE.Mesh(tier1Geo, spongeMat);
+        // Bottom Tier (Chocolate)
+        const tier1Geo = new THREE.CylinderGeometry(2.3, 2.3, 1.2, 64);
+        const tier1 = new THREE.Mesh(tier1Geo, chocolateMat);
         tier1.castShadow = true;
         tier1.receiveShadow = true;
         cakeGroup.add(tier1);
 
-        // Bottom Tier Rim (Gold)
-        const rim1Geo = new THREE.TorusGeometry(2.2, 0.05, 16, 100);
-        const rim1 = new THREE.Mesh(rim1Geo, goldMat);
+        // Bottom Rim (Gold)
+        const rim1 = new THREE.Mesh(new THREE.TorusGeometry(2.3, 0.04, 16, 100), goldMat);
         rim1.rotation.x = Math.PI / 2;
         rim1.position.y = 0.6;
         cakeGroup.add(rim1);
 
-        // Top Tier (White Cream)
+        // Top Tier (Dark Ganache)
         const tier2Geo = new THREE.CylinderGeometry(1.6, 1.6, 1.0, 64);
-        const tier2 = new THREE.Mesh(tier2Geo, creamMat);
+        const tier2 = new THREE.Mesh(tier2Geo, darkGanacheMat);
         tier2.position.y = 1.1;
         tier2.castShadow = true;
         tier2.receiveShadow = true;
         cakeGroup.add(tier2);
 
-        // Gold Drips (Abstract Torus)
-        const dripGeo = new THREE.TorusGeometry(1.65, 0.08, 16, 100);
-        const drip = new THREE.Mesh(dripGeo, goldMat);
+        // Gold Drip
+        const drip = new THREE.Mesh(new THREE.TorusGeometry(1.65, 0.06, 16, 100), goldMat);
         drip.rotation.x = Math.PI / 2;
         drip.position.y = 1.55;
         cakeGroup.add(drip);
 
-        // Candle
-        const candleGeo = new THREE.CylinderGeometry(0.12, 0.12, 1.2, 16);
-        const candle = new THREE.Mesh(candleGeo, new THREE.MeshStandardMaterial({ color: 0xffffff, emissive: 0x444444 }));
-        candle.position.y = 2.1;
+        // Candle (Elegant White)
+        const candleGeo = new THREE.CylinderGeometry(0.1, 0.1, 1.4, 16);
+        const candle = new THREE.Mesh(candleGeo, new THREE.MeshStandardMaterial({ color: 0xffffff }));
+        candle.position.y = 2.2;
         cakeGroup.add(candle);
 
-        // Flame (Animated Sprite)
+        // Flame
         const flameCanvas = document.createElement('canvas');
         flameCanvas.width = 128; flameCanvas.height = 128;
         const ctx = flameCanvas.getContext('2d');
         const texture = new THREE.CanvasTexture(flameCanvas);
         const flameMat = new THREE.SpriteMaterial({ map: texture, blending: THREE.AdditiveBlending });
         const flame = new THREE.Sprite(flameMat);
-        flame.position.y = 2.9;
-        flame.scale.set(0.6, 0.6, 0.6);
+        flame.position.y = 3.1;
+        flame.scale.set(0.7, 0.7, 0.7);
         cakeGroup.add(flame);
 
         function drawFlame(time) {
             ctx.clearRect(0,0,128,128);
             const gradient = ctx.createRadialGradient(64,64,0,64,64,60);
-            gradient.addColorStop(0, `rgba(255, 255, 200, ${0.8 + Math.sin(time*10)*0.2})`);
-            gradient.addColorStop(0.4, `rgba(255, 150, 50, ${0.6 + Math.cos(time*8)*0.2})`); // Orange/Gold tint
-            gradient.addColorStop(1, 'rgba(255, 0, 0, 0)');
+            gradient.addColorStop(0, `rgba(255, 220, 100, ${0.9 + Math.sin(time*15)*0.1})`);
+            gradient.addColorStop(0.3, `rgba(255, 100, 0, ${0.7 + Math.cos(time*10)*0.2})`);
+            gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
             ctx.fillStyle = gradient;
             ctx.beginPath();
             ctx.arc(64, 64, 60, 0, Math.PI*2);
@@ -235,17 +259,11 @@
             requestAnimationFrame(animate);
             time += 0.015;
             
-            // Magical float
-            cakeGroup.position.y = Math.sin(time) * 0.15;
-            cakeGroup.rotation.y = Math.sin(time * 0.5) * 0.1; // Gentle sway instead of full spin
+            cakeGroup.position.y = Math.sin(time) * 0.1;
+            cakeGroup.rotation.y = Math.sin(time * 0.5) * 0.05; 
 
-            // Flame flicker
             drawFlame(time);
-            candleLight.intensity = 1.5 + Math.sin(time * 20) * 0.3;
-            
-            // Camera subtle move
-            camera.position.x = Math.sin(time * 0.2) * 0.5;
-
+            candleLight.intensity = 1.5 + Math.sin(time * 25) * 0.3;
             renderer.render(scene, camera);
         }
         animate();
@@ -297,7 +315,7 @@
             isDrawing = false;
             
             const width = parseFloat(knifeLine.style.width);
-            if(width > 120) { // Slightly easier threshold
+            if(width > 120) { 
                 cutComplete = true;
                 triggerCelebration();
             } else {
@@ -306,35 +324,40 @@
         }
 
         function triggerCelebration() {
-            // 1. UI Vanish
+            // 1. Play Music
+            const audio = document.getElementById('bday-audio');
+            if(audio) {
+                audio.volume = 0.5;
+                audio.play().catch(e => console.log("Audio play failed:", e));
+            }
+
+            // 2. UI Vanish
             gsap.to('.instruction-pill', { opacity: 0, y: 20 });
             gsap.to('#knife-line', { opacity: 0, duration: 0.3 });
             gsap.to('.title', { opacity: 0, y: -20 });
 
-            // 2. Cake Split Animation
-            // We simulate cutting by dropping the whole cake slightly and fading it
-            gsap.to(cakeGroup.position, { y: -3, duration: 1.5, ease: "back.in(1.7)" });
-            gsap.to(cakeGroup.scale, { x: 0.9, y: 0.9, z: 0.9, duration: 1.5 });
+            // 3. Cake Split Animation
+            gsap.to(cakeGroup.position, { y: -4, duration: 2, ease: "back.in(1.5)" });
+            gsap.to(cakeGroup.rotation, { x: 0.2, duration: 2 });
 
-            // 3. Confetti Explosion
-            const duration = 4000;
+            // 4. Confetti Explosion
+            const duration = 5000;
             const end = Date.now() + duration;
 
             (function frame() {
-                // Pink, Gold, White
                 confetti({
-                    particleCount: 6,
+                    particleCount: 8,
                     angle: 60,
-                    spread: 60,
-                    origin: { x: 0, y: 0.6 },
-                    colors: ['#ffcad4', '#d4af37', '#ffffff']
+                    spread: 70,
+                    origin: { x: 0, y: 0.7 },
+                    colors: ['#ffd700', '#ffffff', '#d4af37']
                 });
                 confetti({
-                    particleCount: 6,
+                    particleCount: 8,
                     angle: 120,
-                    spread: 60,
-                    origin: { x: 1, y: 0.6 },
-                    colors: ['#ffcad4', '#d4af37', '#ffffff']
+                    spread: 70,
+                    origin: { x: 1, y: 0.7 },
+                    colors: ['#ffd700', '#ffffff', '#d4af37']
                 });
 
                 if (Date.now() < end) {
@@ -342,13 +365,13 @@
                 }
             }());
 
-            // 4. Reveal Message
+            // 5. Reveal Grand Text
             gsap.to('.celebration-text', { 
                 scale: 1, 
                 opacity: 1, 
-                duration: 2, 
-                ease: "elastic.out(1, 0.5)",
-                delay: 0.8 
+                duration: 2.5, 
+                ease: "elastic.out(1, 0.6)",
+                delay: 0.5 
             });
         }
 
