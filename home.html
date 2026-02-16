@@ -101,96 +101,95 @@
         
 <section id="hero-scene" class="relative h-screen flex items-center justify-center overflow-hidden bg-[#050505] perspective-container">
     
-    <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1536630596259-22a7442a537d?w=2000')] bg-cover bg-center opacity-20 grayscale mix-blend-luminosity"></div>
-    <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_transparent_0%,_#000_90%)]"></div>
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_#2e1065_0%,_#000_80%)] opacity-80"></div>
+    <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-20 animate-pulse"></div>
 
     <div id="particle-layer" class="absolute inset-0 z-0 overflow-hidden pointer-events-none">
         
-        <div class="parallax-item absolute top-[15%] left-[10%] w-28 h-36 bg-cover bg-center rounded-xl opacity-40 blur-[3px]"
+        <div class="parallax-item absolute top-[15%] left-[10%] w-24 h-32 bg-cover bg-center rounded-xl opacity-40 blur-[3px]"
              data-speed="40"
-             style="background-image: url('https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200'); box-shadow: 0 0 20px rgba(212,175,55,0.2);">
-        </div>
+             style="background-image: url('https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200'); box-shadow: 0 0 20px rgba(212,175,55,0.1);">
+             </div>
         
-        <div class="parallax-item absolute bottom-[20%] right-[15%] w-40 h-52 bg-cover bg-center rounded-xl opacity-30 blur-[6px]"
-             data-speed="-20"
+        <div class="parallax-item absolute bottom-[20%] right-[15%] w-32 h-40 bg-cover bg-center rounded-xl opacity-30 blur-[5px]"
+             data-speed="-30"
              style="background-image: url('https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=200'); box-shadow: 0 0 30px rgba(212,175,55,0.1);">
-        </div>
+             </div>
 
-         <div class="parallax-item absolute top-[60%] left-[5%] w-24 h-28 bg-cover bg-center rounded-lg opacity-50 blur-[2px]"
-              data-speed="25"
+         <div class="parallax-item absolute top-[60%] left-[5%] w-20 h-24 bg-cover bg-center rounded-lg opacity-30 blur-[2px]"
+              data-speed="20"
               style="background-image: url('https://images.unsplash.com/photo-1517841905240-472988babdf9?w=200');">
-        </div>
+             </div>
 
-        <div class="parallax-item absolute top-[25%] right-[25%] w-20 h-20 bg-cover bg-center rounded-lg opacity-40 blur-[4px]"
-             data-speed="-10"
+        <div class="parallax-item absolute top-[25%] right-[25%] w-16 h-16 bg-cover bg-center rounded-lg opacity-20 blur-[4px]"
+             data-speed="-15"
              style="background-image: url('https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200');">
-       </div>
+             </div>
 
-       <div class="parallax-item absolute top-1/4 left-1/2 w-2 h-2 bg-[#d4af37] rounded-full blur-[1px]" data-speed="60"></div>
+       <div class="parallax-item absolute top-1/4 left-1/2 w-2 h-2 bg-[#d4af37] rounded-full blur-[1px] animate-pulse" data-speed="60"></div>
        <div class="parallax-item absolute bottom-1/3 left-1/4 w-1 h-1 bg-white rounded-full blur-[1px]" data-speed="30"></div>
        <div class="parallax-item absolute top-1/2 right-1/3 w-1.5 h-1.5 bg-[#d4af37] rounded-full blur-[1px]" data-speed="50"></div>
     </div>
 
-    <div class="relative z-20 text-center w-full px-4" id="text-layer">
+    <div id="hero-tilt" class="relative z-10 transition-transform duration-100 ease-out will-change-transform" style="transform-style: preserve-3d;">
         
-        <p class="font-cinematic text-[#d4af37]/80 tracking-[1em] text-xs md:text-sm mb-6 animate-[fadeIn_2s_ease-out] drop-shadow-lg">
-            THE ONE & ONLY
-        </p>
-
-        <h1 class="masked-text-premium text-[15vw] leading-[0.9] font-bold font-cinematic uppercase tracking-tighter cursor-default transition-all duration-700 hover:tracking-normal hover:scale-105"
-            style="transform-style: preserve-3d;">
-            NITHYA
-        </h1>
-
-        <div class="mt-12 flex items-center justify-center gap-6 opacity-0 animate-[slideUp_1s_ease-out_1s_forwards] mix-blend-screen">
-            <div class="h-[1px] w-16 md:w-32 bg-gradient-to-r from-transparent to-[#d4af37]"></div>
-            <p class="text-xl md:text-4xl font-emotional text-[#d4af37] drop-shadow-[0_0_10px_rgba(212,175,55,0.8)]">The Golden Era Begins</p>
-            <div class="h-[1px] w-16 md:w-32 bg-gradient-to-l from-transparent to-[#d4af37]"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] md:w-[600px] md:h-[600px] animate-[spin_20s_linear_infinite]">
+            <svg viewBox="0 0 100 100" class="w-full h-full fill-[#d4af37] tracking-[0.2em] uppercase text-[6px] font-bold font-cinematic" style="filter: drop-shadow(0 0 5px rgba(212,175,55,0.5));">
+                <path id="circlePath" d="M 50, 50 m -37, 0 a 37,37 0 1,1 74,0 a 37,37 0 1,1 -74,0" fill="transparent" />
+                <text>
+                    <textPath xlink:href="#circlePath" startOffset="0%">
+                        • The Celebration of Nithya • The Celebration of Nithya •
+                    </textPath>
+                </text>
+            </svg>
         </div>
+
+        <div class="relative w-[300px] h-[400px] md:w-[350px] md:h-[450px] rounded-full md:rounded-[100px] overflow-hidden border-2 border-[#d4af37]/30 shadow-[0_0_60px_rgba(212,175,55,0.4)]">
+            <div class="absolute inset-0 bg-black/10 z-10"></div> <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=800" 
+                 class="w-full h-full object-cover transform scale-110" 
+                 alt="Portrait">
+            
+            <div class="absolute bottom-10 left-0 w-full text-center z-20">
+                 <h1 class="text-6xl font-emotional text-white drop-shadow-md">Nithya</h1>
+            </div>
+        </div>
+
+        <div class="absolute -top-10 -right-20 text-6xl text-[#d4af37] opacity-60 blur-[1px] animate-pulse" style="transform: translateZ(50px);">✨</div>
+        <div class="absolute -bottom-10 -left-20 text-4xl text-white opacity-40 blur-[1px]" style="transform: translateZ(80px);">✦</div>
     </div>
-    
-    <div class="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-50 animate-bounce">
-        <span class="text-[10px] tracking-[0.3em] text-[#d4af37] uppercase">Explore</span>
-        <i class="fas fa-chevron-down text-[#d4af37]"></i>
+
+    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-60 animate-bounce">
+        <span class="text-[10px] tracking-[0.4em] uppercase text-[#d4af37]">Scroll</span>
+        <div class="w-[1px] h-12 bg-gradient-to-b from-[#d4af37] to-transparent"></div>
     </div>
 
 </section>
 
-<style>
-    /* 1. The Gold Gradient Text */
-    .masked-text-premium {
-        background: linear-gradient(to right, #8a6219, #e4c47d, #d4af37, #fcf6ba, #d4af37, #e4c47d, #8a6219);
-        background-size: 200% auto;
-        -webkit-background-clip: text;
-        color: transparent;
-        animation: goldShimmer 4s linear infinite;
-        filter: drop-shadow(0 10px 20px rgba(0,0,0,0.8)) drop-shadow(0 0 30px rgba(212,175,55,0.3));
-    }
-
-    /* 2. Animations */
-    @keyframes goldShimmer { to { background-position: 200% center; } }
-    @keyframes slideUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
-    
-    /* Note: We removed the floatPhoto animation because JS will handle the movement now for smoother control */
-</style>
-
 <script>
     document.addEventListener('mousemove', (e) => {
-        const scene = document.getElementById('hero-scene');
+        // 1. Setup Variables
+        const tiltObj = document.getElementById('hero-tilt');
         const particles = document.querySelectorAll('.parallax-item');
         
-        // Calculate mouse position relative to center (from -1 to 1)
-        const x = (e.clientX / window.innerWidth - 0.5) * 2;
-        const y = (e.clientY / window.innerHeight - 0.5) * 2;
+        // 2. Calculate Mouse Position (-1 to 1)
+        const xNorm = (e.clientX / window.innerWidth - 0.5) * 2;
+        const yNorm = (e.clientY / window.innerHeight - 0.5) * 2;
 
+        // 3. Apply 3D Tilt to Main Hero (The Halo)
+        // Note: We divide by 25 to keep the tilt subtle and elegant
+        const tiltX = (window.innerWidth / 2 - e.pageX) / 25;
+        const tiltY = (window.innerHeight / 2 - e.pageY) / 25;
+        tiltObj.style.transform = `rotateY(${tiltX}deg) rotateX(${tiltY}deg)`;
+
+        // 4. Apply Parallax to Background Particles
         particles.forEach(el => {
             const speed = el.getAttribute('data-speed');
             // Move opposite to mouse for depth effect
-            const xMove = x * speed;
-            const yMove = y * speed;
+            const xMove = xNorm * speed;
+            const yMove = yNorm * speed;
             
             el.style.transform = `translate(${xMove}px, ${yMove}px)`;
-            el.style.transition = "transform 0.1s ease-out"; // Smoothness
+            el.style.transition = "transform 0.1s ease-out"; // Smooth follow
         });
     });
 </script>
