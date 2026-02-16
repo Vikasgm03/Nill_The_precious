@@ -3,84 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>You Are Invited</title>
+    <title>Initialize</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        body { background: #1a0b2e; overflow: hidden; font-family: 'Cormorant Garamond', serif; }
-        .envelope-container { perspective: 1000px; }
-        .envelope {
-            width: 300px; height: 200px; background: #f4f1ea; position: relative;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5); transform-style: preserve-3d;
-            transition: transform 1s; cursor: pointer;
+        body { background: #000; color: #0ff; overflow: hidden; font-family: monospace; }
+        .ring { 
+            position: absolute; border: 1px solid rgba(0, 255, 255, 0.3); border-radius: 50%;
+            top: 50%; left: 50%; transform: translate(-50%, -50%);
         }
-        .flap {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: #e6e2d8; clip-path: polygon(0 0, 50% 50%, 100% 0);
-            transform-origin: top; transition: transform 0.8s 0.5s; z-index: 10;
+        .core {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 100px; height: 100px; background: #0ff; border-radius: 50%;
+            box-shadow: 0 0 50px #0ff; opacity: 0.5; cursor: pointer; transition: all 0.3s;
         }
-        .letter {
-            position: absolute; top: 10px; left: 10px; width: 280px; height: 180px;
-            background: #fff; padding: 20px; text-align: center;
-            transform: translateY(0); transition: transform 1s 1s; z-index: 5;
-            display: flex; flex-col; align-items: center; justify-content: center;
-        }
-        .wax-seal {
-            position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%);
-            width: 60px; height: 60px; background: #d94848; border-radius: 50%;
-            border: 4px solid #b93838; box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-            z-index: 20; display: flex; align-items: center; justify-content: center;
-            font-family: 'Great Vibes', cursive; color: #5a1a1a; font-size: 24px;
-            cursor: pointer; transition: transform 0.3s;
-        }
-        .wax-seal:hover { transform: translate(-50%, -50%) scale(1.1); }
-        .pocket {
-            position: absolute; bottom: 0; left: 0; width: 100%; height: 100%;
-            background: #f4f1ea; clip-path: polygon(0 100%, 50% 50%, 100% 100%);
-            z-index: 15;
-        }
-        .opened .flap { transform: rotateX(180deg); z-index: 1; }
-        .opened .letter { transform: translateY(-120px); z-index: 25; }
-        .opened .wax-seal { opacity: 0; pointer-events: none; }
+        .core:hover { transform: translate(-50%, -50%) scale(1.1); opacity: 0.8; }
+        .core:active { transform: translate(-50%, -50%) scale(0.9); }
     </style>
 </head>
-<body class="flex items-center justify-center h-screen">
+<body>
+    
+    <div class="ring w-[300px] h-[300px] animate-[spin_10s_linear_infinite]"></div>
+    <div class="ring w-[500px] h-[500px] animate-[spin_15s_linear_infinite_reverse] border-dashed"></div>
+    <div class="ring w-[700px] h-[700px] animate-[spin_20s_linear_infinite] opacity-30"></div>
 
-    <div class="text-center absolute top-20 text-[#d4af37] opacity-60">
-        <p class="tracking-[0.5em] text-xs uppercase">A message awaits</p>
+    <div class="absolute bottom-20 w-full text-center">
+        <p id="status" class="tracking-[0.5em] text-xs">TOUCH THE CORE TO INITIALIZE</p>
     </div>
 
-    <div class="envelope-container" onclick="openEnvelope()">
-        <div class="envelope" id="env">
-            <div class="flap"></div>
-            <div class="pocket"></div>
-            <div class="wax-seal" id="seal">N</div>
-            
-            <div class="letter shadow-xl">
-                <p class="font-bold text-gray-800 uppercase tracking-widest text-xs mb-2">Exclusive Access</p>
-                <h2 class="font-[Great_Vibes] text-4xl text-[#d4af37] mb-4">Nithya</h2>
-                <button onclick="enterParty(event)" class="bg-[#1a0b2e] text-white px-6 py-2 rounded-full text-sm hover:bg-[#d4af37] transition-colors">Enter Celebration</button>
-            </div>
-        </div>
+    <div class="core flex items-center justify-center text-black font-bold tracking-widest" onclick="warpSpeed()">
+        GO
     </div>
 
     <script>
-        function openEnvelope() {
-            const env = document.getElementById('env');
-            if (!env.classList.contains('opened')) {
-                env.classList.add('opened');
-                // Play paper sound if you have one
-            }
-        }
+        function warpSpeed() {
+            const core = document.querySelector('.core');
+            const status = document.getElementById('status');
+            
+            status.innerText = "ACCELERATING...";
+            
+            // Animation sequence
+            gsap.to(core, { scale: 50, duration: 2, ease: "expo.in" });
+            gsap.to(".ring", { opacity: 0, scale: 0.1, duration: 1 });
+            gsap.to("body", { backgroundColor: "#fff", delay: 1.8, duration: 0.2 });
 
-        function enterParty(e) {
-            e.stopPropagation();
-            gsap.to(".letter", { scale: 50, opacity: 0, duration: 1.5, ease: "power2.in" });
-            gsap.to("body", { backgroundColor: "#fff9f0", duration: 1.2 });
             setTimeout(() => {
                 window.location.href = 'home.html';
-            }, 1200);
+            }, 2000);
         }
     </script>
 </body>
