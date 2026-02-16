@@ -3,554 +3,431 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Identity Verification | The Journey</title>
+    <title>THE ARCHIVES | Sarah</title>
     
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" defer></script>
-    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Cinzel:wght@400;700&family=Inter:wght@300;400;600&family=Playfair+Display:ital,wght@1,400;1,700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Cinzel:wght@400;700&family=Inter:wght@300;400;600&family=Playfair+Display:ital,wght@1,400&display=swap" rel="stylesheet">
 
     <style>
-        /* --- CORE STYLES --- */
-        :root { --gold: #D4AF37; --deep-black: #050505; }
-        body { background-color: var(--deep-black); color: #ffffff; font-family: 'Inter', sans-serif; overflow-x: hidden; -webkit-tap-highlight-color: transparent; }
+        :root { --gold: #D4AF37; --cyan: #00f3ff; --black: #050505; }
+        body { background-color: var(--black); color: white; font-family: 'Inter', sans-serif; overflow: hidden; height: 100vh; width: 100vw; }
         
-        /* Mobile Optimization: Prevent layout shifts */
-        img { display: block; max-width: 100%; height: auto; }
-        
-        /* --- HUD SCANNER --- */
-        .hud-container { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle at center, #001a2c 0%, #000 70%); z-index: 9999; font-family: 'Share Tech Mono', monospace; color: #0ff; }
-        .scan-frame { width: 300px; height: 300px; border: 2px solid rgba(0, 255, 255, 0.3); position: relative; box-shadow: 0 0 20px rgba(0, 255, 255, 0.1); }
-        .bracket { position: absolute; width: 40px; height: 40px; border: 4px solid #0ff; transition: all 0.5s ease; }
-        .tl { top: -2px; left: -2px; border-bottom: 0; border-right: 0; }
-        .tr { top: -2px; right: -2px; border-bottom: 0; border-left: 0; }
-        .bl { bottom: -2px; left: -2px; border-top: 0; border-right: 0; }
-        .br { bottom: -2px; right: -2px; border-top: 0; border-left: 0; }
-        .scan-line { position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: #0ff; box-shadow: 0 0 15px #0ff, 0 0 30px #0ff; opacity: 0; will-change: top, opacity; }
-        .grid-bg { position: absolute; inset: 0; background-image: linear-gradient(rgba(0, 255, 255, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 255, 255, 0.1) 1px, transparent 1px); background-size: 40px 40px; opacity: 0.2; pointer-events: none; }
-        
-        /* --- SITE WRAPPER --- */
-        #site-wrapper { opacity: 0; transition: opacity 2s ease; will-change: opacity; }
-        
-        /* --- CUSTOM CURSOR (Desktop Only) --- */
-        @media (hover: hover) and (pointer: fine) {
-            .cursor-dot, .cursor-outline { position: fixed; top: 0; left: 0; transform: translate(-50%, -50%); border-radius: 50%; z-index: 10000; pointer-events: none; }
-            .cursor-dot { width: 8px; height: 8px; background-color: var(--gold); }
-            .cursor-outline { width: 40px; height: 40px; border: 1px solid rgba(212, 175, 55, 0.5); transition: width 0.2s, height 0.2s; will-change: transform; }
-            body { cursor: none; }
+        /* --- SCENE MANAGEMENT --- */
+        .chapter {
+            position: absolute; inset: 0; width: 100%; height: 100%;
+            opacity: 0; pointer-events: none; z-index: 0;
+            transition: opacity 1s ease-in-out;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            overflow: hidden;
         }
+        .chapter.active { opacity: 1; pointer-events: all; z-index: 10; }
         
-        /* --- UTILS --- */
+        /* --- NAVIGATION --- */
+        .nav-bar {
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+            display: flex; gap: 10px; z-index: 50; opacity: 0; transition: opacity 1s;
+        }
+        .nav-dot {
+            width: 8px; height: 8px; background: rgba(255,255,255,0.2); border-radius: 50%;
+            transition: all 0.3s;
+        }
+        .nav-dot.active { background: var(--gold); transform: scale(1.5); }
+        
+        .next-btn {
+            position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%);
+            padding: 12px 30px; border: 1px solid rgba(255,255,255,0.2);
+            background: rgba(0,0,0,0.5); backdrop-filter: blur(10px);
+            border-radius: 30px; color: white; font-family: 'Share Tech Mono';
+            text-transform: uppercase; letter-spacing: 2px; font-size: 12px;
+            cursor: pointer; z-index: 50; opacity: 0; pointer-events: none;
+            transition: all 0.3s;
+        }
+        .next-btn.visible { opacity: 1; pointer-events: all; }
+        .next-btn:hover { background: var(--gold); border-color: var(--gold); color: black; }
+
+        /* --- CHAPTER 1: HUD --- */
+        .scan-frame { width: 280px; height: 280px; border: 1px solid rgba(0, 243, 255, 0.2); position: relative; }
+        .scan-line { position: absolute; width: 100%; height: 2px; background: var(--cyan); box-shadow: 0 0 15px var(--cyan); top: 0; }
+        .bracket { position: absolute; width: 20px; height: 20px; border: 2px solid var(--cyan); }
+        .tl { top: -1px; left: -1px; border-bottom: 0; border-right: 0; }
+        .tr { top: -1px; right: -1px; border-bottom: 0; border-left: 0; }
+        .bl { bottom: -1px; left: -1px; border-top: 0; border-right: 0; }
+        .br { bottom: -1px; right: -1px; border-top: 0; border-left: 0; }
+
+        /* --- CHAPTER 3: TIME SLIDER --- */
+        .slider-wrapper { position: relative; width: 90%; max-width: 500px; aspect-ratio: 4/5; border-radius: 20px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); }
+        .time-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+        .time-overlay { position: absolute; inset: 0; clip-path: inset(0 50% 0 0); border-right: 2px solid white; }
+        
+        /* --- CHAPTER 4: GLOBE --- */
+        .globe-container { width: 300px; height: 300px; position: relative; perspective: 1000px; }
+        .globe-sphere { width: 100%; height: 100%; border-radius: 50%; background: radial-gradient(circle at 30% 30%, #2b32b2, #000); box-shadow: 0 0 60px rgba(43, 50, 178, 0.4); animation: rotateGlobe 20s linear infinite; position: relative; }
+        .map-texture { position: absolute; inset: 0; background: url('https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/Blue_Marble_2002.png/1024px-Blue_Marble_2002.png'); background-size: cover; opacity: 0.6; border-radius: 50%; }
+        @keyframes rotateGlobe { from { transform: rotateY(0deg); } to { transform: rotateY(360deg); } }
+        
+        /* --- CHAPTER 5: GALLERY --- */
+        .gallery-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; width: 100%; padding: 20px; max-width: 600px; height: 60vh; overflow-y: auto; }
+        .gallery-item { position: relative; border-radius: 12px; overflow: hidden; aspect-ratio: 3/4; }
+        .key { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 2rem; opacity: 0.6; animation: float 3s ease-in-out infinite; cursor: pointer; z-index: 20; }
+        .key.collected { transform: scale(3); opacity: 0; transition: 0.5s; pointer-events: none; }
+        @keyframes float { 0%, 100% { transform: translate(-50%, -50%); } 50% { transform: translate(-50%, -60%); } }
+
+        /* --- CHAPTER 6: VAULT --- */
+        .vault-door { width: 120px; height: 120px; border: 4px solid var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 3rem; color: var(--gold); transition: 1s; }
+        .scratch-area { position: relative; width: 300px; height: 180px; border-radius: 15px; overflow: hidden; display: none; }
+        
+        /* UTILS */
         .font-cinematic { font-family: 'Cinzel', serif; }
-        .font-emotional { font-family: 'Playfair Display', serif; }
-        .text-gradient { background: linear-gradient(to right, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c); -webkit-background-clip: text; background-clip: text; color: transparent; }
-        
-        /* --- INTERACTIVE ELEMENTS --- */
-        .video-card { min-width: 280px; height: 400px; border-radius: 8px; transition: transform 0.3s ease; position: relative; overflow: hidden; cursor: pointer; }
-        .video-card:hover { transform: scale(1.05); z-index: 20; }
-        .netflix-scroll { display: flex; overflow-x: auto; gap: 1rem; padding: 2rem 0; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
-        
-        /* --- CAKE --- */
-        .cake-stage { position: relative; width: 300px; height: 300px; margin: 0 auto; }
-        .cake-body { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 200px; height: 140px; background: #FFF0F5; border-radius: 10px 10px 0 0; }
-        .icing { position: absolute; top: 0; left: 0; width: 100%; height: 40px; background: #FFB7B2; border-radius: 10px 10px 20px 20px; }
-        .candle { position: absolute; bottom: 140px; left: 50%; transform: translateX(-50%); width: 14px; height: 40px; background: linear-gradient(to right, #fff, #eee); z-index: 10; }
-        .flame { position: absolute; top: -25px; left: 50%; transform: translateX(-50%); width: 14px; height: 26px; background: #FFD700; border-radius: 50% 50% 20% 20%; animation: flicker 0.8s infinite alternate; box-shadow: 0 0 10px #FFD700, 0 0 30px #FF4500; cursor: pointer; transform-origin: bottom center; }
-        @keyframes flicker { 0% { transform: translateX(-50%) scale(1); opacity: 1; } 100% { transform: translateX(-50%) scale(1.1) rotate(2deg); opacity: 0.8; } }
-        .flame.out { display: none; }
-        
-        /* --- NEW FEATURES STYLES --- */
-        .time-slider { position: relative; overflow: hidden; border-radius: 24px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); }
-        .time-overlay { position: absolute; inset: 0; clip-path: inset(0 50% 0 0); will-change: clip-path; }
-        .globe { transform-style: preserve-3d; will-change: transform; }
-        .key { transition: transform 0.3s, opacity 0.3s; cursor: pointer; }
-        .key.collected { opacity: 0; pointer-events: none; transform: scale(2); }
-        .vault-door { will-change: transform; }
-        
-        /* Mobile specific adjustments */
-        @media (max-width: 640px) {
-            .scan-frame { width: 240px; height: 240px; }
-            .text-9xl { font-size: 5rem; }
-            .cake-stage { transform: scale(0.8); }
-        }
+        .font-tech { font-family: 'Share Tech Mono', monospace; }
+        .hidden { display: none !important; }
     </style>
 </head>
 <body>
 
-    <audio id="sfx-scan" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" preload="auto"></audio> 
-    <audio id="sfx-success" src="https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3" preload="auto"></audio>
-    <audio id="bg-music" loop preload="auto"><source src="https://cdn.pixabay.com/audio/2022/05/27/audio_1808fbf07a.mp3" type="audio/mp3"></audio>
+    <audio id="bg-music" loop><source src="https://cdn.pixabay.com/audio/2022/05/27/audio_1808fbf07a.mp3" type="audio/mp3"></audio>
+    <audio id="sfx-scan" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3"></audio>
+    <audio id="sfx-success" src="https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3"></audio>
+    
+    <button id="mute-btn" class="fixed top-6 right-6 z-[60] text-white/50 hover:text-white"><i class="fas fa-volume-mute text-2xl"></i></button>
 
-    <div id="music-control" class="fixed bottom-6 right-6 z-[200] w-12 h-12 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center cursor-pointer border border-white/20 hover:bg-white/20 transition-all hidden">
-        <i class="fas fa-volume-high text-white"></i>
+    <div class="nav-bar" id="nav-dots">
+        <div class="nav-dot active"></div>
+        <div class="nav-dot"></div>
+        <div class="nav-dot"></div>
+        <div class="nav-dot"></div>
+        <div class="nav-dot"></div>
+        <div class="nav-dot"></div>
     </div>
 
-    <div id="hud-layer" class="hud-container">
-        <div class="grid-bg"></div>
-        <div class="absolute left-4 top-1/2 -translate-y-1/2 hidden md:block text-[10px] opacity-60">
-            <div id="data-stream-left">INITIALIZING...</div>
-        </div>
-        <div class="flex flex-col items-center gap-6 relative z-10 p-4">
-            
-            <div class="scan-frame relative overflow-hidden" id="scanner">
-                <div class="bracket tl"></div> <div class="bracket tr"></div>
-                <div class="bracket bl"></div> <div class="bracket br"></div>
-                
-                <img id="id-photo" 
-                     src="media/4.jpeg" 
-                     class="absolute inset-0 w-full h-full object-cover opacity-0 transition-all duration-500"
-                     style="filter: grayscale(100%) sepia(100%) hue-rotate(90deg) brightness(0.8) contrast(1.2);" 
-                     alt="Target Identity">
+    <button id="next-chapter-btn" class="next-btn">
+        Initialize Chapter <span id="next-chap-num">2</span> <i class="fas fa-chevron-right ml-2"></i>
+    </button>
 
-                <div class="scan-line z-20"></div>
-            </div>
-
-            <div class="text-center space-y-2">
-                <h2 id="status" class="text-2xl font-bold tracking-widest text-[#0ff]" style="text-shadow: 0 0 5px #0ff;">SYSTEM LOCKED</h2>
-                <p id="sub-status" class="text-xs opacity-70">BIOMETRIC AUTHENTICATION REQUIRED</p>
+    <div id="chap-1" class="chapter active bg-black">
+        <div class="flex flex-col items-center gap-8 relative z-10">
+            <div class="scan-frame overflow-hidden bg-black/50">
+                <div class="bracket tl"></div><div class="bracket tr"></div><div class="bracket bl"></div><div class="bracket br"></div>
+                <img id="id-photo" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400" 
+                     class="w-full h-full object-cover opacity-0 grayscale contrast-125 sepia transition-all duration-700" alt="ID">
+                <div class="scan-line"></div>
+                <div id="fingerprint" class="absolute inset-0 flex items-center justify-center text-cyan-400 opacity-50"><i class="fas fa-fingerprint text-8xl"></i></div>
             </div>
             
-            <button id="start-btn" class="mt-8 px-8 py-3 border border-[#0ff] hover:bg-[#0ff] hover:text-black transition-colors tracking-[0.3em] uppercase text-sm animate-pulse">
-                Initiate Scan
+            <div class="text-center font-tech">
+                <h2 id="hud-status" class="text-2xl text-cyan-400 tracking-widest mb-2">SYSTEM LOCKED</h2>
+                <p class="text-xs text-cyan-400/60">BIOMETRIC AUTHENTICATION REQUIRED</p>
+            </div>
+
+            <button onclick="app.startScan()" id="scan-btn" class="px-8 py-3 border border-cyan-400 text-cyan-400 font-tech tracking-[4px] hover:bg-cyan-400 hover:text-black transition-all">
+                INITIATE SCAN
             </button>
         </div>
-        <div class="absolute right-4 top-1/2 -translate-y-1/2 hidden md:block text-[10px] opacity-60 text-right">
-            <div id="data-stream-right">WAITING INPUT...</div>
+        <div class="absolute inset-0 bg-[linear-gradient(rgba(0,243,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(0,243,255,0.05)_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none"></div>
+    </div>
+
+    <div id="chap-2" class="chapter bg-black">
+        <canvas id="star-canvas" class="absolute inset-0 w-full h-full"></canvas>
+        <div class="relative z-10 text-center px-6">
+            <div class="mb-4 text-xs font-tech text-gray-500 tracking-[0.5em]">TEMPORAL MARKER</div>
+            <h2 class="text-6xl md:text-8xl font-cinematic text-white mb-2">JULY 22</h2>
+            <div class="h-px w-20 bg-white/30 mx-auto my-6"></div>
+            <p class="text-xl font-serif italic text-gray-300">"The night the stars aligned."</p>
         </div>
     </div>
 
-    <div id="site-wrapper">
+    <div id="chap-3" class="chapter bg-[#080808]">
+        <h2 class="text-3xl font-cinematic mb-8">Temporal Shift</h2>
         
-        <div class="cursor-dot hidden md:block"></div>
-        <div class="cursor-outline hidden md:block"></div>
-
-        <section id="intro-screen" class="fixed inset-0 z-[100] bg-black flex flex-col items-center justify-center cursor-pointer">
-            <div class="text-center space-y-6 px-4">
-                <p class="text-xs tracking-[0.6em] text-gray-500 uppercase fade-elem">Access Verified</p>
-                <h1 class="text-5xl md:text-7xl font-cinematic text-white tracking-widest fade-elem scale-elem">LUMINA</h1>
-                <p class="text-sm text-gray-400 font-light fade-elem animate-pulse mt-8">Tap to Begin Experience</p>
-            </div>
-        </section>
-
-        <section class="relative h-screen flex items-center justify-center overflow-hidden">
-            <div class="absolute inset-0 z-0">
-                <img src="https://images.unsplash.com/photo-1513201099705-a9746e1e201f?q=80&w=2000&auto=format&fit=crop" class="w-full h-full object-cover opacity-30 scale-110 will-change-transform" id="hero-bg" alt="Hero">
-                <div class="absolute inset-0 bg-gradient-to-b from-black/20 via-black/60 to-[#050505]"></div>
-            </div>
-            <div class="relative z-10 text-center px-4">
-                <h2 class="text-xl md:text-3xl font-light text-white/80 mb-6 hero-text translate-y-10 opacity-0">Today, the universe celebrates</h2>
-                <h1 class="text-6xl md:text-9xl font-cinematic font-bold text-gradient hero-text translate-y-10 opacity-0">YOU</h1>
-                <p class="mt-8 text-lg md:text-xl font-emotional text-gray-300 max-w-2xl mx-auto hero-text translate-y-10 opacity-0 italic">"Another year bolder, another year wiser."</p>
-            </div>
-        </section>
-
-        <section class="min-h-screen bg-[#050505] flex items-center justify-center py-20 relative">
-            <div class="max-w-4xl mx-auto px-6 text-center space-y-32">
-                <div class="scroll-reveal opacity-0 translate-y-10">
-                    <i class="fas fa-quote-left text-2xl text-yellow-600/50 mb-6"></i>
-                    <p class="text-3xl md:text-5xl font-emotional leading-tight text-gray-200">Your laughter is the soundtrack<br>to our happiest memories.</p>
-                </div>
-                <div class="scroll-reveal opacity-0 translate-y-10">
-                    <p class="text-2xl md:text-4xl font-light font-cinematic text-gradient">"To the world you are one person,<br>but to me, you are the world."</p>
-                </div>
-            </div>
-        </section>
-
-        <section class="relative h-screen bg-black flex items-center justify-center overflow-hidden">
-            <canvas id="star-canvas" class="absolute inset-0 w-full h-full"></canvas>
-            <div class="absolute inset-0 bg-gradient-to-b from-transparent via-black/50 to-black pointer-events-none"></div>
-            <div class="relative z-10 text-center px-6 pointer-events-none">
-                <div class="mb-6 inline-flex items-center gap-2 bg-white/5 backdrop-blur-md border border-white/10 px-6 py-2 rounded-full">
-                    <span class="text-2xl">🌌</span><span class="font-mono text-xs tracking-[4px] text-cyan-400">CELESTIAL ARCHIVE</span>
-                </div>
-                <h2 class="text-5xl md:text-7xl font-cinematic leading-none mb-4 text-gradient">THE STARS<br>ALIGNED</h2>
-                <p class="text-3xl font-light text-white/90" id="birth-date-display">July 22, 1995</p>
-            </div>
-        </section>
-
-        <section class="min-h-screen bg-[#050505] flex items-center justify-center py-20">
-            <div class="w-full max-w-4xl px-4 text-center">
-                <h2 class="text-5xl font-cinematic mb-2">TIME TRAVEL</h2>
-                <p class="text-gray-400 mb-8">Swipe to see the journey</p>
-                <div class="time-slider max-w-[500px] mx-auto aspect-[4/5] relative">
-                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=600" class="w-full h-full object-cover" alt="Now">
-                    <div id="baby-overlay" class="time-overlay bg-black">
-                        <img src="https://images.unsplash.com/photo-1519689680058-324335c77eba?w=600" class="w-full h-full object-cover" alt="Baby">
-                    </div>
-                    <div class="absolute inset-0 pointer-events-none flex items-center justify-center opacity-50">
-                        <div class="w-0.5 h-full bg-white/50"></div>
-                    </div>
-                    <input type="range" id="time-range" min="0" max="100" value="50" class="absolute inset-0 w-full h-full opacity-0 cursor-ew-resize z-20">
-                </div>
-            </div>
-        </section>
-
-        <section class="py-24 bg-gradient-to-b from-[#050505] to-[#0a0a0a]">
-            <div class="px-8 md:px-16 mb-12 flex justify-between items-end">
-                <h2 class="text-4xl font-cinematic text-white">Memories</h2>
-                <span class="text-gray-600 font-mono hidden md:block">01 / COLLECTION</span>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-12 gap-6 px-4 md:px-16 h-[100vh]">
-                <div class="md:col-span-4 h-full relative rounded-2xl overflow-hidden group parallax-container">
-                    <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=600" class="w-full h-[120%] object-cover absolute top-0 parallax-img" alt="Memory 1">
-                    <div class="absolute top-4 right-4 text-4xl opacity-50 hover:opacity-100 key" onclick="collectKey(this)">🔑</div>
-                </div>
-                <div class="md:col-span-4 md:col-start-5 h-[80%] mt-[10%] relative rounded-2xl overflow-hidden group parallax-container">
-                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=600" class="w-full h-[120%] object-cover absolute top-0 parallax-img" alt="Memory 2">
-                    <div class="absolute top-4 right-4 text-4xl opacity-50 hover:opacity-100 key" onclick="collectKey(this)">🔑</div>
-                </div>
-                <div class="md:col-span-4 md:col-start-9 h-full relative rounded-2xl overflow-hidden group parallax-container">
-                    <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=600" class="w-full h-[120%] object-cover absolute top-0 parallax-img" alt="Memory 3">
-                    <div class="absolute top-4 right-4 text-4xl opacity-50 hover:opacity-100 key" onclick="collectKey(this)">🔑</div>
-                </div>
-                <div class="md:hidden h-80 relative rounded-2xl overflow-hidden mt-4">
-                     <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600" class="w-full h-full object-cover">
-                     <div class="absolute top-4 right-4 text-4xl opacity-50 hover:opacity-100 key" onclick="collectKey(this)">🔑</div>
-                </div>
-            </div>
-        </section>
-
-        <div id="keys-bar" class="fixed bottom-8 left-1/2 -translate-x-1/2 bg-zinc-900/90 backdrop-blur-md border border-white/10 px-6 py-3 rounded-full flex items-center gap-4 z-40 hidden shadow-2xl transition-all">
-            <span class="text-xs font-mono text-gray-400">VAULT KEYS:</span>
-            <div id="keys-container" class="flex gap-2"></div>
-        </div>
-
-        <section class="min-h-screen bg-black relative flex flex-col items-center justify-center overflow-hidden py-20">
-            <h2 class="text-4xl font-cinematic mb-2 z-10">Global Wishes</h2>
-            <p class="text-gray-400 mb-10 z-10">Tap the markers</p>
-            <div id="globe-wrapper" class="relative w-[300px] h-[300px] md:w-[450px] md:h-[450px]">
-                <div id="globe" class="globe w-full h-full rounded-full relative shadow-[0_0_50px_rgba(0,255,255,0.2)]">
-                    <div class="absolute inset-0 bg-[url('https://picsum.photos/id/1015/1000/500')] bg-cover opacity-50 rounded-full"></div>
-                    <div onclick="openVideo('https://www.youtube.com/embed/9bZkp7q19f0')" class="absolute top-[30%] left-[30%] w-8 h-8 bg-red-500 rounded-full flex items-center justify-center cursor-pointer hover:scale-125 transition-transform z-20">❤️</div>
-                    <div onclick="openVideo('https://www.youtube.com/embed/3JZ_D3ELwOQ')" class="absolute top-[50%] left-[70%] w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center cursor-pointer hover:scale-125 transition-transform z-20">🎬</div>
-                </div>
-            </div>
-        </section>
-
-        <section class="py-20 bg-[#050505]">
-            <div class="px-8 md:px-16 mb-6">
-                <h3 class="text-2xl text-white font-semibold mb-1">Video Messages</h3>
-            </div>
-            <div class="netflix-scroll px-8 md:px-16">
-                <div class="video-card flex-shrink-0 bg-gray-900 group">
-                    <img src="https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?w=400" class="w-full h-full object-cover opacity-70 group-hover:opacity-100 transition-opacity" alt="Video 1">
-                    <div class="absolute bottom-4 left-4"><h4 class="font-bold">Mom & Dad</h4></div>
-                </div>
-                 <div class="video-card flex-shrink-0 bg-gray-900 group">
-                    <img src="https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=400" class="w-full h-full object-cover opacity-70 group-hover:opacity-100 transition-opacity" alt="Video 2">
-                    <div class="absolute bottom-4 left-4"><h4 class="font-bold">Besties</h4></div>
-                </div>
-            </div>
-        </section>
-
-        <div id="vault-screen" class="hidden fixed inset-0 bg-black z-[200] flex items-center justify-center">
-            <div class="relative w-full max-w-lg px-6">
-                <div class="flex h-[400px] relative overflow-hidden">
-                    <div id="door-left" class="vault-door w-1/2 h-full bg-zinc-900 border-r-4 border-amber-400 flex items-center justify-center"><span class="text-6xl">🔒</span></div>
-                    <div id="door-right" class="vault-door w-1/2 h-full bg-zinc-900 border-l-4 border-amber-400 flex items-center justify-center"><span class="text-6xl">🔒</span></div>
-                </div>
-                <div id="vault-content" class="absolute inset-0 flex flex-col items-center justify-center hidden">
-                    <h2 class="text-3xl font-cinematic text-amber-400 mb-4">VAULT OPEN</h2>
-                    <div class="relative w-[300px] h-[200px] bg-white rounded-xl overflow-hidden shadow-2xl">
-                        <div class="absolute inset-0 flex items-center justify-center p-4 text-center text-black font-bold">
-                            <div>
-                                <h3 class="text-2xl mb-2">PARIS TRIP! ✈️</h3>
-                                <p class="text-sm text-gray-600">Pack your bags for next weekend.</p>
-                            </div>
-                        </div>
-                        <canvas id="scratch-canvas" width="300" height="200" class="absolute inset-0 cursor-crosshair touch-none"></canvas>
-                    </div>
-                    <button onclick="location.reload()" class="mt-8 text-sm text-gray-500 uppercase tracking-widest">Replay</button>
-                </div>
+        <div class="slider-wrapper">
+            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600" class="time-img" alt="Now">
+            
+            <div id="time-overlay" class="time-overlay">
+                <img src="https://images.unsplash.com/photo-1519689680058-324335c77eba?w=600" class="time-img" alt="Baby">
             </div>
         </div>
-
-        <section class="min-h-screen flex flex-col items-center justify-center bg-[#050505] relative overflow-hidden py-20">
-            <div id="cake-section" class="z-20 text-center transition-all duration-1000">
-                <h2 class="text-4xl font-cinematic text-white mb-2">Make a Wish</h2>
-                <div class="cake-stage mt-10">
-                    <div class="cake-body"><div class="icing"></div></div>
-                    <div class="candle"><div class="flame" id="flame"></div></div>
-                </div>
-            </div>
-            <div id="surprise-section" class="absolute inset-0 flex flex-col items-center justify-center z-30 gift-wrapper">
-                <div class="text-center">
-                    <i class="fas fa-gift text-6xl text-gradient mb-4 animate-bounce"></i>
-                    <h2 class="text-5xl font-cinematic text-white">Happy Birthday!</h2>
-                </div>
-            </div>
-        </section>
-
+        
+        <input type="range" min="0" max="100" value="50" class="mt-8 w-64 accent-white" oninput="app.updateTime(this.value)">
+        <p class="text-xs font-tech text-gray-500 mt-2">DRAG TO TRAVEL</p>
     </div>
 
-    <div id="video-modal" class="hidden fixed inset-0 bg-black/95 z-[250] flex items-center justify-center p-4">
-        <div class="w-full max-w-2xl bg-zinc-900 rounded-lg overflow-hidden relative">
-            <button onclick="document.getElementById('video-modal').classList.add('hidden'); document.getElementById('modal-frame').src=''" class="absolute top-2 right-4 text-3xl text-white">&times;</button>
-            <div class="aspect-video">
-                <iframe id="modal-frame" class="w-full h-full" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    <div id="chap-4" class="chapter bg-[#050505]">
+        <div class="text-center mb-10">
+            <h2 class="text-3xl font-cinematic text-white mb-2">Global Signal</h2>
+            <p class="text-xs font-tech text-cyan-400">INCOMING TRANSMISSIONS</p>
+        </div>
+
+        <div class="globe-container">
+            <div class="globe-sphere">
+                <div class="map-texture"></div>
+                <div class="absolute top-[30%] left-[40%] w-4 h-4 bg-red-500 rounded-full animate-ping"></div>
+                <div class="absolute top-[50%] left-[70%] w-4 h-4 bg-amber-500 rounded-full animate-ping" style="animation-delay: 0.5s"></div>
             </div>
         </div>
+
+        <div class="flex gap-4 mt-12 overflow-x-auto w-full px-6 no-scrollbar snap-x">
+            <div class="min-w-[200px] h-[280px] bg-zinc-900 rounded-xl relative overflow-hidden snap-center shrink-0 border border-white/10" onclick="app.playVideo(this)">
+                <img src="https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=400" class="w-full h-full object-cover opacity-60">
+                <div class="absolute bottom-3 left-3 font-bold text-sm">Mom & Dad</div>
+                <i class="fas fa-play absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-2xl"></i>
+            </div>
+            <div class="min-w-[200px] h-[280px] bg-zinc-900 rounded-xl relative overflow-hidden snap-center shrink-0 border border-white/10" onclick="app.playVideo(this)">
+                <img src="https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?w=400" class="w-full h-full object-cover opacity-60">
+                <div class="absolute bottom-3 left-3 font-bold text-sm">Besties</div>
+                <i class="fas fa-play absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-2xl"></i>
+            </div>
+        </div>
+    </div>
+
+    <div id="chap-5" class="chapter bg-[#0a0a0a]">
+        <div class="flex justify-between w-full px-8 items-end mb-6">
+            <h2 class="text-3xl font-cinematic">Archives</h2>
+            <div class="font-tech text-yellow-500 text-sm">KEYS FOUND: <span id="key-count">0</span>/3</div>
+        </div>
+
+        <div class="gallery-grid">
+            <div class="gallery-item bg-gray-800"><img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400" class="w-full h-full object-cover"></div>
+            <div class="gallery-item bg-gray-800">
+                <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=400" class="w-full h-full object-cover">
+                <div class="key" onclick="app.collectKey(this)">🔑</div>
+            </div>
+            <div class="gallery-item bg-gray-800">
+                <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=400" class="w-full h-full object-cover">
+                <div class="key" style="top:20%; left:80%" onclick="app.collectKey(this)">🔑</div>
+            </div>
+            <div class="gallery-item bg-gray-800"><img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400" class="w-full h-full object-cover"></div>
+            <div class="gallery-item bg-gray-800">
+                <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400" class="w-full h-full object-cover">
+                <div class="key" onclick="app.collectKey(this)">🔑</div>
+            </div>
+        </div>
+        <p class="text-gray-500 text-xs mt-4 animate-pulse">FIND 3 KEYS TO PROCEED</p>
+    </div>
+
+    <div id="chap-6" class="chapter bg-black">
+        <div id="vault-locked" class="text-center">
+            <div id="vault-icon" class="vault-door mx-auto mb-6"><i class="fas fa-lock"></i></div>
+            <h2 class="text-4xl font-cinematic text-gradient">THE VAULT</h2>
+            <p class="text-gray-500 text-sm mt-2">SECURE STORAGE</p>
+        </div>
+
+        <div id="vault-open" class="hidden flex-col items-center">
+            <h2 class="text-3xl font-cinematic text-white mb-6">REWARD UNLOCKED</h2>
+            
+            <div class="scratch-area bg-white" id="scratch-area">
+                <div class="absolute inset-0 flex flex-col items-center justify-center text-center p-4 bg-gradient-to-br from-yellow-100 to-amber-200">
+                    <div class="text-xs font-bold text-amber-600 tracking-widest mb-1">HAPPY BIRTHDAY</div>
+                    <div class="text-2xl font-bold text-black mb-1">PARIS TRIP</div>
+                    <div class="text-[10px] text-gray-700">Flight: AA123 • July 24</div>
+                </div>
+                <canvas id="scratch-canvas" class="absolute inset-0 w-full h-full cursor-crosshair"></canvas>
+            </div>
+            <p class="text-gray-500 text-xs mt-6 font-tech">SCRATCH TO REVEAL</p>
+        </div>
+        
+        <div id="fireworks" class="absolute inset-0 pointer-events-none"></div>
     </div>
 
     <script>
-        // --- DATA ---
-        const CONFIG = { name: "NITHYA", birthDate: "MARCH 22, 2004" };
-        document.getElementById('birth-date-display').textContent = CONFIG.birthDate;
-
-        // --- AUDIO SYSTEM ---
-        const audio = {
-            bg: document.getElementById('bg-music'),
-            scan: document.getElementById('sfx-scan'),
-            success: document.getElementById('sfx-success'),
-            btn: document.getElementById('music-control'),
-            icon: document.querySelector('#music-control i'),
-            isMuted: false,
-            init: function() {
-                this.bg.volume = 0.4;
-                this.btn.classList.remove('hidden');
-                this.btn.addEventListener('click', () => this.toggle());
-            },
-            toggle: function() {
-                this.isMuted = !this.isMuted;
-                this.bg.muted = this.isMuted;
-                this.icon.className = this.isMuted ? 'fas fa-volume-mute text-white' : 'fas fa-volume-high text-white';
-            }
-        };
-
-        // --- HUD SCANNER LOGIC ---
-        const hud = {
-            el: document.getElementById('hud-layer'),
-            startBtn: document.getElementById('start-btn'),
-            scanLine: document.querySelector('.scan-line'),
-            photo: document.getElementById('id-photo'),
-            
-            init: function() {
-                if (this.startBtn) {
-                    this.startBtn.addEventListener('click', () => this.start());
-                }
-            },
-            
-            start: function() {
-                this.startBtn.style.display = 'none';
-                if(audio.scan) audio.scan.play().catch(e => console.log("Audio play failed:", e));
-
-                // Reveal Hologram Photo (Green)
-                if(this.photo) {
-                    this.photo.style.opacity = "0.8"; 
-                    this.photo.style.filter = "grayscale(100%) sepia(100%) hue-rotate(90deg) brightness(0.8) contrast(1.2)";
-                }
-
-                // Text Scramble
-                const statusEl = document.getElementById('status');
-                if(statusEl) {
-                    let idx = 0;
-                    const text = "MATCHING FACE ID...";
-                    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-                    const interval = setInterval(() => {
-                        statusEl.innerText = text.split('').map((char, i) => i < idx ? char : chars[Math.floor(Math.random() * chars.length)]).join('');
-                        if (idx >= text.length) clearInterval(interval);
-                        idx += 1/3;
-                    }, 30);
-                }
-                
-                // Scan Laser
-                if(this.scanLine) {
-                    gsap.to(this.scanLine, { opacity: 1, duration: 0.2 });
-                    gsap.to(this.scanLine, { 
-                        top: '100%', duration: 2, ease: "power2.inOut", repeat: 1, yoyo: true, 
-                        onComplete: () => this.success() 
-                    });
-                } else {
-                    setTimeout(() => this.success(), 2000);
-                }
-            },
-            
-            success: function() {
-                if(audio.scan) audio.scan.pause();
-                if(audio.success) audio.success.play().catch(e => console.log(e));
-                
-                const status = document.getElementById('status');
-                if(status) {
-                    status.innerText = "IDENTITY CONFIRMED";
-                    status.style.color = "#0f0";
-                    status.style.textShadow = "0 0 20px #0f0";
-                }
-                
-                const frame = document.querySelector('.scan-frame');
-                if(frame) {
-                    frame.style.borderColor = "#0f0";
-                    frame.style.boxShadow = "0 0 30px #0f0, inset 0 0 10px #0f0";
-                }
-
-                // Show True Color Photo
-                if(this.photo) {
-                    this.photo.style.transition = "filter 0.5s ease, opacity 0.5s ease";
-                    this.photo.style.filter = "none";
-                    this.photo.style.opacity = "1";
-                }
-                
-                // Enter Site
-                setTimeout(() => {
-                    gsap.to(this.el, { opacity: 0, duration: 1, onComplete: () => {
-                        this.el.style.display = 'none';
-                        gsap.to('#site-wrapper', { opacity: 1, duration: 1 });
-                        if(typeof app !== 'undefined' && app.initFeatures) app.initFeatures();
-                    }});
-                }, 2000);
-            }
-        };
-
-        // --- MAIN APP LOGIC ---
         const app = {
+            currentChapter: 1,
+            totalChapters: 6,
+            keysFound: 0,
+            audioMuted: false,
+            
             init: function() {
-                hud.init();
-                // Cursor Logic
-                if (window.matchMedia("(hover: hover)").matches) {
-                    const dot = document.querySelector('.cursor-dot');
-                    const outline = document.querySelector('.cursor-outline');
-                    window.addEventListener('mousemove', e => {
-                        dot.style.left = outline.style.left = e.clientX + 'px';
-                        dot.style.top = outline.style.top = e.clientY + 'px';
-                        outline.animate({ left: e.clientX + 'px', top: e.clientY + 'px' }, { duration: 500, fill: "forwards" });
-                    });
-                }
-            },
-            initFeatures: function() {
-                this.initIntro();
-                this.initStarMap();
-                this.initSlider();
-                this.initKeys();
-                this.initGlobe();
-                this.initCake();
-                this.initScroll();
-            },
-            initIntro: function() {
-                const intro = document.getElementById('intro-screen');
-                intro.addEventListener('click', () => {
-                    audio.bg.play().catch(() => {});
-                    audio.init();
-                    gsap.to('.fade-elem', { y: -20, opacity: 0, stagger: 0.1 });
-                    gsap.to(intro, { opacity: 0, duration: 1, pointerEvents: 'none' });
-                    gsap.to(".hero-text", { y: 0, opacity: 1, duration: 1.5, stagger: 0.2, delay: 0.5 });
-                    gsap.to("#hero-bg", { scale: 1, duration: 10 });
+                this.setupAudio();
+                this.setupStars();
+                this.setupScratch();
+                
+                // Nav Button Logic
+                document.getElementById('next-chapter-btn').addEventListener('click', () => {
+                    this.changeChapter(this.currentChapter + 1);
                 });
             },
-            initStarMap: function() {
+
+            // --- NAVIGATION ---
+            changeChapter: function(num) {
+                // Hide current
+                document.getElementById(`chap-${this.currentChapter}`).classList.remove('active');
+                document.querySelectorAll('.nav-dot')[this.currentChapter-1].classList.remove('active');
+                
+                this.currentChapter = num;
+                
+                // Show next
+                document.getElementById(`chap-${num}`).classList.add('active');
+                document.querySelectorAll('.nav-dot')[num-1].classList.add('active');
+                
+                // Reset Button logic
+                const btn = document.getElementById('next-chapter-btn');
+                btn.classList.remove('visible');
+                
+                // Specific Chapter Logic
+                if(num === 2) {
+                    setTimeout(() => this.enableNext(3), 4000); // Auto enable after star animation
+                }
+                if(num === 3) this.enableNext(4); // Instant enable
+                if(num === 4) this.enableNext(5);
+                if(num === 6) this.openVault();
+            },
+
+            enableNext: function(targetChap) {
+                const btn = document.getElementById('next-chapter-btn');
+                document.getElementById('next-chap-num').innerText = targetChap;
+                btn.classList.add('visible');
+            },
+
+            // --- CHAP 1: SCAN ---
+            startScan: function() {
+                const btn = document.getElementById('scan-btn');
+                const line = document.querySelector('.scan-line');
+                const photo = document.getElementById('id-photo');
+                const fingerprint = document.getElementById('fingerprint');
+                const status = document.getElementById('hud-status');
+                
+                btn.style.opacity = 0;
+                document.getElementById('sfx-scan').play();
+                
+                // Animate Line
+                gsap.to(line, { top: '100%', duration: 2, repeat: 1, yoyo: true, ease: "power1.inOut", onComplete: () => {
+                    // Success State
+                    document.getElementById('sfx-success').play();
+                    fingerprint.style.opacity = 0;
+                    photo.style.opacity = 1;
+                    photo.classList.remove('grayscale', 'sepia');
+                    status.innerText = "IDENTITY CONFIRMED";
+                    status.style.color = "#0f0";
+                    document.querySelector('.scan-frame').style.borderColor = "#0f0";
+                    
+                    document.getElementById('nav-dots').style.opacity = 1;
+                    setTimeout(() => this.enableNext(2), 1000);
+                }});
+            },
+
+            // --- CHAP 2: STARS ---
+            setupStars: function() {
                 const canvas = document.getElementById('star-canvas');
                 const ctx = canvas.getContext('2d');
-                let w, h;
-                const stars = [];
-                const resize = () => { w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; };
-                window.addEventListener('resize', resize);
-                resize();
-                for(let i=0; i<800; i++) stars.push({ x: Math.random()*w, y: Math.random()*h, r: Math.random()*1.5, a: Math.random() });
-                const animate = () => {
-                    ctx.clearRect(0,0,w,h);
+                canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+                const stars = Array(200).fill().map(() => ({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    r: Math.random() * 1.5,
+                    a: Math.random()
+                }));
+                function animate() {
+                    ctx.clearRect(0,0,canvas.width, canvas.height);
                     ctx.fillStyle = "white";
                     stars.forEach(s => {
-                        ctx.globalAlpha = Math.abs(Math.sin(Date.now()/1000 * s.r + s.x));
+                        ctx.globalAlpha = Math.abs(Math.sin(Date.now()/1000 + s.x));
                         ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI*2); ctx.fill();
                     });
                     requestAnimationFrame(animate);
-                };
+                }
                 animate();
             },
-            initSlider: function() {
-                const range = document.getElementById('time-range');
-                const overlay = document.getElementById('baby-overlay');
-                range.addEventListener('input', (e) => {
-                    overlay.style.clipPath = `inset(0 ${100 - e.target.value}% 0 0)`;
-                });
+
+            // --- CHAP 3: TIME ---
+            updateTime: function(val) {
+                document.getElementById('time-overlay').style.clipPath = `inset(0 ${100-val}% 0 0)`;
             },
-            initKeys: function() {
-                let count = 0;
-                const total = 4;
-                window.collectKey = (el) => {
-                    if(el.classList.contains('collected')) return;
-                    el.classList.add('collected');
-                    count++;
-                    const bar = document.getElementById('keys-bar');
-                    bar.classList.remove('hidden');
-                    const icon = document.createElement('div');
-                    icon.innerHTML = '🔑';
-                    document.getElementById('keys-container').appendChild(icon);
-                    confetti({ particleCount: 30, spread: 50, origin: { y: 0.8 } });
-                    if(count >= total) setTimeout(this.openVault, 1000);
-                };
+
+            // --- CHAP 5: KEYS ---
+            collectKey: function(el) {
+                if(el.classList.contains('collected')) return;
+                el.classList.add('collected');
+                this.keysFound++;
+                document.getElementById('key-count').innerText = this.keysFound;
+                
+                // Confetti at click position
+                const rect = el.getBoundingClientRect();
+                confetti({ particleCount: 30, spread: 40, origin: { x: rect.left/window.innerWidth, y: rect.top/window.innerHeight } });
+
+                if(this.keysFound === 3) {
+                    setTimeout(() => this.enableNext(6), 1000);
+                }
             },
+
+            // --- CHAP 6: VAULT ---
             openVault: function() {
-                const screen = document.getElementById('vault-screen');
-                screen.classList.remove('hidden');
-                gsap.to('#door-left', { x: '-100%', duration: 1.5, ease: 'power2.inOut' });
-                gsap.to('#door-right', { x: '100%', duration: 1.5, ease: 'power2.inOut', onComplete: () => {
-                    document.getElementById('vault-content').classList.remove('hidden');
-                    app.initScratch();
+                gsap.to('#vault-icon', { rotate: 360, scale: 0, opacity: 0, duration: 1, delay: 0.5 });
+                gsap.to('#vault-locked', { opacity: 0, duration: 0.5, delay: 1, onComplete: () => {
+                    document.getElementById('vault-locked').style.display = 'none';
+                    document.getElementById('vault-open').classList.remove('hidden');
+                    document.getElementById('vault-open').classList.add('flex');
+                    document.getElementById('scratch-area').style.display = 'block';
+                    this.triggerFireworks();
                 }});
             },
-            initScratch: function() {
+
+            setupScratch: function() {
                 const canvas = document.getElementById('scratch-canvas');
                 const ctx = canvas.getContext('2d');
+                canvas.width = 300; canvas.height = 180;
+                
                 ctx.fillStyle = "#C0C0C0";
-                ctx.fillRect(0,0,300,200);
+                ctx.fillRect(0,0,300,180);
                 ctx.fillStyle = "#000";
-                ctx.font = "20px Arial";
-                ctx.fillText("SCRATCH ME", 85, 110);
+                ctx.font = "16px Arial";
+                ctx.fillText("SCRATCH HERE", 90, 95);
+
                 let isDrawing = false;
                 const scratch = (e) => {
                     if(!isDrawing) return;
+                    e.preventDefault();
                     const rect = canvas.getBoundingClientRect();
                     const x = (e.clientX || e.touches[0].clientX) - rect.left;
                     const y = (e.clientY || e.touches[0].clientY) - rect.top;
                     ctx.globalCompositeOperation = "destination-out";
                     ctx.beginPath(); ctx.arc(x,y,20,0,Math.PI*2); ctx.fill();
-                };
+                }
+
                 canvas.addEventListener('mousedown', () => isDrawing = true);
-                canvas.addEventListener('touchstart', (e) => { isDrawing = true; scratch(e); });
+                canvas.addEventListener('touchstart', () => isDrawing = true);
                 window.addEventListener('mouseup', () => isDrawing = false);
                 window.addEventListener('touchend', () => isDrawing = false);
                 canvas.addEventListener('mousemove', scratch);
                 canvas.addEventListener('touchmove', scratch);
             },
-            initGlobe: function() {
-                const globe = document.getElementById('globe');
-                let rotation = 0;
-                setInterval(() => {
-                    rotation += 0.2;
-                    globe.style.transform = `rotateY(${rotation}deg)`;
-                }, 50);
-                window.openVideo = (url) => {
-                    const modal = document.getElementById('video-modal');
-                    modal.classList.remove('hidden');
-                    document.getElementById('modal-frame').src = url;
-                };
+
+            triggerFireworks: function() {
+                const duration = 3000;
+                const end = Date.now() + duration;
+                (function frame() {
+                    confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 } });
+                    confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 } });
+                    if (Date.now() < end) requestAnimationFrame(frame);
+                }());
             },
-            initCake: function() {
-                document.getElementById('flame').addEventListener('click', function() {
-                    this.classList.add('out');
-                    confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
-                    gsap.to('#cake-section', { opacity: 0, duration: 1 });
-                    setTimeout(() => {
-                        document.getElementById('cake-section').style.display = 'none';
-                        document.getElementById('surprise-section').classList.add('active');
-                        gsap.from('#surprise-section', { scale: 0.8, opacity: 0, duration: 1 });
-                    }, 1000);
+
+            setupAudio: function() {
+                const btn = document.getElementById('mute-btn');
+                const music = document.getElementById('bg-music');
+                music.volume = 0.3;
+                
+                btn.addEventListener('click', () => {
+                    this.audioMuted = !this.audioMuted;
+                    music.muted = this.audioMuted;
+                    btn.innerHTML = this.audioMuted ? '<i class="fas fa-volume-off text-2xl"></i>' : '<i class="fas fa-volume-up text-2xl"></i>';
+                    if(!this.audioMuted) music.play().catch(()=>{});
                 });
+                
+                // Auto play on first interaction
+                document.body.addEventListener('click', () => {
+                    if(!this.audioMuted) music.play().catch(()=>{});
+                }, { once: true });
             },
-            initScroll: function() {
-                gsap.utils.toArray('.parallax-img').forEach(img => {
-                    gsap.to(img, { y: "20%", ease: "none", scrollTrigger: { trigger: img.parentElement, start: "top bottom", end: "bottom top", scrub: true }});
-                });
-                gsap.utils.toArray('.scroll-reveal').forEach(elem => {
-                    gsap.to(elem, { y: 0, opacity: 1, duration: 1, scrollTrigger: { trigger: elem, start: "top 80%" }});
-                });
+            
+            playVideo: function(el) {
+                // Placeholder for video logic
+                alert("Video playing...");
             }
         };
 
-        window.addEventListener('DOMContentLoaded', () => app.init());
+        window.onload = () => app.init();
     </script>
 </body>
 </html>
