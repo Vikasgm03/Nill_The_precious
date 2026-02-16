@@ -99,53 +99,56 @@
 </section>
 
         
-      <section class="relative h-screen flex items-center justify-center overflow-hidden bg-black">
+<section class="relative h-screen flex items-center justify-center overflow-hidden bg-[#0a0a0a] perspective-container">
     
-    <div class="absolute inset-0 z-0">
-        <img src="https://images.unsplash.com/photo-1490750967868-58cb75069ed6?q=80&w=2000&auto=format&fit=crop" 
-             class="w-full h-full object-cover opacity-60 grayscale-[30%] scale-105" 
-             id="hero-bg" 
-             alt="Hero">
-        <div class="absolute inset-0 bg-gradient-to-t from-[#fff9f0] via-transparent to-black/60"></div>
-    </div>
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_#2e1065_0%,_#000_70%)] opacity-60"></div>
+    <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-20 animate-pulse"></div>
 
-    <div class="relative z-10 text-center w-full px-4">
+    <div id="hero-tilt" class="relative z-10 transition-transform duration-100 ease-out will-change-transform" style="transform-style: preserve-3d;">
         
-        <p class="font-cinematic text-[#d4af37] tracking-[0.5em] text-xs md:text-sm mb-6 animate-[fadeIn_2s_ease-out]">
-            THE CELEBRATION OF
-        </p>
-
-        <div class="relative inline-block group cursor-default">
-            <h1 class="text-[5rem] md:text-[12rem] leading-none font-cinematic font-bold text-transparent absolute top-2 left-2 blur-sm opacity-50 select-none" 
-                style="-webkit-text-stroke: 2px #d4af37;">
-                NITHYA
-            </h1>
-            <h1 class="text-[5rem] md:text-[12rem] leading-none font-cinematic font-bold text-white relative z-10 mix-blend-overlay opacity-90 group-hover:opacity-100 transition-opacity duration-500">
-                NITHYA
-            </h1>
-            <h1 class="text-[5rem] md:text-[12rem] leading-none font-cinematic font-bold text-transparent absolute top-0 left-0 z-20" 
-                style="-webkit-text-stroke: 1px rgba(255,255,255,0.8);">
-                NITHYA
-            </h1>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] md:w-[600px] md:h-[600px] animate-[spin_20s_linear_infinite]">
+            <svg viewBox="0 0 100 100" class="w-full h-full fill-[#d4af37] tracking-[0.2em] uppercase text-[6px] font-bold font-cinematic">
+                <path id="circlePath" d="M 50, 50 m -37, 0 a 37,37 0 1,1 74,0 a 37,37 0 1,1 -74,0" fill="transparent" />
+                <text>
+                    <textPath xlink:href="#circlePath" startOffset="0%">
+                        • The Celebration of Nithya • The Celebration of Nithya •
+                    </textPath>
+                </text>
+            </svg>
         </div>
 
-        <div class="mt-12 opacity-0 animate-[slideUp_1.5s_ease-out_1s_forwards]">
-            <i class="fas fa-star text-[#d4af37] text-xs mb-4 block"></i>
-            <p class="text-xl md:text-2xl font-emotional text-gray-800 drop-shadow-md">
-                "Here's to the magic you bring to the world."
-            </p>
+        <div class="relative w-[300px] h-[400px] md:w-[350px] md:h-[450px] rounded-full md:rounded-[100px] overflow-hidden border-2 border-[#d4af37]/30 shadow-[0_0_60px_rgba(212,175,55,0.3)]">
+            <div class="absolute inset-0 bg-black/20 z-10"></div> <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=800" 
+                 class="w-full h-full object-cover transform scale-110" 
+                 alt="Portrait">
+            
+            <div class="absolute bottom-10 left-0 w-full text-center z-20">
+                 <h1 class="text-6xl font-emotional text-white drop-shadow-md">Nithya</h1>
+            </div>
         </div>
+
+        <div class="absolute -top-10 -right-20 text-6xl text-[#d4af37] opacity-50 blur-[2px]" style="transform: translateZ(50px);">✨</div>
+        <div class="absolute -bottom-10 -left-20 text-4xl text-white opacity-30 blur-[1px]" style="transform: translateZ(80px);">✦</div>
     </div>
-    
-    <div class="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce text-gray-500">
-        <i class="fas fa-chevron-down text-2xl"></i>
+
+    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-60">
+        <span class="text-[10px] tracking-[0.4em] uppercase text-[#d4af37]">Scroll</span>
+        <div class="w-[1px] h-12 bg-gradient-to-b from-[#d4af37] to-transparent"></div>
     </div>
+
 </section>
 
-<style>
-    @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-</style>
+<script>
+    const heroSection = document.querySelector('.perspective-container');
+    const tiltObj = document.getElementById('hero-tilt');
+
+    heroSection.addEventListener('mousemove', (e) => {
+        const x = (window.innerWidth / 2 - e.pageX) / 25;
+        const y = (window.innerHeight / 2 - e.pageY) / 25;
+        // Subtle tilt effect
+        tiltObj.style.transform = `rotateY(${x}deg) rotateX(${y}deg)`;
+    });
+</script>
 
         <section class="min-h-screen bg-[#fff9f0] flex items-center justify-center py-20 relative">
             <div class="max-w-4xl mx-auto px-6 text-center space-y-32">
