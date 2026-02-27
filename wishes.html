@@ -30,7 +30,7 @@
             border-color: var(--gold);
         }
         .play-overlay {
-            position: absolute; inset: 0; background: rgba(0,0,0,0.4);
+            position: absolute; inset: 0; background: rgba(0,0,0,0.5);
             display: flex; align-items: center; justify-content: center;
             opacity: 0; transition: opacity 0.3s;
         }
@@ -56,9 +56,10 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
 
             <div class="video-card group" onclick="playVideo('media/videos/h2.mp4', 'Mom & Dad')">
-                <div class="aspect-[3/4] relative">
-                    <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
-                    <div class="play-overlay"><i class="fas fa-play-circle text-6xl text-white drop-shadow-lg"></i></div>
+                <div class="aspect-[3/4] relative overflow-hidden bg-black">
+                    <video src="media/videos/h2.mp4" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700 ease-out" autoplay muted loop playsinline></video>
+                    
+                    <div class="play-overlay"><i class="fas fa-play-circle text-6xl text-white drop-shadow-lg transform scale-90 group-hover:scale-100 transition-transform duration-300"></i></div>
                 </div>
                 <div class="p-4 bg-[#1a0b2e]">
                     <h3 class="text-xl text-[#d4af37] font-bold">Mom & Dad</h3>
@@ -67,9 +68,10 @@
             </div>
 
             <div class="video-card group" onclick="playVideo('media/videos/h3.mp4', 'Sister')">
-                <div class="aspect-[3/4] relative">
-                    <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=400" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
-                    <div class="play-overlay"><i class="fas fa-play-circle text-6xl text-white drop-shadow-lg"></i></div>
+                <div class="aspect-[3/4] relative overflow-hidden bg-black">
+                    <video src="media/videos/h3.mp4" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700 ease-out" autoplay muted loop playsinline></video>
+                    
+                    <div class="play-overlay"><i class="fas fa-play-circle text-6xl text-white drop-shadow-lg transform scale-90 group-hover:scale-100 transition-transform duration-300"></i></div>
                 </div>
                 <div class="p-4 bg-[#1a0b2e]">
                     <h3 class="text-xl text-[#d4af37] font-bold">Sister</h3>
@@ -78,9 +80,10 @@
             </div>
 
             <div class="video-card group" onclick="playVideo('media/videos/h1.mp4', 'College Gang')">
-                <div class="aspect-[3/4] relative">
-                    <img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=400" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
-                    <div class="play-overlay"><i class="fas fa-play-circle text-6xl text-white drop-shadow-lg"></i></div>
+                <div class="aspect-[3/4] relative overflow-hidden bg-black">
+                    <video src="media/videos/h1.mp4" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700 ease-out" autoplay muted loop playsinline></video>
+                    
+                    <div class="play-overlay"><i class="fas fa-play-circle text-6xl text-white drop-shadow-lg transform scale-90 group-hover:scale-100 transition-transform duration-300"></i></div>
                 </div>
                 <div class="p-4 bg-[#1a0b2e]">
                     <h3 class="text-xl text-[#d4af37] font-bold">College Gang</h3>
@@ -89,9 +92,10 @@
             </div>
 
             <div class="video-card group" onclick="playVideo('media/videos/h2.mp4', 'Grandma')">
-                <div class="aspect-[3/4] relative">
-                    <img src="https://images.unsplash.com/photo-1511895426328-dc8714191300?w=400" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
-                    <div class="play-overlay"><i class="fas fa-play-circle text-6xl text-white drop-shadow-lg"></i></div>
+                <div class="aspect-[3/4] relative overflow-hidden bg-black">
+                    <video src="media/videos/h2.mp4" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700 ease-out" autoplay muted loop playsinline></video>
+                    
+                    <div class="play-overlay"><i class="fas fa-play-circle text-6xl text-white drop-shadow-lg transform scale-90 group-hover:scale-100 transition-transform duration-300"></i></div>
                 </div>
                 <div class="p-4 bg-[#1a0b2e]">
                     <h3 class="text-xl text-[#d4af37] font-bold">Grandma</h3>
@@ -99,7 +103,7 @@
                 </div>
             </div>
 
-            </div>
+        </div>
     </main>
 
     <div id="cinema-modal" class="fixed inset-0 bg-black/95 z-[100] hidden flex items-center justify-center p-4 backdrop-blur-xl opacity-0 transition-opacity duration-300">
@@ -135,29 +139,23 @@
         const title = document.getElementById('modal-title');
 
         function playVideo(source, name) {
-            // 1. Set the source
             player.src = source;
             title.innerText = name;
             
-            // 2. Show Modal
             modal.classList.remove('hidden');
-            // Small timeout to allow display:block to apply before opacity transition
             setTimeout(() => {
                 modal.classList.remove('opacity-0');
             }, 10);
             
-            // 3. Play
             player.play();
             document.body.classList.add('modal-open');
         }
 
         function closeModal() {
-            // 1. Hide Modal
             modal.classList.add('opacity-0');
             
             setTimeout(() => {
                 modal.classList.add('hidden');
-                // 2. Stop Video
                 player.pause();
                 player.src = "";
             }, 300);
@@ -165,7 +163,6 @@
             document.body.classList.remove('modal-open');
         }
 
-        // Close on background click
         modal.addEventListener('click', (e) => {
             if (e.target === modal) closeModal();
         });
