@@ -350,6 +350,37 @@
             </div>
         </section>
 
+        <section id="gallery-anchor" class="min-h-[70vh] md:min-h-screen relative flex items-center justify-center py-12 overflow-hidden bg-black z-[2]">
+            
+            <div id="mosaic-grid" class="absolute inset-0 grid grid-cols-6 md:grid-cols-12 opacity-20 gap-1 pointer-events-none"></div>
+            
+            <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-black z-10 pointer-events-none"></div>
+            
+            <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(212,175,55,0.1)_0%,transparent_60%)] z-10 pointer-events-none"></div>
+
+            <div class="relative z-20 text-center flex flex-col items-center px-4">
+                
+                <p class="text-[#d4af37] font-mono text-[10px] md:text-xs tracking-[1em] uppercase mb-6 opacity-80 drop-shadow-md">
+                    200+ Moments Captured
+                </p>
+                
+                <div class="animate-pulse" style="animation-duration: 4s;">
+                    <h2 class="text-6xl md:text-[9rem] font-cinematic font-bold text-white tracking-tighter drop-shadow-[0_0_30px_rgba(255,255,255,0.2)] leading-none">
+                        THE <span class="font-emotional text-[#d4af37] lowercase text-7xl md:text-[10rem] px-2 font-normal tracking-normal drop-shadow-[0_0_20px_rgba(212,175,55,0.6)]">vault</span>
+                    </h2>
+                </div>
+                
+                <div class="w-[1px] h-20 md:h-32 bg-gradient-to-b from-[#d4af37] to-transparent mx-auto mt-8 mb-10 md:mb-12"></div>
+                
+                <button onclick="enterGallery()" class="group relative px-8 py-4 md:px-12 md:py-5 border border-[#d4af37]/30 text-[#d4af37] transition-all rounded-full uppercase tracking-[0.3em] md:tracking-[0.4em] text-[10px] md:text-xs overflow-hidden bg-[#050505]/60 backdrop-blur-md shadow-[0_0_20px_rgba(212,175,55,0.1)] hover:shadow-[0_0_40px_rgba(212,175,55,0.3)] hover:border-[#d4af37] cursor-pointer">
+                    <div class="absolute inset-0 bg-gradient-to-r from-[#d4af37] to-[#8a6219] translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out z-0"></div>
+                    
+                    <span class="relative z-10 group-hover:text-black font-bold transition-colors duration-300">Open The Archives</span>
+                </button>
+            </div>
+            
+        </section>
+
         <section id="cake-anchor" class="min-h-[70vh] md:min-h-screen relative flex flex-col items-center justify-center py-12 overflow-hidden bg-black z-[2]">
             <div id="cake-preview-section" class="z-20 text-center relative group cursor-pointer" onclick="enterCake()">
                 <h2 class="text-5xl md:text-8xl font-emotional text-white mb-6 md:mb-8 animate-pulse">Make a Wish</h2>
