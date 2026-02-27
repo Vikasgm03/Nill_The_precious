@@ -556,6 +556,18 @@ window.enterCake = () => {
 };
 
 window.addEventListener('DOMContentLoaded', () => app.init());
+
+    
+    window.enterGallery = () => {
+    // Fades the screen to black smoothly
+    gsap.to("body", { backgroundColor: "#000", opacity: 0, duration: 0.5 });
+    
+    // Redirects to gallery.html after the fade animation finishes
+    setTimeout(() => {
+        window.location.href = 'gallery.html';
+    }, 500);
+};
 </script>
+    
 </body>
 </html>
