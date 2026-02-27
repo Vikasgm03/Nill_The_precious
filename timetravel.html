@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Echoes of Love | Celebration</title>
+    <title>The Sands of Time | Celebration</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,12 +11,13 @@
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" defer></script>
 
     <style>
         /* --- CORE STYLES --- */
-        :root { --gold: #d4af37; --dark: #050505; --accent: #2e1065; }
+        :root { --gold: #d4af37; --dark: #030105; }
         
         body { 
             background-color: var(--dark); 
@@ -26,7 +27,6 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        /* Smooth Scroll */
         @media (min-width: 769px) {
             html.lenis { height: auto; } 
             .lenis.lenis-smooth { scroll-behavior: auto; } 
@@ -42,291 +42,237 @@
             .cursor-dot { position: fixed; top: 0; left: 0; width: 8px; height: 8px; background-color: var(--gold); border-radius: 50%; z-index: 10000; pointer-events: none; transform: translate(-50%, -50%); }
             .cursor-outline { position: fixed; top: 0; left: 0; width: 40px; height: 40px; border: 1px dashed rgba(212, 175, 55, 0.5); border-radius: 50%; z-index: 10000; pointer-events: none; transform: translate(-50%, -50%); transition: width 0.3s, height 0.3s; }
             body { cursor: none; }
-            a:hover ~ .cursor-outline, .video-card:hover ~ .cursor-outline { width: 60px; height: 60px; border-color: var(--gold); border-style: solid; background: rgba(212, 175, 55, 0.1); }
+            a:hover ~ .cursor-outline, .timeline-card:hover ~ .cursor-outline { width: 60px; height: 60px; border-color: var(--gold); border-style: solid; background: rgba(212, 175, 55, 0.1); }
         }
 
-        /* --- FILM GRAIN (Global) --- */
+        /* --- FILM GRAIN --- */
         .film-grain::after {
-            content: "";
-            position: fixed;
-            inset: 0;
+            content: ""; position: fixed; inset: 0;
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-            opacity: 0.04;
-            pointer-events: none;
-            mix-blend-mode: overlay;
-            z-index: 9999;
+            opacity: 0.05; pointer-events: none; mix-blend-mode: overlay; z-index: 9999;
         }
 
-        /* --- ADVANCED WORLD ENTRANCE GATES --- */
-        .gate { position: fixed; top: 0; width: 50vw; height: 100vh; background: #030105; z-index: 100000; display: flex; align-items: center; }
-        #gate-left { left: 0; border-right: 1px solid rgba(212,175,55,0.3); justify-content: flex-end; box-shadow: inset -20px 0 50px rgba(0,0,0,0.5); }
-        #gate-right { right: 0; border-left: 1px solid rgba(212,175,55,0.3); justify-content: flex-start; box-shadow: inset 20px 0 50px rgba(0,0,0,0.5); }
+        /* --- TIME WARP ENTRANCE --- */
+        #time-warp-overlay {
+            position: fixed; inset: 0; background: #000; z-index: 100000;
+            display: flex; flex-col; items-center; justify-content: center;
+        }
+        .portal-ring {
+            position: absolute; border-radius: 50%;
+            border: 2px solid rgba(212, 175, 55, 0.1);
+            transform: scale(0); box-shadow: 0 0 50px rgba(212, 175, 55, 0.2);
+        }
+
+        /* --- FALLING SAND (JavaScript Generated) --- */
+        .sand-grain {
+            position: fixed; top: -10px; width: 2px; height: 4px;
+            background: linear-gradient(to bottom, transparent, #d4af37, transparent);
+            filter: blur(1px); border-radius: 50%; opacity: 0;
+            z-index: 0; pointer-events: none;
+        }
+
+        /* --- TIMELINE STYLING --- */
+        .timeline-line {
+            position: absolute; left: 50%; top: 0; bottom: 0; width: 2px;
+            background: rgba(255, 255, 255, 0.05); transform: translateX(-50%); z-index: 10;
+        }
+        .timeline-progress {
+            position: absolute; top: 0; left: 0; width: 100%; height: 0%;
+            background: linear-gradient(to bottom, #d4af37, #fcf6ba, #d4af37);
+            box-shadow: 0 0 20px #d4af37, 0 0 40px #d4af37;
+        }
+        .timeline-node {
+            position: absolute; left: 50%; transform: translate(-50%, -50%);
+            width: 20px; height: 20px; border-radius: 50%; background: #030105;
+            border: 2px solid rgba(212, 175, 55, 0.3); z-index: 20;
+            transition: all 0.5s;
+        }
+        .timeline-node.active {
+            background: #d4af37; border-color: #fcf6ba;
+            box-shadow: 0 0 20px rgba(212,175,55,0.8); scale: 1.2;
+        }
+
+        /* --- TIMELINE CARDS --- */
+        .timeline-card {
+            background: rgba(10, 5, 20, 0.4); backdrop-filter: blur(10px);
+            border: 1px solid rgba(212, 175, 55, 0.1); border-radius: 12px;
+            padding: 1rem; position: relative; z-index: 15;
+            transition: all 0.5s ease; opacity: 0;
+        }
+        .timeline-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            border-color: rgba(212, 175, 55, 0.5);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8), 0 0 30px rgba(212, 175, 55, 0.15);
+        }
         
-        .seal-ring {
-            position: absolute; width: 120px; height: 120px; border-radius: 50%;
-            border: 1px dashed rgba(212, 175, 55, 0.6);
-            animation: spin 10s linear infinite;
-        }
-        .seal-ring-inner {
-            position: absolute; width: 90px; height: 90px; border-radius: 50%;
-            border: 1px solid rgba(212, 175, 55, 0.3);
-            animation: spin 7s linear infinite reverse;
-        }
-
-        /* --- VIDEO CARD UPGRADES --- */
-        .video-card {
-            background: rgba(10, 5, 20, 0.6);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 20px;
-            overflow: hidden;
-            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-            position: relative;
-            transform: translateY(0);
-        }
+        /* Auto-Edit Styles based on Era */
+        .era-vintage { filter: sepia(60%) grayscale(40%) contrast(120%) blur(0.5px); transition: all 1s; }
+        .era-retro { filter: sepia(20%) contrast(110%) saturate(120%); transition: all 1s; }
+        .era-modern { filter: contrast(105%) brightness(105%); transition: all 1s; }
         
-        .video-card:hover {
-            transform: translateY(-12px) scale(1.02);
-            border-color: rgba(212, 175, 55, 0.4);
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.9), inset 0 0 20px rgba(212, 175, 55, 0.1);
-        }
+        .timeline-card:hover img { filter: sepia(0%) grayscale(0%) blur(0) contrast(110%) saturate(110%); }
 
-        /* The preview video styling */
-        .preview-vid {
-            filter: grayscale(100%) contrast(120%) brightness(50%);
-            transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
+        /* Mobile adjustments */
+        @media (max-width: 768px) {
+            .timeline-line { left: 20px; transform: none; }
+            .timeline-node { left: 20px; }
+            .timeline-card-wrapper { padding-left: 50px !important; width: 100% !important; margin-left: 0 !important; }
+            .timeline-year-text { position: relative !important; text-align: left !important; left: 0 !important; right: 0 !important; top: 0 !important; transform: none !important; margin-bottom: 10px; }
         }
-        .video-card:hover .preview-vid {
-            filter: grayscale(0%) contrast(105%) brightness(100%);
-            transform: scale(1.08);
-        }
-
-        .play-overlay {
-            background: radial-gradient(circle at center, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.9) 100%);
-            transition: opacity 0.7s ease;
-        }
-        .video-card:hover .play-overlay { opacity: 0; }
-
-        /* Emitting Soundwaves Effect behind cards */
-        .soundwave-pulse {
-            position: absolute; inset: -5px; border-radius: 20px;
-            border: 1px solid var(--gold); opacity: 0;
-            transition: all 0.5s; pointer-events: none; z-index: -1;
-        }
-        .video-card:hover .soundwave-pulse {
-            animation: pulseWave 2s cubic-bezier(0, 0, 0.2, 1) infinite;
-        }
-        @keyframes pulseWave {
-            0% { transform: scale(1); opacity: 0.4; }
-            100% { transform: scale(1.08); opacity: 0; }
-        }
-
-        /* Audio Bars Background Animation */
-        .audio-bar {
-            width: 2px; background: linear-gradient(to top, transparent, rgba(212,175,55,0.2), transparent);
-            animation: eqBounce 1.5s ease-in-out infinite alternate;
-        }
-        @keyframes eqBounce { 0% { height: 20%; opacity: 0.1; } 100% { height: 80%; opacity: 0.5; } }
-
-        /* Modal Lock */
-        body.modal-open { overflow: hidden; }
-        @keyframes spin { 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body class="film-grain">
 
-    <div id="gate-left" class="gate"></div>
-    <div id="gate-right" class="gate"></div>
-    
-    <div id="entrance-seal" class="fixed inset-0 z-[100002] flex flex-col items-center justify-center pointer-events-none">
-        <div class="relative flex items-center justify-center w-40 h-40">
-            <div class="seal-ring"></div>
-            <div class="seal-ring-inner"></div>
-            <i class="fas fa-fingerprint text-[#d4af37] text-5xl drop-shadow-[0_0_15px_rgba(212,175,55,0.8)] animate-pulse"></i>
+    <div id="time-warp-overlay">
+        <div class="portal-ring ring-1"></div>
+        <div class="portal-ring ring-2"></div>
+        <div class="portal-ring ring-3"></div>
+        <div class="portal-ring ring-4"></div>
+        <div class="flex flex-col items-center justify-center z-10" id="warp-text">
+            <i class="fas fa-hourglass-half text-4xl text-[#d4af37] animate-spin-slow mb-6 drop-shadow-[0_0_15px_#d4af37]"></i>
+            <p class="font-cinematic text-[#d4af37] tracking-[0.8em] uppercase text-xs animate-pulse">Rewinding Time</p>
         </div>
-        <p class="mt-8 font-cinematic text-[#d4af37] tracking-[0.8em] uppercase text-xs">Decrypting Audio</p>
     </div>
+
+    <div id="sands-layer"></div>
 
     <div class="cursor-dot hidden md:block"></div>
     <div class="cursor-outline hidden md:block"></div>
 
-    <a href="home.html?skipIntro=true#wishes-anchor" class="fixed top-6 left-6 z-50 text-white/50 hover:text-[#d4af37] transition-all flex items-center gap-3 cursor-pointer group">
+    <a href="home.html?skipIntro=true#timetravel-anchor" class="fixed top-6 left-6 z-50 text-white/50 hover:text-[#d4af37] transition-all flex items-center gap-3 cursor-pointer group">
         <div class="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center backdrop-blur-md group-hover:border-[#d4af37] transition-colors bg-black/30">
             <i class="fas fa-arrow-left"></i>
         </div>
-        <span class="tracking-[0.3em] text-[10px] uppercase font-cinematic opacity-0 group-hover:opacity-100 transform -translate-x-4 group-hover:translate-x-0 transition-all duration-300">Return</span>
+        <span class="tracking-[0.3em] text-[10px] uppercase font-cinematic opacity-0 group-hover:opacity-100 transform -translate-x-4 group-hover:translate-x-0 transition-all duration-300">Present Day</span>
     </a>
 
-    <header class="min-h-[50vh] md:min-h-[60vh] flex flex-col items-center justify-end pb-12 relative overflow-hidden">
+    <header class="min-h-[60vh] flex flex-col items-center justify-end pb-20 relative overflow-hidden">
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(212,175,55,0.15)_0%,transparent_60%)] pointer-events-none"></div>
         
-        <div class="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(46,16,101,0.3)_0%,transparent_70%)] pointer-events-none"></div>
-        <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-20 animate-[spin_60s_linear_infinite] pointer-events-none"></div>
-        
-        <div class="absolute inset-0 flex items-end justify-center gap-2 md:gap-4 opacity-30 pb-20 pointer-events-none mix-blend-screen" id="hero-visualizer">
-            <div class="audio-bar" style="animation-delay: 0.1s; height: 30%;"></div>
-            <div class="audio-bar" style="animation-delay: 0.4s; height: 60%;"></div>
-            <div class="audio-bar" style="animation-delay: 0.2s; height: 40%;"></div>
-            <div class="audio-bar" style="animation-delay: 0.6s; height: 80%;"></div>
-            <div class="audio-bar" style="animation-delay: 0.3s; height: 50%;"></div>
-            <div class="audio-bar" style="animation-delay: 0.5s; height: 70%;"></div>
-            <div class="audio-bar" style="animation-delay: 0.1s; height: 30%;"></div>
-        </div>
-
         <div class="relative z-10 text-center px-4">
-            <p class="text-[#d4af37] text-[10px] md:text-xs tracking-[1em] uppercase font-mono mb-4 md:mb-6 opacity-0 translate-y-4" id="hero-sub">The Galaxy Speaks</p>
+            <p class="text-[#d4af37] text-[10px] md:text-xs tracking-[1em] uppercase font-mono mb-6" id="hero-sub">Chronicles of a lifetime</p>
             
-            <div class="animate-[pulseWave_6s_ease-in-out_infinite_alternate]">
-                <h1 class="text-5xl md:text-8xl font-cinematic text-white drop-shadow-[0_0_30px_rgba(212,175,55,0.2)] opacity-0 translate-y-10" id="hero-title">
-                    ECHOES OF <span class="font-emotional text-[#d4af37] lowercase text-6xl md:text-9xl px-2">love</span>
-                </h1>
-            </div>
-            
-            <div class="w-[1px] h-16 md:h-24 bg-gradient-to-b from-[#d4af37] to-transparent mx-auto mt-8 opacity-0" id="hero-line"></div>
+            <h1 class="text-5xl md:text-8xl font-cinematic text-white drop-shadow-[0_0_40px_rgba(212,175,55,0.3)]">
+                THE SANDS OF <span class="font-emotional text-[#d4af37] lowercase text-6xl md:text-9xl px-2">time</span>
+            </h1>
         </div>
     </header>
 
-    <main class="max-w-[1600px] mx-auto px-4 md:px-8 pb-32 relative z-10">
+    <main class="max-w-[1200px] mx-auto px-4 pb-40 relative z-10">
         
-        <div class="flex items-center gap-6 mb-12 opacity-0 fade-up-elem">
-            <h3 class="font-cinematic text-xl md:text-2xl text-[#d4af37] tracking-[0.3em] uppercase whitespace-nowrap drop-shadow-md">The Inner Circle</h3>
-            <div class="h-[1px] bg-gradient-to-r from-[#d4af37]/50 to-transparent flex-grow"></div>
-        </div>
+        <div class="relative pt-10 pb-20" id="timeline-container">
+            
+            <div class="timeline-line">
+                <div class="timeline-progress" id="progress-line"></div>
+            </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-10">
-
-            <div class="video-card group cursor-pointer fade-up-elem" onclick="playFullVideo('media/videos/h2.mp4', 'Mom & Dad')">
-                <div class="soundwave-pulse"></div>
-                <div class="aspect-[4/5] relative overflow-hidden bg-black">
-                    <video src="media/videos/h2.mp4" class="preview-vid w-full h-full object-cover" muted loop playsinline></video>
-                    
-                    <div class="play-overlay absolute inset-0 flex flex-col items-center justify-center z-10">
-                        <div class="flex gap-[2px] items-end h-6 opacity-40 mb-3">
-                            <div class="w-1 bg-white h-2 animate-[bounce_1s_infinite]"></div>
-                            <div class="w-1 bg-white h-5 animate-[bounce_1.2s_infinite]"></div>
-                            <div class="w-1 bg-white h-3 animate-[bounce_0.8s_infinite]"></div>
-                            <div class="w-1 bg-white h-6 animate-[bounce_1.5s_infinite]"></div>
-                        </div>
-                        <span class="text-[9px] tracking-[0.4em] font-mono text-white/50 uppercase">Hover to preview</span>
-                    </div>
-
-                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500 transform scale-50 group-hover:scale-100 z-20">
-                        <div class="absolute w-20 h-20 rounded-full border border-[#d4af37]/30 animate-ping"></div>
-                        <div class="w-16 h-16 bg-[#050505]/60 backdrop-blur-md rounded-full border border-[#d4af37] flex items-center justify-center shadow-[0_0_30px_rgba(212,175,55,0.6)]">
-                            <i class="fas fa-play text-[#d4af37] ml-1 text-xl"></i>
-                        </div>
-                    </div>
+            <div class="relative w-full mb-32 flex justify-start md:justify-start timeline-row">
+                <div class="absolute top-1/2 timeline-node" data-year="2004"></div>
+                <div class="timeline-year-text absolute top-1/2 right-[55%] transform -translate-y-1/2 text-right hidden md:block">
+                    <h2 class="text-[8rem] font-bold font-cinematic text-white/5 tracking-tighter leading-none">2004</h2>
+                    <p class="text-[#d4af37] font-emotional text-3xl">The Genesis</p>
                 </div>
                 
-                <div class="p-6 bg-gradient-to-t from-[#020104] via-[#0a0510]/90 to-transparent relative z-30 border-t border-[#d4af37]/20 transform translate-y-2 group-hover:translate-y-0 transition-transform">
-                    <h3 class="text-3xl text-white font-cinematic drop-shadow-md">Mom & Dad</h3>
-                    <p class="text-[10px] text-[#d4af37] uppercase tracking-[0.2em] mt-1 font-mono">The Original Blessings</p>
+                <div class="w-full md:w-[45%] timeline-card-wrapper pl-0 md:pr-16">
+                    <div class="md:hidden mb-4"><h2 class="text-5xl font-cinematic text-[#d4af37]">2004</h2><p class="font-emotional text-xl text-gray-400">The Genesis</p></div>
+                    
+                    <div class="timeline-card group">
+                        <div class="aspect-[4/3] overflow-hidden rounded-lg relative">
+                            <img src="https://images.unsplash.com/photo-1519689680058-324335c77eba?w=800" class="w-full h-full object-cover era-vintage group-hover:scale-105 transition-transform duration-700" alt="Memory">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60"></div>
+                        </div>
+                        <div class="mt-6 text-center">
+                            <h3 class="text-2xl font-cinematic text-white mb-2">A Star is Born</h3>
+                            <p class="text-sm text-gray-400 font-light leading-relaxed">The day the universe decided it needed a little more light, and you arrived.</p>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <div class="video-card group cursor-pointer fade-up-elem" onclick="playFullVideo('media/videos/h3.mp4', 'Sister')">
-                <div class="soundwave-pulse"></div>
-                <div class="aspect-[4/5] relative overflow-hidden bg-black">
-                    <video src="media/videos/h3.mp4" class="preview-vid w-full h-full object-cover" muted loop playsinline></video>
-                    <div class="play-overlay absolute inset-0 flex flex-col items-center justify-center z-10">
-                        <div class="flex gap-[2px] items-end h-6 opacity-40 mb-3">
-                            <div class="w-1 bg-white h-3 animate-[bounce_0.9s_infinite]"></div>
-                            <div class="w-1 bg-white h-6 animate-[bounce_1.4s_infinite]"></div>
-                            <div class="w-1 bg-white h-2 animate-[bounce_1.1s_infinite]"></div>
-                            <div class="w-1 bg-white h-4 animate-[bounce_1.3s_infinite]"></div>
-                        </div>
-                        <span class="text-[9px] tracking-[0.4em] font-mono text-white/50 uppercase">Hover to preview</span>
-                    </div>
-                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500 transform scale-50 group-hover:scale-100 z-20">
-                        <div class="absolute w-20 h-20 rounded-full border border-[#d4af37]/30 animate-ping"></div>
-                        <div class="w-16 h-16 bg-[#050505]/60 backdrop-blur-md rounded-full border border-[#d4af37] flex items-center justify-center shadow-[0_0_30px_rgba(212,175,55,0.6)]">
-                            <i class="fas fa-play text-[#d4af37] ml-1 text-xl"></i>
-                        </div>
-                    </div>
+            <div class="relative w-full mb-32 flex justify-end md:justify-end timeline-row">
+                <div class="absolute top-1/2 timeline-node" data-year="2010"></div>
+                
+                <div class="timeline-year-text absolute top-1/2 left-[55%] transform -translate-y-1/2 text-left hidden md:block">
+                    <h2 class="text-[8rem] font-bold font-cinematic text-white/5 tracking-tighter leading-none">2010</h2>
+                    <p class="text-[#d4af37] font-emotional text-3xl">Wonder Years</p>
                 </div>
-                <div class="p-6 bg-gradient-to-t from-[#020104] via-[#0a0510]/90 to-transparent relative z-30 border-t border-[#d4af37]/20 transform translate-y-2 group-hover:translate-y-0 transition-transform">
-                    <h3 class="text-3xl text-white font-cinematic drop-shadow-md">Sister</h3>
-                    <p class="text-[10px] text-[#d4af37] uppercase tracking-[0.2em] mt-1 font-mono">Partner in Crime</p>
+
+                <div class="w-full md:w-[45%] timeline-card-wrapper pl-0 md:pl-16">
+                    <div class="md:hidden mb-4"><h2 class="text-5xl font-cinematic text-[#d4af37]">2010</h2><p class="font-emotional text-xl text-gray-400">Wonder Years</p></div>
+                    
+                    <div class="timeline-card group">
+                        <div class="aspect-[4/3] overflow-hidden rounded-lg relative">
+                             <img src="https://images.unsplash.com/photo-1471286174890-9c112ffcca6b?w=800" class="w-full h-full object-cover era-retro group-hover:scale-105 transition-transform duration-700" alt="Memory">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60"></div>
+                        </div>
+                        <div class="mt-6 text-center">
+                            <h3 class="text-2xl font-cinematic text-white mb-2">Innocence & Mischief</h3>
+                            <p class="text-sm text-gray-400 font-light leading-relaxed">Chasing butterflies, building castles, and viewing the world through eyes of pure wonder.</p>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <div class="video-card group cursor-pointer fade-up-elem" onclick="playFullVideo('media/videos/h1.mp4', 'College Gang')">
-                <div class="soundwave-pulse"></div>
-                <div class="aspect-[4/5] relative overflow-hidden bg-black">
-                    <video src="media/videos/h1.mp4" class="preview-vid w-full h-full object-cover" muted loop playsinline></video>
-                    <div class="play-overlay absolute inset-0 flex flex-col items-center justify-center z-10">
-                        <div class="flex gap-[2px] items-end h-6 opacity-40 mb-3">
-                            <div class="w-1 bg-white h-5 animate-[bounce_1.3s_infinite]"></div>
-                            <div class="w-1 bg-white h-2 animate-[bounce_0.8s_infinite]"></div>
-                            <div class="w-1 bg-white h-6 animate-[bounce_1.5s_infinite]"></div>
-                            <div class="w-1 bg-white h-3 animate-[bounce_1s_infinite]"></div>
-                        </div>
-                        <span class="text-[9px] tracking-[0.4em] font-mono text-white/50 uppercase">Hover to preview</span>
-                    </div>
-                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500 transform scale-50 group-hover:scale-100 z-20">
-                        <div class="absolute w-20 h-20 rounded-full border border-[#d4af37]/30 animate-ping"></div>
-                        <div class="w-16 h-16 bg-[#050505]/60 backdrop-blur-md rounded-full border border-[#d4af37] flex items-center justify-center shadow-[0_0_30px_rgba(212,175,55,0.6)]">
-                            <i class="fas fa-play text-[#d4af37] ml-1 text-xl"></i>
-                        </div>
-                    </div>
+            <div class="relative w-full mb-32 flex justify-start md:justify-start timeline-row">
+                <div class="absolute top-1/2 timeline-node" data-year="2018"></div>
+                
+                <div class="timeline-year-text absolute top-1/2 right-[55%] transform -translate-y-1/2 text-right hidden md:block">
+                    <h2 class="text-[8rem] font-bold font-cinematic text-white/5 tracking-tighter leading-none">2018</h2>
+                    <p class="text-[#d4af37] font-emotional text-3xl">The Spark</p>
                 </div>
-                <div class="p-6 bg-gradient-to-t from-[#020104] via-[#0a0510]/90 to-transparent relative z-30 border-t border-[#d4af37]/20 transform translate-y-2 group-hover:translate-y-0 transition-transform">
-                    <h3 class="text-3xl text-white font-cinematic drop-shadow-md">College Gang</h3>
-                    <p class="text-[10px] text-[#d4af37] uppercase tracking-[0.2em] mt-1 font-mono">The Crazy Ones</p>
+                
+                <div class="w-full md:w-[45%] timeline-card-wrapper pl-0 md:pr-16">
+                    <div class="md:hidden mb-4"><h2 class="text-5xl font-cinematic text-[#d4af37]">2018</h2><p class="font-emotional text-xl text-gray-400">The Spark</p></div>
+                    
+                    <div class="timeline-card group">
+                        <div class="aspect-square overflow-hidden rounded-lg relative">
+                             <img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=800" class="w-full h-full object-cover era-retro group-hover:scale-105 transition-transform duration-700" alt="Memory">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60"></div>
+                        </div>
+                        <div class="mt-6 text-center">
+                            <h3 class="text-2xl font-cinematic text-white mb-2">Finding the Fire</h3>
+                            <p class="text-sm text-gray-400 font-light leading-relaxed">The era of discovering who you were meant to be. Friendships forged in fire and dreams taking flight.</p>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <div class="video-card group cursor-pointer fade-up-elem" onclick="playFullVideo('media/videos/h2.mp4', 'Grandma')">
-                <div class="soundwave-pulse"></div>
-                <div class="aspect-[4/5] relative overflow-hidden bg-black">
-                    <video src="media/videos/h2.mp4" class="preview-vid w-full h-full object-cover" muted loop playsinline></video>
-                    <div class="play-overlay absolute inset-0 flex flex-col items-center justify-center z-10">
-                        <div class="flex gap-[2px] items-end h-6 opacity-40 mb-3">
-                            <div class="w-1 bg-white h-2 animate-[bounce_1.1s_infinite]"></div>
-                            <div class="w-1 bg-white h-4 animate-[bounce_0.9s_infinite]"></div>
-                            <div class="w-1 bg-white h-2 animate-[bounce_1.2s_infinite]"></div>
-                            <div class="w-1 bg-white h-5 animate-[bounce_1.4s_infinite]"></div>
+            <div class="relative w-full mb-32 flex justify-end md:justify-end timeline-row">
+                <div class="absolute top-1/2 timeline-node" data-year="2024"></div>
+                
+                <div class="timeline-year-text absolute top-1/2 left-[55%] transform -translate-y-1/2 text-left hidden md:block">
+                    <h2 class="text-[8rem] font-bold font-cinematic text-white/5 tracking-tighter leading-none">2024</h2>
+                    <p class="text-[#d4af37] font-emotional text-3xl">Golden Era</p>
+                </div>
+
+                <div class="w-full md:w-[45%] timeline-card-wrapper pl-0 md:pl-16">
+                    <div class="md:hidden mb-4"><h2 class="text-5xl font-cinematic text-[#d4af37]">2024</h2><p class="font-emotional text-xl text-gray-400">Golden Era</p></div>
+                    
+                    <div class="timeline-card group">
+                        <div class="aspect-[4/5] overflow-hidden rounded-lg relative">
+                             <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800" class="w-full h-full object-cover era-modern group-hover:scale-105 transition-transform duration-700" alt="Memory">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60"></div>
                         </div>
-                        <span class="text-[9px] tracking-[0.4em] font-mono text-white/50 uppercase">Hover to preview</span>
-                    </div>
-                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500 transform scale-50 group-hover:scale-100 z-20">
-                        <div class="absolute w-20 h-20 rounded-full border border-[#d4af37]/30 animate-ping"></div>
-                        <div class="w-16 h-16 bg-[#050505]/60 backdrop-blur-md rounded-full border border-[#d4af37] flex items-center justify-center shadow-[0_0_30px_rgba(212,175,55,0.6)]">
-                            <i class="fas fa-play text-[#d4af37] ml-1 text-xl"></i>
+                        <div class="mt-6 text-center">
+                            <h3 class="text-2xl font-cinematic text-white mb-2">Unstoppable</h3>
+                            <p class="text-sm text-gray-400 font-light leading-relaxed">Stepping into power. A year defined by grace, strength, and an unbreakable spirit.</p>
                         </div>
                     </div>
                 </div>
-                <div class="p-6 bg-gradient-to-t from-[#020104] via-[#0a0510]/90 to-transparent relative z-30 border-t border-[#d4af37]/20 transform translate-y-2 group-hover:translate-y-0 transition-transform">
-                    <h3 class="text-3xl text-white font-cinematic drop-shadow-md">Grandma</h3>
-                    <p class="text-[10px] text-[#d4af37] uppercase tracking-[0.2em] mt-1 font-mono">Wisdom & Warmth</p>
+            </div>
+
+            <div class="relative w-full flex justify-center timeline-row pt-20">
+                <div class="absolute top-[40px] timeline-node" data-year="2026"></div>
+                
+                <div class="w-full md:w-[70%] text-center mt-10">
+                    <h2 class="text-7xl md:text-9xl font-cinematic font-bold text-transparent bg-clip-text bg-gradient-to-b from-[#fcf6ba] via-[#d4af37] to-[#8a6219] drop-shadow-[0_0_20px_rgba(212,175,55,0.4)]">NOW</h2>
+                    <p class="font-emotional text-3xl md:text-5xl text-gray-300 mt-4">The best is yet to come.</p>
+                    <div class="w-[1px] h-32 bg-gradient-to-b from-[#d4af37] to-transparent mx-auto mt-12"></div>
                 </div>
             </div>
 
         </div>
     </main>
-
-    <div id="cinema-modal" class="fixed inset-0 z-[200000] hidden flex items-center justify-center p-4 md:p-8 transition-opacity duration-500 opacity-0">
-        
-        <div class="absolute inset-0 bg-[#050505]/95 backdrop-blur-2xl"></div>
-        
-        <button onclick="closeModal()" class="absolute top-6 right-6 md:top-10 md:right-10 text-white/50 hover:text-[#d4af37] text-3xl md:text-5xl z-[110] transition-colors group">
-            <i class="fas fa-times transform group-hover:rotate-90 transition-transform duration-300"></i>
-        </button>
-        
-        <div class="w-full max-w-7xl flex flex-col items-center relative z-10 transform scale-95 opacity-0 transition-all duration-700 cubic-bezier(0.16, 1, 0.3, 1)" id="modal-content">
-            
-            <h2 id="modal-title" class="text-4xl md:text-6xl font-cinematic text-white mb-6 md:mb-10 drop-shadow-[0_0_20px_rgba(212,175,55,0.3)] tracking-wide">Title</h2>
-            
-            <div class="w-full aspect-video bg-black rounded-xl md:rounded-2xl overflow-hidden shadow-[0_0_80px_rgba(212,175,55,0.15)] border border-[#d4af37]/30 relative">
-                <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(212,175,55,0.15)_0%,transparent_80%)] pointer-events-none"></div>
-                
-                <video id="main-player" class="w-full h-full relative z-10 object-cover" controls>
-                    <source src="" type="video/mp4">
-                    Your browser does not support the video tag.
-                </video>
-            </div>
-            
-        </div>
-    </div>
 
     <script>
         const isMobile = window.innerWidth < 768;
@@ -348,91 +294,127 @@
             });
         }
 
-        // 3. Play/Pause Preview Videos on Hover (Performance optimization)
-        const cards = document.querySelectorAll('.video-card');
-        cards.forEach(card => {
-            const vid = card.querySelector('.preview-vid');
-            if(vid) {
-                card.addEventListener('mouseenter', () => {
-                    vid.play().catch(e => console.log("Auto-play prevented"));
+        // 3. Falling Sands Generator
+        function createSands() {
+            const container = document.getElementById('sands-layer');
+            const count = isMobile ? 30 : 80;
+            
+            for(let i=0; i<count; i++) {
+                let sand = document.createElement('div');
+                sand.className = 'sand-grain';
+                sand.style.left = Math.random() * 100 + 'vw';
+                
+                // Animation settings
+                let duration = Math.random() * 5 + 5; // 5s to 10s
+                let delay = Math.random() * 5;
+                
+                // GSAP animation for continuous falling
+                gsap.to(sand, {
+                    y: "110vh",
+                    opacity: 0.8,
+                    duration: duration,
+                    delay: delay,
+                    ease: "none",
+                    repeat: -1,
+                    onRepeat: () => {
+                        // Randomize X position slightly on repeat for dynamic feel
+                        sand.style.left = Math.random() * 100 + 'vw';
+                    }
                 });
-                card.addEventListener('mouseleave', () => {
-                    vid.pause();
-                    // Optional: Keep current time instead of resetting, feels more continuous
+                
+                // Fade in and out
+                gsap.to(sand, {
+                    opacity: 0,
+                    duration: duration / 4,
+                    delay: delay + (duration * 0.75),
+                    ease: "none",
+                    repeat: -1
                 });
-            }
-        });
 
-        // 4. Initial Entrance Animations (The Cosmic Gate)
+                container.appendChild(sand);
+            }
+        }
+
+        // 4. Initial Entrance Animations (Time Warp)
         window.onload = () => {
+            gsap.registerPlugin(ScrollTrigger);
+            createSands();
+
             const tl = gsap.timeline();
             
-            // 1. Seal pulses and fades
-            tl.to("#entrance-seal", { scale: 1.5, opacity: 0, duration: 0.8, ease: "power2.in" }, "+=0.5")
-              // 2. Gates crack open
-              .to("#gate-left", { x: "-100%", duration: 1.5, ease: "expo.inOut" }, "open")
-              .to("#gate-right", { x: "100%", duration: 1.5, ease: "expo.inOut" }, "open")
-              // 3. Content fades in
-              .to("#hero-sub", { opacity: 1, y: 0, duration: 1, ease: "power3.out" }, "open+=0.5")
-              .to("#hero-title", { opacity: 1, y: 0, duration: 1.5, ease: "expo.out" }, "open+=0.7")
-              .to("#hero-visualizer", { opacity: 0.3, duration: 2 }, "open+=1")
-              .to("#hero-line", { opacity: 1, duration: 1, ease: "power2.out" }, "open+=1")
-              .set(".gate", { display: "none" });
+            // Portal rings expand and fade
+            tl.to(".ring-1", { scale: 10, opacity: 0, duration: 2, ease: "power2.in" }, 0)
+              .to(".ring-2", { scale: 10, opacity: 0, duration: 2, ease: "power2.in" }, 0.3)
+              .to(".ring-3", { scale: 10, opacity: 0, duration: 2, ease: "power2.in" }, 0.6)
+              .to("#warp-text", { scale: 2, opacity: 0, duration: 1, ease: "power2.in" }, 0.8)
+              // Overlay fades out
+              .to("#time-warp-overlay", { opacity: 0, duration: 1 }, 1.5)
+              .set("#time-warp-overlay", { display: "none" })
+              // Hero fades in
+              .to("#hero-sub", { opacity: 1, y: 0, duration: 1, ease: "power3.out" }, 1.5)
+              .to("h1", { opacity: 1, y: 0, duration: 1.5, ease: "expo.out" }, 1.7);
 
-            // Scroll reveal for video cards
-            gsap.utils.toArray('.fade-up-elem').forEach((elem, i) => {
-                gsap.from(elem, {
-                    scrollTrigger: { trigger: elem, start: "top 90%" },
-                    y: 40, opacity: 0, duration: 1.2, ease: "power3.out"
+
+            // --- TIMELINE SCROLL LOGIC ---
+            
+            // 1. Line filling up
+            gsap.to("#progress-line", {
+                height: "100%",
+                ease: "none",
+                scrollTrigger: {
+                    trigger: "#timeline-container",
+                    start: "top center",
+                    end: "bottom center",
+                    scrub: true
+                }
+            });
+
+            // 2. Nodes and Cards Revealing
+            const rows = document.querySelectorAll('.timeline-row');
+            
+            rows.forEach((row) => {
+                const node = row.querySelector('.timeline-node');
+                const card = row.querySelector('.timeline-card');
+                const text = row.querySelector('.timeline-year-text');
+
+                // Reveal Node
+                ScrollTrigger.create({
+                    trigger: row,
+                    start: "top center",
+                    onEnter: () => node.classList.add('active'),
+                    onLeaveBack: () => node.classList.remove('active')
                 });
+
+                // Reveal Card (Slides from outer edge inwards)
+                let xOffset = row.classList.contains('justify-end') ? 50 : -50;
+                if (isMobile) xOffset = 20; // Simplified for mobile
+
+                gsap.from(card, {
+                    x: xOffset,
+                    opacity: 0,
+                    duration: 1,
+                    ease: "power3.out",
+                    scrollTrigger: {
+                        trigger: row,
+                        start: "top 70%"
+                    }
+                });
+
+                // Reveal Background Text
+                if (text && !isMobile) {
+                    gsap.from(text, {
+                        y: 30,
+                        opacity: 0,
+                        duration: 1.5,
+                        ease: "power2.out",
+                        scrollTrigger: {
+                            trigger: row,
+                            start: "top 70%"
+                        }
+                    });
+                }
             });
         };
-
-        // 5. Cinematic Modal Logic
-        const modal = document.getElementById('cinema-modal');
-        const modalContent = document.getElementById('modal-content');
-        const player = document.getElementById('main-player');
-        const title = document.getElementById('modal-title');
-
-        window.playFullVideo = (source, name) => {
-            player.src = source;
-            title.innerText = name;
-            
-            modal.classList.remove('hidden');
-            
-            // Render block, then transition opacity and scale
-            requestAnimationFrame(() => {
-                modal.classList.remove('opacity-0');
-                modalContent.classList.remove('scale-95', 'opacity-0');
-                modalContent.classList.add('scale-100', 'opacity-100');
-            });
-            
-            // Attempt autoplay in modal
-            setTimeout(() => { player.play(); }, 300);
-            
-            document.body.classList.add('modal-open');
-        };
-
-        window.closeModal = () => {
-            modal.classList.add('opacity-0');
-            modalContent.classList.remove('scale-100', 'opacity-100');
-            modalContent.classList.add('scale-95', 'opacity-0');
-            
-            setTimeout(() => {
-                modal.classList.add('hidden');
-                player.pause();
-                player.src = ""; // Clear buffer
-            }, 500); 
-            
-            document.body.classList.remove('modal-open');
-        };
-
-        // Close on background click
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal || e.target.classList.contains('backdrop-blur-2xl')) {
-                closeModal();
-            }
-        });
     </script>
 </body>
 </html>
