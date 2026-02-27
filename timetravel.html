@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>The Sands of Time | Celebration</title>
+    <title>Chronicles of Time</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,20 +13,15 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" defer></script>
 
     <style>
         /* --- CORE STYLES --- */
-        :root { --gold: #d4af37; --dark: #030105; }
+        :root { --gold: #d4af37; --deep: #0f0518; }
+        body { background-color: var(--deep); color: #fff; font-family: 'Montserrat', sans-serif; overflow-x: hidden; -webkit-tap-highlight-color: transparent; }
+        .font-cinematic { font-family: 'Cormorant Garamond', serif; }
+        .font-emotional { font-family: 'Great Vibes', cursive; }
         
-        body { 
-            background-color: var(--dark); 
-            color: white; 
-            font-family: 'Montserrat', sans-serif;
-            overflow-x: hidden;
-            -webkit-tap-highlight-color: transparent;
-        }
-
+        /* Smooth Scroll */
         @media (min-width: 769px) {
             html.lenis { height: auto; } 
             .lenis.lenis-smooth { scroll-behavior: auto; } 
@@ -34,15 +29,12 @@
             .lenis.lenis-stopped { overflow: hidden; } 
         }
 
-        .font-cinematic { font-family: 'Cormorant Garamond', serif; }
-        .font-emotional { font-family: 'Great Vibes', cursive; }
-
         /* --- CUSTOM CURSOR --- */
         @media (hover: hover) and (pointer: fine) {
             .cursor-dot { position: fixed; top: 0; left: 0; width: 8px; height: 8px; background-color: var(--gold); border-radius: 50%; z-index: 10000; pointer-events: none; transform: translate(-50%, -50%); }
             .cursor-outline { position: fixed; top: 0; left: 0; width: 40px; height: 40px; border: 1px dashed rgba(212, 175, 55, 0.5); border-radius: 50%; z-index: 10000; pointer-events: none; transform: translate(-50%, -50%); transition: width 0.3s, height 0.3s; }
             body { cursor: none; }
-            a:hover ~ .cursor-outline, .timeline-card:hover ~ .cursor-outline { width: 60px; height: 60px; border-color: var(--gold); border-style: solid; background: rgba(212, 175, 55, 0.1); }
+            a:hover ~ .cursor-outline, .memory-card:hover ~ .cursor-outline { width: 60px; height: 60px; border-color: var(--gold); border-style: solid; background: rgba(212, 175, 55, 0.1); }
         }
 
         /* --- FILM GRAIN --- */
@@ -52,232 +44,209 @@
             opacity: 0.05; pointer-events: none; mix-blend-mode: overlay; z-index: 9999;
         }
 
-        /* --- TIME WARP ENTRANCE --- */
-        #time-warp-overlay {
-            position: fixed; inset: 0; background: #000; z-index: 100000;
-            display: flex; flex-col; items-center; justify-content: center;
+        /* --- BACKGROUND ELEMENTS --- */
+        .clock-bg {
+            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 90vw; height: 90vw; max-width: 800px; max-height: 800px;
+            border: 1px solid rgba(255,255,255,0.03); border-radius: 50%;
+            pointer-events: none; z-index: -1;
         }
-        .portal-ring {
-            position: absolute; border-radius: 50%;
-            border: 2px solid rgba(212, 175, 55, 0.1);
-            transform: scale(0); box-shadow: 0 0 50px rgba(212, 175, 55, 0.2);
-        }
+        
+        .dust { position: fixed; background: #fff; border-radius: 50%; pointer-events: none; opacity: 0; z-index: 0; }
+        .sand-grain { position: fixed; width: 2px; height: 6px; background: linear-gradient(to bottom, transparent, #d4af37, transparent); filter: blur(1px); border-radius: 50%; opacity: 0; z-index: 0; pointer-events: none; }
 
-        /* --- FALLING SAND (JavaScript Generated) --- */
-        .sand-grain {
-            position: fixed; top: -10px; width: 2px; height: 4px;
-            background: linear-gradient(to bottom, transparent, #d4af37, transparent);
-            filter: blur(1px); border-radius: 50%; opacity: 0;
-            z-index: 0; pointer-events: none;
-        }
-
-        /* --- TIMELINE STYLING --- */
-        .timeline-line {
-            position: absolute; left: 50%; top: 0; bottom: 0; width: 2px;
-            background: rgba(255, 255, 255, 0.05); transform: translateX(-50%); z-index: 10;
+        /* --- THE TIMELINE LINE --- */
+        #timeline-container { position: relative; }
+        .timeline-line { 
+            position: absolute; left: 50%; top: 0; bottom: 0; width: 2px; 
+            background: rgba(255, 255, 255, 0.05); transform: translateX(-50%); z-index: 5; 
         }
         .timeline-progress {
             position: absolute; top: 0; left: 0; width: 100%; height: 0%;
-            background: linear-gradient(to bottom, #d4af37, #fcf6ba, #d4af37);
-            box-shadow: 0 0 20px #d4af37, 0 0 40px #d4af37;
+            background: linear-gradient(to bottom, transparent, #fcf6ba, #d4af37);
+            box-shadow: 0 0 15px #d4af37;
         }
         .timeline-node {
             position: absolute; left: 50%; transform: translate(-50%, -50%);
-            width: 20px; height: 20px; border-radius: 50%; background: #030105;
-            border: 2px solid rgba(212, 175, 55, 0.3); z-index: 20;
-            transition: all 0.5s;
+            width: 16px; height: 16px; border-radius: 50%; background: var(--deep);
+            border: 2px solid rgba(212, 175, 55, 0.3); z-index: 20; transition: all 0.5s;
         }
-        .timeline-node.active {
-            background: #d4af37; border-color: #fcf6ba;
-            box-shadow: 0 0 20px rgba(212,175,55,0.8); scale: 1.2;
-        }
+        .timeline-node.active { background: #d4af37; border-color: #fff; box-shadow: 0 0 20px rgba(212,175,55,0.8); transform: translate(-50%, -50%) scale(1.3); }
 
-        /* --- TIMELINE CARDS --- */
-        .timeline-card {
-            background: rgba(10, 5, 20, 0.4); backdrop-filter: blur(10px);
-            border: 1px solid rgba(212, 175, 55, 0.1); border-radius: 12px;
-            padding: 1rem; position: relative; z-index: 15;
-            transition: all 0.5s ease; opacity: 0;
+        /* --- MEMORY CARDS & IMAGES --- */
+        .memory-card {
+            background: rgba(20, 10, 30, 0.4); backdrop-filter: blur(10px);
+            border: 1px solid rgba(212, 175, 55, 0.1);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5); z-index: 15;
+            transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        .timeline-card:hover {
-            transform: translateY(-10px) scale(1.02);
-            border-color: rgba(212, 175, 55, 0.5);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8), 0 0 30px rgba(212, 175, 55, 0.15);
-        }
+        .memory-card:hover { border-color: rgba(212, 175, 55, 0.5); box-shadow: 0 20px 50px rgba(0,0,0,0.8), 0 0 30px rgba(212,175,55,0.1); z-index: 30; }
         
-        /* Auto-Edit Styles based on Era */
-        .era-vintage { filter: sepia(60%) grayscale(40%) contrast(120%) blur(0.5px); transition: all 1s; }
-        .era-retro { filter: sepia(20%) contrast(110%) saturate(120%); transition: all 1s; }
-        .era-modern { filter: contrast(105%) brightness(105%); transition: all 1s; }
-        
-        .timeline-card:hover img { filter: sepia(0%) grayscale(0%) blur(0) contrast(110%) saturate(110%); }
+        .era-vintage { filter: sepia(60%) grayscale(60%) contrast(110%) blur(0.5px); transition: all 1s ease; }
+        .era-retro { filter: sepia(20%) grayscale(20%) contrast(120%) saturate(110%); transition: all 1s ease; }
+        .era-modern { filter: grayscale(30%) contrast(110%); transition: all 1s ease; }
+        .memory-card:hover img { filter: sepia(0%) grayscale(0%) blur(0) contrast(105%) saturate(110%); }
 
-        /* Mobile adjustments */
+        /* --- ENTRANCE OVERLAY --- */
+        #loader-overlay { position: fixed; inset: 0; background: #05020a; z-index: 100000; display: flex; flex-col; align-items: center; justify-content: center; }
+        .portal-ring { position: absolute; border-radius: 50%; border: 1px solid rgba(212, 175, 55, 0.2); transform: scale(0); box-shadow: inset 0 0 20px rgba(212, 175, 55, 0.1); }
+        
         @media (max-width: 768px) {
-            .timeline-line { left: 20px; transform: none; }
-            .timeline-node { left: 20px; }
-            .timeline-card-wrapper { padding-left: 50px !important; width: 100% !important; margin-left: 0 !important; }
-            .timeline-year-text { position: relative !important; text-align: left !important; left: 0 !important; right: 0 !important; top: 0 !important; transform: none !important; margin-bottom: 10px; }
+            .timeline-line { left: 24px; transform: none; }
+            .timeline-node { left: 24px; }
+            .mobile-pl { padding-left: 56px !important; }
         }
     </style>
 </head>
 <body class="film-grain">
 
-    <div id="time-warp-overlay">
-        <div class="portal-ring ring-1"></div>
-        <div class="portal-ring ring-2"></div>
-        <div class="portal-ring ring-3"></div>
-        <div class="portal-ring ring-4"></div>
-        <div class="flex flex-col items-center justify-center z-10" id="warp-text">
-            <i class="fas fa-hourglass-half text-4xl text-[#d4af37] animate-spin-slow mb-6 drop-shadow-[0_0_15px_#d4af37]"></i>
-            <p class="font-cinematic text-[#d4af37] tracking-[0.8em] uppercase text-xs animate-pulse">Rewinding Time</p>
-        </div>
-    </div>
-
-    <div id="sands-layer"></div>
+    <audio id="time-music" loop>
+        <source src="https://cdn.pixabay.com/audio/2022/10/05/audio_68629e7695.mp3" type="audio/mp3">
+    </audio>
 
     <div class="cursor-dot hidden md:block"></div>
     <div class="cursor-outline hidden md:block"></div>
 
-    <a href="home.html?skipIntro=true#timetravel-anchor" class="fixed top-6 left-6 z-50 text-white/50 hover:text-[#d4af37] transition-all flex items-center gap-3 cursor-pointer group">
-        <div class="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center backdrop-blur-md group-hover:border-[#d4af37] transition-colors bg-black/30">
-            <i class="fas fa-arrow-left"></i>
+    <div id="loader-overlay">
+        <div class="portal-ring ring-1"></div>
+        <div class="portal-ring ring-2"></div>
+        <div class="portal-ring ring-3"></div>
+        
+        <div id="clock-loader" class="flex flex-col items-center z-10">
+            <div class="relative w-24 h-24 border border-gray-800 rounded-full flex items-center justify-center shadow-[0_0_30px_rgba(212,175,55,0.1)]">
+                <div class="absolute w-[2px] h-10 bg-[#d4af37] top-2 left-[calc(50%-1px)] origin-bottom animate-[spin_2s_linear_infinite]"></div>
+                <div class="absolute w-[2px] h-6 bg-white top-6 left-[calc(50%-1px)] origin-bottom animate-[spin_6s_linear_infinite]"></div>
+                <div class="w-2 h-2 bg-[#d4af37] rounded-full z-10"></div>
+            </div>
+            <p class="mt-8 text-[#d4af37] tracking-[0.5em] text-xs uppercase animate-pulse">Calibrating Timeline...</p>
         </div>
-        <span class="tracking-[0.3em] text-[10px] uppercase font-cinematic opacity-0 group-hover:opacity-100 transform -translate-x-4 group-hover:translate-x-0 transition-all duration-300">Present Day</span>
+    </div>
+
+    <div id="dust-layer"></div>
+    <div id="sands-layer"></div>
+
+    <div class="clock-bg">
+        <div class="absolute inset-0 border border-white/5 rounded-full scale-[0.8] border-dashed"></div>
+        <div class="absolute inset-0 border border-[#d4af37]/10 rounded-full scale-[0.6]"></div>
+        <div class="absolute top-0 bottom-0 left-1/2 w-px bg-white/5 -translate-x-1/2"></div>
+        <div class="absolute left-0 right-0 top-1/2 h-px bg-white/5 -translate-y-1/2"></div>
+    </div>
+
+    <a href="home.html?skipIntro=true#timetravel-anchor" class="fixed top-8 left-6 md:left-8 z-50 text-white/50 hover:text-[#d4af37] transition-colors flex items-center gap-3 cursor-pointer group bg-black/20 backdrop-blur-md px-4 py-2 rounded-full border border-white/10">
+        <i class="fas fa-arrow-left transform group-hover:-translate-x-1 transition-transform"></i> 
+        <span class="tracking-[0.3em] text-[10px] uppercase font-cinematic">Return to Now</span>
     </a>
 
-    <header class="min-h-[60vh] flex flex-col items-center justify-end pb-20 relative overflow-hidden">
-        <div class="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(212,175,55,0.15)_0%,transparent_60%)] pointer-events-none"></div>
-        
-        <div class="relative z-10 text-center px-4">
-            <p class="text-[#d4af37] text-[10px] md:text-xs tracking-[1em] uppercase font-mono mb-6" id="hero-sub">Chronicles of a lifetime</p>
-            
-            <h1 class="text-5xl md:text-8xl font-cinematic text-white drop-shadow-[0_0_40px_rgba(212,175,55,0.3)]">
-                THE SANDS OF <span class="font-emotional text-[#d4af37] lowercase text-6xl md:text-9xl px-2">time</span>
-            </h1>
-        </div>
+    <header class="h-[80vh] flex flex-col items-center justify-center text-center relative z-10" id="header-section">
+        <p class="text-[#d4af37] text-[10px] md:text-xs tracking-[1em] uppercase font-mono mb-6">Chronicles of a lifetime</p>
+        <h1 class="text-6xl md:text-[9rem] leading-none text-transparent bg-clip-text bg-gradient-to-b from-white via-[#fcf6ba] to-[#8a6219] font-cinematic font-bold drop-shadow-[0_0_30px_rgba(212,175,55,0.3)]">
+            THE RIVER OF <span class="font-emotional text-[#d4af37] lowercase text-7xl md:text-[10rem] px-2">time</span>
+        </h1>
+        <p class="text-xl md:text-2xl font-emotional text-purple-200 mt-8 opacity-80">Scroll to unwind the clock</p>
     </header>
 
-    <main class="max-w-[1200px] mx-auto px-4 pb-40 relative z-10">
+    <main class="w-full max-w-[1400px] mx-auto relative z-10 pb-40" id="timeline-container">
         
-        <div class="relative pt-10 pb-20" id="timeline-container">
+        <div class="timeline-line hidden md:block"><div class="timeline-progress progress-fill"></div></div>
+        <div class="timeline-line md:hidden"><div class="timeline-progress progress-fill"></div></div> <div class="relative w-full flex items-center mb-32 md:mb-56 timeline-row min-h-[50vh]">
+            <div class="timeline-node" data-year="2004"></div>
             
-            <div class="timeline-line">
-                <div class="timeline-progress" id="progress-line"></div>
+            <div class="absolute left-1/2 transform -translate-x-1/2 text-center w-full hidden md:block z-0 pointer-events-none">
+                <h2 class="text-[12rem] font-bold font-cinematic text-white/[0.03] tracking-tighter leading-none bg-timeline-text">2004</h2>
             </div>
 
-            <div class="relative w-full mb-32 flex justify-start md:justify-start timeline-row">
-                <div class="absolute top-1/2 timeline-node" data-year="2004"></div>
-                <div class="timeline-year-text absolute top-1/2 right-[55%] transform -translate-y-1/2 text-right hidden md:block">
-                    <h2 class="text-[8rem] font-bold font-cinematic text-white/5 tracking-tighter leading-none">2004</h2>
-                    <p class="text-[#d4af37] font-emotional text-3xl">The Genesis</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 w-full px-6 md:px-12 items-center mobile-pl z-10">
+                <div class="memory-card p-3 md:p-4 -rotate-3 hover:rotate-0 rounded-xl relative reveal-img order-1 md:order-1">
+                    <img src="https://images.unsplash.com/photo-1519689680058-324335c77eba?w=800" class="w-full h-[300px] md:h-[450px] object-cover era-vintage rounded-lg">
+                    <div class="absolute -bottom-4 -left-4 md:-bottom-6 md:-left-6 text-5xl md:text-7xl text-[#d4af37] opacity-30 font-cinematic font-bold">2004</div>
                 </div>
-                
-                <div class="w-full md:w-[45%] timeline-card-wrapper pl-0 md:pr-16">
-                    <div class="md:hidden mb-4"><h2 class="text-5xl font-cinematic text-[#d4af37]">2004</h2><p class="font-emotional text-xl text-gray-400">The Genesis</p></div>
-                    
-                    <div class="timeline-card group">
-                        <div class="aspect-[4/3] overflow-hidden rounded-lg relative">
-                            <img src="https://images.unsplash.com/photo-1519689680058-324335c77eba?w=800" class="w-full h-full object-cover era-vintage group-hover:scale-105 transition-transform duration-700" alt="Memory">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60"></div>
-                        </div>
-                        <div class="mt-6 text-center">
-                            <h3 class="text-2xl font-cinematic text-white mb-2">A Star is Born</h3>
-                            <p class="text-sm text-gray-400 font-light leading-relaxed">The day the universe decided it needed a little more light, and you arrived.</p>
-                        </div>
-                    </div>
+                <div class="space-y-4 reveal-text order-2 md:order-2 md:pl-10">
+                    <div class="md:hidden"><h2 class="text-4xl font-cinematic text-[#d4af37] mb-1">2004</h2></div>
+                    <span class="text-[#d4af37] tracking-[0.4em] text-[10px] md:text-sm uppercase font-mono">The Genesis</span>
+                    <h2 class="text-4xl md:text-6xl font-emotional text-white">A Star is Born</h2>
+                    <p class="text-gray-400 leading-relaxed text-sm md:text-base">Where the story began. A tiny spark that would grow to light up the world.</p>
                 </div>
             </div>
+        </div>
 
-            <div class="relative w-full mb-32 flex justify-end md:justify-end timeline-row">
-                <div class="absolute top-1/2 timeline-node" data-year="2010"></div>
-                
-                <div class="timeline-year-text absolute top-1/2 left-[55%] transform -translate-y-1/2 text-left hidden md:block">
-                    <h2 class="text-[8rem] font-bold font-cinematic text-white/5 tracking-tighter leading-none">2010</h2>
-                    <p class="text-[#d4af37] font-emotional text-3xl">Wonder Years</p>
-                </div>
-
-                <div class="w-full md:w-[45%] timeline-card-wrapper pl-0 md:pl-16">
-                    <div class="md:hidden mb-4"><h2 class="text-5xl font-cinematic text-[#d4af37]">2010</h2><p class="font-emotional text-xl text-gray-400">Wonder Years</p></div>
-                    
-                    <div class="timeline-card group">
-                        <div class="aspect-[4/3] overflow-hidden rounded-lg relative">
-                             <img src="https://images.unsplash.com/photo-1471286174890-9c112ffcca6b?w=800" class="w-full h-full object-cover era-retro group-hover:scale-105 transition-transform duration-700" alt="Memory">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60"></div>
-                        </div>
-                        <div class="mt-6 text-center">
-                            <h3 class="text-2xl font-cinematic text-white mb-2">Innocence & Mischief</h3>
-                            <p class="text-sm text-gray-400 font-light leading-relaxed">Chasing butterflies, building castles, and viewing the world through eyes of pure wonder.</p>
-                        </div>
-                    </div>
-                </div>
+        <div class="relative w-full flex items-center mb-32 md:mb-56 timeline-row min-h-[50vh]">
+            <div class="timeline-node" data-year="2010"></div>
+            
+            <div class="absolute left-1/2 transform -translate-x-1/2 text-center w-full hidden md:block z-0 pointer-events-none">
+                <h2 class="text-[12rem] font-bold font-cinematic text-white/[0.03] tracking-tighter leading-none bg-timeline-text">2010</h2>
             </div>
 
-            <div class="relative w-full mb-32 flex justify-start md:justify-start timeline-row">
-                <div class="absolute top-1/2 timeline-node" data-year="2018"></div>
-                
-                <div class="timeline-year-text absolute top-1/2 right-[55%] transform -translate-y-1/2 text-right hidden md:block">
-                    <h2 class="text-[8rem] font-bold font-cinematic text-white/5 tracking-tighter leading-none">2018</h2>
-                    <p class="text-[#d4af37] font-emotional text-3xl">The Spark</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 w-full px-6 md:px-12 items-center mobile-pl z-10">
+                <div class="text-left md:text-right space-y-4 reveal-text order-2 md:order-1 md:pr-10">
+                    <div class="md:hidden"><h2 class="text-4xl font-cinematic text-[#d4af37] mb-1">2010</h2></div>
+                    <span class="text-[#d4af37] tracking-[0.4em] text-[10px] md:text-sm uppercase font-mono">The Wonder</span>
+                    <h2 class="text-4xl md:text-6xl font-emotional text-white">Small Steps</h2>
+                    <p class="text-gray-400 leading-relaxed text-sm md:text-base">The world was giant, and every day was a new magic trick. Skinned knees, ice cream smiles, and infinite imagination.</p>
                 </div>
-                
-                <div class="w-full md:w-[45%] timeline-card-wrapper pl-0 md:pr-16">
-                    <div class="md:hidden mb-4"><h2 class="text-5xl font-cinematic text-[#d4af37]">2018</h2><p class="font-emotional text-xl text-gray-400">The Spark</p></div>
-                    
-                    <div class="timeline-card group">
-                        <div class="aspect-square overflow-hidden rounded-lg relative">
-                             <img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=800" class="w-full h-full object-cover era-retro group-hover:scale-105 transition-transform duration-700" alt="Memory">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60"></div>
-                        </div>
-                        <div class="mt-6 text-center">
-                            <h3 class="text-2xl font-cinematic text-white mb-2">Finding the Fire</h3>
-                            <p class="text-sm text-gray-400 font-light leading-relaxed">The era of discovering who you were meant to be. Friendships forged in fire and dreams taking flight.</p>
-                        </div>
-                    </div>
+                <div class="memory-card p-3 md:p-4 rotate-2 hover:rotate-0 rounded-xl relative reveal-img order-1 md:order-2">
+                    <img src="https://images.unsplash.com/photo-1471286174890-9c112ffcca6b?w=800" class="w-full h-[300px] md:h-[450px] object-cover era-retro rounded-lg">
+                    <div class="absolute -bottom-4 -right-4 md:-bottom-6 md:-right-6 text-5xl md:text-7xl text-[#d4af37] opacity-30 font-cinematic font-bold">2010</div>
                 </div>
             </div>
+        </div>
 
-            <div class="relative w-full mb-32 flex justify-end md:justify-end timeline-row">
-                <div class="absolute top-1/2 timeline-node" data-year="2024"></div>
-                
-                <div class="timeline-year-text absolute top-1/2 left-[55%] transform -translate-y-1/2 text-left hidden md:block">
-                    <h2 class="text-[8rem] font-bold font-cinematic text-white/5 tracking-tighter leading-none">2024</h2>
-                    <p class="text-[#d4af37] font-emotional text-3xl">Golden Era</p>
-                </div>
-
-                <div class="w-full md:w-[45%] timeline-card-wrapper pl-0 md:pl-16">
-                    <div class="md:hidden mb-4"><h2 class="text-5xl font-cinematic text-[#d4af37]">2024</h2><p class="font-emotional text-xl text-gray-400">Golden Era</p></div>
-                    
-                    <div class="timeline-card group">
-                        <div class="aspect-[4/5] overflow-hidden rounded-lg relative">
-                             <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800" class="w-full h-full object-cover era-modern group-hover:scale-105 transition-transform duration-700" alt="Memory">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60"></div>
-                        </div>
-                        <div class="mt-6 text-center">
-                            <h3 class="text-2xl font-cinematic text-white mb-2">Unstoppable</h3>
-                            <p class="text-sm text-gray-400 font-light leading-relaxed">Stepping into power. A year defined by grace, strength, and an unbreakable spirit.</p>
-                        </div>
-                    </div>
-                </div>
+        <div class="relative w-full flex items-center mb-32 md:mb-56 timeline-row min-h-[50vh]">
+            <div class="timeline-node" data-year="2018"></div>
+            
+            <div class="absolute left-1/2 transform -translate-x-1/2 text-center w-full hidden md:block z-0 pointer-events-none">
+                <h2 class="text-[12rem] font-bold font-cinematic text-white/[0.03] tracking-tighter leading-none bg-timeline-text">2018</h2>
             </div>
 
-            <div class="relative w-full flex justify-center timeline-row pt-20">
-                <div class="absolute top-[40px] timeline-node" data-year="2026"></div>
-                
-                <div class="w-full md:w-[70%] text-center mt-10">
-                    <h2 class="text-7xl md:text-9xl font-cinematic font-bold text-transparent bg-clip-text bg-gradient-to-b from-[#fcf6ba] via-[#d4af37] to-[#8a6219] drop-shadow-[0_0_20px_rgba(212,175,55,0.4)]">NOW</h2>
-                    <p class="font-emotional text-3xl md:text-5xl text-gray-300 mt-4">The best is yet to come.</p>
-                    <div class="w-[1px] h-32 bg-gradient-to-b from-[#d4af37] to-transparent mx-auto mt-12"></div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 w-full px-6 md:px-12 items-center mobile-pl z-10">
+                <div class="memory-card p-3 md:p-4 -rotate-2 hover:rotate-0 rounded-xl relative reveal-img order-1 md:order-1">
+                    <img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=800" class="w-full h-[300px] md:h-[450px] object-cover era-retro rounded-lg">
+                    <div class="absolute -bottom-4 -left-4 md:-bottom-6 md:-left-6 text-5xl md:text-7xl text-[#d4af37] opacity-30 font-cinematic font-bold">2018</div>
+                </div>
+                <div class="space-y-4 reveal-text order-2 md:order-2 md:pl-10">
+                    <div class="md:hidden"><h2 class="text-4xl font-cinematic text-[#d4af37] mb-1">2018</h2></div>
+                    <span class="text-[#d4af37] tracking-[0.4em] text-[10px] md:text-sm uppercase font-mono">The Discovery</span>
+                    <h2 class="text-4xl md:text-6xl font-emotional text-white">Wild & Free</h2>
+                    <p class="text-gray-400 leading-relaxed text-sm md:text-base">School days, endless laughter, and the friendships that shaped the soul. A time of color, chaos, and pure joy.</p>
                 </div>
             </div>
+        </div>
 
+        <div class="relative w-full flex items-center timeline-row min-h-[50vh] pt-10">
+            <div class="timeline-node" data-year="2026"></div>
+            
+            <div class="absolute left-1/2 transform -translate-x-1/2 text-center w-full hidden md:block z-0 pointer-events-none">
+                <h2 class="text-[12rem] font-bold font-cinematic text-[#d4af37]/[0.05] tracking-tighter leading-none bg-timeline-text">2026</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 w-full px-6 md:px-12 items-center mobile-pl z-10">
+                <div class="text-left md:text-right space-y-4 reveal-text order-2 md:order-1 md:pr-10">
+                    <div class="md:hidden"><h2 class="text-4xl font-cinematic text-[#d4af37] mb-1">2026</h2></div>
+                    <span class="text-[#d4af37] tracking-[0.4em] text-[10px] md:text-sm uppercase font-mono">The Present</span>
+                    <h2 class="text-4xl md:text-6xl font-emotional text-white">Blooming & Bold</h2>
+                    <p class="text-gray-400 leading-relaxed text-sm md:text-base">Standing tall in the garden of life. Full of dreams, ambition, and the beauty of becoming exactly who you are meant to be.</p>
+                </div>
+                <div class="memory-card p-3 md:p-4 rotate-3 hover:rotate-0 rounded-xl relative reveal-img order-1 md:order-2 border-[#d4af37]/40 shadow-[0_0_40px_rgba(212,175,55,0.2)]">
+                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800" class="w-full h-[350px] md:h-[500px] object-cover era-modern rounded-lg">
+                    <div class="absolute -bottom-4 -right-4 md:-bottom-6 md:-right-6 text-5xl md:text-7xl text-[#d4af37] opacity-80 font-cinematic font-bold drop-shadow-lg">2026</div>
+                </div>
+            </div>
         </div>
     </main>
 
+    <div class="h-[50vh] flex flex-col items-center justify-center relative overflow-hidden bg-black z-20">
+        <div class="absolute w-[300px] h-[300px] bg-[#d4af37]/10 rounded-full blur-[100px] pointer-events-none"></div>
+        <p class="text-gray-400 font-emotional text-3xl md:text-4xl mb-8 opacity-80">The story continues...</p>
+        <a href="home.html?skipIntro=true#timetravel-anchor" class="group relative px-8 py-3 md:px-10 md:py-4 border border-[#d4af37]/30 text-[#d4af37] transition-all rounded-full uppercase tracking-[0.3em] md:tracking-[0.4em] text-[10px] overflow-hidden bg-black/50 backdrop-blur-sm">
+            <div class="absolute inset-0 bg-gradient-to-r from-[#d4af37] to-[#8a6219] translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out"></div>
+            <span class="relative z-10 group-hover:text-black font-bold transition-colors">Return to Realm</span>
+        </a>
+    </div>
+
     <script>
+        gsap.registerPlugin(ScrollTrigger);
         const isMobile = window.innerWidth < 768;
 
-        // 1. Smooth Scroll (Lenis)
+        // 1. Smooth Scroll
         if (!isMobile) {
             const lenis = new Lenis({ duration: 1.2, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), smooth: true });
             function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
@@ -294,127 +263,131 @@
             });
         }
 
-        // 3. Falling Sands Generator
-        function createSands() {
-            const container = document.getElementById('sands-layer');
-            const count = isMobile ? 30 : 80;
+        // 3. Particle Generators (Upward Dust + Downward Sand)
+        function generateParticles() {
+            const dustLayer = document.getElementById('dust-layer');
+            const sandLayer = document.getElementById('sands-layer');
+            const count = isMobile ? 20 : 50;
             
+            // Dust (Upwards)
+            const colors = ['#d4af37', '#ffffff', '#8b5cf6'];
+            for(let i=0; i<count; i++) {
+                let div = document.createElement('div');
+                div.classList.add('dust');
+                dustLayer.appendChild(div);
+                
+                const size = Math.random() * 3 + 1;
+                gsap.set(div, {
+                    x: Math.random() * window.innerWidth,
+                    y: Math.random() * window.innerHeight,
+                    width: size, height: size,
+                    backgroundColor: colors[Math.floor(Math.random() * colors.length)]
+                });
+
+                gsap.to(div, {
+                    y: "-=150", opacity: Math.random() * 0.6 + 0.2,
+                    duration: Math.random() * 4 + 3,
+                    repeat: -1, yoyo: true, ease: "sine.inOut"
+                });
+            }
+
+            // Sands (Downwards)
             for(let i=0; i<count; i++) {
                 let sand = document.createElement('div');
                 sand.className = 'sand-grain';
                 sand.style.left = Math.random() * 100 + 'vw';
+                sandLayer.appendChild(sand);
                 
-                // Animation settings
-                let duration = Math.random() * 5 + 5; // 5s to 10s
+                let duration = Math.random() * 5 + 5; 
                 let delay = Math.random() * 5;
                 
-                // GSAP animation for continuous falling
                 gsap.to(sand, {
-                    y: "110vh",
-                    opacity: 0.8,
-                    duration: duration,
-                    delay: delay,
-                    ease: "none",
-                    repeat: -1,
-                    onRepeat: () => {
-                        // Randomize X position slightly on repeat for dynamic feel
-                        sand.style.left = Math.random() * 100 + 'vw';
-                    }
+                    y: "110vh", opacity: 0.8, duration: duration, delay: delay, ease: "none", repeat: -1,
+                    onRepeat: () => { sand.style.left = Math.random() * 100 + 'vw'; }
                 });
-                
-                // Fade in and out
-                gsap.to(sand, {
-                    opacity: 0,
-                    duration: duration / 4,
-                    delay: delay + (duration * 0.75),
-                    ease: "none",
-                    repeat: -1
-                });
-
-                container.appendChild(sand);
+                gsap.to(sand, { opacity: 0, duration: duration / 4, delay: delay + (duration * 0.75), ease: "none", repeat: -1 });
             }
         }
 
-        // 4. Initial Entrance Animations (Time Warp)
+        // 4. Entrance & Main Animations
         window.onload = () => {
-            gsap.registerPlugin(ScrollTrigger);
-            createSands();
+            generateParticles();
+            
+            // Audio trigger on first interaction
+            const music = document.getElementById('time-music');
+            document.body.addEventListener('click', () => { music.play().catch(e => console.log(e)); }, {once:true});
+            document.body.addEventListener('scroll', () => { music.play().catch(e => console.log(e)); }, {once:true});
 
             const tl = gsap.timeline();
             
-            // Portal rings expand and fade
-            tl.to(".ring-1", { scale: 10, opacity: 0, duration: 2, ease: "power2.in" }, 0)
-              .to(".ring-2", { scale: 10, opacity: 0, duration: 2, ease: "power2.in" }, 0.3)
-              .to(".ring-3", { scale: 10, opacity: 0, duration: 2, ease: "power2.in" }, 0.6)
-              .to("#warp-text", { scale: 2, opacity: 0, duration: 1, ease: "power2.in" }, 0.8)
-              // Overlay fades out
-              .to("#time-warp-overlay", { opacity: 0, duration: 1 }, 1.5)
-              .set("#time-warp-overlay", { display: "none" })
-              // Hero fades in
-              .to("#hero-sub", { opacity: 1, y: 0, duration: 1, ease: "power3.out" }, 1.5)
-              .to("h1", { opacity: 1, y: 0, duration: 1.5, ease: "expo.out" }, 1.7);
+            // Phase 1: Calibrate
+            tl.to("#clock-loader", { opacity: 0, scale: 1.5, duration: 1, delay: 1.5, ease: "power2.in" })
+              // Phase 2: Warp Rings
+              .to(".ring-1", { scale: 15, opacity: 0, duration: 1.5, ease: "power2.in" }, "+=0.2")
+              .to(".ring-2", { scale: 15, opacity: 0, duration: 1.5, ease: "power2.in" }, "-=1.2")
+              .to(".ring-3", { scale: 15, opacity: 0, duration: 1.5, ease: "power2.in" }, "-=1.2")
+              // Phase 3: Enter World
+              .to("#loader-overlay", { opacity: 0, duration: 1, ease: "power2.inOut" }, "-=0.5")
+              .set("#loader-overlay", { display: "none" })
+              // Reveal Hero
+              .from("#header-section h1", { y: 50, opacity: 0, duration: 1.5, ease: "expo.out" }, "-=0.5")
+              .from("#header-section p", { y: 20, opacity: 0, duration: 1, ease: "power3.out", stagger: 0.2 }, "-=1");
 
-
-            // --- TIMELINE SCROLL LOGIC ---
+            // Scroll Triggers
             
-            // 1. Line filling up
-            gsap.to("#progress-line", {
-                height: "100%",
-                ease: "none",
-                scrollTrigger: {
-                    trigger: "#timeline-container",
-                    start: "top center",
-                    end: "bottom center",
-                    scrub: true
-                }
+            // Header Parallax Fade
+            gsap.to("#header-section", {
+                opacity: 0, y: -100,
+                scrollTrigger: { trigger: "body", start: "top top", end: "20% top", scrub: true }
             });
 
-            // 2. Nodes and Cards Revealing
-            const rows = document.querySelectorAll('.timeline-row');
-            
-            rows.forEach((row) => {
-                const node = row.querySelector('.timeline-node');
-                const card = row.querySelector('.timeline-card');
-                const text = row.querySelector('.timeline-year-text');
+            // Clock BG Rotation
+            gsap.to(".clock-bg", {
+                rotation: 180,
+                scrollTrigger: { trigger: "body", start: "top top", end: "bottom bottom", scrub: 1 }
+            });
 
-                // Reveal Node
+            // Timeline Center Line Fill
+            gsap.to(".progress-fill", {
+                height: "100%", ease: "none",
+                scrollTrigger: { trigger: "#timeline-container", start: "top center", end: "bottom center", scrub: true }
+            });
+
+            // Era Row Reveals
+            document.querySelectorAll('.timeline-row').forEach((row) => {
+                const text = row.querySelector('.reveal-text');
+                const img = row.querySelector('.reveal-img');
+                const bgText = row.querySelector('.bg-timeline-text');
+                const node = row.querySelector('.timeline-node');
+
+                // Node Activation
                 ScrollTrigger.create({
-                    trigger: row,
-                    start: "top center",
+                    trigger: row, start: "top center",
                     onEnter: () => node.classList.add('active'),
                     onLeaveBack: () => node.classList.remove('active')
                 });
 
-                // Reveal Card (Slides from outer edge inwards)
-                let xOffset = row.classList.contains('justify-end') ? 50 : -50;
-                if (isMobile) xOffset = 20; // Simplified for mobile
-
-                gsap.from(card, {
-                    x: xOffset,
-                    opacity: 0,
-                    duration: 1,
-                    ease: "power3.out",
-                    scrollTrigger: {
-                        trigger: row,
-                        start: "top 70%"
-                    }
+                // Text Reveal
+                gsap.from(text, {
+                    y: 50, opacity: 0, duration: 1.2, ease: "power3.out",
+                    scrollTrigger: { trigger: row, start: "top 75%" }
                 });
 
-                // Reveal Background Text
-                if (text && !isMobile) {
-                    gsap.from(text, {
-                        y: 30,
-                        opacity: 0,
-                        duration: 1.5,
-                        ease: "power2.out",
-                        scrollTrigger: {
-                            trigger: row,
-                            start: "top 70%"
-                        }
-                    });
+                // Image Reveal
+                gsap.from(img, {
+                    y: 100, opacity: 0, duration: 1.5, ease: "power3.out",
+                    scrollTrigger: { trigger: row, start: "top 75%" }
+                });
+
+                // Giant BG Text Parallax
+                if(bgText && !isMobile) {
+                    gsap.fromTo(bgText, 
+                        { y: 100, opacity: 0 },
+                        { y: -50, opacity: 1, ease: "none", scrollTrigger: { trigger: row, start: "top 90%", end: "bottom top", scrub: 1 } }
+                    );
                 }
             });
-        };
+        }
     </script>
 </body>
 </html>
