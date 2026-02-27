@@ -75,19 +75,19 @@
             100% { transform: translate3d(0, 0, 0) rotate(0deg); } 
         }
         
-        /* Dynamic Glow for Happy Birthday Text */
+        /* UPDATED: Stronger Dynamic Glow for Happy Birthday Text */
         @keyframes pulseGlow {
             0%, 100% { 
-                opacity: 0.15; 
+                opacity: 0.3; 
                 transform: rotate(-5deg) scale(1) translateY(-10px); 
-                text-shadow: 0 0 30px rgba(212,175,55,0.3); 
-                filter: blur(4px); 
+                text-shadow: 0 0 40px rgba(212,175,55,0.6); 
+                filter: blur(3px); 
             }
             50% { 
-                opacity: 0.35; 
-                transform: rotate(-5deg) scale(1.03) translateY(-10px); 
-                text-shadow: 0 0 60px rgba(212,175,55,0.8); 
-                filter: blur(2px); 
+                opacity: 0.6; 
+                transform: rotate(-5deg) scale(1.05) translateY(-10px); 
+                text-shadow: 0 0 80px rgba(212,175,55,1), 0 0 30px rgba(255,255,255,0.5); 
+                filter: blur(1px); 
             }
         }
         
@@ -108,7 +108,7 @@
         @media (max-width: 768px) {
             .animate-spin-slow { animation: none; } /* Stop heavy spins on mobile */
             .masked-text-premium { animation: none; background: #d4af37; -webkit-background-clip: text; }
-            #particle-layer { display: none; } /* Hide parallax particles on mobile for speed */
+            /* Removed the hiding of particle layer here so photos show on mobile */
         }
 
         /* --- SCROLL LOCK --- */
@@ -197,13 +197,13 @@
             <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_transparent_0%,_#000_95%)]"></div>
             <div class="absolute inset-0 opacity-20 animate-pulse" style="background-image: url('https://www.transparenttextures.com/patterns/stardust.png');"></div>
 
-            <div id="particle-layer" class="absolute inset-0 z-10 overflow-hidden pointer-events-none hidden md:block">
-                <div class="parallax-item absolute top-[15%] left-[10%] w-28 h-36 bg-cover bg-center rounded-xl opacity-50 blur-[2px] animate-[floatCustom_14s_ease-in-out_infinite]" style="background-image: url('media/5.jpeg');"></div>
-                <div class="parallax-item absolute bottom-[20%] right-[15%] w-40 h-52 bg-cover bg-center rounded-xl opacity-40 blur-[4px] animate-[floatCustom_18s_ease-in-out_infinite_reverse]" style="background-image: url('media/1.jpeg');"></div>
+            <div id="particle-layer" class="absolute inset-0 z-10 overflow-hidden pointer-events-none">
+                <div class="parallax-item absolute top-[15%] left-[10%] w-28 h-36 bg-cover bg-center rounded-xl opacity-50 blur-[3px] animate-[floatCustom_14s_ease-in-out_infinite]" style="background-image: url('media/5.jpeg');"></div>
+                <div class="parallax-item absolute bottom-[20%] right-[15%] w-40 h-52 bg-cover bg-center rounded-xl opacity-40 blur-[5px] animate-[floatCustom_18s_ease-in-out_infinite_reverse]" style="background-image: url('media/1.jpeg');"></div>
             </div>
 
-            <div class="absolute inset-0 flex items-center justify-center z-15 pointer-events-none select-none overflow-hidden">
-                <h2 class="text-[25vw] md:text-[22vw] font-emotional text-[#d4af37] whitespace-nowrap animate-[pulseGlow_4s_ease-in-out_infinite]">
+            <div class="absolute inset-0 flex items-center justify-center z-15 pointer-events-none select-none overflow-hidden px-4">
+                <h2 class="text-[12vw] md:text-[20vw] font-emotional text-[#d4af37] text-center leading-none animate-[pulseGlow_4s_ease-in-out_infinite]">
                     Happy Birthday
                 </h2>
             </div>
