@@ -13,6 +13,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" defer></script>
 
     <style>
         /* --- CORE STYLES --- */
@@ -34,7 +35,6 @@
             .cursor-dot { position: fixed; top: 0; left: 0; width: 8px; height: 8px; background-color: var(--gold); border-radius: 50%; z-index: 10000; pointer-events: none; transform: translate(-50%, -50%); }
             .cursor-outline { position: fixed; top: 0; left: 0; width: 40px; height: 40px; border: 1px dashed rgba(212, 175, 55, 0.5); border-radius: 50%; z-index: 10000; pointer-events: none; transform: translate(-50%, -50%); transition: width 0.3s, height 0.3s; }
             body { cursor: none; }
-            a:hover ~ .cursor-outline, .memory-card:hover ~ .cursor-outline { width: 60px; height: 60px; border-color: var(--gold); border-style: solid; background: rgba(212, 175, 55, 0.1); }
         }
 
         /* --- FILM GRAIN --- */
@@ -43,6 +43,18 @@
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
             opacity: 0.05; pointer-events: none; mix-blend-mode: overlay; z-index: 9999;
         }
+
+        /* --- ADVANCED WORLD ENTRANCE GATES --- */
+        .gate { position: fixed; top: 0; width: 50vw; height: 100vh; background: #030105; z-index: 100000; display: flex; align-items: center; }
+        #gate-left { left: 0; border-right: 1px solid rgba(212,175,55,0.2); justify-content: flex-end; box-shadow: inset -30px 0 60px rgba(0,0,0,0.8); }
+        #gate-right { right: 0; border-left: 1px solid rgba(212,175,55,0.2); justify-content: flex-start; box-shadow: inset 30px 0 60px rgba(0,0,0,0.8); }
+        #gate-flash {
+            position: fixed; top: 0; left: 50%; transform: translateX(-50%);
+            width: 2px; height: 0%; background: #fff;
+            box-shadow: 0 0 40px 10px rgba(212,175,55,0.8), 0 0 80px 20px rgba(255,255,255,0.6);
+            z-index: 100001; opacity: 0; pointer-events: none;
+        }
+        .portal-ring { position: absolute; border-radius: 50%; border: 1px solid rgba(212, 175, 55, 0.2); transform: scale(0); box-shadow: inset 0 0 20px rgba(212, 175, 55, 0.1); }
 
         /* --- BACKGROUND ELEMENTS --- */
         .clock-bg {
@@ -73,24 +85,34 @@
         }
         .timeline-node.active { background: #d4af37; border-color: #fff; box-shadow: 0 0 20px rgba(212,175,55,0.8); transform: translate(-50%, -50%) scale(1.3); }
 
-        /* --- MEMORY CARDS & IMAGES --- */
+        /* --- DYNAMIC SCROLL-AWAKENING MEMORY CARDS --- */
         .memory-card {
             background: rgba(20, 10, 30, 0.4); backdrop-filter: blur(10px);
             border: 1px solid rgba(212, 175, 55, 0.1);
             box-shadow: 0 10px 30px rgba(0,0,0,0.5); z-index: 15;
-            transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        .memory-card:hover { border-color: rgba(212, 175, 55, 0.5); box-shadow: 0 20px 50px rgba(0,0,0,0.8), 0 0 30px rgba(212,175,55,0.1); z-index: 30; }
         
-        .era-vintage { filter: sepia(60%) grayscale(60%) contrast(110%) blur(0.5px); transition: all 1s ease; }
-        .era-retro { filter: sepia(20%) grayscale(20%) contrast(120%) saturate(110%); transition: all 1s ease; }
-        .era-modern { filter: grayscale(30%) contrast(110%); transition: all 1s ease; }
-        .memory-card:hover img { filter: sepia(0%) grayscale(0%) blur(0) contrast(105%) saturate(110%); }
+        /* Initial Tilted States */
+        .rotate-left { transform: rotate(-4deg) scale(0.95); }
+        .rotate-right { transform: rotate(4deg) scale(0.95); }
 
-        /* --- ENTRANCE OVERLAY --- */
-        #loader-overlay { position: fixed; inset: 0; background: #05020a; z-index: 100000; display: flex; flex-col; align-items: center; justify-content: center; }
-        .portal-ring { position: absolute; border-radius: 50%; border: 1px solid rgba(212, 175, 55, 0.2); transform: scale(0); box-shadow: inset 0 0 20px rgba(212, 175, 55, 0.1); }
+        /* The Awake State (Triggered automatically by ScrollTrigger) */
+        .memory-card.is-revealed {
+            transform: rotate(0deg) scale(1.05);
+            border-color: rgba(212, 175, 55, 0.6);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.9), 0 0 40px rgba(212,175,55,0.15);
+            z-index: 30;
+        }
+
+        /* Image Filters based on Era */
+        .era-vintage { filter: sepia(70%) grayscale(60%) contrast(120%) blur(0.5px); transition: all 1.5s cubic-bezier(0.16, 1, 0.3, 1); }
+        .era-retro { filter: sepia(30%) grayscale(30%) contrast(120%) saturate(110%); transition: all 1.5s cubic-bezier(0.16, 1, 0.3, 1); }
+        .era-modern { filter: grayscale(40%) contrast(110%); transition: all 1.5s cubic-bezier(0.16, 1, 0.3, 1); }
         
+        /* Bloom into color when revealed */
+        .memory-card.is-revealed img { filter: sepia(0%) grayscale(0%) blur(0) contrast(105%) saturate(110%); }
+
         @media (max-width: 768px) {
             .timeline-line { left: 24px; transform: none; }
             .timeline-node { left: 24px; }
@@ -104,23 +126,22 @@
         <source src="https://cdn.pixabay.com/audio/2022/10/05/audio_68629e7695.mp3" type="audio/mp3">
     </audio>
 
+    <div id="gate-left" class="gate"></div>
+    <div id="gate-right" class="gate"></div>
+    <div id="gate-flash"></div> 
+    
+    <div id="entrance-seal" class="fixed inset-0 z-[100002] flex flex-col items-center justify-center pointer-events-none">
+        <div class="relative flex items-center justify-center w-40 h-40">
+            <div class="portal-ring ring-1 w-full h-full"></div>
+            <div class="portal-ring ring-2 w-full h-full"></div>
+            <div class="portal-ring ring-3 w-full h-full"></div>
+            <i class="fas fa-hourglass-half text-[#d4af37] text-4xl drop-shadow-[0_0_15px_rgba(212,175,55,0.8)] animate-[spin_4s_linear_infinite]"></i>
+        </div>
+        <p class="mt-8 font-cinematic text-[#d4af37] tracking-[0.8em] uppercase text-xs animate-pulse">Reversing Time</p>
+    </div>
+
     <div class="cursor-dot hidden md:block"></div>
     <div class="cursor-outline hidden md:block"></div>
-
-    <div id="loader-overlay">
-        <div class="portal-ring ring-1"></div>
-        <div class="portal-ring ring-2"></div>
-        <div class="portal-ring ring-3"></div>
-        
-        <div id="clock-loader" class="flex flex-col items-center z-10">
-            <div class="relative w-24 h-24 border border-gray-800 rounded-full flex items-center justify-center shadow-[0_0_30px_rgba(212,175,55,0.1)]">
-                <div class="absolute w-[2px] h-10 bg-[#d4af37] top-2 left-[calc(50%-1px)] origin-bottom animate-[spin_2s_linear_infinite]"></div>
-                <div class="absolute w-[2px] h-6 bg-white top-6 left-[calc(50%-1px)] origin-bottom animate-[spin_6s_linear_infinite]"></div>
-                <div class="w-2 h-2 bg-[#d4af37] rounded-full z-10"></div>
-            </div>
-            <p class="mt-8 text-[#d4af37] tracking-[0.5em] text-xs uppercase animate-pulse">Calibrating Timeline...</p>
-        </div>
-    </div>
 
     <div id="dust-layer"></div>
     <div id="sands-layer"></div>
@@ -142,92 +163,86 @@
         <h1 class="text-6xl md:text-[9rem] leading-none text-transparent bg-clip-text bg-gradient-to-b from-white via-[#fcf6ba] to-[#8a6219] font-cinematic font-bold drop-shadow-[0_0_30px_rgba(212,175,55,0.3)]">
             THE RIVER OF <span class="font-emotional text-[#d4af37] lowercase text-7xl md:text-[10rem] px-2">time</span>
         </h1>
-        <p class="text-xl md:text-2xl font-emotional text-purple-200 mt-8 opacity-80">Scroll to unwind the clock</p>
+        <p class="text-xl md:text-2xl font-emotional text-purple-200 mt-8 opacity-80 animate-pulse">Scroll to unwind</p>
     </header>
 
     <main class="w-full max-w-[1400px] mx-auto relative z-10 pb-40" id="timeline-container">
         
         <div class="timeline-line hidden md:block"><div class="timeline-progress progress-fill"></div></div>
-        <div class="timeline-line md:hidden"><div class="timeline-progress progress-fill"></div></div> <div class="relative w-full flex items-center mb-32 md:mb-56 timeline-row min-h-[50vh]">
-            <div class="timeline-node" data-year="2004"></div>
+        <div class="timeline-line md:hidden"><div class="timeline-progress progress-fill"></div></div> 
+
+        <div class="relative w-full flex items-center mb-32 md:mb-56 timeline-row min-h-[50vh]">
+            <div class="timeline-node"></div>
             
             <div class="absolute left-1/2 transform -translate-x-1/2 text-center w-full hidden md:block z-0 pointer-events-none">
-                <h2 class="text-[12rem] font-bold font-cinematic text-white/[0.03] tracking-tighter leading-none bg-timeline-text">2004</h2>
+                <h2 class="text-[12rem] font-bold font-cinematic text-white/[0.03] tracking-widest leading-none bg-timeline-text uppercase">ORIGINS</h2>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 w-full px-6 md:px-12 items-center mobile-pl z-10">
-                <div class="memory-card p-3 md:p-4 -rotate-3 hover:rotate-0 rounded-xl relative reveal-img order-1 md:order-1">
+                <div class="memory-card p-3 md:p-4 rotate-left rounded-xl relative reveal-img order-1 md:order-1">
                     <img src="https://images.unsplash.com/photo-1519689680058-324335c77eba?w=800" class="w-full h-[300px] md:h-[450px] object-cover era-vintage rounded-lg">
-                    <div class="absolute -bottom-4 -left-4 md:-bottom-6 md:-left-6 text-5xl md:text-7xl text-[#d4af37] opacity-30 font-cinematic font-bold">2004</div>
                 </div>
                 <div class="space-y-4 reveal-text order-2 md:order-2 md:pl-10">
-                    <div class="md:hidden"><h2 class="text-4xl font-cinematic text-[#d4af37] mb-1">2004</h2></div>
-                    <span class="text-[#d4af37] tracking-[0.4em] text-[10px] md:text-sm uppercase font-mono">The Genesis</span>
+                    <span class="text-[#d4af37] tracking-[0.4em] text-[10px] md:text-sm uppercase font-mono">Phase I</span>
                     <h2 class="text-4xl md:text-6xl font-emotional text-white">A Star is Born</h2>
-                    <p class="text-gray-400 leading-relaxed text-sm md:text-base">Where the story began. A tiny spark that would grow to light up the world.</p>
+                    <p class="text-gray-400 leading-relaxed text-sm md:text-base">Where the story began. A tiny spark that would grow to light up the world, bringing joy to everyone around.</p>
                 </div>
             </div>
         </div>
 
         <div class="relative w-full flex items-center mb-32 md:mb-56 timeline-row min-h-[50vh]">
-            <div class="timeline-node" data-year="2010"></div>
+            <div class="timeline-node"></div>
             
             <div class="absolute left-1/2 transform -translate-x-1/2 text-center w-full hidden md:block z-0 pointer-events-none">
-                <h2 class="text-[12rem] font-bold font-cinematic text-white/[0.03] tracking-tighter leading-none bg-timeline-text">2010</h2>
+                <h2 class="text-[12rem] font-bold font-cinematic text-white/[0.03] tracking-widest leading-none bg-timeline-text uppercase">WONDER</h2>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 w-full px-6 md:px-12 items-center mobile-pl z-10">
                 <div class="text-left md:text-right space-y-4 reveal-text order-2 md:order-1 md:pr-10">
-                    <div class="md:hidden"><h2 class="text-4xl font-cinematic text-[#d4af37] mb-1">2010</h2></div>
-                    <span class="text-[#d4af37] tracking-[0.4em] text-[10px] md:text-sm uppercase font-mono">The Wonder</span>
+                    <span class="text-[#d4af37] tracking-[0.4em] text-[10px] md:text-sm uppercase font-mono">Phase II</span>
                     <h2 class="text-4xl md:text-6xl font-emotional text-white">Small Steps</h2>
                     <p class="text-gray-400 leading-relaxed text-sm md:text-base">The world was giant, and every day was a new magic trick. Skinned knees, ice cream smiles, and infinite imagination.</p>
                 </div>
-                <div class="memory-card p-3 md:p-4 rotate-2 hover:rotate-0 rounded-xl relative reveal-img order-1 md:order-2">
-                    <img src="https://images.unsplash.com/photo-1471286174890-9c112ffcca6b?w=800" class="w-full h-[300px] md:h-[450px] object-cover era-retro rounded-lg">
-                    <div class="absolute -bottom-4 -right-4 md:-bottom-6 md:-right-6 text-5xl md:text-7xl text-[#d4af37] opacity-30 font-cinematic font-bold">2010</div>
+                <div class="memory-card p-3 md:p-4 rotate-right rounded-xl relative reveal-img order-1 md:order-2">
+                     <img src="https://images.unsplash.com/photo-1471286174890-9c112ffcca6b?w=800" class="w-full h-[300px] md:h-[450px] object-cover era-retro rounded-lg">
                 </div>
             </div>
         </div>
 
         <div class="relative w-full flex items-center mb-32 md:mb-56 timeline-row min-h-[50vh]">
-            <div class="timeline-node" data-year="2018"></div>
+            <div class="timeline-node"></div>
             
             <div class="absolute left-1/2 transform -translate-x-1/2 text-center w-full hidden md:block z-0 pointer-events-none">
-                <h2 class="text-[12rem] font-bold font-cinematic text-white/[0.03] tracking-tighter leading-none bg-timeline-text">2018</h2>
+                <h2 class="text-[12rem] font-bold font-cinematic text-white/[0.03] tracking-widest leading-none bg-timeline-text uppercase">JOURNEY</h2>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 w-full px-6 md:px-12 items-center mobile-pl z-10">
-                <div class="memory-card p-3 md:p-4 -rotate-2 hover:rotate-0 rounded-xl relative reveal-img order-1 md:order-1">
-                    <img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=800" class="w-full h-[300px] md:h-[450px] object-cover era-retro rounded-lg">
-                    <div class="absolute -bottom-4 -left-4 md:-bottom-6 md:-left-6 text-5xl md:text-7xl text-[#d4af37] opacity-30 font-cinematic font-bold">2018</div>
+                <div class="memory-card p-3 md:p-4 rotate-left rounded-xl relative reveal-img order-1 md:order-1">
+                     <img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=800" class="w-full h-[300px] md:h-[450px] object-cover era-retro rounded-lg">
                 </div>
                 <div class="space-y-4 reveal-text order-2 md:order-2 md:pl-10">
-                    <div class="md:hidden"><h2 class="text-4xl font-cinematic text-[#d4af37] mb-1">2018</h2></div>
-                    <span class="text-[#d4af37] tracking-[0.4em] text-[10px] md:text-sm uppercase font-mono">The Discovery</span>
+                    <span class="text-[#d4af37] tracking-[0.4em] text-[10px] md:text-sm uppercase font-mono">Phase III</span>
                     <h2 class="text-4xl md:text-6xl font-emotional text-white">Wild & Free</h2>
-                    <p class="text-gray-400 leading-relaxed text-sm md:text-base">School days, endless laughter, and the friendships that shaped the soul. A time of color, chaos, and pure joy.</p>
+                    <p class="text-gray-400 leading-relaxed text-sm md:text-base">School days, endless laughter, and the friendships that shaped the soul. A time of color, chaos, and pure heart.</p>
                 </div>
             </div>
         </div>
 
         <div class="relative w-full flex items-center timeline-row min-h-[50vh] pt-10">
-            <div class="timeline-node" data-year="2026"></div>
+            <div class="timeline-node"></div>
             
             <div class="absolute left-1/2 transform -translate-x-1/2 text-center w-full hidden md:block z-0 pointer-events-none">
-                <h2 class="text-[12rem] font-bold font-cinematic text-[#d4af37]/[0.05] tracking-tighter leading-none bg-timeline-text">2026</h2>
+                <h2 class="text-[14rem] font-bold font-cinematic text-[#d4af37]/[0.05] tracking-widest leading-none bg-timeline-text uppercase">NOW</h2>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 w-full px-6 md:px-12 items-center mobile-pl z-10">
                 <div class="text-left md:text-right space-y-4 reveal-text order-2 md:order-1 md:pr-10">
-                    <div class="md:hidden"><h2 class="text-4xl font-cinematic text-[#d4af37] mb-1">2026</h2></div>
-                    <span class="text-[#d4af37] tracking-[0.4em] text-[10px] md:text-sm uppercase font-mono">The Present</span>
+                    <span class="text-[#d4af37] tracking-[0.4em] text-[10px] md:text-sm uppercase font-mono">Current Era</span>
                     <h2 class="text-4xl md:text-6xl font-emotional text-white">Blooming & Bold</h2>
                     <p class="text-gray-400 leading-relaxed text-sm md:text-base">Standing tall in the garden of life. Full of dreams, ambition, and the beauty of becoming exactly who you are meant to be.</p>
                 </div>
-                <div class="memory-card p-3 md:p-4 rotate-3 hover:rotate-0 rounded-xl relative reveal-img order-1 md:order-2 border-[#d4af37]/40 shadow-[0_0_40px_rgba(212,175,55,0.2)]">
-                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800" class="w-full h-[350px] md:h-[500px] object-cover era-modern rounded-lg">
-                    <div class="absolute -bottom-4 -right-4 md:-bottom-6 md:-right-6 text-5xl md:text-7xl text-[#d4af37] opacity-80 font-cinematic font-bold drop-shadow-lg">2026</div>
+                <div class="memory-card p-3 md:p-4 rotate-right rounded-xl relative reveal-img order-1 md:order-2 border-[#d4af37]/40 shadow-[0_0_40px_rgba(212,175,55,0.2)]">
+                     <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800" class="w-full h-[350px] md:h-[500px] object-cover era-modern rounded-lg">
                 </div>
             </div>
         </div>
@@ -249,7 +264,7 @@
         // 1. Smooth Scroll
         if (!isMobile) {
             const lenis = new Lenis({ duration: 1.2, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), smooth: true });
-            function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+            function raf(time) { lenis.raf(time); ScrollTrigger.update(); requestAnimationFrame(raf); }
             requestAnimationFrame(raf);
         }
 
@@ -267,7 +282,7 @@
         function generateParticles() {
             const dustLayer = document.getElementById('dust-layer');
             const sandLayer = document.getElementById('sands-layer');
-            const count = isMobile ? 20 : 50;
+            const count = isMobile ? 20 : 40;
             
             // Dust (Upwards)
             const colors = ['#d4af37', '#ffffff', '#8b5cf6'];
@@ -278,12 +293,10 @@
                 
                 const size = Math.random() * 3 + 1;
                 gsap.set(div, {
-                    x: Math.random() * window.innerWidth,
-                    y: Math.random() * window.innerHeight,
+                    x: Math.random() * window.innerWidth, y: Math.random() * window.innerHeight,
                     width: size, height: size,
                     backgroundColor: colors[Math.floor(Math.random() * colors.length)]
                 });
-
                 gsap.to(div, {
                     y: "-=150", opacity: Math.random() * 0.6 + 0.2,
                     duration: Math.random() * 4 + 3,
@@ -320,18 +333,26 @@
 
             const tl = gsap.timeline();
             
-            // Phase 1: Calibrate
-            tl.to("#clock-loader", { opacity: 0, scale: 1.5, duration: 1, delay: 1.5, ease: "power2.in" })
-              // Phase 2: Warp Rings
-              .to(".ring-1", { scale: 15, opacity: 0, duration: 1.5, ease: "power2.in" }, "+=0.2")
+            // Phase 1: Portal Rings Expansion
+            tl.to(".ring-1", { scale: 15, opacity: 0, duration: 1.5, ease: "power2.in" }, "+=0.5")
               .to(".ring-2", { scale: 15, opacity: 0, duration: 1.5, ease: "power2.in" }, "-=1.2")
               .to(".ring-3", { scale: 15, opacity: 0, duration: 1.5, ease: "power2.in" }, "-=1.2")
-              // Phase 3: Enter World
-              .to("#loader-overlay", { opacity: 0, duration: 1, ease: "power2.inOut" }, "-=0.5")
-              .set("#loader-overlay", { display: "none" })
-              // Reveal Hero
-              .from("#header-section h1", { y: 50, opacity: 0, duration: 1.5, ease: "expo.out" }, "-=0.5")
-              .from("#header-section p", { y: 20, opacity: 0, duration: 1, ease: "power3.out", stagger: 0.2 }, "-=1");
+              .to("#entrance-seal", { opacity: 0, duration: 0.5 }, "-=0.5")
+              
+              // Phase 2: The Light Crack
+              .to("#gate-flash", { opacity: 1, height: "100%", duration: 0.4, ease: "power2.out" })
+              .to("#gate-flash", { width: "100vw", opacity: 0, duration: 1.5, ease: "expo.inOut" }, "open")
+              
+              // Phase 3: Gates Open
+              .to("#gate-left", { x: "-100%", duration: 1.5, ease: "expo.inOut" }, "open")
+              .to("#gate-right", { x: "100%", duration: 1.5, ease: "expo.inOut" }, "open")
+              
+              // Phase 4: Reveal Hero
+              .from("#header-section h1", { y: 50, opacity: 0, duration: 1.5, ease: "expo.out" }, "open+=0.5")
+              .from("#header-section p", { y: 20, opacity: 0, duration: 1, ease: "power3.out", stagger: 0.2 }, "open+=0.7")
+              .set(".gate", { display: "none" })
+              .set("#gate-flash", { display: "none" })
+              .set("#entrance-seal", { display: "none" });
 
             // Scroll Triggers
             
@@ -353,12 +374,21 @@
                 scrollTrigger: { trigger: "#timeline-container", start: "top center", end: "bottom center", scrub: true }
             });
 
-            // Era Row Reveals
+            // Era Row Reveals & Auto-Colorize
             document.querySelectorAll('.timeline-row').forEach((row) => {
                 const text = row.querySelector('.reveal-text');
-                const img = row.querySelector('.reveal-img');
+                const imgWrap = row.querySelector('.reveal-img');
                 const bgText = row.querySelector('.bg-timeline-text');
                 const node = row.querySelector('.timeline-node');
+                const memoryCard = row.querySelector('.memory-card');
+
+                // Auto-Awaken Effect (Straightens & Colorizes)
+                ScrollTrigger.create({
+                    trigger: memoryCard,
+                    start: "top 60%", // Triggers when photo hits middle of screen
+                    end: "bottom 40%", 
+                    toggleClass: "is-revealed" // Applies CSS class for vibrant look
+                });
 
                 // Node Activation
                 ScrollTrigger.create({
@@ -367,14 +397,14 @@
                     onLeaveBack: () => node.classList.remove('active')
                 });
 
-                // Text Reveal
+                // Text Slide-in Reveal
                 gsap.from(text, {
                     y: 50, opacity: 0, duration: 1.2, ease: "power3.out",
                     scrollTrigger: { trigger: row, start: "top 75%" }
                 });
 
-                // Image Reveal
-                gsap.from(img, {
+                // Image Slide-in Reveal
+                gsap.from(imgWrap, {
                     y: 100, opacity: 0, duration: 1.5, ease: "power3.out",
                     scrollTrigger: { trigger: row, start: "top 75%" }
                 });
