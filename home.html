@@ -75,6 +75,22 @@
             100% { transform: translate3d(0, 0, 0) rotate(0deg); } 
         }
         
+        /* Dynamic Glow for Happy Birthday Text */
+        @keyframes pulseGlow {
+            0%, 100% { 
+                opacity: 0.15; 
+                transform: rotate(-5deg) scale(1) translateY(-10px); 
+                text-shadow: 0 0 30px rgba(212,175,55,0.3); 
+                filter: blur(4px); 
+            }
+            50% { 
+                opacity: 0.35; 
+                transform: rotate(-5deg) scale(1.03) translateY(-10px); 
+                text-shadow: 0 0 60px rgba(212,175,55,0.8); 
+                filter: blur(2px); 
+            }
+        }
+        
         /* Mosaic Grid */
         .mosaic-tile { background-color: #1a1a1a; transition: background-color 0.5s; }
         .mosaic-tile.active { background-color: #d4af37; box-shadow: 0 0 10px #d4af37; }
@@ -96,51 +112,51 @@
         }
 
         /* --- SCROLL LOCK --- */
-body.scroll-locked {
-    overflow: hidden !important;
-    height: 100vh !important;
-    touch-action: none; /* Prevents touch scrolling on mobile */
-}
+        body.scroll-locked {
+            overflow: hidden !important;
+            height: 100vh !important;
+            touch-action: none; /* Prevents touch scrolling on mobile */
+        }
 
-/* --- INTRO SCREEN DESIGN --- */
-#intro-screen {
-    background: radial-gradient(circle at center, #1a0b2e 0%, #000000 80%); /* Deep luxurious purple-black */
-}
+        /* --- INTRO SCREEN DESIGN --- */
+        #intro-screen {
+            background: radial-gradient(circle at center, #1a0b2e 0%, #000000 80%); /* Deep luxurious purple-black */
+        }
 
-/* Animated Spotlight behind text */
-.intro-spotlight {
-    position: absolute;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    width: 150vw; height: 150vw;
-    background: conic-gradient(from 0deg, transparent 0%, rgba(212, 175, 55, 0.05) 15%, transparent 30%);
-    animation: rotateSpotlight 20s linear infinite;
-    pointer-events: none;
-}
+        /* Animated Spotlight behind text */
+        .intro-spotlight {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 150vw; height: 150vw;
+            background: conic-gradient(from 0deg, transparent 0%, rgba(212, 175, 55, 0.05) 15%, transparent 30%);
+            animation: rotateSpotlight 20s linear infinite;
+            pointer-events: none;
+        }
 
-@keyframes rotateSpotlight {
-    from { transform: translate(-50%, -50%) rotate(0deg); }
-    to { transform: translate(-50%, -50%) rotate(360deg); }
-}
+        @keyframes rotateSpotlight {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
 
-.enter-btn {
-    border: 1px solid rgba(212, 175, 55, 0.3);
-    padding: 15px 40px;
-    border-radius: 50px;
-    transition: all 0.5s ease;
-    background: rgba(0,0,0,0.5);
-    backdrop-filter: blur(5px);
-}
+        .enter-btn {
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            padding: 15px 40px;
+            border-radius: 50px;
+            transition: all 0.5s ease;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(5px);
+        }
 
-.enter-btn:hover {
-    background: #d4af37;
-    border-color: #d4af37;
-    box-shadow: 0 0 30px rgba(212, 175, 55, 0.4);
-}
+        .enter-btn:hover {
+            background: #d4af37;
+            border-color: #d4af37;
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.4);
+        }
 
-.enter-btn:hover span {
-    color: #000;
-}
+        .enter-btn:hover span {
+            color: #000;
+        }
         
     </style>
 
@@ -184,6 +200,12 @@ body.scroll-locked {
             <div id="particle-layer" class="absolute inset-0 z-10 overflow-hidden pointer-events-none hidden md:block">
                 <div class="parallax-item absolute top-[15%] left-[10%] w-28 h-36 bg-cover bg-center rounded-xl opacity-50 blur-[2px] animate-[floatCustom_14s_ease-in-out_infinite]" style="background-image: url('media/5.jpeg');"></div>
                 <div class="parallax-item absolute bottom-[20%] right-[15%] w-40 h-52 bg-cover bg-center rounded-xl opacity-40 blur-[4px] animate-[floatCustom_18s_ease-in-out_infinite_reverse]" style="background-image: url('media/1.jpeg');"></div>
+            </div>
+
+            <div class="absolute inset-0 flex items-center justify-center z-15 pointer-events-none select-none overflow-hidden">
+                <h2 class="text-[25vw] md:text-[22vw] font-emotional text-[#d4af37] whitespace-nowrap animate-[pulseGlow_4s_ease-in-out_infinite]">
+                    Happy Birthday
+                </h2>
             </div>
 
             <div class="relative z-20 text-center w-full px-4 mix-blend-normal">
