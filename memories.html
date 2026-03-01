@@ -3,73 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>The Exhibition | Memories</title>
-    
+    <title>BLOOM • Her Birthday Memories</title>
+   
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Great+Vibes&family=Montserrat:wght@300;400&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Great+Vibes&family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;400&display=swap" rel="stylesheet">
+   
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" defer></script>
-
     <style>
-        /* --- CORE STYLES --- */
-        :root { --gold: #d4af37; --dark: #050505; }
-        
-        body { 
-            background-color: var(--dark); 
-            color: white; 
+        :root {
+            --gold: #d4af37;
+            --rose-gold: #e8b4b8;
+            --blush: #f8d7e3;
+            --dark: #050505;
+        }
+       
+        body {
+            background-color: var(--dark);
+            color: white;
             font-family: 'Montserrat', sans-serif;
             overflow-x: hidden;
             -webkit-tap-highlight-color: transparent;
         }
+        .font-cinematic { font-family: 'Cormorant Garamond', serif; }
+        .font-emotional { font-family: 'Great Vibes', cursive; }
+        .font-playfair { font-family: 'Playfair Display', serif; }
 
         /* Smooth Scroll */
         @media (min-width: 769px) {
-            html.lenis { height: auto; } 
-            .lenis.lenis-smooth { scroll-behavior: auto; } 
-            .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; } 
-            .lenis.lenis-stopped { overflow: hidden; } 
+            html.lenis { height: auto; }
+            .lenis.lenis-smooth { scroll-behavior: auto; }
+            .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
         }
 
-        .font-cinematic { font-family: 'Cormorant Garamond', serif; }
-        .font-emotional { font-family: 'Great Vibes', cursive; }
-
-        /* --- CUSTOM CURSOR --- */
+        /* Custom Cursor */
         @media (hover: hover) and (pointer: fine) {
-            .cursor-dot { position: fixed; top: 0; left: 0; width: 8px; height: 8px; background-color: var(--gold); border-radius: 50%; z-index: 10000; pointer-events: none; transform: translate(-50%, -50%); }
-            .cursor-outline { position: fixed; top: 0; left: 0; width: 40px; height: 40px; border: 1px dashed rgba(212, 175, 55, 0.5); border-radius: 50%; z-index: 10000; pointer-events: none; transform: translate(-50%, -50%); transition: width 0.3s, height 0.3s; }
+            .cursor-dot { position: fixed; top: 0; left: 0; width: 10px; height: 10px; background: var(--rose-gold); border-radius: 50%; z-index: 10000; pointer-events: none; transform: translate(-50%, -50%); box-shadow: 0 0 15px var(--rose-gold); }
+            .cursor-outline { position: fixed; top: 0; left: 0; width: 50px; height: 50px; border: 1px solid rgba(232,180,184,0.6); border-radius: 50%; z-index: 10000; pointer-events: none; transform: translate(-50%, -50%); transition: all 0.4s cubic-bezier(0.23,1,0.32,1); }
             body { cursor: none; }
         }
 
-        /* --- FILM GRAIN (Optimized) --- */
+        /* Film Grain + Petals Container */
         .film-grain::after {
             content: ""; position: fixed; inset: 0;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-            opacity: 0.04; pointer-events: none; mix-blend-mode: overlay; z-index: 9999;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            opacity: 0.035; pointer-events: none; mix-blend-mode: overlay; z-index: 9999;
         }
+        .petals-container { position: fixed; inset: 0; pointer-events: none; z-index: 9998; overflow: hidden; }
 
-        /* --- THE ADVANCED COSMIC GATE --- */
+        /* Cosmic Gate - now with rose-gold glow */
         .gate { position: fixed; top: 0; width: 50vw; height: 100vh; background: #030105; z-index: 100000; display: flex; align-items: center; will-change: transform; }
-        #gate-left { left: 0; border-right: 1px solid rgba(212,175,55,0.2); justify-content: flex-end; box-shadow: inset -30px 0 60px rgba(0,0,0,0.8); }
-        #gate-right { right: 0; border-left: 1px solid rgba(212,175,55,0.2); justify-content: flex-start; box-shadow: inset 30px 0 60px rgba(0,0,0,0.8); }
+        #gate-left { left: 0; border-right: 1px solid rgba(232,180,184,0.3); box-shadow: inset -40px 0 80px rgba(0,0,0,0.85); }
+        #gate-right { right: 0; border-left: 1px solid rgba(232,180,184,0.3); box-shadow: inset 40px 0 80px rgba(0,0,0,0.85); }
         #gate-flash {
-            position: fixed; top: 0; left: 50%; transform: translateX(-50%); width: 2px; height: 0%; background: #fff;
-            box-shadow: 0 0 40px 10px rgba(212,175,55,0.8), 0 0 80px 20px rgba(255,255,255,0.6); z-index: 100001; opacity: 0; pointer-events: none;
+            position: fixed; top: 0; left: 50%; transform: translateX(-50%); width: 3px; height: 0; background: linear-gradient(transparent, #fff, transparent);
+            box-shadow: 0 0 60px 15px var(--rose-gold), 0 0 120px 30px #fff; z-index: 100001; opacity: 0;
         }
-        .portal-ring { position: absolute; border-radius: 50%; border: 1px solid rgba(212, 175, 55, 0.2); transform: scale(0); box-shadow: inset 0 0 20px rgba(212, 175, 55, 0.1); }
-        
-        body.scroll-locked { overflow: hidden !important; height: 100vh !important; }
 
-        /* --- EDITORIAL STICKY STACK LAYOUT --- */
-        .stack-container {
-            position: relative;
-            width: 100%;
-        }
-        
+        /* Sticky Editorial Stack */
+        .stack-container { position: relative; width: 100%; }
         .sticky-card {
             position: sticky;
             top: 0;
@@ -79,273 +75,430 @@
             align-items: center;
             justify-content: center;
             overflow: hidden;
-            /* Native CSS shadow for beautiful stacking */
-            box-shadow: 0 -20px 50px rgba(0,0,0,0.8);
+            box-shadow: 0 -25px 60px rgba(0,0,0,0.9);
         }
-
-        /* --- THE INBUILT CSS PHOTO EDITOR --- */
         .art-frame {
             position: relative;
-            width: 90vw;
-            max-width: 1200px;
-            height: 75vh;
-            border-radius: 16px;
+            width: 88vw;
+            max-width: 1100px;
+            height: 78vh;
+            border-radius: 20px;
             overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            border: 1px solid rgba(232,180,184,0.15);
             background: #000;
+            transition: all 1s cubic-bezier(0.23,1,0.32,1);
         }
-
         .cinematic-img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            /* Resting: Moody, cinematic, slightly desaturated */
-            filter: grayscale(60%) contrast(110%) brightness(75%) sepia(20%);
-            transform: scale(1.05);
-            transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
+            filter: grayscale(55%) contrast(115%) brightness(72%) sepia(15%);
+            transform: scale(1.08);
+            transition: all 1.4s cubic-bezier(0.23,1,0.32,1);
         }
-
-        /* Hover or Touch State: Breathes into color */
         .art-frame:hover .cinematic-img {
-            filter: grayscale(0%) contrast(105%) brightness(105%) sepia(0%);
+            filter: grayscale(0%) contrast(108%) brightness(108%) sepia(0%);
             transform: scale(1);
         }
         .art-frame:hover {
-            border-color: rgba(212, 175, 55, 0.4);
-            box-shadow: 0 30px 60px rgba(0,0,0,0.9), inset 0 0 40px rgba(212,175,55,0.1);
+            border-color: var(--rose-gold);
+            box-shadow: 0 40px 80px rgba(0,0,0,0.95), inset 0 0 60px rgba(232,180,184,0.2);
         }
-
-        /* Dark Vignette Overlay */
         .vignette {
             position: absolute; inset: 0; pointer-events: none;
-            background: radial-gradient(circle at center, transparent 30%, rgba(0,0,0,0.8) 100%);
-            transition: opacity 0.8s;
+            background: radial-gradient(circle at center, transparent 35%, rgba(5,5,5,0.85) 95%);
         }
-        .art-frame:hover .vignette { opacity: 0.4; }
 
-        /* --- GLASS INFO OVERLAY --- */
+        /* Glass Info - now more luxurious */
         .info-glass {
             position: absolute;
-            bottom: 30px;
-            left: 30px;
-            background: rgba(5, 5, 5, 0.5);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-left: 2px solid var(--gold);
-            padding: 24px 32px;
-            border-radius: 8px;
-            max-width: 400px;
-            transform: translateY(20px);
+            bottom: 40px;
+            left: 40px;
+            background: rgba(5,5,5,0.65);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-left: 3px solid var(--rose-gold);
+            padding: 28px 36px;
+            border-radius: 12px;
+            max-width: 420px;
+            transform: translateY(30px);
             opacity: 0;
-            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: all 0.8s cubic-bezier(0.23,1,0.32,1);
         }
-        
         .art-frame:hover .info-glass {
             transform: translateY(0);
             opacity: 1;
         }
-
         @media (max-width: 768px) {
-            .art-frame { width: 92vw; height: 80vh; }
-            .info-glass { bottom: 15px; left: 15px; right: 15px; max-width: none; padding: 16px 20px; }
-            /* Mobile adjustment */
-            .info-glass h2 { font-size: 1.75rem; line-height: 1; margin-bottom: 0.5rem; }
-            .info-glass p { font-size: 0.75rem; }
+            .art-frame { width: 92vw; height: 82vh; }
+            .info-glass { bottom: 20px; left: 20px; right: 20px; max-width: none; padding: 20px; }
+        }
+
+        /* Floating Chapter Dots */
+        .chapter-dots {
+            position: fixed;
+            right: 40px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 99999;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+        .dot {
+            width: 10px;
+            height: 10px;
+            border: 2px solid var(--rose-gold);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.4s ease;
+        }
+        .dot.active { background: var(--rose-gold); transform: scale(1.6); box-shadow: 0 0 20px var(--rose-gold); }
+
+        /* Confetti Canvas */
+        #confetti-canvas { position: fixed; inset: 0; pointer-events: none; z-index: 999999; }
+
+        /* Music Toggle */
+        .music-btn {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            z-index: 99999;
+            background: rgba(5,5,5,0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--rose-gold);
+            color: var(--rose-gold);
+            padding: 12px 20px;
+            border-radius: 9999px;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.4s ease;
         }
     </style>
 </head>
 <body class="scroll-locked film-grain">
+    <!-- Floating Petals -->
+    <div class="petals-container" id="petals"></div>
 
+    <!-- Cosmic Gate -->
     <div id="gate-left" class="gate"></div>
     <div id="gate-right" class="gate"></div>
-    <div id="gate-flash"></div> 
-    
+    <div id="gate-flash"></div>
+
+    <!-- Entrance Seal -->
     <div id="entrance-seal" class="fixed inset-0 z-[100002] flex flex-col items-center justify-center pointer-events-none">
-        <div class="relative flex items-center justify-center w-40 h-40">
-            <div class="portal-ring ring-1 w-full h-full"></div>
-            <div class="portal-ring ring-2 w-full h-full"></div>
-            <div class="portal-ring ring-3 w-full h-full"></div>
-            <i class="fas fa-camera-retro text-[#d4af37] text-4xl drop-shadow-[0_0_15px_rgba(212,175,55,0.8)] animate-pulse"></i>
+        <div class="relative flex items-center justify-center w-48 h-48">
+            <div class="absolute w-40 h-40 border border-[rgba(232,180,184,0.4)] rounded-full animate-[ping_3s_infinite]"></div>
+            <i class="fas fa-birthday-cake text-[#e8b4b8] text-6xl drop-shadow-[0_0_30px_rgba(232,180,184,0.9)]"></i>
         </div>
-        <p class="mt-8 font-cinematic text-[#d4af37] tracking-[0.8em] uppercase text-xs animate-pulse">Curating Gallery</p>
+        <p class="mt-10 font-cinematic text-[#e8b4b8] tracking-[0.6em] uppercase text-sm animate-pulse">BLOOM • Opening Her Magical Day</p>
     </div>
 
+    <!-- Custom Cursor -->
     <div class="cursor-dot hidden md:block"></div>
     <div class="cursor-outline hidden md:block"></div>
 
-    <a href="home.html?skipIntro=true#gallery-anchor" class="fixed top-6 left-6 z-50 text-white/50 hover:text-[#d4af37] transition-all flex items-center gap-3 cursor-pointer group bg-black/40 backdrop-blur-md px-4 py-2 rounded-full border border-white/10">
-        <i class="fas fa-arrow-left transform group-hover:-translate-x-1 transition-transform"></i> 
-        <span class="tracking-[0.3em] text-[10px] uppercase font-cinematic">Return</span>
+    <!-- Back Button -->
+    <a href="home.html?skipIntro=true#gallery-anchor" class="fixed top-6 left-6 z-50 text-white/60 hover:text-[#e8b4b8] transition-all flex items-center gap-3 bg-black/40 backdrop-blur-md px-5 py-2.5 rounded-full border border-white/10">
+        <i class="fas fa-arrow-left"></i>
+        <span class="tracking-widest text-xs font-cinematic">RETURN HOME</span>
     </a>
 
+    <!-- Music Toggle -->
+    <button onclick="toggleMusic()" id="music-btn" class="music-btn">
+        <i class="fas fa-music"></i>
+        <span id="music-text">PLAY HER SONG</span>
+    </button>
+
+    <!-- HERO -->
     <div class="sticky-card bg-[#050505]">
-        <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(212,175,55,0.1)_0%,transparent_60%)] pointer-events-none"></div>
-        <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1534447677768-be436bb09401?w=2000')] bg-cover bg-center opacity-10 mix-blend-screen"></div>
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(232,180,184,0.12)_0%,transparent_65%)]"></div>
+        <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1519741497674-611027288377?w=2000')] bg-cover bg-center opacity-10 mix-blend-screen"></div>
         
-        <div class="text-center z-10 px-4 mt-12 w-full max-w-4xl mx-auto">
-            <p class="text-[#d4af37] text-[10px] md:text-xs tracking-[1em] uppercase font-mono mb-6 opacity-0" id="hero-sub">The Masterpieces</p>
-            <h1 class="text-6xl md:text-[9rem] leading-none font-cinematic font-bold text-white uppercase tracking-tighter mix-blend-overlay drop-shadow-2xl opacity-0" id="hero-title" style="-webkit-text-stroke: 1px rgba(255,255,255,0.5);">
-                EXHIBITION
+        <div class="text-center z-10 px-6 max-w-5xl mx-auto">
+            <p class="text-[#e8b4b8] text-xs tracking-[0.5em] font-mono mb-4 opacity-0" id="hero-sub">Once upon a birthday...</p>
+            <h1 class="text-7xl md:text-[10rem] leading-none font-playfair font-bold text-white tracking-[-4px] mix-blend-overlay drop-shadow-2xl opacity-0" id="hero-title" style="text-shadow: 0 0 60px rgba(232,180,184,0.5);">
+                BLOOM
             </h1>
-            <div class="w-[1px] h-24 md:h-32 bg-gradient-to-b from-[#d4af37] to-transparent mx-auto mt-8 md:mt-12 opacity-0" id="hero-line"></div>
+            <p class="mt-3 text-2xl md:text-4xl font-emotional text-[#e8b4b8] opacity-0" id="hero-name">Her Birthday Story</p>
             
-            <p class="mt-8 font-emotional text-2xl text-gray-400 animate-pulse opacity-0" id="scroll-hint">Scroll downwards</p>
+            <div class="w-px h-28 bg-gradient-to-b from-[#e8b4b8] to-transparent mx-auto mt-12 opacity-0" id="hero-line"></div>
+            <p class="mt-10 font-emotional text-3xl text-rose-200/80 opacity-0" id="scroll-hint">Scroll to relive the magic ✨</p>
         </div>
     </div>
 
     <div class="stack-container">
 
-        <div class="sticky-card bg-[#08050a]">
+        <!-- CHAPTER 1 -->
+        <div class="sticky-card bg-[#0a0508]">
             <div class="art-frame group">
-                <img src="media/1.jpeg" class="cinematic-img" alt="Gallery Photo 1">
+                <img src="media/1.jpeg" class="cinematic-img" alt="Birthday Glow">
                 <div class="vignette"></div>
-                
                 <div class="info-glass">
-                    <span class="text-[#d4af37] font-mono text-[9px] tracking-[0.4em] uppercase mb-2 block">I. The Glow</span>
-                    <h2 class="text-4xl md:text-5xl font-emotional text-white mb-2">Golden Hours</h2>
-                    <p class="text-gray-300 font-light leading-relaxed">Moments bathed in light and laughter. The kind of day where time seems to stand still just to admire the view.</p>
+                    <span class="text-[#e8b4b8] font-mono text-[10px] tracking-[0.4em] block mb-3">CHAPTER I • The Glow</span>
+                    <h2 class="text-5xl font-emotional text-white">Candlelit Wishes</h2>
+                    <p class="text-rose-100/90 leading-relaxed mt-3">The room held its breath as she closed her eyes and made a wish that lit up the entire universe.</p>
                 </div>
             </div>
         </div>
 
-        <div class="sticky-card bg-[#050505]">
+        <!-- CHAPTER 2 -->
+        <div class="sticky-card bg-[#050508]">
             <div class="art-frame group">
-                <img src="media/2.jpeg" class="cinematic-img" alt="Gallery Photo 2">
+                <img src="media/2.jpeg" class="cinematic-img" alt="Cake Moment">
                 <div class="vignette"></div>
-                
-                <div class="info-glass" style="left: auto; right: 30px; border-left: none; border-right: 2px solid var(--gold); text-align: right;">
-                    <span class="text-[#d4af37] font-mono text-[9px] tracking-[0.4em] uppercase mb-2 block">II. The Grace</span>
-                    <h2 class="text-4xl md:text-5xl font-emotional text-white mb-2">Quiet Elegance</h2>
-                    <p class="text-gray-300 font-light leading-relaxed">Finding beauty in the subtle details. A gentle reminder that grace doesn't need to shout to be seen.</p>
+                <div class="info-glass" style="left: auto; right: 40px; border-left: none; border-right: 3px solid var(--rose-gold); text-align: right;">
+                    <span class="text-[#e8b4b8] font-mono text-[10px] tracking-[0.4em] block mb-3">CHAPTER II • The Sweetness</span>
+                    <h2 class="text-5xl font-emotional text-white">Slice of Heaven</h2>
+                    <p class="text-rose-100/90 leading-relaxed mt-3">Every bite tasted like laughter, love, and the kind of joy that only happens once a year.</p>
                 </div>
             </div>
         </div>
 
-        <div class="sticky-card bg-[#0a0505]">
+        <!-- CHAPTER 3 -->
+        <div class="sticky-card bg-[#080508]">
             <div class="art-frame group">
-                <img src="media/3.jpeg" class="cinematic-img" alt="Gallery Photo 3">
+                <img src="media/3.jpeg" class="cinematic-img" alt="Birthday Spirit">
                 <div class="vignette"></div>
-                
                 <div class="info-glass">
-                    <span class="text-[#d4af37] font-mono text-[9px] tracking-[0.4em] uppercase mb-2 block">III. The Fire</span>
-                    <h2 class="text-4xl md:text-5xl font-emotional text-white mb-2">Unbreakable Spirit</h2>
-                    <p class="text-gray-300 font-light leading-relaxed">Fierce, unbothered, and entirely yourself. Capturing the raw energy that makes you truly unique.</p>
+                    <span class="text-[#e8b4b8] font-mono text-[10px] tracking-[0.4em] block mb-3">CHAPTER III • The Spark</span>
+                    <h2 class="text-5xl font-emotional text-white">Fireworks in Her Soul</h2>
+                    <p class="text-rose-100/90 leading-relaxed mt-3">Blowing out every candle with the power of a thousand dreams coming true.</p>
                 </div>
             </div>
         </div>
 
+        <!-- CHAPTER 4 -->
         <div class="sticky-card bg-[#05080a]">
             <div class="art-frame group">
-                <img src="media/4.jpeg" class="cinematic-img" alt="Gallery Photo 4">
+                <img src="media/4.jpeg" class="cinematic-img" alt="Gift Moment">
                 <div class="vignette"></div>
-                
-                <div class="info-glass" style="left: auto; right: 30px; border-left: none; border-right: 2px solid var(--gold); text-align: right;">
-                    <span class="text-[#d4af37] font-mono text-[9px] tracking-[0.4em] uppercase mb-2 block">IV. The Essence</span>
-                    <h2 class="text-4xl md:text-5xl font-emotional text-white mb-2">Pure Magic</h2>
-                    <p class="text-gray-300 font-light leading-relaxed">The effortless spark that lights up any room. A masterpiece captured in a single frame.</p>
+                <div class="info-glass" style="left: auto; right: 40px; border-left: none; border-right: 3px solid var(--rose-gold); text-align: right;">
+                    <span class="text-[#e8b4b8] font-mono text-[10px] tracking-[0.4em] block mb-3">CHAPTER IV • The Love</span>
+                    <h2 class="text-5xl font-emotional text-white">Wrapped in Forever</h2>
+                    <p class="text-rose-100/90 leading-relaxed mt-3">Every ribbon, every bow, every hug reminded her how deeply she is loved.</p>
                 </div>
             </div>
         </div>
 
+        <!-- CHAPTER 5 -->
         <div class="sticky-card bg-[#050505]">
             <div class="art-frame group">
-                <img src="media/5.jpeg" class="cinematic-img" alt="Gallery Photo 5">
+                <img src="media/5.jpeg" class="cinematic-img" alt="Timeless Smile">
                 <div class="vignette"></div>
-                
                 <div class="info-glass">
-                    <span class="text-[#d4af37] font-mono text-[9px] tracking-[0.4em] uppercase mb-2 block">V. The Core</span>
-                    <h2 class="text-4xl md:text-5xl font-emotional text-white mb-2">Timeless</h2>
-                    <p class="text-gray-300 font-light leading-relaxed">Some pictures tell a story, others simply capture a feeling that lasts forever.</p>
+                    <span class="text-[#e8b4b8] font-mono text-[10px] tracking-[0.4em] block mb-3">CHAPTER V • The Bloom</span>
+                    <h2 class="text-5xl font-emotional text-white">Forever Young</h2>
+                    <p class="text-rose-100/90 leading-relaxed mt-3">A single frame that holds an entire lifetime of birthday magic and endless joy.</p>
                 </div>
             </div>
         </div>
 
-        <div class="sticky-card bg-black flex-col text-center relative overflow-hidden" style="box-shadow: 0 -30px 60px rgba(212,175,55,0.1);">
-            <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(212,175,55,0.05)_0%,transparent_70%)] pointer-events-none"></div>
+        <!-- FINAL CHAPTER -->
+        <div id="final-chapter" class="sticky-card bg-black flex flex-col items-center justify-center text-center relative overflow-hidden">
+            <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(232,180,184,0.15)_0%,transparent_70%)]"></div>
             
-            <i class="fas fa-gem text-[#d4af37] text-4xl mb-8 opacity-50 drop-shadow-[0_0_10px_#d4af37]"></i>
-            <h2 class="text-4xl md:text-6xl font-cinematic text-white mb-6 tracking-widest drop-shadow-md">THE COLLECTION</h2>
-            <p class="text-gray-400 font-emotional text-3xl md:text-4xl mb-12">Is only just beginning...</p>
+            <i class="fas fa-heart text-[#e8b4b8] text-6xl mb-6 drop-shadow-2xl"></i>
+            <h2 class="text-6xl md:text-8xl font-playfair tracking-widest text-white mb-4">Happy Birthday</h2>
+            <p class="text-4xl font-emotional text-[#e8b4b8] mb-12">You are the most beautiful bloom in the garden of life</p>
             
-            <button onclick="window.location.href='home.html?skipIntro=true#gallery-anchor'" class="relative px-10 py-4 bg-black/50 backdrop-blur-md border border-[#d4af37]/40 rounded-full overflow-hidden transition-all duration-300 hover:border-[#d4af37] hover:scale-105 group cursor-pointer shadow-[0_0_20px_rgba(212,175,55,0.2)]">
-                <div class="absolute inset-0 bg-gradient-to-r from-[#d4af37] to-[#8a6219] translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out z-0"></div>
-                <span class="relative z-10 font-cinematic text-xs md:text-sm tracking-[0.3em] text-[#d4af37] group-hover:text-black transition-colors uppercase font-bold">
-                    Close Archives
-                </span>
+            <button onclick="window.location.href='home.html?skipIntro=true#gallery-anchor'" 
+                    class="px-12 py-5 border border-[#e8b4b8]/60 hover:border-[#e8b4b8] rounded-full text-sm tracking-widest font-cinematic transition-all hover:scale-105">
+                RETURN TO THE WORLD
             </button>
         </div>
-
     </div>
+
+    <!-- Chapter Navigation Dots -->
+    <div class="chapter-dots hidden md:flex" id="chapter-dots"></div>
+
+    <!-- Confetti Canvas -->
+    <canvas id="confetti-canvas"></canvas>
 
     <script>
         gsap.registerPlugin(ScrollTrigger);
         const isMobile = window.innerWidth < 768;
 
-        // 1. Smooth Scroll (Lenis)
+        // Lenis Smooth Scroll
+        let lenis;
         if (!isMobile) {
-            const lenis = new Lenis({ duration: 1.2, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), smooth: true });
+            lenis = new Lenis({ duration: 1.4, easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)) });
             function raf(time) { lenis.raf(time); ScrollTrigger.update(); requestAnimationFrame(raf); }
             requestAnimationFrame(raf);
         }
 
-        // 2. Custom Cursor
-        if (!isMobile && window.matchMedia("(hover: hover)").matches) {
+        // Custom Cursor
+        if (!isMobile) {
             const dot = document.querySelector('.cursor-dot');
             const outline = document.querySelector('.cursor-outline');
             window.addEventListener('mousemove', e => {
-                gsap.to(dot, { x: e.clientX, y: e.clientY, duration: 0.1 });
-                gsap.to(outline, { x: e.clientX, y: e.clientY, duration: 0.15 });
+                gsap.to(dot, {x: e.clientX, y: e.clientY, duration: 0.1});
+                gsap.to(outline, {x: e.clientX, y: e.clientY, duration: 0.25});
             });
         }
 
-        // 3. Entrance Animation (The Cosmic Gate)
+        // Floating Cherry Blossom Petals
+        function createPetals() {
+            const container = document.getElementById('petals');
+            for (let i = 0; i < 45; i++) {
+                const petal = document.createElement('div');
+                petal.className = 'absolute text-3xl text-[#e8b4b8]/40 pointer-events-none';
+                petal.innerHTML = '🌸';
+                petal.style.left = Math.random() * 100 + 'vw';
+                petal.style.top = '-50px';
+                petal.style.animation = `fall ${Math.random() * 18 + 14}s linear infinite`;
+                petal.style.animationDelay = `-${Math.random() * 20}s`;
+                petal.style.transform = `rotate(${Math.random() * 360}deg)`;
+                petal.style.opacity = Math.random() * 0.6 + 0.3;
+                container.appendChild(petal);
+            }
+        }
+        const petalStyle = document.createElement('style');
+        petalStyle.innerHTML = `@keyframes fall { to { transform: translateY(110vh) rotate(720deg); } }`;
+        document.head.appendChild(petalStyle);
+
+        // Entrance Gate Animation
         window.onload = () => {
+            createPetals();
+
             const tl = gsap.timeline();
-            
-            // Phase 1: Portal Rings
-            tl.to(".ring-1", { scale: 15, opacity: 0, duration: 1.5, ease: "power2.in" }, "+=0.5")
-              .to(".ring-2", { scale: 15, opacity: 0, duration: 1.5, ease: "power2.in" }, "-=1.2")
-              .to(".ring-3", { scale: 15, opacity: 0, duration: 1.5, ease: "power2.in" }, "-=1.2")
-              .to("#entrance-seal", { opacity: 0, duration: 0.5 }, "-=0.5")
-              
-              // Phase 2: The Light Crack
-              .to("#gate-flash", { opacity: 1, height: "100%", duration: 0.4, ease: "power2.out" })
-              .to("#gate-flash", { width: "100vw", opacity: 0, duration: 1.5, ease: "expo.inOut" }, "open")
-              
-              // Phase 3: Gates Open
-              .to("#gate-left", { x: "-100%", duration: 1.5, ease: "power3.inOut" }, "open")
-              .to("#gate-right", { x: "100%", duration: 1.5, ease: "power3.inOut" }, "open")
-              
-              // Phase 4: Reveal Hero Text
-              .to("#hero-sub", { opacity: 1, y: -20, duration: 1, ease: "power3.out" }, "open+=0.5")
-              .to("#hero-title", { opacity: 1, y: -20, duration: 1.5, ease: "expo.out" }, "open+=0.7")
-              .to("#hero-line", { opacity: 1, duration: 1, ease: "power2.out" }, "open+=1")
-              .to("#scroll-hint", { opacity: 1, duration: 1, ease: "power2.out" }, "open+=1.5")
-              
-              // Cleanup
+            tl.to(".ring-1", { scale: 18, opacity: 0, duration: 1.8, ease: "power2.in" }, "+=0.6")
+              .to(".ring-2", { scale: 18, opacity: 0, duration: 1.8, ease: "power2.in" }, "-=1.3")
+              .to("#entrance-seal", { opacity: 0, duration: 0.6 }, "-=0.8")
+              .to("#gate-flash", { opacity: 1, height: "100%", duration: 0.5, ease: "power3.out" })
+              .to("#gate-flash", { width: "100vw", opacity: 0, duration: 1.8, ease: "expo.inOut" }, "open")
+              .to("#gate-left", { x: "-100%", duration: 1.8, ease: "power3.inOut" }, "open")
+              .to("#gate-right", { x: "100%", duration: 1.8, ease: "power3.inOut" }, "open")
+              .to("#hero-sub", { opacity: 1, y: -30, duration: 1.2 }, "open+=0.6")
+              .to("#hero-title", { opacity: 1, y: -40, duration: 1.6, ease: "expo.out" }, "open+=0.9")
+              .to("#hero-name", { opacity: 1, y: -20, duration: 1.4 }, "open+=1.1")
+              .to("#hero-line", { opacity: 1, duration: 1 }, "open+=1.4")
+              .to("#scroll-hint", { opacity: 1, duration: 1.2 }, "open+=1.7")
               .set(".gate", { display: "none" })
               .set("#gate-flash", { display: "none" })
               .set("#entrance-seal", { display: "none" })
-              .set("body", { className: "film-grain" }); // Unlocks scroll
+              .set("body", { className: "film-grain" });
 
-            // Optional Parallax for the images inside frames as they scroll
+            // Parallax on images
             if (!isMobile) {
-                gsap.utils.toArray('.art-frame').forEach(frame => {
+                gsap.utils.toArray('.art-frame').forEach((frame, i) => {
                     const img = frame.querySelector('.cinematic-img');
                     gsap.to(img, {
-                        yPercent: 10,
+                        yPercent: 12,
                         ease: "none",
-                        scrollTrigger: {
-                            trigger: frame,
-                            start: "top bottom",
-                            end: "bottom top",
-                            scrub: true
-                        }
+                        scrollTrigger: { trigger: frame, start: "top bottom", end: "bottom top", scrub: 1.2 }
                     });
                 });
             }
+
+            // Chapter dots
+            createChapterDots();
+
+            // Confetti on final chapter
+            ScrollTrigger.create({
+                trigger: "#final-chapter",
+                start: "top 60%",
+                onEnter: () => launchConfetti()
+            });
         };
+
+        // Chapter Navigation Dots
+        function createChapterDots() {
+            const container = document.getElementById('chapter-dots');
+            const chapters = document.querySelectorAll('.sticky-card');
+            chapters.forEach((_, i) => {
+                const dot = document.createElement('div');
+                dot.className = 'dot';
+                dot.onclick = () => {
+                    if (lenis) lenis.scrollTo(chapters[i], { offset: -50 });
+                };
+                container.appendChild(dot);
+            });
+
+            // Highlight active
+            ScrollTrigger.create({
+                trigger: ".stack-container",
+                start: "top top",
+                end: "bottom bottom",
+                onUpdate: (self) => {
+                    const progress = Math.floor(self.progress * 5);
+                    document.querySelectorAll('.dot').forEach((d, i) => {
+                        d.classList.toggle('active', i === progress);
+                    });
+                }
+            });
+        }
+
+        // Confetti Explosion
+        function launchConfetti() {
+            const canvas = document.getElementById('confetti-canvas');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            const ctx = canvas.getContext('2d');
+            const colors = ['#e8b4b8', '#d4af37', '#ff69b4', '#fff'];
+            const particles = [];
+
+            class Particle {
+                constructor() {
+                    this.x = Math.random() * canvas.width;
+                    this.y = Math.random() * canvas.height - canvas.height;
+                    this.size = Math.random() * 9 + 5;
+                    this.speed = Math.random() * 6 + 4;
+                    this.angle = Math.random() * 360;
+                    this.color = colors[Math.floor(Math.random() * colors.length)];
+                }
+                update() {
+                    this.y += this.speed;
+                    this.angle += 4;
+                }
+                draw() {
+                    ctx.save();
+                    ctx.translate(this.x, this.y);
+                    ctx.rotate(this.angle * Math.PI / 180);
+                    ctx.fillStyle = this.color;
+                    ctx.fillRect(-this.size/2, -this.size/2, this.size, this.size * 0.6);
+                    ctx.restore();
+                }
+            }
+
+            for (let i = 0; i < 280; i++) particles.push(new Particle());
+
+            let frame = 0;
+            function animateConfetti() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                particles.forEach((p, i) => {
+                    p.update();
+                    p.draw();
+                    if (p.y > canvas.height) particles.splice(i, 1);
+                });
+                frame++;
+                if (frame < 220) requestAnimationFrame(animateConfetti);
+                else canvas.style.opacity = 0;
+            }
+            animateConfetti();
+        }
+
+        // Background Music Toggle (replace src with your song)
+        let audio = null;
+        let isPlaying = false;
+        function toggleMusic() {
+            if (!audio) {
+                audio = new Audio('https://assets.mixkit.co/sfx/preview/296/296-preview.mp3'); // replace with your soft birthday song
+                audio.loop = true;
+            }
+            if (isPlaying) {
+                audio.pause();
+                document.getElementById('music-text').innerHTML = 'PLAY HER SONG';
+            } else {
+                audio.play();
+                document.getElementById('music-text').innerHTML = 'PAUSE SONG';
+            }
+            isPlaying = !isPlaying;
+        }
+
+        // Tailwind script already included via CDN
     </script>
 </body>
 </html>
