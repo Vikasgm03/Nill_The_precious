@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>The Archives | Memories</title>
+    <title>The Exhibition | Memories</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -45,14 +45,14 @@
             body { cursor: none; }
         }
 
-        /* --- FILM GRAIN OVERLAY --- */
+        /* --- FILM GRAIN --- */
         .film-grain::after {
             content: ""; position: fixed; inset: 0;
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
             opacity: 0.04; pointer-events: none; mix-blend-mode: overlay; z-index: 9999;
         }
 
-        /* --- ADVANCED WORLD ENTRANCE GATES --- */
+        /* --- THE ADVANCED COSMIC GATE --- */
         .gate { position: fixed; top: 0; width: 50vw; height: 100vh; background: #030105; z-index: 100000; display: flex; align-items: center; will-change: transform; }
         #gate-left { left: 0; border-right: 1px solid rgba(212,175,55,0.2); justify-content: flex-end; box-shadow: inset -30px 0 60px rgba(0,0,0,0.8); }
         #gate-right { right: 0; border-left: 1px solid rgba(212,175,55,0.2); justify-content: flex-start; box-shadow: inset 30px 0 60px rgba(0,0,0,0.8); }
@@ -64,55 +64,95 @@
         
         body.scroll-locked { overflow: hidden !important; height: 100vh !important; }
 
-        /* --- THE INBUILT CSS PHOTO EDITOR --- */
-        .cinematic-img {
-            filter: grayscale(60%) contrast(110%) brightness(70%) sepia(20%);
-            transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
-            transform: scale(1.05);
-        }
-        .gallery-panel:hover .cinematic-img {
-            filter: grayscale(0%) contrast(105%) brightness(105%) sepia(0%);
-            transform: scale(1);
-        }
-
-        /* --- GLASS DETAILS CARD --- */
-        .glass-card {
-            background: rgba(5, 5, 5, 0.4);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-left: 1px solid rgba(212, 175, 55, 0.3);
-            transform: translateX(-20px);
-            opacity: 0;
-            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .gallery-panel:hover .glass-card {
-            transform: translateX(0);
-            opacity: 1;
-            box-shadow: 20px 20px 50px rgba(0,0,0,0.5);
-        }
-
-        /* --- HORIZONTAL SCROLL CONTAINER --- */
-        .horizontal-container {
-            width: 500vw; /* 5 Panels = 500vw */
-            height: 100vh;
-            display: flex;
-            flex-wrap: nowrap;
-        }
-        .gallery-panel {
-            width: 100vw;
-            height: 100vh;
-            flex-shrink: 0;
+        /* --- EDITORIAL STICKY STACK LAYOUT --- */
+        .stack-container {
             position: relative;
-            overflow: hidden;
+            width: 100%;
+        }
+        
+        .sticky-card {
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            width: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
+            overflow: hidden;
+            /* Gives a slight shadow to separate cards stacking on top of each other */
+            box-shadow: 0 -20px 50px rgba(0,0,0,0.8);
+        }
+
+        /* --- THE INBUILT CSS PHOTO EDITOR --- */
+        .art-frame {
+            position: relative;
+            width: 90vw;
+            max-width: 1200px;
+            height: 75vh;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            background: #000;
+        }
+
+        .cinematic-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            /* Resting: Moody, cinematic, slightly desaturated */
+            filter: grayscale(40%) contrast(110%) brightness(75%) sepia(20%);
+            transform: scale(1.05);
+            transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Hover or Touch State: Breathes into color */
+        .art-frame:hover .cinematic-img {
+            filter: grayscale(0%) contrast(105%) brightness(105%) sepia(0%);
+            transform: scale(1);
+        }
+        .art-frame:hover {
+            border-color: rgba(212, 175, 55, 0.4);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.9), inset 0 0 40px rgba(212,175,55,0.1);
+        }
+
+        /* Dark Vignette Overlay */
+        .vignette {
+            position: absolute; inset: 0; pointer-events: none;
+            background: radial-gradient(circle at center, transparent 30%, rgba(0,0,0,0.8) 100%);
+            transition: opacity 0.8s;
+        }
+        .art-frame:hover .vignette { opacity: 0.4; }
+
+        /* --- GLASS INFO OVERLAY --- */
+        .info-glass {
+            position: absolute;
+            bottom: 30px;
+            left: 30px;
+            background: rgba(5, 5, 5, 0.5);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-left: 2px solid var(--gold);
+            padding: 24px 32px;
+            border-radius: 8px;
+            max-width: 400px;
+            transform: translateY(20px);
+            opacity: 0;
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
         
-        /* Mobile hides scrollbar but allows native horizontal scroll if JS fails */
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        
+        .art-frame:hover .info-glass {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        @media (max-width: 768px) {
+            .art-frame { width: 92vw; height: 80vh; }
+            .info-glass { bottom: 15px; left: 15px; right: 15px; max-width: none; padding: 16px 20px; }
+            /* Make text smaller for mobile glass card */
+            .info-glass h2 { font-size: 1.75rem; line-height: 1; margin-bottom: 0.5rem; }
+            .info-glass p { font-size: 0.75rem; }
+        }
     </style>
 </head>
 <body class="scroll-locked film-grain">
@@ -126,99 +166,116 @@
             <div class="portal-ring ring-1 w-full h-full"></div>
             <div class="portal-ring ring-2 w-full h-full"></div>
             <div class="portal-ring ring-3 w-full h-full"></div>
-            <i class="fas fa-camera text-[#d4af37] text-4xl drop-shadow-[0_0_15px_rgba(212,175,55,0.8)] animate-pulse"></i>
+            <i class="fas fa-camera-retro text-[#d4af37] text-4xl drop-shadow-[0_0_15px_rgba(212,175,55,0.8)] animate-pulse"></i>
         </div>
-        <p class="mt-8 font-cinematic text-[#d4af37] tracking-[0.8em] uppercase text-xs animate-pulse">Unlocking Vault</p>
+        <p class="mt-8 font-cinematic text-[#d4af37] tracking-[0.8em] uppercase text-xs animate-pulse">Curating Gallery</p>
     </div>
 
     <div class="cursor-dot hidden md:block"></div>
     <div class="cursor-outline hidden md:block"></div>
 
-    <a href="home.html?skipIntro=true#memories-anchor" class="fixed top-6 left-6 z-50 text-white/50 hover:text-[#d4af37] transition-all flex items-center gap-3 cursor-pointer group bg-black/40 backdrop-blur-md px-4 py-2 rounded-full border border-white/10">
+    <a href="home.html?skipIntro=true#gallery-anchor" class="fixed top-6 left-6 z-50 text-white/50 hover:text-[#d4af37] transition-all flex items-center gap-3 cursor-pointer group bg-black/40 backdrop-blur-md px-4 py-2 rounded-full border border-white/10">
         <i class="fas fa-arrow-left transform group-hover:-translate-x-1 transition-transform"></i> 
         <span class="tracking-[0.3em] text-[10px] uppercase font-cinematic">Return</span>
     </a>
 
-    <div class="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 text-center pointer-events-none mix-blend-screen opacity-50" id="scroll-hint">
-        <p class="font-mono text-[10px] tracking-[0.5em] text-[#d4af37] uppercase animate-pulse">Scroll to explore</p>
+    <div class="sticky-card bg-[#050505]">
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(212,175,55,0.1)_0%,transparent_60%)] pointer-events-none"></div>
+        <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1534447677768-be436bb09401?w=2000')] bg-cover bg-center opacity-10 mix-blend-screen"></div>
+        
+        <div class="text-center z-10 px-4 mt-12 w-full max-w-4xl mx-auto">
+            <p class="text-[#d4af37] text-[10px] md:text-xs tracking-[1em] uppercase font-mono mb-6 opacity-0" id="hero-sub">The Masterpieces</p>
+            <h1 class="text-6xl md:text-[9rem] leading-none font-cinematic font-bold text-white uppercase tracking-tighter mix-blend-overlay drop-shadow-2xl opacity-0" id="hero-title" style="-webkit-text-stroke: 1px rgba(255,255,255,0.5);">
+                EXHIBITION
+            </h1>
+            <div class="w-[1px] h-24 md:h-32 bg-gradient-to-b from-[#d4af37] to-transparent mx-auto mt-8 md:mt-12 opacity-0" id="hero-line"></div>
+            
+            <p class="mt-8 font-emotional text-2xl text-gray-400 animate-pulse opacity-0" id="scroll-hint">Scroll downwards</p>
+        </div>
     </div>
 
-    <div class="overflow-hidden" id="horizontal-wrapper">
-        <div class="horizontal-container" id="horizontal-track">
+    <div class="stack-container">
 
-            <div class="gallery-panel bg-black relative flex-col">
-                <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(212,175,55,0.08)_0%,transparent_60%)] pointer-events-none"></div>
-                <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1534447677768-be436bb09401?w=2000')] bg-cover bg-center opacity-10 mix-blend-screen"></div>
+        <div class="sticky-card bg-[#08050a]">
+            <div class="art-frame group">
+                <img src="media/1.jpeg" class="cinematic-img" alt="Gallery Photo 1">
+                <div class="vignette"></div>
                 
-                <div class="text-center z-10 px-4 mt-12">
-                    <p class="text-[#d4af37] text-xs md:text-sm tracking-[1em] uppercase font-cinematic mb-6 opacity-0" id="hero-sub">The Visual Diary</p>
-                    <h1 class="text-6xl md:text-[9rem] leading-none font-cinematic font-bold text-white uppercase tracking-tighter mix-blend-overlay drop-shadow-2xl opacity-0" id="hero-title" style="-webkit-text-stroke: 1px rgba(255,255,255,0.5);">
-                        ARCHIVES
-                    </h1>
-                    <div class="w-[1px] h-32 bg-gradient-to-b from-[#d4af37] to-transparent mx-auto mt-12 opacity-0" id="hero-line"></div>
+                <div class="info-glass">
+                    <span class="text-[#d4af37] font-mono text-[9px] tracking-[0.4em] uppercase mb-2 block">I. The Glow</span>
+                    <h2 class="text-4xl md:text-5xl font-emotional text-white mb-2">Golden Hours</h2>
+                    <p class="text-gray-300 font-light leading-relaxed">Moments bathed in light and laughter. The kind of day where time seems to stand still just to admire the view.</p>
                 </div>
             </div>
-
-            <div class="gallery-panel group">
-                <img src="media/1.jpeg" class="absolute inset-0 w-full h-full object-cover cinematic-img">
-                <div class="absolute inset-0 bg-gradient-to-r from-black/80 via-black/20 to-transparent pointer-events-none"></div>
-                
-                <div class="absolute left-6 md:left-24 top-1/2 -translate-y-1/2 w-[85%] md:w-auto max-w-md glass-card p-8 md:p-12">
-                    <span class="text-[#d4af37] font-mono text-[10px] tracking-[0.4em] uppercase mb-4 block">Fragment 01</span>
-                    <h2 class="text-4xl md:text-5xl font-emotional text-white mb-4">Golden Hours</h2>
-                    <p class="text-gray-300 text-sm md:text-base font-light leading-relaxed">Moments bathed in light and laughter. The kind of day where time seems to stand still just to admire the view.</p>
-                </div>
-            </div>
-
-            <div class="gallery-panel group">
-                <img src="media/2.jpeg" class="absolute inset-0 w-full h-full object-cover cinematic-img">
-                <div class="absolute inset-0 bg-gradient-to-r from-black/80 via-black/20 to-transparent pointer-events-none"></div>
-                
-                <div class="absolute left-6 md:left-24 top-1/2 -translate-y-1/2 w-[85%] md:w-auto max-w-md glass-card p-8 md:p-12">
-                    <span class="text-[#d4af37] font-mono text-[10px] tracking-[0.4em] uppercase mb-4 block">Fragment 02</span>
-                    <h2 class="text-4xl md:text-5xl font-emotional text-white mb-4">Quiet Elegance</h2>
-                    <p class="text-gray-300 text-sm md:text-base font-light leading-relaxed">Finding beauty in the subtle details. A gentle reminder that grace doesn't need to shout to be seen.</p>
-                </div>
-            </div>
-
-            <div class="gallery-panel group">
-                <img src="media/3.jpeg" class="absolute inset-0 w-full h-full object-cover cinematic-img">
-                <div class="absolute inset-0 bg-gradient-to-r from-black/80 via-black/20 to-transparent pointer-events-none"></div>
-                
-                <div class="absolute left-6 md:left-24 top-1/2 -translate-y-1/2 w-[85%] md:w-auto max-w-md glass-card p-8 md:p-12">
-                    <span class="text-[#d4af37] font-mono text-[10px] tracking-[0.4em] uppercase mb-4 block">Fragment 03</span>
-                    <h2 class="text-4xl md:text-5xl font-emotional text-white mb-4">Unbreakable Spirit</h2>
-                    <p class="text-gray-300 text-sm md:text-base font-light leading-relaxed">Fierce, unbothered, and entirely yourself. Capturing the raw energy that makes you truly unique.</p>
-                </div>
-            </div>
-
-            <div class="gallery-panel group">
-                <img src="media/4.jpeg" class="absolute inset-0 w-full h-full object-cover cinematic-img">
-                <div class="absolute inset-0 bg-gradient-to-r from-black/80 via-black/20 to-transparent pointer-events-none"></div>
-                
-                <div class="absolute left-6 md:left-24 top-1/2 -translate-y-1/2 w-[85%] md:w-auto max-w-md glass-card p-8 md:p-12">
-                    <span class="text-[#d4af37] font-mono text-[10px] tracking-[0.4em] uppercase mb-4 block">Fragment 04</span>
-                    <h2 class="text-4xl md:text-5xl font-emotional text-white mb-4">Pure Magic</h2>
-                    <p class="text-gray-300 text-sm md:text-base font-light leading-relaxed">The effortless spark that lights up any room. A masterpiece captured in a single frame.</p>
-                </div>
-            </div>
-
-            <div class="gallery-panel bg-black flex-col text-center relative overflow-hidden">
-                <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(212,175,55,0.05)_0%,transparent_70%)] pointer-events-none"></div>
-                
-                <i class="fas fa-gem text-[#d4af37] text-3xl mb-8 opacity-50"></i>
-                <h2 class="text-4xl md:text-6xl font-cinematic text-white mb-8 tracking-widest">THE COLLECTION</h2>
-                <p class="text-gray-400 font-emotional text-2xl md:text-3xl mb-12">Is only just beginning...</p>
-                
-                <button onclick="window.location.href='home.html?skipIntro=true#gallery-anchor'" class="relative px-10 py-4 bg-transparent border border-[#d4af37]/30 rounded-full overflow-hidden transition-all duration-300 hover:border-[#d4af37] hover:scale-105 group cursor-pointer">
-                    <div class="absolute inset-0 bg-gradient-to-r from-[#d4af37] to-[#8a6219] translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out z-0"></div>
-                    <span class="relative z-10 font-cinematic text-sm tracking-[0.3em] text-[#d4af37] group-hover:text-black transition-colors uppercase font-bold">
-                        Close Archives
-                    </span>
-                </button>
-            </div>
-
         </div>
+
+        <div class="sticky-card bg-[#050505]">
+            <div class="art-frame group">
+                <img src="media/2.jpeg" class="cinematic-img" alt="Gallery Photo 2">
+                <div class="vignette"></div>
+                
+                <div class="info-glass" style="left: auto; right: 30px; border-left: none; border-right: 2px solid var(--gold); text-align: right;">
+                    <span class="text-[#d4af37] font-mono text-[9px] tracking-[0.4em] uppercase mb-2 block">II. The Grace</span>
+                    <h2 class="text-4xl md:text-5xl font-emotional text-white mb-2">Quiet Elegance</h2>
+                    <p class="text-gray-300 font-light leading-relaxed">Finding beauty in the subtle details. A gentle reminder that grace doesn't need to shout to be seen.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="sticky-card bg-[#0a0505]">
+            <div class="art-frame group">
+                <img src="media/3.jpeg" class="cinematic-img" alt="Gallery Photo 3">
+                <div class="vignette"></div>
+                
+                <div class="info-glass">
+                    <span class="text-[#d4af37] font-mono text-[9px] tracking-[0.4em] uppercase mb-2 block">III. The Fire</span>
+                    <h2 class="text-4xl md:text-5xl font-emotional text-white mb-2">Unbreakable Spirit</h2>
+                    <p class="text-gray-300 font-light leading-relaxed">Fierce, unbothered, and entirely yourself. Capturing the raw energy that makes you truly unique.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="sticky-card bg-[#05080a]">
+            <div class="art-frame group">
+                <img src="media/4.jpeg" class="cinematic-img" alt="Gallery Photo 4">
+                <div class="vignette"></div>
+                
+                <div class="info-glass" style="left: auto; right: 30px; border-left: none; border-right: 2px solid var(--gold); text-align: right;">
+                    <span class="text-[#d4af37] font-mono text-[9px] tracking-[0.4em] uppercase mb-2 block">IV. The Essence</span>
+                    <h2 class="text-4xl md:text-5xl font-emotional text-white mb-2">Pure Magic</h2>
+                    <p class="text-gray-300 font-light leading-relaxed">The effortless spark that lights up any room. A masterpiece captured in a single frame.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="sticky-card bg-[#050505]">
+            <div class="art-frame group">
+                <img src="media/5.jpeg" class="cinematic-img" alt="Gallery Photo 5">
+                <div class="vignette"></div>
+                
+                <div class="info-glass">
+                    <span class="text-[#d4af37] font-mono text-[9px] tracking-[0.4em] uppercase mb-2 block">V. The Core</span>
+                    <h2 class="text-4xl md:text-5xl font-emotional text-white mb-2">Timeless</h2>
+                    <p class="text-gray-300 font-light leading-relaxed">Some pictures tell a story, others simply capture a feeling that lasts forever.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="sticky-card bg-black flex-col text-center relative overflow-hidden" style="box-shadow: 0 -30px 60px rgba(212,175,55,0.1);">
+            <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(212,175,55,0.05)_0%,transparent_70%)] pointer-events-none"></div>
+            
+            <i class="fas fa-gem text-[#d4af37] text-4xl mb-8 opacity-50 drop-shadow-[0_0_10px_#d4af37]"></i>
+            <h2 class="text-4xl md:text-6xl font-cinematic text-white mb-6 tracking-widest drop-shadow-md">THE COLLECTION</h2>
+            <p class="text-gray-400 font-emotional text-3xl md:text-4xl mb-12">Is only just beginning...</p>
+            
+            <button onclick="window.location.href='home.html?skipIntro=true#gallery-anchor'" class="relative px-10 py-4 bg-black/50 backdrop-blur-md border border-[#d4af37]/40 rounded-full overflow-hidden transition-all duration-300 hover:border-[#d4af37] hover:scale-105 group cursor-pointer shadow-[0_0_20px_rgba(212,175,55,0.2)]">
+                <div class="absolute inset-0 bg-gradient-to-r from-[#d4af37] to-[#8a6219] translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out z-0"></div>
+                <span class="relative z-10 font-cinematic text-xs md:text-sm tracking-[0.3em] text-[#d4af37] group-hover:text-black transition-colors uppercase font-bold">
+                    Close Archives
+                </span>
+            </button>
+        </div>
+
     </div>
 
     <script>
@@ -264,6 +321,7 @@
               .to("#hero-sub", { opacity: 1, y: -20, duration: 1, ease: "power3.out" }, "open+=0.5")
               .to("#hero-title", { opacity: 1, y: -20, duration: 1.5, ease: "expo.out" }, "open+=0.7")
               .to("#hero-line", { opacity: 1, duration: 1, ease: "power2.out" }, "open+=1")
+              .to("#scroll-hint", { opacity: 1, duration: 1, ease: "power2.out" }, "open+=1.5")
               
               // Cleanup
               .set(".gate", { display: "none" })
@@ -271,36 +329,23 @@
               .set("#entrance-seal", { display: "none" })
               .set("body", { className: "film-grain" }); // Unlocks scroll
 
-            initHorizontalScroll();
-        };
-
-        // 4. HORIZONTAL SCROLL LOGIC
-        function initHorizontalScroll() {
-            const wrapper = document.getElementById("horizontal-wrapper");
-            const track = document.getElementById("horizontal-track");
-            
-            // Gets the total width we need to scroll minus one viewport width
-            let getScrollAmount = () => -(track.scrollWidth - window.innerWidth);
-
-            gsap.to(track, {
-                x: getScrollAmount,
-                ease: "none",
-                scrollTrigger: {
-                    trigger: wrapper,
-                    start: "top top",
-                    end: () => `+=${track.scrollWidth - window.innerWidth}`,
-                    pin: true,
-                    scrub: 1, // Smooth scrubbing
-                    invalidateOnRefresh: true,
-                    // Hide scroll hint once they start scrolling
-                    onUpdate: (self) => {
-                        if (self.progress > 0.05) {
-                            gsap.to("#scroll-hint", { opacity: 0, duration: 0.5 });
+            // Optional Parallax for the images inside frames as they scroll
+            if (!isMobile) {
+                gsap.utils.toArray('.art-frame').forEach(frame => {
+                    const img = frame.querySelector('.cinematic-img');
+                    gsap.to(img, {
+                        yPercent: 10,
+                        ease: "none",
+                        scrollTrigger: {
+                            trigger: frame,
+                            start: "top bottom",
+                            end: "bottom top",
+                            scrub: true
                         }
-                    }
-                }
-            });
-        }
+                    });
+                });
+            }
+        };
     </script>
 </body>
 </html>
