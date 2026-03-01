@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Art of Memories | Nithya's Birthday ✨</title>
-   
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
@@ -24,7 +24,7 @@
             font-family: 'Montserrat', sans-serif; 
             cursor: none; 
         }
-       
+        
         .font-cinematic { font-family: 'Cinzel', serif; }
         .font-hand { font-family: 'Dancing Script', cursive; }
         .font-serif { font-family: 'Playfair Display', serif; }
@@ -40,6 +40,7 @@
             border: 1.5px solid rgba(248, 209, 224, 0.6); 
             transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1); 
         }
+        a:hover ~ .cursor-outline, button:hover ~ .cursor-outline { width: 60px; height: 60px; border-color: var(--rose); background: rgba(249, 168, 212, 0.1); }
 
         /* SCROLLBAR */
         .no-scrollbar::-webkit-scrollbar { display: none; }
@@ -75,6 +76,7 @@
             -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
             opacity: 0; transform: translateY(40px); 
         }
+        @media (max-width: 768px) { .section-title { font-size: 2.2rem; } }
 
         /* ENHANCED FILTERS */
         .filter-golden { 
@@ -114,93 +116,79 @@
     </style>
 </head>
 <body class="relative">
-    <!-- CUSTOM CURSOR -->
-    <div class="cursor-dot"></div>
-    <div class="cursor-outline"></div>
+    <div class="cursor-dot hidden md:block"></div>
+    <div class="cursor-outline hidden md:block"></div>
 
-    <!-- CONFETTI CANVAS -->
     <canvas id="confetti" class="confetti-canvas"></canvas>
 
-    <!-- NAV -->
-    <nav class="fixed top-0 left-0 w-full z-50 p-6 flex justify-between items-center mix-blend-difference text-white">
-        <a href="home.html?skipIntro=true#gallery-anchor" class="text-xs font-bold tracking-[0.4em] hover:text-[#f9a8d4] transition-colors">← BACK TO HOME</a>
-        <div class="font-cinematic text-2xl tracking-widest text-[#f8d1e0]">NITHYA'S BIRTHDAY</div>
+    <nav class="fixed top-0 left-0 w-full z-50 p-4 md:p-6 flex justify-between items-center mix-blend-difference text-white">
+        <a href="home.html?skipIntro=true#gallery-anchor" class="text-[10px] md:text-xs font-bold tracking-[0.4em] hover:text-[#f9a8d4] transition-colors cursor-pointer">← BACK TO HOME</a>
+        <div class="font-cinematic text-sm md:text-2xl tracking-widest text-[#f8d1e0]">NITHYA'S BIRTHDAY</div>
     </nav>
 
-    <!-- HERO -->
     <header class="min-h-screen flex items-center justify-center relative overflow-hidden">
         <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=2000')] bg-cover bg-center opacity-30"></div>
         <div class="absolute inset-0 bg-gradient-to-b from-transparent via-black/70 to-black"></div>
         
-        <!-- Floating hearts container -->
         <div id="hearts" class="absolute inset-0 pointer-events-none"></div>
 
         <div class="relative z-10 text-center px-6">
             <div class="inline-block mb-6">
-                <span class="text-[#f9a8d4] text-sm tracking-[0.5em] font-medium">18 MARCH • 2026</span>
+                <span class="text-[#f9a8d4] text-xs md:text-sm tracking-[0.5em] font-medium">18 MARCH • 2026</span>
             </div>
             <h1 id="hero-name" 
-                class="text-[9vw] md:text-[7.5rem] leading-none font-cinematic text-transparent bg-clip-text bg-gradient-to-r from-white via-[#f8d1e0] to-[#f9a8d4] mb-4">
+                class="text-6xl md:text-[7.5rem] leading-none font-cinematic text-transparent bg-clip-text bg-gradient-to-r from-white via-[#f8d1e0] to-[#f9a8d4] mb-4">
                 NITHYA
             </h1>
-            <p class="text-4xl md:text-5xl font-hand text-[#f9a8d4] tracking-wider mb-8">Happy Birthday, My Eternal Muse ✨</p>
+            <p class="text-3xl md:text-5xl font-hand text-[#f9a8d4] tracking-wider mb-8">Happy Birthday, My Eternal Muse ✨</p>
             
             <div onclick="document.getElementById('gallery-start').scrollIntoView({ behavior: 'smooth' })" 
                  class="cursor-pointer inline-flex items-center gap-3 group">
                 <div class="w-px h-12 bg-gradient-to-b from-transparent via-[#f9a8d4] to-transparent"></div>
-                <span class="uppercase text-xs tracking-[0.3em] group-hover:text-[#f8d1e0] transition-colors">Scroll to celebrate</span>
+                <span class="uppercase text-[10px] md:text-xs tracking-[0.3em] group-hover:text-[#f8d1e0] transition-colors">Scroll to celebrate</span>
                 <i class="fas fa-arrow-down text-[#f9a8d4]"></i>
             </div>
         </div>
 
-        <!-- Subtle rose glow -->
-        <div class="absolute bottom-12 left-1/2 -translate-x-1/2 text-[#f9a8d4]/30 text-[180px] font-hand pointer-events-none">forever</div>
+        <div class="absolute bottom-12 left-1/2 -translate-x-1/2 text-[#f9a8d4]/30 text-8xl md:text-[180px] font-hand pointer-events-none whitespace-nowrap">forever</div>
     </header>
 
-    <!-- GOLDEN HOUR -->
-    <section id="gallery-start" class="py-28 bg-[#0a0305] relative overflow-hidden">
+    <section id="gallery-start" class="py-20 md:py-28 bg-[#0a0305] relative overflow-hidden">
         <div id="fireflies" class="absolute inset-0 pointer-events-none"></div>
         
-        <div class="max-w-6xl mx-auto px-6">
-            <h2 class="section-title">Golden Hour Memories <span class="block text-xs font-mono text-[#f9a8d4]/70 mt-3">WARM GLOW • FOREVER YOURS</span></h2>
+        <div class="max-w-6xl mx-auto px-6 relative z-10">
+            <h2 class="section-title">Golden Hour Memories <span class="block text-[10px] md:text-xs font-mono text-[#f9a8d4]/70 mt-3">WARM GLOW • FOREVER YOURS</span></h2>
             
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <!-- Image 1 -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-6 mt-12">
                 <div class="filter-golden rounded-3xl overflow-hidden aspect-[4/5] group">
                     <img src="media/1.jpeg" class="w-full h-full object-cover transition-all duration-1000 group-hover:scale-110">
-                    <div class="absolute bottom-8 left-8 text-white font-hand text-3xl opacity-0 group-hover:opacity-100 transition-all">Sunkissed soul</div>
+                    <div class="absolute bottom-6 md:bottom-8 left-6 md:left-8 text-white font-hand text-2xl md:text-3xl opacity-0 group-hover:opacity-100 transition-all pointer-events-none">Sunkissed soul</div>
                 </div>
-                <!-- Image 2 -->
                 <div class="filter-golden rounded-3xl overflow-hidden aspect-[4/5] group md:-mt-12">
                     <img src="media/2.jpeg" class="w-full h-full object-cover transition-all duration-1000 group-hover:scale-110">
                 </div>
-                <!-- Image 3 -->
                 <div class="filter-golden rounded-3xl overflow-hidden aspect-[4/5] group">
                     <img src="media/3.jpeg" class="w-full h-full object-cover transition-all duration-1000 group-hover:scale-110">
-                    <div class="absolute bottom-8 left-8 text-white font-hand text-3xl opacity-0 group-hover:opacity-100 transition-all">Pure magic</div>
+                    <div class="absolute bottom-6 md:bottom-8 left-6 md:left-8 text-white font-hand text-2xl md:text-3xl opacity-0 group-hover:opacity-100 transition-all pointer-events-none">Pure magic</div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- VINTAGE POLAROIDS -->
-    <section class="py-28 bg-[#111111] relative">
+    <section class="py-20 md:py-28 bg-[#111111] relative">
         <div class="max-w-6xl mx-auto px-6">
-            <h2 class="section-title text-white">Polaroid Treasures <span class="block text-xs font-mono text-[#f9a8d4]/70 mt-3">CAPTURED WITH LOVE</span></h2>
+            <h2 class="section-title text-white">Polaroid Treasures <span class="block text-[10px] md:text-xs font-mono text-[#f9a8d4]/70 mt-3">CAPTURED WITH LOVE</span></h2>
             
-            <div class="flex flex-wrap justify-center gap-12">
-                <!-- Polaroid 1 -->
-                <div class="polaroid-card w-72 rotate-[-4deg]">
+            <div class="flex flex-wrap justify-center gap-10 md:gap-12 mt-12">
+                <div class="polaroid-card w-64 md:w-72 rotate-[-4deg]">
                     <img src="media/4.jpeg" class="w-full aspect-square object-cover">
                     <p class="text-center font-hand text-2xl text-black mt-4">My sunshine</p>
                 </div>
-                <!-- Polaroid 2 -->
-                <div class="polaroid-card w-72 rotate-[3deg] mt-16">
+                <div class="polaroid-card w-64 md:w-72 rotate-[3deg] md:mt-16">
                     <img src="media/5.jpeg" class="w-full aspect-square object-cover">
                     <p class="text-center font-hand text-2xl text-black mt-4">Forever 21 vibes</p>
                 </div>
-                <!-- Polaroid 3 -->
-                <div class="polaroid-card w-72 rotate-[-2deg]">
+                <div class="polaroid-card w-64 md:w-72 rotate-[-2deg]">
                     <img src="media/1.jpeg" class="w-full aspect-square object-cover">
                     <p class="text-center font-hand text-2xl text-black mt-4">Best day ever</p>
                 </div>
@@ -208,178 +196,192 @@
         </div>
     </section>
 
-    <!-- CINEMATIC MODE -->
-    <section class="py-28 bg-black relative overflow-hidden">
-        <h2 class="section-title text-white">Cinematic Dreams <span class="block text-xs font-mono text-[#f9a8d4]/70 mt-3">TEAL &amp; ROSE • LETTERBOX MAGIC</span></h2>
+    <section class="py-20 md:py-28 bg-black relative overflow-hidden">
+        <h2 class="section-title text-white px-4">Cinematic Dreams <span class="block text-[10px] md:text-xs font-mono text-[#f9a8d4]/70 mt-3">TEAL &amp; ROSE • LETTERBOX MAGIC</span></h2>
         
-        <div class="max-w-5xl mx-auto space-y-20 px-6">
-            <!-- Cinematic 1 -->
-            <div class="cinematic-frame aspect-[21/9] rounded-3xl overflow-hidden relative group">
-                <div class="letterbox absolute top-0 left-0 w-full h-10 bg-black z-10 transition-all duration-700 group-hover:h-0"></div>
-                <div class="letterbox absolute bottom-0 left-0 w-full h-10 bg-black z-10 transition-all duration-700 group-hover:h-0"></div>
+        <div class="max-w-5xl mx-auto space-y-12 md:space-y-20 px-6 mt-12">
+            <div class="cinematic-frame aspect-[16/9] md:aspect-[21/9] rounded-xl md:rounded-3xl overflow-hidden relative group">
+                <div class="letterbox absolute top-0 left-0 w-full h-8 md:h-10 bg-black z-10 transition-all duration-700 group-hover:h-0"></div>
+                <div class="letterbox absolute bottom-0 left-0 w-full h-8 md:h-10 bg-black z-10 transition-all duration-700 group-hover:h-0"></div>
                 <img src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=1400" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105">
-                <div class="absolute bottom-12 left-0 right-0 text-center">
-                    <p class="font-cinematic text-[#f9a8d4] tracking-widest text-sm">SCENE 01 • THE QUEEN ARRIVES</p>
+                <div class="absolute bottom-6 md:bottom-12 left-0 right-0 text-center">
+                    <p class="font-cinematic text-[#f9a8d4] tracking-[0.2em] md:tracking-widest text-[10px] md:text-sm drop-shadow-md shadow-black">SCENE 01 • THE QUEEN ARRIVES</p>
                 </div>
             </div>
 
-            <!-- Cinematic 2 -->
-            <div class="cinematic-frame aspect-[21/9] rounded-3xl overflow-hidden relative group">
-                <div class="letterbox absolute top-0 left-0 w-full h-10 bg-black z-10 transition-all duration-700 group-hover:h-0"></div>
-                <div class="letterbox absolute bottom-0 left-0 w-full h-10 bg-black z-10 transition-all duration-700 group-hover:h-0"></div>
+            <div class="cinematic-frame aspect-[16/9] md:aspect-[21/9] rounded-xl md:rounded-3xl overflow-hidden relative group">
+                <div class="letterbox absolute top-0 left-0 w-full h-8 md:h-10 bg-black z-10 transition-all duration-700 group-hover:h-0"></div>
+                <div class="letterbox absolute bottom-0 left-0 w-full h-8 md:h-10 bg-black z-10 transition-all duration-700 group-hover:h-0"></div>
                 <img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=1400" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105">
-                <div class="absolute bottom-12 left-0 right-0 text-center">
-                    <p class="font-cinematic text-[#f9a8d4] tracking-widest text-sm">SCENE 02 • PURE JOY</p>
+                <div class="absolute bottom-6 md:bottom-12 left-0 right-0 text-center">
+                    <p class="font-cinematic text-[#f9a8d4] tracking-[0.2em] md:tracking-widest text-[10px] md:text-sm drop-shadow-md shadow-black">SCENE 02 • PURE JOY</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- DREAMY PASTEL -->
-    <section class="py-28 bg-gradient-to-b from-rose-50 to-white text-black relative">
-        <div class="max-w-4xl mx-auto px-6">
-            <h2 class="section-title text-pink-400">Dreamy Pastel Moments <span class="block text-xs font-mono text-pink-400/70 mt-3">SOFT GLOW FOR THE SOFTEST HEART</span></h2>
+    <section class="py-20 md:py-28 bg-gradient-to-b from-rose-50 to-white text-black relative">
+        <div class="max-w-2xl mx-auto px-6">
+            <h2 class="section-title text-pink-400">Dreamy Pastel Moments <span class="block text-[10px] md:text-xs font-mono text-pink-400/70 mt-3">SOFT GLOW FOR THE SOFTEST HEART</span></h2>
             
-            <div class="relative rounded-[4rem] overflow-hidden shadow-2xl border-8 border-white">
+            <div class="relative rounded-[2rem] md:rounded-[4rem] overflow-hidden shadow-2xl border-4 md:border-8 border-white mt-12 aspect-[4/5] md:aspect-auto">
                 <div class="bloom bg-[url('media/3.jpeg')] bg-cover"></div>
                 <img src="media/3.jpeg" class="w-full h-full object-cover relative z-10">
-                <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent flex items-end justify-center pb-16">
-                    <p class="font-hand text-5xl text-white drop-shadow-2xl">You are the dream</p>
+                <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-black/10 to-transparent flex items-end justify-center pb-8 md:pb-16 pointer-events-none z-20">
+                    <p class="font-hand text-4xl md:text-5xl text-white drop-shadow-lg">You are the dream</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- THE SCREENING ROOM (VIDEOS UNCHANGED) -->
-    <section class="py-28 bg-[#020202] relative">
+    <section class="py-20 md:py-28 bg-[#020202] relative">
         <div class="max-w-7xl mx-auto px-6">
-            <h2 class="section-title text-white mb-16">The Screening Room <span class="block text-xs font-mono text-[#f9a8d4]/70 mt-3">LIVE FROM NITHYA'S WORLD</span></h2>
+            <h2 class="section-title text-white mb-12 md:mb-16">The Screening Room <span class="block text-[10px] md:text-xs font-mono text-[#f9a8d4]/70 mt-3">LIVE FROM NITHYA'S WORLD</span></h2>
             
-            <!-- Dance Floor -->
-            <div class="mb-20">
+            <div class="mb-16 md:mb-20">
                 <div class="flex items-center gap-4 mb-8">
                     <div class="h-px bg-gradient-to-r from-transparent via-pink-400 to-transparent flex-1"></div>
-                    <h3 class="font-cinematic text-3xl tracking-widest">Dance Floor Moments</h3>
+                    <h3 class="font-cinematic text-xl md:text-3xl tracking-widest text-center">Dance Floor Moments</h3>
                     <div class="h-px bg-gradient-to-r from-transparent via-pink-400 to-transparent flex-1"></div>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <!-- Video 1 -->
-                    <div class="group relative aspect-video rounded-3xl overflow-hidden border border-pink-900/40 hover:border-pink-400 shadow-2xl transition-all">
-                        <video class="w-full h-full object-cover opacity-70 group-hover:opacity-100 group-hover:scale-110 transition-all duration-1000" autoplay muted loop playsinline>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+                    <div class="group relative aspect-video rounded-2xl md:rounded-3xl overflow-hidden border border-pink-900/40 hover:border-pink-400 shadow-2xl transition-all cursor-pointer" onclick="openVideo('media/videos/v3.mp4')">
+                        <video class="w-full h-full object-cover opacity-70 group-hover:opacity-100 group-hover:scale-105 transition-all duration-1000" autoplay muted loop playsinline>
                             <source src="media/videos/v3.mp4" type="video/mp4">
                         </video>
-                        <div class="absolute bottom-0 left-0 w-full p-8 bg-gradient-to-t from-black/80 to-transparent">
-                            <span class="text-pink-300 text-xs font-mono tracking-widest">TRADITIONAL</span>
-                            <h4 class="font-cinematic text-3xl">Traditional Vibes</h4>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent pointer-events-none"></div>
+                        <i class="fas fa-play-circle absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-5xl text-white/50 group-hover:text-white transition-colors duration-300 z-10 pointer-events-none"></i>
+                        <div class="absolute bottom-0 left-0 w-full p-6 md:p-8 pointer-events-none z-10">
+                            <span class="text-pink-300 text-[10px] md:text-xs font-mono tracking-widest">TRADITIONAL</span>
+                            <h4 class="font-cinematic text-2xl md:text-3xl text-white">Traditional Vibes</h4>
                         </div>
                     </div>
-                    <!-- Video 2 -->
-                    <div class="group relative aspect-video rounded-3xl overflow-hidden border border-pink-900/40 hover:border-pink-400 shadow-2xl transition-all">
-                        <video class="w-full h-full object-cover opacity-70 group-hover:opacity-100 group-hover:scale-110 transition-all duration-1000" autoplay muted loop playsinline>
+                    <div class="group relative aspect-video rounded-2xl md:rounded-3xl overflow-hidden border border-pink-900/40 hover:border-pink-400 shadow-2xl transition-all cursor-pointer" onclick="openVideo('media/videos/v1.mp4')">
+                        <video class="w-full h-full object-cover opacity-70 group-hover:opacity-100 group-hover:scale-105 transition-all duration-1000" autoplay muted loop playsinline>
                             <source src="media/videos/v1.mp4" type="video/mp4">
                         </video>
-                        <div class="absolute bottom-0 left-0 w-full p-8 bg-gradient-to-t from-black/80 to-transparent">
-                            <span class="text-pink-300 text-xs font-mono tracking-widest">FREESTYLE</span>
-                            <h4 class="font-cinematic text-3xl">College Fest Energy</h4>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent pointer-events-none"></div>
+                        <i class="fas fa-play-circle absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-5xl text-white/50 group-hover:text-white transition-colors duration-300 z-10 pointer-events-none"></i>
+                        <div class="absolute bottom-0 left-0 w-full p-6 md:p-8 pointer-events-none z-10">
+                            <span class="text-pink-300 text-[10px] md:text-xs font-mono tracking-widest">FREESTYLE</span>
+                            <h4 class="font-cinematic text-2xl md:text-3xl text-white">College Fest Energy</h4>
                         </div>
                     </div>
-                    <!-- Video 3 -->
-                    <div class="group relative aspect-video rounded-3xl overflow-hidden border border-pink-900/40 hover:border-pink-400 shadow-2xl transition-all">
-                        <video class="w-full h-full object-cover opacity-70 group-hover:opacity-100 group-hover:scale-110 transition-all duration-1000" autoplay muted loop playsinline>
+                    <div class="group relative aspect-video rounded-2xl md:rounded-3xl overflow-hidden border border-pink-900/40 hover:border-pink-400 shadow-2xl transition-all cursor-pointer" onclick="openVideo('media/videos/v7.mp4')">
+                        <video class="w-full h-full object-cover opacity-70 group-hover:opacity-100 group-hover:scale-105 transition-all duration-1000" autoplay muted loop playsinline>
                             <source src="media/videos/v7.mp4" type="video/mp4">
                         </video>
-                        <div class="absolute bottom-0 left-0 w-full p-8 bg-gradient-to-t from-black/80 to-transparent">
-                            <span class="text-pink-300 text-xs font-mono tracking-widest">CHOREOGRAPHY</span>
-                            <h4 class="font-cinematic text-3xl">Stage Queen</h4>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent pointer-events-none"></div>
+                        <i class="fas fa-play-circle absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-5xl text-white/50 group-hover:text-white transition-colors duration-300 z-10 pointer-events-none"></i>
+                        <div class="absolute bottom-0 left-0 w-full p-6 md:p-8 pointer-events-none z-10">
+                            <span class="text-pink-300 text-[10px] md:text-xs font-mono tracking-widest">CHOREOGRAPHY</span>
+                            <h4 class="font-cinematic text-2xl md:text-3xl text-white">Stage Queen</h4>
                         </div>
                     </div>
-                    <!-- Video 4 -->
-                    <div class="group relative aspect-video rounded-3xl overflow-hidden border border-pink-900/40 hover:border-pink-400 shadow-2xl transition-all">
-                        <video class="w-full h-full object-cover opacity-70 group-hover:opacity-100 group-hover:scale-110 transition-all duration-1000" autoplay muted loop playsinline>
+                    <div class="group relative aspect-video rounded-2xl md:rounded-3xl overflow-hidden border border-pink-900/40 hover:border-pink-400 shadow-2xl transition-all cursor-pointer" onclick="openVideo('media/videos/v9.mp4')">
+                        <video class="w-full h-full object-cover opacity-70 group-hover:opacity-100 group-hover:scale-105 transition-all duration-1000" autoplay muted loop playsinline>
                             <source src="media/videos/v9.mp4" type="video/mp4">
                         </video>
-                        <div class="absolute bottom-0 left-0 w-full p-8 bg-gradient-to-t from-black/80 to-transparent">
-                            <span class="text-pink-300 text-xs font-mono tracking-widest">SOLO</span>
-                            <h4 class="font-cinematic text-3xl">Night Vibes</h4>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent pointer-events-none"></div>
+                        <i class="fas fa-play-circle absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-5xl text-white/50 group-hover:text-white transition-colors duration-300 z-10 pointer-events-none"></i>
+                        <div class="absolute bottom-0 left-0 w-full p-6 md:p-8 pointer-events-none z-10">
+                            <span class="text-pink-300 text-[10px] md:text-xs font-mono tracking-widest">SOLO</span>
+                            <h4 class="font-cinematic text-2xl md:text-3xl text-white">Night Vibes</h4>
                         </div>
                     </div>
-                    <!-- Video 5 -->
-                    <div class="group relative aspect-video rounded-3xl overflow-hidden border border-pink-900/40 hover:border-pink-400 shadow-2xl transition-all">
-                        <video class="w-full h-full object-cover opacity-70 group-hover:opacity-100 group-hover:scale-110 transition-all duration-1000" autoplay muted loop playsinline>
+                    <div class="group relative aspect-video rounded-2xl md:rounded-3xl overflow-hidden border border-pink-900/40 hover:border-pink-400 shadow-2xl transition-all cursor-pointer" onclick="openVideo('media/videos/v1.mp4')">
+                        <video class="w-full h-full object-cover opacity-70 group-hover:opacity-100 group-hover:scale-105 transition-all duration-1000" autoplay muted loop playsinline>
                             <source src="media/videos/v1.mp4" type="video/mp4">
                         </video>
-                        <div class="absolute bottom-0 left-0 w-full p-8 bg-gradient-to-t from-black/80 to-transparent">
-                            <span class="text-pink-300 text-xs font-mono tracking-widest">MEMORIES</span>
-                            <h4 class="font-cinematic text-3xl">Flashback Magic</h4>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent pointer-events-none"></div>
+                        <i class="fas fa-play-circle absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-5xl text-white/50 group-hover:text-white transition-colors duration-300 z-10 pointer-events-none"></i>
+                        <div class="absolute bottom-0 left-0 w-full p-6 md:p-8 pointer-events-none z-10">
+                            <span class="text-pink-300 text-[10px] md:text-xs font-mono tracking-widest">MEMORIES</span>
+                            <h4 class="font-cinematic text-2xl md:text-3xl text-white">Flashback Magic</h4>
                         </div>
                     </div>
-                    <!-- Video 6 -->
-                    <div class="group relative aspect-video rounded-3xl overflow-hidden border border-pink-900/40 hover:border-pink-400 shadow-2xl transition-all">
-                        <video class="w-full h-full object-cover opacity-70 group-hover:opacity-100 group-hover:scale-110 transition-all duration-1000" autoplay muted loop playsinline>
+                    <div class="group relative aspect-video rounded-2xl md:rounded-3xl overflow-hidden border border-pink-900/40 hover:border-pink-400 shadow-2xl transition-all cursor-pointer" onclick="openVideo('media/videos/v7.mp4')">
+                        <video class="w-full h-full object-cover opacity-70 group-hover:opacity-100 group-hover:scale-105 transition-all duration-1000" autoplay muted loop playsinline>
                             <source src="media/videos/v7.mp4" type="video/mp4">
                         </video>
-                        <div class="absolute bottom-0 left-0 w-full p-8 bg-gradient-to-t from-black/80 to-transparent">
-                            <span class="text-pink-300 text-xs font-mono tracking-widest">REHEARSAL</span>
-                            <h4 class="font-cinematic text-3xl">Behind the Glow</h4>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent pointer-events-none"></div>
+                        <i class="fas fa-play-circle absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-5xl text-white/50 group-hover:text-white transition-colors duration-300 z-10 pointer-events-none"></i>
+                        <div class="absolute bottom-0 left-0 w-full p-6 md:p-8 pointer-events-none z-10">
+                            <span class="text-pink-300 text-[10px] md:text-xs font-mono tracking-widest">REHEARSAL</span>
+                            <h4 class="font-cinematic text-2xl md:text-3xl text-white">Behind the Glow</h4>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Bloopers -->
             <div>
                 <div class="flex items-center gap-4 mb-8">
                     <div class="h-px bg-gradient-to-r from-transparent via-rose-400 to-transparent flex-1"></div>
-                    <h3 class="font-cinematic text-3xl tracking-widest text-rose-300">Bloopers &amp; Laughs</h3>
+                    <h3 class="font-cinematic text-xl md:text-3xl tracking-widest text-rose-300 text-center">Bloopers &amp; Laughs</h3>
                     <div class="h-px bg-gradient-to-r from-transparent via-rose-400 to-transparent flex-1"></div>
                 </div>
-                <div class="flex overflow-x-auto gap-6 pb-8 no-scrollbar snap-x">
-                    <div onclick="openVideo('https://www.youtube.com/embed/dQw4w9WgXcQ')" 
-                         class="flex-none w-64 aspect-[9/16] relative rounded-2xl overflow-hidden cursor-pointer group snap-center border border-rose-400/30">
+                <div class="flex justify-center md:justify-start overflow-x-auto gap-6 pb-8 no-scrollbar snap-x">
+                    <div onclick="openVideo('media/videos/v7.mp4')" 
+                         class="flex-none w-56 md:w-64 aspect-[9/16] relative rounded-2xl overflow-hidden cursor-pointer group snap-center border border-rose-400/30 shadow-xl">
                         <img src="media/2.jpeg" class="w-full h-full object-cover transition-all group-hover:scale-110">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-6">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 to-transparent flex items-end p-6 pointer-events-none">
                             <div>
-                                <p class="font-bold text-lg">Epic Fail 😂</p>
-                                <p class="text-xs text-rose-200">Wait for the best part...</p>
+                                <p class="font-bold text-lg text-white">Epic Fail 😂</p>
+                                <p class="text-[10px] md:text-xs text-rose-200">Wait for the best part...</p>
                             </div>
                         </div>
-                        <i class="fas fa-play-circle absolute top-1/2 left-1/2 text-5xl text-white drop-shadow-2xl"></i>
+                        <i class="fas fa-play-circle absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-5xl text-white/70 group-hover:text-white transition-colors drop-shadow-2xl pointer-events-none"></i>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- FINAL HEART SECTION -->
-    <section class="h-screen bg-black flex items-center justify-center relative overflow-hidden">
-        <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,#f9a8d420_0%,transparent_70%)]"></div>
+    <section class="min-h-screen bg-black flex items-center justify-center relative overflow-hidden py-20 px-4">
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,#f9a8d420_0%,transparent_70%)] pointer-events-none"></div>
         
-        <div class="text-center relative z-10">
-            <h2 class="text-6xl font-hand text-[#f9a8d4] mb-6 tracking-widest">Thank you for being the most beautiful chapter of my life</h2>
-            <p class="max-w-md mx-auto text-lg text-[#f8d1e0]/80">— Made with endless love for Nithya on her special day</p>
+        <div class="text-center relative z-10 w-full max-w-4xl">
+            <h2 class="text-4xl md:text-6xl font-hand text-[#f9a8d4] mb-6 tracking-widest leading-tight">Thank you for being the most beautiful chapter of my life</h2>
+            <p class="max-w-md mx-auto text-sm md:text-lg text-[#f8d1e0]/80 mb-16">— Made with endless love for Nithya on her special day</p>
             
-            <button onclick="window.scrollTo({top:0,behavior:'smooth'})" 
-                    class="mt-16 border border-[#f9a8d4]/40 hover:border-[#f9a8d4] px-10 py-5 rounded-full text-xs tracking-[0.2em] transition-all hover:scale-105">
-                BACK TO THE TOP ✨
-            </button>
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-6">
+                <button onclick="window.location.href='masterpiece.html'" 
+                        class="w-full sm:w-auto border border-[#f9a8d4] bg-[#f9a8d4]/10 hover:bg-[#f9a8d4]/20 px-8 py-5 rounded-full text-xs tracking-[0.2em] transition-all hover:scale-105 font-bold shadow-[0_0_20px_rgba(249,168,212,0.3)] cursor-pointer">
+                    VIEW THE MASTERPIECE ✨
+                </button>
+                <button onclick="window.scrollTo({top:0,behavior:'smooth'})" 
+                        class="w-full sm:w-auto border border-[#f9a8d4]/40 hover:border-[#f9a8d4] px-8 py-5 rounded-full text-xs tracking-[0.2em] transition-all hover:scale-105 text-white/70 cursor-pointer">
+                    BACK TO THE TOP
+                </button>
+            </div>
         </div>
     </section>
 
-    <script>
-        // Tailwind script already loaded via CDN
+    <div id="video-modal" class="fixed inset-0 z-[99999] hidden bg-black/95 flex items-center justify-center p-4 md:p-6 opacity-0 transition-opacity duration-300">
+        <button onclick="closeVideo()" class="absolute top-6 right-6 md:top-8 md:right-8 text-white/50 hover:text-white text-4xl md:text-5xl z-50 cursor-pointer p-2">&times;</button>
+        <div class="w-full max-w-5xl aspect-video bg-black rounded-xl md:rounded-2xl overflow-hidden shadow-[0_0_50px_rgba(249,168,212,0.2)] border border-[#f9a8d4]/20 transform scale-95 transition-transform duration-300" id="modal-content">
+            <iframe id="modal-frame" class="w-full h-full" frameborder="0" allowfullscreen></iframe>
+        </div>
+    </div>
 
+    <script>
         // Custom cursor
         const dot = document.querySelector('.cursor-dot');
         const outline = document.querySelector('.cursor-outline');
-        document.addEventListener('mousemove', e => {
-            dot.style.left = outline.style.left = `${e.clientX}px`;
-            dot.style.top = outline.style.top = `${e.clientY}px`;
-        });
+        if (window.innerWidth >= 768) {
+            document.addEventListener('mousemove', e => {
+                dot.style.left = outline.style.left = `${e.clientX}px`;
+                dot.style.top = outline.style.top = `${e.clientY}px`;
+            });
+        }
 
         // Lenis smooth scroll
-        const lenis = new Lenis({ duration: 1.4, smoothWheel: true });
-        function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
-        requestAnimationFrame(raf);
+        let lenis;
+        if (window.innerWidth >= 768) {
+            lenis = new Lenis({ duration: 1.4, smoothWheel: true });
+            function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+            requestAnimationFrame(raf);
+        }
 
         // GSAP + ScrollTrigger
         gsap.registerPlugin(ScrollTrigger);
@@ -394,6 +396,13 @@
             });
         });
 
+        gsap.utils.toArray('.fade-up-elem').forEach((elem) => {
+            gsap.from(elem, {
+                scrollTrigger: { trigger: elem, start: "top 85%" },
+                y: 50, opacity: 0, duration: 1.2, ease: "power3.out"
+            });
+        });
+
         // Floating hearts
         function createHeart() {
             const heart = document.createElement('div');
@@ -405,15 +414,15 @@
             
             setTimeout(() => heart.remove(), 15000);
         }
-        setInterval(createHeart, 180);
+        setInterval(createHeart, 300); // Reduced frequency slightly for performance
 
         // Fireflies in golden hour
         const ff = document.getElementById('fireflies');
-        for (let i = 0; i < 25; i++) {
+        for (let i = 0; i < 20; i++) {
             const f = document.createElement('div');
             f.className = 'firefly';
             f.style.left = Math.random() * 100 + '%';
-            f.style.top = Math.random() * 60 + '%';
+            f.style.top = Math.random() * 80 + '%';
             f.style.animationDelay = Math.random() * 8 + 's';
             ff.appendChild(f);
         }
@@ -451,7 +460,7 @@
                 }
             }
 
-            for (let i = 0; i < 220; i++) {
+            for (let i = 0; i < 150; i++) { // Reduced count for performance
                 particles.push(new Particle());
             }
 
@@ -468,49 +477,66 @@
             animateConfetti();
         }
 
-        // Trigger confetti on load + every 8 seconds once
+        // Trigger confetti on load
         window.onload = () => {
             setTimeout(() => {
                 launchConfetti();
             }, 800);
         };
 
-        // Video modal (kept exactly as original)
-        let vidModal, vidFrame;
+        // Video modal 
+        const vidModal = document.getElementById('video-modal');
+        const vidFrame = document.getElementById('modal-frame');
+        const modalContent = document.getElementById('modal-content');
+
         window.openVideo = (url) => {
-            if (!vidModal) {
-                vidModal = document.createElement('div');
-                vidModal.className = 'fixed inset-0 z-[99999] bg-black/95 flex items-center justify-center p-6';
-                vidModal.innerHTML = `
-                    <button onclick="closeVideo()" class="absolute top-8 right-8 text-white text-5xl z-50">&times;</button>
-                    <div class="w-full max-w-5xl aspect-video bg-black rounded-2xl overflow-hidden">
-                        <iframe id="modal-frame" class="w-full h-full" frameborder="0" allowfullscreen></iframe>
-                    </div>
-                `;
-                document.body.appendChild(vidModal);
-                vidFrame = document.getElementById('modal-frame');
-            }
+            if (!vidModal) return;
             vidModal.style.display = 'flex';
-            vidFrame.src = url + "?autoplay=1";
-            lenis.stop();
-        };
-        window.closeVideo = () => {
-            if (vidModal) {
-                vidModal.style.display = 'none';
-                vidFrame.src = '';
-                lenis.start();
+            
+            requestAnimationFrame(() => {
+                vidModal.classList.remove('opacity-0');
+                modalContent.classList.remove('scale-95');
+                modalContent.classList.add('scale-100');
+            });
+            
+            // Check if it's an MP4 file to play directly, else use iframe src
+            if(url.endsWith('.mp4')) {
+                vidFrame.outerHTML = `<video id="modal-frame" class="w-full h-full object-contain" src="${url}" autoplay controls playsinline></video>`;
+            } else {
+                vidFrame.outerHTML = `<iframe id="modal-frame" class="w-full h-full" src="${url}?autoplay=1" frameborder="0" allowfullscreen></iframe>`;
             }
+            
+            if (typeof lenis !== 'undefined') lenis.stop();
+            document.body.style.overflow = 'hidden';
         };
 
-        // Keyboard escape
+        window.closeVideo = () => {
+            if (!vidModal) return;
+            vidModal.classList.add('opacity-0');
+            modalContent.classList.remove('scale-100');
+            modalContent.classList.add('scale-95');
+            
+            setTimeout(() => {
+                vidModal.style.display = 'none';
+                const frame = document.getElementById('modal-frame');
+                if(frame) frame.src = '';
+            }, 300);
+            
+            if (typeof lenis !== 'undefined') lenis.start();
+            document.body.style.overflow = '';
+        };
+
+        // Keyboard escape & click outside
         document.addEventListener('keydown', e => { if (e.key === "Escape") closeVideo(); });
+        if(vidModal) vidModal.addEventListener('click', (e) => { if (e.target === vidModal) closeVideo(); });
 
         // Final hero animation
         gsap.from("#hero-name", {
-            y: 120,
+            y: 80,
             opacity: 0,
-            duration: 1.8,
-            ease: "power4.out"
+            duration: 1.5,
+            ease: "power4.out",
+            delay: 0.2
         });
     </script>
 </body>
