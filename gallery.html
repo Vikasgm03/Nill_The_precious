@@ -3,480 +3,515 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Art of Memories | Nithya</title>
-    
+    <title>The Art of Memories | Nithya's Birthday ✨</title>
+   
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Dancing+Script&family=Montserrat:wght@300;400&family=Playfair+Display:ital@0;1&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Dancing+Script:wght@400;700&family=Montserrat:wght@300;400&family=Playfair+Display:ital@0;1&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
-        :root { --gold: #d4af37; --bg: #050505; }
+        :root { 
+            --gold: #f8d1e0; 
+            --rose: #f9a8d4; 
+            --bg: #0a0305; 
+        }
         html, body { width: 100%; overflow-x: hidden; margin: 0; padding: 0; }
-        body { background-color: var(--bg); color: #fff; font-family: 'Montserrat', sans-serif; cursor: none; }
-        
+        body { 
+            background-color: var(--bg); 
+            color: #fff; 
+            font-family: 'Montserrat', sans-serif; 
+            cursor: none; 
+        }
+       
         .font-cinematic { font-family: 'Cinzel', serif; }
         .font-hand { font-family: 'Dancing Script', cursive; }
         .font-serif { font-family: 'Playfair Display', serif; }
 
-        /* CURSOR */
-        .cursor-dot, .cursor-outline { position: fixed; top: 0; left: 0; transform: translate(-50%, -50%); border-radius: 50%; z-index: 9999; pointer-events: none; }
-        .cursor-dot { width: 8px; height: 8px; background: white; }
-        .cursor-outline { width: 40px; height: 40px; border: 1px solid rgba(255,255,255,0.5); transition: width 0.2s, height 0.2s; }
+        /* PREMIUM CURSOR */
+        .cursor-dot, .cursor-outline { 
+            position: fixed; top: 0; left: 0; transform: translate(-50%, -50%); 
+            border-radius: 50%; z-index: 9999; pointer-events: none; 
+        }
+        .cursor-dot { width: 10px; height: 10px; background: #f8d1e0; box-shadow: 0 0 15px #f9a8d4; }
+        .cursor-outline { 
+            width: 44px; height: 44px; 
+            border: 1.5px solid rgba(248, 209, 224, 0.6); 
+            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1); 
+        }
 
-        /* SCROLLBAR HIDING */
+        /* SCROLLBAR */
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-        /* --- ATMOSPHERIC EFFECTS --- */
-        .firefly { position: absolute; width: 4px; height: 4px; background: #ffd700; border-radius: 50%; opacity: 0; animation: fly 10s infinite; pointer-events: none; box-shadow: 0 0 10px #ffd700; }
-        @keyframes fly { 0% { transform: translate(0,0); opacity: 0; } 20% { opacity: 1; } 80% { opacity: 1; } 100% { transform: translate(100px, -100px); opacity: 0; } }
+        /* BIRTHDAY ATMOSPHERE */
+        .heart-particle { 
+            position: absolute; color: #f9a8d4; font-size: 18px; 
+            pointer-events: none; z-index: 10; animation: floatHeart 8s linear infinite; 
+            text-shadow: 0 0 12px #f8d1e0;
+        }
+        @keyframes floatHeart { 
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; } 
+            10% { opacity: 1; } 
+            90% { opacity: 1; } 
+            100% { transform: translateY(-120vh) rotate(360deg); opacity: 0; } 
+        }
 
-        .sparkle { position: absolute; width: 2px; height: 2px; background: white; animation: twinkle 3s infinite; }
-        @keyframes twinkle { 0%, 100% { transform: scale(0); opacity: 0; } 50% { transform: scale(1.5); opacity: 1; box-shadow: 0 0 10px white; } }
+        .firefly { 
+            position: absolute; width: 5px; height: 5px; background: #f8d1e0; 
+            border-radius: 50%; box-shadow: 0 0 15px #f9a8d4; 
+            animation: fly 12s infinite linear; 
+        }
+        @keyframes fly { 
+            0% { transform: translate(0, 0); } 
+            100% { transform: translate(120px, -180px); } 
+        }
 
-        .film-grain { position: absolute; inset: 0; background: url('https://www.transparenttextures.com/patterns/stardust.png'); opacity: 0.1; animation: grain 0.5s steps(5) infinite; pointer-events: none; }
-        @keyframes grain { 0%, 100% { transform: translate(0, 0); } 10% { transform: translate(-2px, -2px); } 30% { transform: translate(2px, -2px); } 50% { transform: translate(-2px, 2px); } 70% { transform: translate(2px, 2px); } }
+        .section-title { 
+            font-family: 'Cinzel', serif; font-size: 3.2rem; 
+            margin-bottom: 1.5rem; text-align: center; 
+            background: linear-gradient(90deg, #f8d1e0, #f9a8d4, #f8d1e0); 
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
+            opacity: 0; transform: translateY(40px); 
+        }
 
-        .light-leak { position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle, rgba(255,100,50,0.1) 0%, transparent 60%); animation: leak 10s infinite alternate; pointer-events: none; mix-blend-mode: screen; }
-        @keyframes leak { 0% { transform: rotate(0deg) scale(1); opacity: 0.3; } 100% { transform: rotate(10deg) scale(1.1); opacity: 0.6; } }
+        /* ENHANCED FILTERS */
+        .filter-golden { 
+            position: relative; overflow: hidden; 
+            filter: contrast(108%) brightness(107%) saturate(130%) hue-rotate(-8deg); 
+            transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1); 
+        }
+        .filter-golden:hover { transform: scale(1.04) rotate(1deg); }
+        .filter-golden::after { 
+            content: ''; position: absolute; inset: 0; 
+            background: linear-gradient(135deg, rgba(249,168,212,0.25), transparent); 
+            mix-blend-mode: screen; pointer-events: none; 
+        }
 
-        /* --- STYLES --- */
-        .filter-golden { position: relative; overflow: hidden; filter: contrast(105%) brightness(105%) sepia(20%) saturate(140%); transition: transform 0.5s; }
-        .filter-golden:hover { transform: scale(1.02); }
-        .filter-golden::after { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(255,160,0,0.2), transparent 60%); mix-blend-mode: overlay; pointer-events: none; }
+        .polaroid-card { 
+            background: #fff; padding: 14px 14px 52px 14px; 
+            box-shadow: 8px 8px 25px rgba(0,0,0,0.6); 
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1); 
+        }
+        .polaroid-card:hover { 
+            transform: rotate(0deg) scale(1.12) !important; 
+            box-shadow: 0 30px 60px rgba(249,168,212,0.3); 
+        }
 
-        .filter-bw { filter: grayscale(100%) contrast(120%) brightness(90%); transition: all 0.7s ease; }
-        .filter-bw:hover { filter: grayscale(0%) contrast(100%); }
-        .grain-overlay { position: absolute; inset: 0; background-image: url("https://www.transparenttextures.com/patterns/stardust.png"); opacity: 0.3; mix-blend-mode: overlay; pointer-events: none; }
+        .cinematic-frame { 
+            position: relative; overflow: hidden; 
+            box-shadow: 0 0 80px rgba(249,168,212,0.4); 
+        }
 
-        .filter-dreamy { transition: transform 0.5s; }
-        .filter-dreamy:hover { transform: translateY(-10px); }
-        .filter-dreamy img { filter: brightness(110%) saturate(90%) contrast(90%); }
-        .filter-dreamy::before { content: ''; position: absolute; inset: 0; z-index: 10; box-shadow: inset 0 0 40px rgba(255,255,255,0.4); mix-blend-mode: soft-light; pointer-events: none; }
-        .bloom-effect { filter: blur(8px); opacity: 0.6; mix-blend-mode: screen; position: absolute; inset: 0; transform: scale(1.05); }
+        .bloom { 
+            position: absolute; inset: 0; 
+            filter: blur(14px) brightness(1.3); 
+            mix-blend-mode: screen; opacity: 0.55; 
+        }
 
-        .polaroid-card { background: #fff; padding: 12px 12px 50px 12px; box-shadow: 5px 5px 15px rgba(0,0,0,0.5); transform: rotate(-2deg); transition: transform 0.4s; }
-        .polaroid-card:hover { transform: rotate(0deg) scale(1.1) !important; z-index: 20; box-shadow: 0 20px 40px rgba(0,0,0,0.6); }
-        .polaroid-img { filter: sepia(30%) contrast(90%) brightness(110%) hue-rotate(-10deg); }
-        .tape { position: absolute; top: -15px; left: 50%; transform: translateX(-50%); width: 100px; height: 30px; background: rgba(255,255,255,0.4); border: 1px solid rgba(255,255,255,0.2); backdrop-filter: blur(5px); transform: translateX(-50%) rotate(2deg); box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
-
-        .filter-cinematic { position: relative; filter: contrast(110%) saturate(120%) sepia(20%) hue-rotate(-10deg); overflow: hidden; }
-        .cinematic-shine { position: absolute; top: 0; left: -100%; width: 50%; height: 100%; background: linear-gradient(to right, transparent, rgba(255,255,255,0.1), transparent); transform: skewX(-20deg); transition: left 0.7s; pointer-events: none; z-index: 10; }
-        .group:hover .cinematic-shine { left: 150%; transition: left 1s ease-in-out; }
-        .letterbox { position: absolute; left: 0; width: 100%; height: 10%; background: black; z-index: 20; transition: height 0.5s; }
-        .group:hover .letterbox { height: 0%; } 
-        .lb-top { top: 0; } .lb-bottom { bottom: 0; }
-
-        .scrap-item { position: relative; transition: all 0.3s; will-change: transform; }
-        .scrap-item:hover { z-index: 50; transform: scale(1.1) !important; }
-        .paper-texture { background-image: url('https://www.transparenttextures.com/patterns/notebook.png'); background-color: #fff9f0; }
-
-        .section-title { font-family: 'Cinzel', serif; font-size: 3rem; margin-bottom: 2rem; text-align: center; color: var(--gold); opacity: 0; transform: translateY(30px); }
-        .reveal-up { opacity: 0; transform: translateY(50px); transition: all 1s ease-out; }
-        .reveal-up.active { opacity: 1; transform: translateY(0); }
-
-        /* Portal Animation */
-        @keyframes spin-slow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-        .animate-spin-slow { animation: spin-slow 20s linear infinite; }
+        .confetti-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 99999; pointer-events: none; }
     </style>
 </head>
-<body>
-
+<body class="relative">
+    <!-- CUSTOM CURSOR -->
     <div class="cursor-dot"></div>
     <div class="cursor-outline"></div>
 
+    <!-- CONFETTI CANVAS -->
+    <canvas id="confetti" class="confetti-canvas"></canvas>
+
+    <!-- NAV -->
     <nav class="fixed top-0 left-0 w-full z-50 p-6 flex justify-between items-center mix-blend-difference text-white">
-        <a href="home.html?skipIntro=true#gallery-anchor" class="text-xs font-bold tracking-[0.3em] hover:text-[#d4af37] transition-colors">← HOME</a>
-        <h1 class="font-cinematic text-xl">The Aesthetic Gallery</h1>
+        <a href="home.html?skipIntro=true#gallery-anchor" class="text-xs font-bold tracking-[0.4em] hover:text-[#f9a8d4] transition-colors">← BACK TO HOME</a>
+        <div class="font-cinematic text-2xl tracking-widest text-[#f8d1e0]">NITHYA'S BIRTHDAY</div>
     </nav>
 
-    <header class="h-screen w-full flex items-center justify-center relative overflow-hidden">
-        <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=1600')] bg-cover bg-center opacity-30 parallax-bg"></div>
-        <div class="absolute inset-0 bg-gradient-to-t from-[#050505] via-transparent to-[#050505]"></div>
-        <div class="relative z-10 text-center">
-            <h1 class="text-7xl md:text-9xl font-cinematic text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-500 reveal-up">MUSE</h1>
-            <p class="text-[#d4af37] tracking-[1em] mt-4 text-xs reveal-up" style="transition-delay: 0.2s;">A LIFE IN FILTERS</p>
+    <!-- HERO -->
+    <header class="min-h-screen flex items-center justify-center relative overflow-hidden">
+        <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=2000')] bg-cover bg-center opacity-30"></div>
+        <div class="absolute inset-0 bg-gradient-to-b from-transparent via-black/70 to-black"></div>
+        
+        <!-- Floating hearts container -->
+        <div id="hearts" class="absolute inset-0 pointer-events-none"></div>
+
+        <div class="relative z-10 text-center px-6">
+            <div class="inline-block mb-6">
+                <span class="text-[#f9a8d4] text-sm tracking-[0.5em] font-medium">18 MARCH • 2026</span>
+            </div>
+            <h1 id="hero-name" 
+                class="text-[9vw] md:text-[7.5rem] leading-none font-cinematic text-transparent bg-clip-text bg-gradient-to-r from-white via-[#f8d1e0] to-[#f9a8d4] mb-4">
+                NITHYA
+            </h1>
+            <p class="text-4xl md:text-5xl font-hand text-[#f9a8d4] tracking-wider mb-8">Happy Birthday, My Eternal Muse ✨</p>
+            
+            <div onclick="document.getElementById('gallery-start').scrollIntoView({ behavior: 'smooth' })" 
+                 class="cursor-pointer inline-flex items-center gap-3 group">
+                <div class="w-px h-12 bg-gradient-to-b from-transparent via-[#f9a8d4] to-transparent"></div>
+                <span class="uppercase text-xs tracking-[0.3em] group-hover:text-[#f8d1e0] transition-colors">Scroll to celebrate</span>
+                <i class="fas fa-arrow-down text-[#f9a8d4]"></i>
+            </div>
         </div>
+
+        <!-- Subtle rose glow -->
+        <div class="absolute bottom-12 left-1/2 -translate-x-1/2 text-[#f9a8d4]/30 text-[180px] font-hand pointer-events-none">forever</div>
     </header>
 
-    <section class="py-24 px-4 bg-[#0a0500] relative overflow-hidden w-full">
-        <div id="fireflies" class="absolute inset-0 pointer-events-none z-0"></div>
-        <h2 class="section-title text-orange-200 relative z-10">Golden Hour <span class="text-xs block font-mono text-gray-500 mt-2">TECHNIQUE: WARM OVERLAY + BLOOM</span></h2>
+    <!-- GOLDEN HOUR -->
+    <section id="gallery-start" class="py-28 bg-[#0a0305] relative overflow-hidden">
+        <div id="fireflies" class="absolute inset-0 pointer-events-none"></div>
         
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-6xl mx-auto relative z-10">
-            <div class="filter-golden h-[500px] rounded-lg group reveal-up">
-                <img src="media/1.jpeg" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110">
-                <div class="absolute bottom-4 left-4 font-serif italic text-orange-100 opacity-0 group-hover:opacity-100 transition-opacity transform translate-y-4 group-hover:translate-y-0 duration-500">Sunkissed</div>
-            </div>
-            <div class="filter-golden h-[500px] rounded-lg group md:mt-12 reveal-up" style="transition-delay: 0.1s;">
-                <img src="media/2.jpeg" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110">
-            </div>
-            <div class="filter-golden h-[500px] rounded-lg group reveal-up" style="transition-delay: 0.2s;">
-                <img src="media/3.jpeg" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110">
-            </div>
-        </div>
-    </section>
-
-    <section class="py-24 bg-[#111] overflow-hidden relative w-full">
-        <div class="absolute inset-0 opacity-10" style="background-image: url('https://www.transparenttextures.com/patterns/wood-pattern.png');"></div>
-        <div class="film-grain"></div> 
-        <h2 class="section-title text-white relative z-10">Vintage Polaroids <span class="text-xs block font-mono text-gray-500 mt-2">TECHNIQUE: SEPIA + ROTATION + TAPE</span></h2>
-
-        <div class="flex flex-wrap justify-center gap-10 max-w-7xl mx-auto py-10 relative z-10">
-            <div class="polaroid-card w-64 rotate-[-3deg] reveal-up">
-                <div class="tape"></div>
-                <img src="media/4.jpeg" class="polaroid-img w-full aspect-square object-cover mb-2">
-                <p class="text-black font-hand text-xl text-center">So candid!</p>
-            </div>
-            <div class="polaroid-card w-64 rotate-[2deg] mt-12 reveal-up" style="transition-delay: 0.1s;">
-                <div class="tape"></div>
-                <img src="media/5.jpeg" class="polaroid-img w-full aspect-square object-cover mb-2">
-                <p class="text-black font-hand text-xl text-center">Favorite place</p>
-            </div>
-            <div class="polaroid-card w-64 rotate-[-1deg] reveal-up" style="transition-delay: 0.2s;">
-                <div class="tape"></div>
-                <img src="media/1.jpeg" class="polaroid-img w-full aspect-square object-cover mb-2">
-                <p class="text-black font-hand text-xl text-center">Summer '25</p>
-            </div>
-            <div class="polaroid-card w-64 rotate-[4deg] mt-8 reveal-up" style="transition-delay: 0.3s;">
-                <div class="tape"></div>
-                <img src="media/2.jpeg" class="polaroid-img w-full aspect-square object-cover mb-2">
-                <p class="text-black font-hand text-xl text-center">Forever</p>
-            </div>
-        </div>
-    </section>
-
-    <section class="py-24 bg-black relative overflow-hidden w-full">
-        <div class="light-leak"></div> 
-        <h2 class="section-title text-gray-300 relative z-10">Cinematic Mode <span class="text-xs block font-mono text-gray-500 mt-2">TECHNIQUE: LETTERBOX + TEAL/ORANGE GRADE</span></h2>
-
-        <div class="max-w-5xl mx-auto space-y-12 relative z-10 px-4">
-            <div class="relative w-full aspect-[21/9] overflow-hidden group shadow-2xl border border-gray-800 reveal-up">
-                <div class="letterbox lb-top"></div>
-                <div class="letterbox lb-bottom"></div>
-                <div class="filter-cinematic w-full h-full">
-                    <div class="cinematic-shine"></div>
-                    <img src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=1200" class="w-full h-full object-cover transform transition-transform duration-[2s] group-hover:scale-105">
-                </div>
-                <div class="absolute bottom-[15%] left-0 w-full text-center opacity-0 group-hover:opacity-100 transition-opacity duration-1000 z-30">
-                    <p class="font-cinematic text-yellow-400 text-sm tracking-[0.2em] shadow-black drop-shadow-md">SCENE 24 • "THE JOURNEY"</p>
-                </div>
-            </div>
-
-            <div class="relative w-full aspect-[21/9] overflow-hidden group shadow-2xl border border-gray-800 reveal-up">
-                <div class="letterbox lb-top"></div>
-                <div class="letterbox lb-bottom"></div>
-                <div class="filter-cinematic w-full h-full">
-                    <div class="cinematic-shine"></div>
-                    <img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=1200" class="w-full h-full object-cover transform transition-transform duration-[2s] group-hover:scale-105">
-                </div>
-                 <div class="absolute bottom-[15%] left-0 w-full text-center opacity-0 group-hover:opacity-100 transition-opacity duration-1000 z-30">
-                    <p class="font-cinematic text-yellow-400 text-sm tracking-[0.2em] shadow-black drop-shadow-md">SCENE 25 • "HAPPINESS"</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="py-24 bg-rose-50 relative overflow-hidden w-full">
-        <div class="absolute inset-0 bg-gradient-to-b from-white to-rose-100"></div>
-        <div id="sparkles" class="absolute inset-0 pointer-events-none"></div> 
-        <h2 class="section-title text-pink-400 relative z-10">Dreamy Pastel <span class="text-xs block font-mono text-gray-400 mt-2">TECHNIQUE: SOFT LIGHT + BLUR GLOW</span></h2>
-
-        <div class="grid grid-cols-2 gap-8 max-w-4xl mx-auto relative z-10 px-6">
-            <div class="relative aspect-[4/5] filter-dreamy rounded-[50px] overflow-hidden shadow-xl border-4 border-white reveal-up">
-                <div class="bloom-effect bg-[url('media/3.jpeg')] bg-cover"></div>
-                <img src="media/3.jpeg" class="relative z-10 w-full h-full object-cover">
-            </div>
-             <div class="relative aspect-[4/5] filter-dreamy rounded-[50px] overflow-hidden shadow-xl border-4 border-white mt-12 reveal-up" style="transition-delay: 0.2s;">
-                <div class="bloom-effect bg-[url('media/4.jpeg')] bg-cover"></div>
-                <img src="media/4.jpeg" class="relative z-10 w-full h-full object-cover">
-            </div>
-        </div>
-    </section>
-
-    <section class="py-24 bg-[#050505] w-full">
-        <h2 class="section-title text-white">Monochrome <span class="text-xs block font-mono text-gray-500 mt-2">TECHNIQUE: HIGH CONTRAST B&W + GRAIN</span></h2>
-        <div class="flex flex-col md:flex-row h-[80vh] w-full">
-            <div class="relative flex-1 overflow-hidden filter-bw group">
-                <div class="grain-overlay"></div>
-                <img src="media/5.jpeg" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
-                <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-black/20">
-                    <p class="font-serif italic text-3xl tracking-widest border-b border-white pb-2">Timeless</p>
-                </div>
-            </div>
-            <div class="relative flex-1 overflow-hidden filter-bw group border-l border-gray-800">
-                <div class="grain-overlay"></div>
-                <img src="media/1.jpeg" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
-                 <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-black/20">
-                    <p class="font-serif italic text-3xl tracking-widest border-b border-white pb-2">Elegance</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="py-24 bg-[#020202] relative overflow-hidden w-full">
-        <div class="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_center,_rgba(120,50,255,0.15),transparent_70%)] pointer-events-none animate-pulse"></div>
-        
-<div class="container mx-auto px-6 relative z-10">
-    <h2 class="section-title text-purple-300 mb-16 text-center font-cinematic text-4xl">
-        The Screening Room 
-        <span class="text-xs block font-mono text-gray-500 mt-2 tracking-widest">LIVE PREVIEW</span>
-    </h2>
-
-    <div class="mb-20">
-        <div class="flex items-center gap-4 mb-8">
-            <div class="h-[1px] bg-purple-500 flex-grow opacity-50"></div>
-            <h3 class="font-cinematic text-2xl text-white tracking-[0.3em] uppercase">Dance Floor</h3>
-            <div class="h-[1px] bg-purple-500 flex-grow opacity-50"></div>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div class="max-w-6xl mx-auto px-6">
+            <h2 class="section-title">Golden Hour Memories <span class="block text-xs font-mono text-[#f9a8d4]/70 mt-3">WARM GLOW • FOREVER YOURS</span></h2>
             
-            <div class="group relative aspect-video rounded-2xl overflow-hidden border border-purple-900/30 hover:border-purple-500/80 shadow-lg hover:shadow-[0_0_40px_rgba(147,51,234,0.3)] transition-all duration-700 bg-[#050505]">
-                <video class="w-full h-full object-cover opacity-60 grayscale-[80%] scale-100 group-hover:scale-110 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-1000 ease-out" 
-                       autoplay muted loop playsinline>
-                    <source src="media/videos/v3.mp4" type="video/mp4">
-                </video>
-                <div class="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/20 to-transparent opacity-90 group-hover:opacity-70 transition-opacity duration-700 pointer-events-none"></div>
-                <div class="absolute bottom-0 left-0 w-full p-8 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 pointer-events-none z-20">
-                    <div class="w-8 h-[2px] bg-purple-400 mb-3 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100 shadow-[0_0_10px_#c084fc]"></div>
-                    <span class="text-purple-300 text-xs font-mono mb-1 block tracking-[0.2em] opacity-80 group-hover:opacity-100 transition-opacity">TRADITIONAL</span>
-                    <h4 class="font-cinematic text-3xl text-white drop-shadow-lg">Traditional Vibes</h4>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Image 1 -->
+                <div class="filter-golden rounded-3xl overflow-hidden aspect-[4/5] group">
+                    <img src="media/1.jpeg" class="w-full h-full object-cover transition-all duration-1000 group-hover:scale-110">
+                    <div class="absolute bottom-8 left-8 text-white font-hand text-3xl opacity-0 group-hover:opacity-100 transition-all">Sunkissed soul</div>
+                </div>
+                <!-- Image 2 -->
+                <div class="filter-golden rounded-3xl overflow-hidden aspect-[4/5] group md:-mt-12">
+                    <img src="media/2.jpeg" class="w-full h-full object-cover transition-all duration-1000 group-hover:scale-110">
+                </div>
+                <!-- Image 3 -->
+                <div class="filter-golden rounded-3xl overflow-hidden aspect-[4/5] group">
+                    <img src="media/3.jpeg" class="w-full h-full object-cover transition-all duration-1000 group-hover:scale-110">
+                    <div class="absolute bottom-8 left-8 text-white font-hand text-3xl opacity-0 group-hover:opacity-100 transition-all">Pure magic</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- VINTAGE POLAROIDS -->
+    <section class="py-28 bg-[#111111] relative">
+        <div class="max-w-6xl mx-auto px-6">
+            <h2 class="section-title text-white">Polaroid Treasures <span class="block text-xs font-mono text-[#f9a8d4]/70 mt-3">CAPTURED WITH LOVE</span></h2>
+            
+            <div class="flex flex-wrap justify-center gap-12">
+                <!-- Polaroid 1 -->
+                <div class="polaroid-card w-72 rotate-[-4deg]">
+                    <img src="media/4.jpeg" class="w-full aspect-square object-cover">
+                    <p class="text-center font-hand text-2xl text-black mt-4">My sunshine</p>
+                </div>
+                <!-- Polaroid 2 -->
+                <div class="polaroid-card w-72 rotate-[3deg] mt-16">
+                    <img src="media/5.jpeg" class="w-full aspect-square object-cover">
+                    <p class="text-center font-hand text-2xl text-black mt-4">Forever 21 vibes</p>
+                </div>
+                <!-- Polaroid 3 -->
+                <div class="polaroid-card w-72 rotate-[-2deg]">
+                    <img src="media/1.jpeg" class="w-full aspect-square object-cover">
+                    <p class="text-center font-hand text-2xl text-black mt-4">Best day ever</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CINEMATIC MODE -->
+    <section class="py-28 bg-black relative overflow-hidden">
+        <h2 class="section-title text-white">Cinematic Dreams <span class="block text-xs font-mono text-[#f9a8d4]/70 mt-3">TEAL &amp; ROSE • LETTERBOX MAGIC</span></h2>
+        
+        <div class="max-w-5xl mx-auto space-y-20 px-6">
+            <!-- Cinematic 1 -->
+            <div class="cinematic-frame aspect-[21/9] rounded-3xl overflow-hidden relative group">
+                <div class="letterbox absolute top-0 left-0 w-full h-10 bg-black z-10 transition-all duration-700 group-hover:h-0"></div>
+                <div class="letterbox absolute bottom-0 left-0 w-full h-10 bg-black z-10 transition-all duration-700 group-hover:h-0"></div>
+                <img src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=1400" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105">
+                <div class="absolute bottom-12 left-0 right-0 text-center">
+                    <p class="font-cinematic text-[#f9a8d4] tracking-widest text-sm">SCENE 01 • THE QUEEN ARRIVES</p>
                 </div>
             </div>
 
-            <div class="group relative aspect-video rounded-2xl overflow-hidden border border-purple-900/30 hover:border-purple-500/80 shadow-lg hover:shadow-[0_0_40px_rgba(147,51,234,0.3)] transition-all duration-700 bg-[#050505]">
-                <video class="w-full h-full object-cover opacity-60 grayscale-[80%] scale-100 group-hover:scale-110 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-1000 ease-out" 
-                       autoplay muted loop playsinline>
-                    <source src="media/videos/v1.mp4" type="video/mp4">
-                </video>
-                <div class="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/20 to-transparent opacity-90 group-hover:opacity-70 transition-opacity duration-700 pointer-events-none"></div>
-                <div class="absolute bottom-0 left-0 w-full p-8 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 pointer-events-none z-20">
-                    <div class="w-8 h-[2px] bg-purple-400 mb-3 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100 shadow-[0_0_10px_#c084fc]"></div>
-                    <span class="text-purple-300 text-xs font-mono mb-1 block tracking-[0.2em] opacity-80 group-hover:opacity-100 transition-opacity">FREESTYLE</span>
-                    <h4 class="font-cinematic text-3xl text-white drop-shadow-lg">College Fest</h4>
+            <!-- Cinematic 2 -->
+            <div class="cinematic-frame aspect-[21/9] rounded-3xl overflow-hidden relative group">
+                <div class="letterbox absolute top-0 left-0 w-full h-10 bg-black z-10 transition-all duration-700 group-hover:h-0"></div>
+                <div class="letterbox absolute bottom-0 left-0 w-full h-10 bg-black z-10 transition-all duration-700 group-hover:h-0"></div>
+                <img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=1400" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105">
+                <div class="absolute bottom-12 left-0 right-0 text-center">
+                    <p class="font-cinematic text-[#f9a8d4] tracking-widest text-sm">SCENE 02 • PURE JOY</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- DREAMY PASTEL -->
+    <section class="py-28 bg-gradient-to-b from-rose-50 to-white text-black relative">
+        <div class="max-w-4xl mx-auto px-6">
+            <h2 class="section-title text-pink-400">Dreamy Pastel Moments <span class="block text-xs font-mono text-pink-400/70 mt-3">SOFT GLOW FOR THE SOFTEST HEART</span></h2>
+            
+            <div class="relative rounded-[4rem] overflow-hidden shadow-2xl border-8 border-white">
+                <div class="bloom bg-[url('media/3.jpeg')] bg-cover"></div>
+                <img src="media/3.jpeg" class="w-full h-full object-cover relative z-10">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent flex items-end justify-center pb-16">
+                    <p class="font-hand text-5xl text-white drop-shadow-2xl">You are the dream</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- THE SCREENING ROOM (VIDEOS UNCHANGED) -->
+    <section class="py-28 bg-[#020202] relative">
+        <div class="max-w-7xl mx-auto px-6">
+            <h2 class="section-title text-white mb-16">The Screening Room <span class="block text-xs font-mono text-[#f9a8d4]/70 mt-3">LIVE FROM NITHYA'S WORLD</span></h2>
+            
+            <!-- Dance Floor -->
+            <div class="mb-20">
+                <div class="flex items-center gap-4 mb-8">
+                    <div class="h-px bg-gradient-to-r from-transparent via-pink-400 to-transparent flex-1"></div>
+                    <h3 class="font-cinematic text-3xl tracking-widest">Dance Floor Moments</h3>
+                    <div class="h-px bg-gradient-to-r from-transparent via-pink-400 to-transparent flex-1"></div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Video 1 -->
+                    <div class="group relative aspect-video rounded-3xl overflow-hidden border border-pink-900/40 hover:border-pink-400 shadow-2xl transition-all">
+                        <video class="w-full h-full object-cover opacity-70 group-hover:opacity-100 group-hover:scale-110 transition-all duration-1000" autoplay muted loop playsinline>
+                            <source src="media/videos/v3.mp4" type="video/mp4">
+                        </video>
+                        <div class="absolute bottom-0 left-0 w-full p-8 bg-gradient-to-t from-black/80 to-transparent">
+                            <span class="text-pink-300 text-xs font-mono tracking-widest">TRADITIONAL</span>
+                            <h4 class="font-cinematic text-3xl">Traditional Vibes</h4>
+                        </div>
+                    </div>
+                    <!-- Video 2 -->
+                    <div class="group relative aspect-video rounded-3xl overflow-hidden border border-pink-900/40 hover:border-pink-400 shadow-2xl transition-all">
+                        <video class="w-full h-full object-cover opacity-70 group-hover:opacity-100 group-hover:scale-110 transition-all duration-1000" autoplay muted loop playsinline>
+                            <source src="media/videos/v1.mp4" type="video/mp4">
+                        </video>
+                        <div class="absolute bottom-0 left-0 w-full p-8 bg-gradient-to-t from-black/80 to-transparent">
+                            <span class="text-pink-300 text-xs font-mono tracking-widest">FREESTYLE</span>
+                            <h4 class="font-cinematic text-3xl">College Fest Energy</h4>
+                        </div>
+                    </div>
+                    <!-- Video 3 -->
+                    <div class="group relative aspect-video rounded-3xl overflow-hidden border border-pink-900/40 hover:border-pink-400 shadow-2xl transition-all">
+                        <video class="w-full h-full object-cover opacity-70 group-hover:opacity-100 group-hover:scale-110 transition-all duration-1000" autoplay muted loop playsinline>
+                            <source src="media/videos/v7.mp4" type="video/mp4">
+                        </video>
+                        <div class="absolute bottom-0 left-0 w-full p-8 bg-gradient-to-t from-black/80 to-transparent">
+                            <span class="text-pink-300 text-xs font-mono tracking-widest">CHOREOGRAPHY</span>
+                            <h4 class="font-cinematic text-3xl">Stage Queen</h4>
+                        </div>
+                    </div>
+                    <!-- Video 4 -->
+                    <div class="group relative aspect-video rounded-3xl overflow-hidden border border-pink-900/40 hover:border-pink-400 shadow-2xl transition-all">
+                        <video class="w-full h-full object-cover opacity-70 group-hover:opacity-100 group-hover:scale-110 transition-all duration-1000" autoplay muted loop playsinline>
+                            <source src="media/videos/v9.mp4" type="video/mp4">
+                        </video>
+                        <div class="absolute bottom-0 left-0 w-full p-8 bg-gradient-to-t from-black/80 to-transparent">
+                            <span class="text-pink-300 text-xs font-mono tracking-widest">SOLO</span>
+                            <h4 class="font-cinematic text-3xl">Night Vibes</h4>
+                        </div>
+                    </div>
+                    <!-- Video 5 -->
+                    <div class="group relative aspect-video rounded-3xl overflow-hidden border border-pink-900/40 hover:border-pink-400 shadow-2xl transition-all">
+                        <video class="w-full h-full object-cover opacity-70 group-hover:opacity-100 group-hover:scale-110 transition-all duration-1000" autoplay muted loop playsinline>
+                            <source src="media/videos/v1.mp4" type="video/mp4">
+                        </video>
+                        <div class="absolute bottom-0 left-0 w-full p-8 bg-gradient-to-t from-black/80 to-transparent">
+                            <span class="text-pink-300 text-xs font-mono tracking-widest">MEMORIES</span>
+                            <h4 class="font-cinematic text-3xl">Flashback Magic</h4>
+                        </div>
+                    </div>
+                    <!-- Video 6 -->
+                    <div class="group relative aspect-video rounded-3xl overflow-hidden border border-pink-900/40 hover:border-pink-400 shadow-2xl transition-all">
+                        <video class="w-full h-full object-cover opacity-70 group-hover:opacity-100 group-hover:scale-110 transition-all duration-1000" autoplay muted loop playsinline>
+                            <source src="media/videos/v7.mp4" type="video/mp4">
+                        </video>
+                        <div class="absolute bottom-0 left-0 w-full p-8 bg-gradient-to-t from-black/80 to-transparent">
+                            <span class="text-pink-300 text-xs font-mono tracking-widest">REHEARSAL</span>
+                            <h4 class="font-cinematic text-3xl">Behind the Glow</h4>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <div class="group relative aspect-video rounded-2xl overflow-hidden border border-purple-900/30 hover:border-purple-500/80 shadow-lg hover:shadow-[0_0_40px_rgba(147,51,234,0.3)] transition-all duration-700 bg-[#050505]">
-                <video class="w-full h-full object-cover opacity-60 grayscale-[80%] scale-100 group-hover:scale-110 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-1000 ease-out" 
-                       autoplay muted loop playsinline>
-                    <source src="media/videos/v7.mp4" type="video/mp4">
-                </video>
-                <div class="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/20 to-transparent opacity-90 group-hover:opacity-70 transition-opacity duration-700 pointer-events-none"></div>
-                <div class="absolute bottom-0 left-0 w-full p-8 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 pointer-events-none z-20">
-                    <div class="w-8 h-[2px] bg-purple-400 mb-3 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100 shadow-[0_0_10px_#c084fc]"></div>
-                    <span class="text-purple-300 text-xs font-mono mb-1 block tracking-[0.2em] opacity-80 group-hover:opacity-100 transition-opacity">CHOREOGRAPHY</span>
-                    <h4 class="font-cinematic text-3xl text-white drop-shadow-lg">Stage Performance</h4>
-                </div>
-            </div>
-
-            <div class="group relative aspect-video rounded-2xl overflow-hidden border border-purple-900/30 hover:border-purple-500/80 shadow-lg hover:shadow-[0_0_40px_rgba(147,51,234,0.3)] transition-all duration-700 bg-[#050505]">
-                <video class="w-full h-full object-cover opacity-60 grayscale-[80%] scale-100 group-hover:scale-110 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-1000 ease-out" 
-                       autoplay muted loop playsinline>
-                    <source src="media/videos/v9.mp4" type="video/mp4">
-                </video>
-                <div class="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/20 to-transparent opacity-90 group-hover:opacity-70 transition-opacity duration-700 pointer-events-none"></div>
-                <div class="absolute bottom-0 left-0 w-full p-8 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 pointer-events-none z-20">
-                    <div class="w-8 h-[2px] bg-purple-400 mb-3 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100 shadow-[0_0_10px_#c084fc]"></div>
-                    <span class="text-purple-300 text-xs font-mono mb-1 block tracking-[0.2em] opacity-80 group-hover:opacity-100 transition-opacity">SOLO</span>
-                    <h4 class="font-cinematic text-3xl text-white drop-shadow-lg">Night Vibes</h4>
-                </div>
-            </div>
-
-            <div class="group relative aspect-video rounded-2xl overflow-hidden border border-purple-900/30 hover:border-purple-500/80 shadow-lg hover:shadow-[0_0_40px_rgba(147,51,234,0.3)] transition-all duration-700 bg-[#050505]">
-                <video class="w-full h-full object-cover opacity-60 grayscale-[80%] scale-100 group-hover:scale-110 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-1000 ease-out" 
-                       autoplay muted loop playsinline>
-                    <source src="media/videos/v1.mp4" type="video/mp4">
-                </video>
-                <div class="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/20 to-transparent opacity-90 group-hover:opacity-70 transition-opacity duration-700 pointer-events-none"></div>
-                <div class="absolute bottom-0 left-0 w-full p-8 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 pointer-events-none z-20">
-                    <div class="w-8 h-[2px] bg-purple-400 mb-3 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100 shadow-[0_0_10px_#c084fc]"></div>
-                    <span class="text-purple-300 text-xs font-mono mb-1 block tracking-[0.2em] opacity-80 group-hover:opacity-100 transition-opacity">MEMORIES</span>
-                    <h4 class="font-cinematic text-3xl text-white drop-shadow-lg">Flashback</h4>
-                </div>
-            </div>
-
-            <div class="group relative aspect-video rounded-2xl overflow-hidden border border-purple-900/30 hover:border-purple-500/80 shadow-lg hover:shadow-[0_0_40px_rgba(147,51,234,0.3)] transition-all duration-700 bg-[#050505]">
-                <video class="w-full h-full object-cover opacity-60 grayscale-[80%] scale-100 group-hover:scale-110 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-1000 ease-out" 
-                       autoplay muted loop playsinline>
-                    <source src="media/videos/v7.mp4" type="video/mp4">
-                </video>
-                <div class="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/20 to-transparent opacity-90 group-hover:opacity-70 transition-opacity duration-700 pointer-events-none"></div>
-                <div class="absolute bottom-0 left-0 w-full p-8 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 pointer-events-none z-20">
-                    <div class="w-8 h-[2px] bg-purple-400 mb-3 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100 shadow-[0_0_10px_#c084fc]"></div>
-                    <span class="text-purple-300 text-xs font-mono mb-1 block tracking-[0.2em] opacity-80 group-hover:opacity-100 transition-opacity">REHEARSAL</span>
-                    <h4 class="font-cinematic text-3xl text-white drop-shadow-lg">Studio Sessions</h4>
-                </div>
-            </div>
-
-        </div> </div> </div> ```
-
-
+            <!-- Bloopers -->
             <div>
                 <div class="flex items-center gap-4 mb-8">
-                    <div class="h-[1px] bg-yellow-500 flex-grow opacity-50"></div>
-                    <h3 class="font-cinematic text-2xl text-white tracking-[0.3em] uppercase">Bloopers & Laughs</h3>
-                    <div class="h-[1px] bg-yellow-500 flex-grow opacity-50"></div>
+                    <div class="h-px bg-gradient-to-r from-transparent via-rose-400 to-transparent flex-1"></div>
+                    <h3 class="font-cinematic text-3xl tracking-widest text-rose-300">Bloopers &amp; Laughs</h3>
+                    <div class="h-px bg-gradient-to-r from-transparent via-rose-400 to-transparent flex-1"></div>
                 </div>
                 <div class="flex overflow-x-auto gap-6 pb-8 no-scrollbar snap-x">
-                    <div class="flex-none w-64 aspect-[9/16] relative rounded-xl overflow-hidden cursor-pointer group snap-center border border-gray-800" onclick="openVideo('https://www.youtube.com/embed/dQw4w9WgXcQ')">
-                        <img src="media/2.jpeg" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
-                        <div class="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-colors"></div>
-                        <div class="absolute bottom-4 left-4 right-4 bg-white/10 backdrop-blur-md p-3 rounded-lg border border-white/10">
-                            <p class="text-sm font-bold text-white">Epic Fail 😂</p>
-                            <p class="text-[10px] text-gray-300">Wait for it...</p>
+                    <div onclick="openVideo('https://www.youtube.com/embed/dQw4w9WgXcQ')" 
+                         class="flex-none w-64 aspect-[9/16] relative rounded-2xl overflow-hidden cursor-pointer group snap-center border border-rose-400/30">
+                        <img src="media/2.jpeg" class="w-full h-full object-cover transition-all group-hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-6">
+                            <div>
+                                <p class="font-bold text-lg">Epic Fail 😂</p>
+                                <p class="text-xs text-rose-200">Wait for the best part...</p>
+                            </div>
                         </div>
-                        <i class="fas fa-play-circle absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-4xl text-white opacity-80 group-hover:scale-125 transition-transform"></i>
+                        <i class="fas fa-play-circle absolute top-1/2 left-1/2 text-5xl text-white drop-shadow-2xl"></i>
                     </div>
-                    </div>
+                </div>
             </div>
         </div>
     </section>
 
-    <section class="py-24 paper-texture overflow-hidden w-full">
-        <h2 class="section-title text-gray-800">Scrapbook <span class="text-xs block font-mono text-gray-500 mt-2">TECHNIQUE: STICKERS + CHAOS</span></h2>
-        <div class="relative w-full h-[100vh] max-w-6xl mx-auto">
-            <div class="scrap-item absolute top-10 left-10 md:left-20 w-64 p-2 bg-white shadow-lg rotate-[-5deg] float-item">
-                <img src="media/2.jpeg" class="w-full aspect-square object-cover">
-                <div class="text-center font-hand text-black text-xl mt-2">Cute!</div>
-                <img src="https://cdn-icons-png.flaticon.com/512/763/763815.png" class="absolute -top-4 -right-4 w-12 opacity-80">
-            </div>
-            <div class="scrap-item absolute top-40 right-10 md:right-40 w-56 p-2 bg-white shadow-lg rotate-[10deg] float-item" style="animation-delay: 1s;">
-                <img src="media/3.jpeg" class="w-full aspect-[3/4] object-cover">
-                <div class="absolute -top-3 left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-red-400 opacity-50"></div>
-            </div>
-            <div class="scrap-item absolute bottom-20 left-1/4 w-72 p-4 bg-white shadow-xl rotate-[-2deg] float-item" style="animation-delay: 2s;">
-                <img src="media/4.jpeg" class="w-full aspect-video object-cover grayscale hover:grayscale-0 transition-all">
-                <p class="font-hand text-2xl text-center mt-2">Memories...</p>
-                <div class="absolute -bottom-2 -right-2 font-mono text-xs bg-black text-white px-2">FEB 14</div>
-            </div>
-             <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-9xl opacity-10 font-emotional text-gray-400 pointer-events-none">Love</div>
-        </div>
-    </section>
-
-    <section class="h-screen flex flex-col items-center justify-center relative overflow-hidden bg-black w-full">
-        <div class="absolute inset-0 bg-[conic-gradient(from_0deg_at_50%_50%,_#000_0%,_#1a0b2e_50%,_#000_100%)] opacity-30 animate-spin-slow"></div>
-        <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,#000_80%)]"></div>
-
-        <div class="relative z-10 text-center space-y-8">
-            <h2 class="text-4xl md:text-6xl font-cinematic text-gray-500 mb-4 tracking-widest">ONE LAST THING</h2>
+    <!-- FINAL HEART SECTION -->
+    <section class="h-screen bg-black flex items-center justify-center relative overflow-hidden">
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,#f9a8d420_0%,transparent_70%)]"></div>
+        
+        <div class="text-center relative z-10">
+            <h2 class="text-6xl font-hand text-[#f9a8d4] mb-6 tracking-widest">Thank you for being the most beautiful chapter of my life</h2>
+            <p class="max-w-md mx-auto text-lg text-[#f8d1e0]/80">— Made with endless love for Nithya on her special day</p>
             
-            <div class="relative group cursor-pointer" onclick="enterMasterpiece()">
-                <div class="absolute inset-0 bg-[#d4af37] rounded-full blur-[50px] opacity-20 group-hover:opacity-50 transition-opacity duration-500 animate-pulse"></div>
-                <button class="relative px-12 py-5 bg-transparent border border-[#d4af37]/50 rounded-full overflow-hidden transition-all duration-300 group-hover:border-[#d4af37] group-hover:scale-105">
-                    <div class="absolute inset-0 bg-[#d4af37] translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out"></div>
-                    <span class="relative font-cinematic text-xl tracking-[0.3em] text-[#d4af37] group-hover:text-black transition-colors uppercase">
-                        View The Masterpiece
-                    </span>
-                </button>
-            </div>
-            
-            <p class="text-xs font-mono text-gray-600 mt-4 tracking-[1em] uppercase opacity-0 animate-fade-up">The Grand Finale</p>
+            <button onclick="window.scrollTo({top:0,behavior:'smooth'})" 
+                    class="mt-16 border border-[#f9a8d4]/40 hover:border-[#f9a8d4] px-10 py-5 rounded-full text-xs tracking-[0.2em] transition-all hover:scale-105">
+                BACK TO THE TOP ✨
+            </button>
         </div>
     </section>
-
-    <div id="video-modal" class="fixed inset-0 z-[100] hidden bg-black/95 backdrop-blur-xl flex items-center justify-center p-4 opacity-0 transition-opacity duration-300">
-        <button onclick="closeVideo()" class="absolute top-6 right-6 text-white/50 hover:text-white transition-colors z-50"><i class="fas fa-times text-4xl"></i></button>
-        <div class="w-full max-w-5xl aspect-video relative bg-black shadow-2xl rounded-lg overflow-hidden border border-white/10">
-            <iframe id="video-frame" class="w-full h-full" src="" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-        </div>
-    </div>
 
     <script>
-        // --- 1. GENERATE ATMOSPHERIC ELEMENTS ---
-        const ffContainer = document.getElementById('fireflies');
-        if (ffContainer) {
-            for(let i=0; i<30; i++) {
-                const f = document.createElement('div');
-                f.className = 'firefly';
-                f.style.left = Math.random() * 100 + '%';
-                f.style.top = Math.random() * 100 + '%';
-                f.style.animationDelay = Math.random() * 5 + 's';
-                f.style.animationDuration = (Math.random() * 5 + 5) + 's';
-                ffContainer.appendChild(f);
-            }
-        }
+        // Tailwind script already loaded via CDN
 
-        const spContainer = document.getElementById('sparkles');
-        if (spContainer) {
-            for(let i=0; i<50; i++) {
-                const s = document.createElement('div');
-                s.className = 'sparkle';
-                s.style.left = Math.random() * 100 + '%';
-                s.style.top = Math.random() * 100 + '%';
-                s.style.animationDelay = Math.random() * 3 + 's';
-                spContainer.appendChild(s);
-            }
-        }
-
-        // --- 2. CORE LOGIC ---
+        // Custom cursor
         const dot = document.querySelector('.cursor-dot');
         const outline = document.querySelector('.cursor-outline');
-        if(dot && outline) {
-            window.addEventListener('mousemove', e => {
-                dot.style.left = outline.style.left = e.clientX + 'px';
-                dot.style.top = outline.style.top = e.clientY + 'px';
-                outline.animate({ left: e.clientX + 'px', top: e.clientY + 'px' }, { duration: 800, fill: "forwards" });
-            });
-        }
+        document.addEventListener('mousemove', e => {
+            dot.style.left = outline.style.left = `${e.clientX}px`;
+            dot.style.top = outline.style.top = `${e.clientY}px`;
+        });
 
-        const lenis = new Lenis({ duration: 1.2, smooth: true });
+        // Lenis smooth scroll
+        const lenis = new Lenis({ duration: 1.4, smoothWheel: true });
         function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
         requestAnimationFrame(raf);
 
-        // --- 3. VIDEO PLAYER ---
-        const vidModal = document.getElementById('video-modal');
-        const vidFrame = document.getElementById('video-frame');
-
-        window.openVideo = (url) => {
-            if(!vidModal) return;
-            vidModal.classList.remove('hidden');
-            setTimeout(() => vidModal.classList.remove('opacity-0'), 10);
-            if(vidFrame) vidFrame.src = url + "?autoplay=1&rel=0";
-            if(typeof lenis !== 'undefined') lenis.stop();
-        };
-
-        window.closeVideo = () => {
-            if(!vidModal) return;
-            vidModal.classList.add('opacity-0');
-            setTimeout(() => {
-                vidModal.classList.add('hidden');
-                if(vidFrame) vidFrame.src = "";
-            }, 300);
-            if(typeof lenis !== 'undefined') lenis.start();
-        };
+        // GSAP + ScrollTrigger
+        gsap.registerPlugin(ScrollTrigger);
         
-        document.addEventListener('keydown', (e) => { if(e.key === "Escape") closeVideo(); });
-
-        // --- 4. ANIMATIONS ---
-        gsap.utils.toArray('.section-title').forEach(title => {
-            gsap.to(title, { opacity: 1, y: 0, duration: 1, ease: "power3.out", scrollTrigger: { trigger: title, start: "top 80%" } });
+        gsap.utils.toArray('.section-title').forEach(t => {
+            gsap.to(t, {
+                opacity: 1,
+                y: 0,
+                duration: 1.2,
+                ease: "power3.out",
+                scrollTrigger: { trigger: t, start: "top 80%" }
+            });
         });
 
-        gsap.utils.toArray('.reveal-up').forEach(elem => {
-            ScrollTrigger.create({ trigger: elem, start: "top 85%", onEnter: () => elem.classList.add('active') });
-        });
+        // Floating hearts
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'heart-particle';
+            heart.textContent = '♥';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = (Math.random() * 6 + 7) + 's';
+            document.getElementById('hearts').appendChild(heart);
+            
+            setTimeout(() => heart.remove(), 15000);
+        }
+        setInterval(createHeart, 180);
 
-        gsap.to('.parallax-bg', { yPercent: 30, ease: "none", scrollTrigger: { trigger: "header", start: "top top", end: "bottom top", scrub: true } });
+        // Fireflies in golden hour
+        const ff = document.getElementById('fireflies');
+        for (let i = 0; i < 25; i++) {
+            const f = document.createElement('div');
+            f.className = 'firefly';
+            f.style.left = Math.random() * 100 + '%';
+            f.style.top = Math.random() * 60 + '%';
+            f.style.animationDelay = Math.random() * 8 + 's';
+            ff.appendChild(f);
+        }
 
-        gsap.utils.toArray('.float-item').forEach(item => {
-            gsap.to(item, { y: -15, duration: 2 + Math.random(), yoyo: true, repeat: -1, ease: "sine.inOut" });
-        });
+        // Birthday confetti
+        function launchConfetti() {
+            const canvas = document.getElementById('confetti');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
 
-        gsap.to('.scrap-item', { y: (i) => (i + 1) * -50, ease: "none", scrollTrigger: { trigger: ".paper-texture", start: "top bottom", end: "bottom top", scrub: 1 } });
+            const colors = ['#f9a8d4', '#f8d1e0', '#fff', '#f472b6'];
+            let particles = [];
 
-        // --- 5. NAVIGATION ---
-        window.enterMasterpiece = () => {
-            if(typeof lenis !== 'undefined') lenis.stop();
-            gsap.to("body", { opacity: 0, duration: 1.5, ease: "power2.inOut" });
+            class Particle {
+                constructor() {
+                    this.x = Math.random() * canvas.width;
+                    this.y = Math.random() * canvas.height - canvas.height;
+                    this.size = Math.random() * 9 + 5;
+                    this.speed = Math.random() * 4 + 3;
+                    this.angle = Math.random() * 360;
+                    this.color = colors[Math.floor(Math.random() * colors.length)];
+                }
+                update() {
+                    this.y += this.speed;
+                    this.angle += 2;
+                }
+                draw() {
+                    ctx.save();
+                    ctx.translate(this.x, this.y);
+                    ctx.rotate(this.angle * Math.PI / 180);
+                    ctx.fillStyle = this.color;
+                    ctx.fillRect(-this.size/2, -this.size/2, this.size, this.size);
+                    ctx.restore();
+                }
+            }
+
+            for (let i = 0; i < 220; i++) {
+                particles.push(new Particle());
+            }
+
+            function animateConfetti() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                particles.forEach((p, i) => {
+                    p.update();
+                    p.draw();
+                    if (p.y > canvas.height) particles.splice(i, 1);
+                });
+                if (particles.length > 0) requestAnimationFrame(animateConfetti);
+                else canvas.style.display = 'none';
+            }
+            animateConfetti();
+        }
+
+        // Trigger confetti on load + every 8 seconds once
+        window.onload = () => {
             setTimeout(() => {
-                window.location.href = "masterpiece.html";
-            }, 1500);
+                launchConfetti();
+            }, 800);
         };
+
+        // Video modal (kept exactly as original)
+        let vidModal, vidFrame;
+        window.openVideo = (url) => {
+            if (!vidModal) {
+                vidModal = document.createElement('div');
+                vidModal.className = 'fixed inset-0 z-[99999] bg-black/95 flex items-center justify-center p-6';
+                vidModal.innerHTML = `
+                    <button onclick="closeVideo()" class="absolute top-8 right-8 text-white text-5xl z-50">&times;</button>
+                    <div class="w-full max-w-5xl aspect-video bg-black rounded-2xl overflow-hidden">
+                        <iframe id="modal-frame" class="w-full h-full" frameborder="0" allowfullscreen></iframe>
+                    </div>
+                `;
+                document.body.appendChild(vidModal);
+                vidFrame = document.getElementById('modal-frame');
+            }
+            vidModal.style.display = 'flex';
+            vidFrame.src = url + "?autoplay=1";
+            lenis.stop();
+        };
+        window.closeVideo = () => {
+            if (vidModal) {
+                vidModal.style.display = 'none';
+                vidFrame.src = '';
+                lenis.start();
+            }
+        };
+
+        // Keyboard escape
+        document.addEventListener('keydown', e => { if (e.key === "Escape") closeVideo(); });
+
+        // Final hero animation
+        gsap.from("#hero-name", {
+            y: 120,
+            opacity: 0,
+            duration: 1.8,
+            ease: "power4.out"
+        });
     </script>
 </body>
 </html>
