@@ -36,11 +36,11 @@
             position: absolute;
             inset: 0;
             pointer-events: none;
-            background: radial-gradient(circle at 30% 20%, rgba(232,180,184,0.08) 0%, transparent 50%),
-                        radial-gradient(circle at 70% 80%, rgba(212,175,55,0.06) 0%, transparent 60%);
-            animation: twinkle 8s infinite alternate ease-in-out;
+            background: radial-gradient(circle at 30% 20%, rgba(232,180,184,0.12) 0%, transparent 50%),
+                        radial-gradient(circle at 70% 80%, rgba(212,175,55,0.08) 0%, transparent 60%);
+            animation: twinkle 10s infinite alternate ease-in-out;
         }
-        @keyframes twinkle { 0% { opacity: 0.6; } 100% { opacity: 1; } }
+        @keyframes twinkle { 0% { opacity: 0.7; } 100% { opacity: 1.1; } }
 
         .ui-layer {
             position: absolute;
@@ -54,35 +54,35 @@
         }
         .title h1 {
             font-family: 'Playfair Display', serif;
-            font-size: clamp(2.8rem, 8vw, 5.5rem);
+            font-size: clamp(3rem, 9vw, 6rem);
             color: #e8b4b8;
-            text-shadow: 0 0 40px rgba(232,180,184,0.6);
-            letter-spacing: -0.02em;
+            text-shadow: 0 0 50px rgba(232,180,184,0.7);
+            letter-spacing: -0.03em;
         }
         .instruction-pill {
             position: absolute;
             bottom: 8%;
             left: 50%;
             transform: translateX(-50%);
-            background: rgba(10,3,15,0.75);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(232,180,184,0.4);
-            padding: 14px 42px;
+            background: rgba(10,3,15,0.8);
+            backdrop-filter: blur(24px);
+            border: 1px solid rgba(232,180,184,0.5);
+            padding: 16px 48px;
             border-radius: 9999px;
             font-family: 'Cinzel', serif;
             color: #e8b4b8;
-            font-size: 1rem;
-            letter-spacing: 0.15em;
-            box-shadow: 0 0 40px rgba(232,180,184,0.3);
+            font-size: 1.05rem;
+            letter-spacing: 0.18em;
+            box-shadow: 0 0 50px rgba(232,180,184,0.4);
             pointer-events: none;
         }
         .hand-icon {
             display: inline-block;
-            animation: sliceHint 1.8s infinite ease-in-out;
+            animation: sliceHint 1.6s infinite ease-in-out;
         }
         @keyframes sliceHint {
-            0%, 100% { transform: translateX(-8px) rotate(-12deg); }
-            50% { transform: translateX(12px) rotate(12deg); }
+            0%, 100% { transform: translateX(-10px) rotate(-15deg); }
+            50% { transform: translateX(15px) rotate(15deg); }
         }
         .celebration-text {
             position: absolute;
@@ -95,19 +95,19 @@
         }
         .bday-msg {
             font-family: 'Great Vibes', cursive;
-            font-size: clamp(4.5rem, 14vw, 10rem);
-            line-height: 0.9;
-            background: linear-gradient(180deg, #fff, #e8b4b8);
+            font-size: clamp(5rem, 16vw, 11rem);
+            line-height: 0.85;
+            background: linear-gradient(180deg, #fff, #e8b4b8, #ffd700);
             -webkit-background-clip: text;
             color: transparent;
-            text-shadow: 0 0 60px rgba(232,180,184,0.8);
+            text-shadow: 0 0 80px rgba(232,180,184,0.9);
         }
         .bday-name {
             font-family: 'Cinzel', serif;
-            font-size: clamp(1.8rem, 6vw, 3.5rem);
-            letter-spacing: 0.6em;
+            font-size: clamp(2rem, 7vw, 4rem);
+            letter-spacing: 0.8em;
             color: #ffd700;
-            margin-top: -10px;
+            margin-top: -15px;
         }
         .back-btn {
             position: fixed;
@@ -129,12 +129,13 @@
         }
         #knife-cursor {
             position: absolute;
-            width: 48px;
-            height: 120px;
+            width: 52px;
+            height: 130px;
             pointer-events: none;
             z-index: 999;
             opacity: 0;
-            transition: transform 0.05s linear;
+            transition: transform 0.04s linear;
+            filter: drop-shadow(0 0 12px #e8b4b8);
         }
     </style>
 </head>
@@ -149,14 +150,14 @@
     <a href="index.html" class="back-btn font-cinematic">← RETURN</a>
 
     <div class="bg-particles"></div>
-    
+   
     <div class="ui-layer">
         <div class="title text-center w-full mt-8">
             <h1 class="opacity-0">Make a Wish, Nithya</h1>
         </div>
-        
+       
         <div class="instruction-pill flex items-center gap-3 text-center" id="hint-text">
-            DRAG TO CUT THE CAKE <span class="hand-icon text-2xl">🔪</span>
+            DRAG TO CUT THE CAKE <span class="hand-icon text-3xl">🔪</span>
         </div>
     </div>
 
@@ -169,14 +170,14 @@
     <img id="knife-cursor" src="https://i.ibb.co/8XvY0vZ/knife-cursor.png" alt="knife">
 
     <script>
-        // ====================== THREE.JS REALISTIC CAKE SCENE ======================
+        // ====================== THREE.JS ULTRA PREMIUM SCENE ======================
         const container = document.getElementById('cake-container');
         const scene = new THREE.Scene();
-        scene.fog = new THREE.FogExp2(0x0a030f, 0.028);
+        scene.fog = new THREE.FogExp2(0x0a030f, 0.022);
 
-        const camera = new THREE.PerspectiveCamera(48, window.innerWidth / window.innerHeight, 0.1, 100);
-        camera.position.set(0, 5.5, 11);
-        
+        const camera = new THREE.PerspectiveCamera(46, window.innerWidth / window.innerHeight, 0.1, 100);
+        camera.position.set(0, 6, 13);
+
         const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
@@ -184,94 +185,105 @@
         renderer.shadowMap.type = THREE.PCFSoftShadowMap;
         container.appendChild(renderer.domElement);
 
-        // ====================== LIGHTING (Dramatic & Romantic) ======================
-        const ambient = new THREE.AmbientLight(0xffffff, 0.45);
-        scene.add(ambient);
+        // ====================== ROMANTIC LIGHTING ======================
+        scene.add(new THREE.AmbientLight(0xffffff, 0.5));
 
-        const mainLight = new THREE.SpotLight(0xfff0d0, 3.8, 0, Math.PI/3, 0.4);
-        mainLight.position.set(8, 18, 10);
+        const mainLight = new THREE.SpotLight(0xfff0d0, 4.2, 0, Math.PI/3.2, 0.35);
+        mainLight.position.set(10, 20, 12);
         mainLight.castShadow = true;
-        mainLight.shadow.mapSize.width = 1024;
-        mainLight.shadow.mapSize.height = 1024;
+        mainLight.shadow.mapSize.width = 2048;
+        mainLight.shadow.mapSize.height = 2048;
         scene.add(mainLight);
+
+        const rimLight = new THREE.DirectionalLight(0xe8b4b8, 1.8);
+        rimLight.position.set(-12, 8, -15);
+        scene.add(rimLight);
 
         const candleLights = [];
 
-        // ====================== LUXURY CAKE (4 tiers + details) ======================
+        // ====================== LUXURY CAKE (now with roses, pearls & topper) ======================
         const cake = new THREE.Group();
         scene.add(cake);
 
-        const cakeMat = new THREE.MeshPhongMaterial({ 
-            color: 0xf8d7e3, 
-            shininess: 12,
-            specular: 0xffffff
-        });
-        const chocolateMat = new THREE.MeshPhongMaterial({ color: 0x3a2a25, shininess: 8 });
-        const goldMat = new THREE.MeshPhongMaterial({ 
-            color: 0xd4af37, 
-            shininess: 90, 
-            specular: 0xffffff,
-            metalness: 0.9
-        });
+        const cakeMat = new THREE.MeshPhongMaterial({ color: 0xf8d7e3, shininess: 18, specular: 0xffffff });
+        const chocolateMat = new THREE.MeshPhongMaterial({ color: 0x3a2a25, shininess: 12 });
+        const goldMat = new THREE.MeshPhongMaterial({ color: 0xd4af37, shininess: 95, specular: 0xffffff, metalness: 0.95 });
 
-        // Tier 1 (bottom)
-        const tier1 = new THREE.Mesh(new THREE.CylinderGeometry(3.8, 3.9, 1.6, 128), cakeMat);
+        // Tiers
+        const tier1 = new THREE.Mesh(new THREE.CylinderGeometry(3.8, 3.95, 1.7, 128), cakeMat);
         tier1.castShadow = true; tier1.receiveShadow = true;
         cake.add(tier1);
 
-        // Tier 2
-        const tier2 = new THREE.Mesh(new THREE.CylinderGeometry(2.9, 3.0, 1.3, 128), chocolateMat);
-        tier2.position.y = 1.45;
+        const tier2 = new THREE.Mesh(new THREE.CylinderGeometry(2.85, 2.95, 1.35, 128), chocolateMat);
+        tier2.position.y = 1.52;
         cake.add(tier2);
 
-        // Tier 3
-        const tier3 = new THREE.Mesh(new THREE.CylinderGeometry(2.1, 2.2, 1.1, 128), cakeMat);
-        tier3.position.y = 2.65;
+        const tier3 = new THREE.Mesh(new THREE.CylinderGeometry(2.05, 2.15, 1.15, 128), cakeMat);
+        tier3.position.y = 2.72;
         cake.add(tier3);
 
-        // Tier 4 (top)
-        const tier4 = new THREE.Mesh(new THREE.CylinderGeometry(1.4, 1.5, 0.9, 128), chocolateMat);
-        tier4.position.y = 3.65;
+        const tier4 = new THREE.Mesh(new THREE.CylinderGeometry(1.35, 1.45, 0.95, 128), chocolateMat);
+        tier4.position.y = 3.72;
         cake.add(tier4);
 
-        // Gold drips
-        for (let i = 0; i < 6; i++) {
-            const drip = new THREE.Mesh(new THREE.TorusGeometry(2.95 + i*0.05, 0.08, 16, 64), goldMat);
+        // Gold drips + pearls
+        for (let i = 0; i < 9; i++) {
+            const drip = new THREE.Mesh(new THREE.TorusGeometry(2.92 + i*0.06, 0.09, 18, 64), goldMat);
             drip.rotation.x = Math.PI / 2;
-            drip.position.y = 1.45 + Math.random() * 0.6;
-            drip.rotation.z = Math.random() * Math.PI;
+            drip.position.y = 1.48 + Math.random() * 0.7;
+            drip.rotation.z = Math.random() * Math.PI * 2;
             cake.add(drip);
+        }
+        for (let i = 0; i < 28; i++) {
+            const pearl = new THREE.Mesh(new THREE.SphereGeometry(0.09, 16, 16), new THREE.MeshPhongMaterial({ color: 0xffffff, shininess: 100 }));
+            pearl.position.set((Math.random()-0.5)*7.2, 0.85 + Math.random()*3.6, (Math.random()-0.5)*7.2);
+            cake.add(pearl);
+        }
+
+        // Decorative roses on cake
+        function createRose() {
+            const rose = new THREE.Group();
+            const petalMat = new THREE.MeshPhongMaterial({ color: 0xff69b4, shininess: 10 });
+            for (let i = 0; i < 8; i++) {
+                const petal = new THREE.Mesh(new THREE.SphereGeometry(0.18, 12, 12), petalMat);
+                petal.scale.set(0.6, 0.25, 1);
+                petal.rotation.set(Math.random()*0.6, i * 0.8, 0);
+                rose.add(petal);
+            }
+            return rose;
+        }
+        for (let i = 0; i < 7; i++) {
+            const rose = createRose();
+            rose.position.set((Math.random()-0.5)*6, 0.9 + Math.random()*3, (Math.random()-0.5)*6);
+            rose.rotation.y = Math.random() * Math.PI;
+            rose.scale.set(0.7, 0.7, 0.7);
+            cake.add(rose);
         }
 
         // Sprinkles
         const sprinkleMat = new THREE.MeshPhongMaterial({ color: 0xff69b4 });
-        for (let i = 0; i < 180; i++) {
-            const sprinkle = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, 0.18, 8), sprinkleMat);
-            sprinkle.position.set(
-                (Math.random() - 0.5) * 7,
-                0.9 + Math.random() * 3.2,
-                (Math.random() - 0.5) * 7
-            );
+        for (let i = 0; i < 220; i++) {
+            const sprinkle = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.035, 0.22, 8), sprinkleMat);
+            sprinkle.position.set((Math.random()-0.5)*7.5, 0.85 + Math.random()*3.6, (Math.random()-0.5)*7.5);
             sprinkle.rotation.set(Math.random()*Math.PI, Math.random()*Math.PI, Math.random()*Math.PI);
             cake.add(sprinkle);
         }
 
-        // 9 candles
+        // 9 candles + topper plate
         const candles = [];
+        const plate = new THREE.Mesh(new THREE.CylinderGeometry(1.6, 1.6, 0.12, 64), goldMat);
+        plate.position.y = 4.45;
+        cake.add(plate);
+
         for (let i = 0; i < 9; i++) {
-            const candle = new THREE.Mesh(
-                new THREE.CylinderGeometry(0.12, 0.12, 1.3, 24),
-                new THREE.MeshPhongMaterial({ color: 0xfff8e1 })
-            );
-            const angle = (i / 9) * Math.PI * 2;
-            candle.position.set(Math.cos(angle) * 1.1, 4.3, Math.sin(angle) * 1.1);
+            const candle = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.11, 1.35, 24), new THREE.MeshPhongMaterial({ color: 0xfff8e1 }));
+            const angle = (i / 9) * Math.PI * 2 + 0.3;
+            candle.position.set(Math.cos(angle) * 1.05, 4.55, Math.sin(angle) * 1.05);
             cake.add(candle);
             candles.push(candle);
 
-            // Candle light
-            const light = new THREE.PointLight(0xffaa33, 2.2, 8);
-            light.position.copy(candle.position);
-            light.position.y += 1.1;
+            const light = new THREE.PointLight(0xffaa44, 2.6, 9);
+            light.position.set(candle.position.x, candle.position.y + 1.3, candle.position.z);
             scene.add(light);
             candleLights.push(light);
         }
@@ -280,66 +292,104 @@
         const flameGroup = new THREE.Group();
         cake.add(flameGroup);
         const flames = [];
-        candles.forEach((candle, i) => {
-            const flameCanvas = document.createElement('canvas');
-            flameCanvas.width = flameCanvas.height = 64;
-            const ctx = flameCanvas.getContext('2d');
-            const tex = new THREE.CanvasTexture(flameCanvas);
-            const mat = new THREE.SpriteMaterial({ 
-                map: tex, 
-                blending: THREE.AdditiveBlending,
-                transparent: true 
-            });
+        candles.forEach((c, i) => {
+            const canvas = document.createElement('canvas'); canvas.width = canvas.height = 64;
+            const ctx = canvas.getContext('2d');
+            const tex = new THREE.CanvasTexture(canvas);
+            const mat = new THREE.SpriteMaterial({ map: tex, blending: THREE.AdditiveBlending, transparent: true });
             const flame = new THREE.Sprite(mat);
-            flame.scale.set(0.65, 0.95, 1);
-            flame.position.copy(candle.position);
-            flame.position.y += 1.75;
+            flame.scale.set(0.68, 1.05, 1);
+            flame.position.copy(c.position);
+            flame.position.y += 1.8;
             flameGroup.add(flame);
-            flames.push({sprite: flame, ctx: ctx, tex: tex});
+            flames.push({sprite: flame, ctx, tex});
         });
 
         function animateFlames(t) {
             flames.forEach((f, i) => {
                 const ctx = f.ctx;
                 ctx.clearRect(0,0,64,64);
-                const grad = ctx.createRadialGradient(32,32,2,32,26,28);
-                grad.addColorStop(0, `rgba(255,240,140,${0.95 + Math.sin(t*20 + i)*0.1})`);
-                grad.addColorStop(0.4, `rgba(255,120,60,${0.75 + Math.cos(t*15 + i)*0.2})`);
-                grad.addColorStop(1, 'rgba(255,60,20,0)');
-                ctx.fillStyle = grad;
+                const g = ctx.createRadialGradient(32,30,3,32,22,31);
+                g.addColorStop(0, `rgba(255,245,160,${0.95 + Math.sin(t*22 + i)*0.12})`);
+                g.addColorStop(0.35, `rgba(255,130,55,${0.8 + Math.cos(t*17 + i)*0.25})`);
+                g.addColorStop(1, 'rgba(255,40,10,0)');
+                ctx.fillStyle = g;
                 ctx.beginPath();
-                ctx.ellipse(32, 32, 18, 32, Math.sin(t*8 + i)*0.2, 0, Math.PI*2);
+                ctx.ellipse(32, 30, 19, 34, Math.sin(t*9 + i)*0.25, 0, Math.PI*2);
                 ctx.fill();
                 f.tex.needsUpdate = true;
             });
         }
 
-        // ====================== 3D KNIFE ======================
+        // ====================== FLOATING ROSE PETALS & SPARKLES ======================
+        const petalParticles = new THREE.Group();
+        scene.add(petalParticles);
+        const sparkleParticles = new THREE.Group();
+        scene.add(sparkleParticles);
+
+        for (let i = 0; i < 85; i++) {
+            const petal = new THREE.Mesh(
+                new THREE.PlaneGeometry(0.45, 0.65),
+                new THREE.MeshPhongMaterial({ color: 0xe8b4b8, side: THREE.DoubleSide, transparent: true, opacity: 0.75 })
+            );
+            petal.position.set((Math.random()-0.5)*40, Math.random()*25 + 5, (Math.random()-0.5)*40);
+            petal.rotation.set(Math.random()*Math.PI, Math.random()*Math.PI, Math.random()*Math.PI);
+            petal.userData = { speed: 0.012 + Math.random()*0.018, rotSpeed: 0.008 + Math.random()*0.02 };
+            petalParticles.add(petal);
+        }
+
+        for (let i = 0; i < 120; i++) {
+            const sparkle = new THREE.Mesh(
+                new THREE.SphereGeometry(0.07, 6, 6),
+                new THREE.MeshPhongMaterial({ color: 0xffd700, emissive: 0xffd700, emissiveIntensity: 0.8 })
+            );
+            sparkle.position.set((Math.random()-0.5)*28, Math.random()*18 + 4, (Math.random()-0.5)*28);
+            sparkle.userData = { speed: 0.03 + Math.random()*0.04 };
+            sparkleParticles.add(sparkle);
+        }
+
+        function animateParticles(t) {
+            petalParticles.children.forEach(p => {
+                p.position.y -= p.userData.speed;
+                p.rotation.z += p.userData.rotSpeed;
+                if (p.position.y < -8) p.position.y = 28;
+            });
+            sparkleParticles.children.forEach((s, i) => {
+                s.position.y += Math.sin(t*3 + i) * 0.018;
+                s.scale.setScalar(0.9 + Math.sin(t*12 + i)*0.3);
+                if (Math.random() < 0.01) s.position.y += 4;
+            });
+        }
+
+        // ====================== 3D KNIFE + GLOWING TRAIL ======================
         const knife = new THREE.Group();
         scene.add(knife);
 
-        const bladeGeo = new THREE.BoxGeometry(0.08, 3.2, 0.6);
-        const bladeMat = new THREE.MeshPhongMaterial({ 
-            color: 0xeeeeee, 
-            shininess: 100,
-            specular: 0xffffff 
-        });
-        const blade = new THREE.Mesh(bladeGeo, bladeMat);
+        const blade = new THREE.Mesh(
+            new THREE.BoxGeometry(0.09, 3.4, 0.65),
+            new THREE.MeshPhongMaterial({ color: 0xeeeeee, shininess: 110, specular: 0xffffff })
+        );
         blade.rotation.x = Math.PI / 2;
-        blade.position.y = 1.6;
+        blade.position.y = 1.7;
         knife.add(blade);
 
         const handle = new THREE.Mesh(
-            new THREE.CylinderGeometry(0.12, 0.14, 1.4, 16),
-            new THREE.MeshPhongMaterial({ color: 0xe8b4b8, shininess: 30 })
+            new THREE.CylinderGeometry(0.13, 0.15, 1.5, 18),
+            new THREE.MeshPhongMaterial({ color: 0xe8b4b8, shininess: 40 })
         );
         handle.rotation.x = Math.PI / 2;
-        handle.position.y = 0.2;
+        handle.position.y = 0.15;
         knife.add(handle);
 
+        // Trail line
+        const trailPoints = [];
+        const trailGeo = new THREE.BufferGeometry();
+        const trailMat = new THREE.LineBasicMaterial({ color: 0xe8b4b8, transparent: true, opacity: 0.6 });
+        const trailLine = new THREE.Line(trailGeo, trailMat);
+        scene.add(trailLine);
         knife.visible = false;
 
-        // ====================== INTERACTION ======================
+        // ====================== INTERACTION + CUTTING ======================
         let isDragging = false;
         let cutProgress = 0;
         let hasCut = false;
@@ -349,15 +399,10 @@
         const sliceSound = document.getElementById('slice-sound');
         const bdayAudio = document.getElementById('bday-audio');
 
-        // Prime audio on first interaction
         let audioPrimed = false;
         function primeAudio() {
             if (audioPrimed) return;
-            bdayAudio.play().then(() => {
-                bdayAudio.pause();
-                bdayAudio.currentTime = 0;
-                audioPrimed = true;
-            }).catch(() => {});
+            bdayAudio.play().then(() => { bdayAudio.pause(); bdayAudio.currentTime = 0; audioPrimed = true; }).catch(() => {});
         }
 
         function onPointerDown(e) {
@@ -367,20 +412,21 @@
             knife.visible = true;
             updateKnifePosition(e);
             cutProgress = 0;
+            trailPoints.length = 0;
         }
 
         function onPointerMove(e) {
             if (!isDragging || hasCut) return;
             updateKnifePosition(e);
-            
-            // Progress cut
-            cutProgress = Math.min(cutProgress + 0.035, 1);
-            
-            // Knife tilt
-            knife.rotation.z = (cutProgress - 0.5) * 0.6;
-            
-            // Crumb particles simulation
-            if (Math.random() < 0.4) createCrumbs();
+            cutProgress = Math.min(cutProgress + 0.042, 1);
+            knife.rotation.z = (cutProgress - 0.5) * 0.75;
+
+            // Trail
+            trailPoints.push(knife.position.clone());
+            if (trailPoints.length > 12) trailPoints.shift();
+            trailGeo.setFromPoints(trailPoints);
+
+            if (Math.random() < 0.55) createCrumbs();
         }
 
         function updateKnifePosition(e) {
@@ -389,141 +435,108 @@
             mouse.y = -((e.clientY || e.touches[0].clientY) - rect.top) / rect.height * 2 + 1;
 
             raycaster.setFromCamera(mouse, camera);
-            const plane = new THREE.Plane(new THREE.Vector3(0, 1, 0), -1.8);
-            const intersectPoint = new THREE.Vector3();
-            raycaster.ray.intersectPlane(plane, intersectPoint);
+            const plane = new THREE.Plane(new THREE.Vector3(0, 1, 0), -1.9);
+            const point = new THREE.Vector3();
+            raycaster.ray.intersectPlane(plane, point);
 
-            if (intersectPoint) {
-                knife.position.copy(intersectPoint);
-                knife.position.y = 3.8 + Math.sin(Date.now()/200) * 0.1;
-                knife.lookAt(intersectPoint.x * 1.2, 0, intersectPoint.z * 1.2);
+            if (point) {
+                knife.position.copy(point);
+                knife.position.y = 4 + Math.sin(Date.now()/180) * 0.15;
+                knife.lookAt(point.x * 1.3, 0, point.z * 1.3);
             }
         }
 
         function createCrumbs() {
-            for (let i = 0; i < 6; i++) {
-                const crumb = new THREE.Mesh(
-                    new THREE.SphereGeometry(0.07, 6, 6),
-                    new THREE.MeshPhongMaterial({ color: 0xf8d7e3 })
-                );
+            for (let i = 0; i < 7; i++) {
+                const crumb = new THREE.Mesh(new THREE.SphereGeometry(0.08, 7, 7), new THREE.MeshPhongMaterial({ color: 0xf8d7e3 }));
                 crumb.position.copy(knife.position);
-                crumb.position.y -= 0.5;
+                crumb.position.y -= 0.6;
                 scene.add(crumb);
-                
-                gsap.to(crumb.position, {
-                    y: "-=4",
-                    x: (Math.random()-0.5)*4,
-                    z: (Math.random()-0.5)*4,
-                    duration: 1.8,
-                    ease: "power2.out",
-                    onComplete: () => scene.remove(crumb)
-                });
+                gsap.to(crumb.position, { y: "-=5", x: (Math.random()-0.5)*5, z: (Math.random()-0.5)*5, duration: 1.6, ease: "power2.out", onComplete: () => scene.remove(crumb) });
             }
         }
 
         function onPointerUp() {
             if (!isDragging || hasCut) return;
             isDragging = false;
-            
-            if (cutProgress > 0.72) {
+            trailPoints.length = 0;
+            trailGeo.setFromPoints([]);
+
+            if (cutProgress > 0.68) {
                 hasCut = true;
-                triggerRealisticCut();
+                triggerUltraCut();
             } else {
                 knife.visible = false;
             }
         }
 
-        function triggerRealisticCut() {
-            // Slice sound
+        function triggerUltraCut() {
             sliceSound.currentTime = 0;
             sliceSound.play();
 
-            // Dramatic knife plunge
-            gsap.to(knife.position, { y: 0.8, duration: 0.6, ease: "back.in(1.6)" });
-            gsap.to(knife.rotation, { z: -1.2, duration: 0.8 });
+            gsap.to(knife.position, { y: 0.6, duration: 0.55, ease: "back.in(2)" });
+            gsap.to(knife.rotation, { z: -1.35, duration: 0.9 });
 
-            // Split cake into two halves
             setTimeout(() => {
                 const left = cake.clone();
                 const right = cake.clone();
-                
-                scene.add(left);
-                scene.add(right);
-                scene.remove(cake);
+                scene.add(left); scene.add(right); scene.remove(cake);
 
-                // Separate halves
-                gsap.to(left.position, { x: -3.2, duration: 2.4, ease: "power3.out" });
-                gsap.to(right.position, { x: 3.2, duration: 2.4, ease: "power3.out" });
-                
-                gsap.to(left.rotation, { y: -0.6, duration: 2.8 });
-                gsap.to(right.rotation, { y: 0.6, duration: 2.8 });
-            }, 420);
+                gsap.to(left.position, { x: -4.2, duration: 2.6, ease: "power4.out" });
+                gsap.to(right.position, { x: 4.2, duration: 2.6, ease: "power4.out" });
+                gsap.to(left.rotation, { y: -0.85, duration: 3.1 });
+                gsap.to(right.rotation, { y: 0.85, duration: 3.1 });
+            }, 380);
 
-            // Celebration sequence
-            setTimeout(() => launchFullCelebration(), 800);
+            setTimeout(launchEpicCelebration, 750);
         }
 
-        function launchFullCelebration() {
-            // Music
-            bdayAudio.volume = 0.75;
+        function launchEpicCelebration() {
+            bdayAudio.volume = 0.82;
             bdayAudio.play();
 
-            // Hide UI
-            gsap.to('.instruction-pill', { opacity: 0, y: 30, duration: 1 });
+            gsap.to('.instruction-pill', { opacity: 0, y: 40, duration: 1.1 });
             gsap.to(knife, { visible: false });
 
-            // Camera zoom out
-            gsap.to(camera.position, { z: 18, y: 8, duration: 3.5, ease: "power2.inOut" });
+            // Cinematic camera orbit
+            gsap.to(camera.position, { z: 22, y: 9, duration: 4.2, ease: "power2.inOut" });
+            gsap.to(camera.position, { x: 6, duration: 5.5, ease: "sine.inOut", yoyo: true, repeat: 1 });
 
-            // Massive confetti
-            const rect = renderer.domElement.getBoundingClientRect();
-            const colors = ['#e8b4b8', '#d4af37', '#ff69b4', '#ffffff'];
-            
+            // Massive layered confetti
+            const colors = ['#e8b4b8', '#d4af37', '#ff69b4', '#ffffff', '#ffd700'];
+            let burstCount = 0;
             const burst = setInterval(() => {
-                confetti({
-                    particleCount: 180,
-                    spread: 90,
-                    origin: { x: Math.random(), y: 0.3 },
-                    colors: colors,
-                    ticks: 180
-                });
-            }, 180);
+                confetti({ particleCount: 220, spread: 110, origin: { x: Math.random(), y: 0.25 }, colors });
+                burstCount++;
+                if (burstCount > 26) clearInterval(burst);
+            }, 110);
 
-            setTimeout(() => clearInterval(burst), 4800);
-
-            // Reveal text
-            gsap.to('#celebration', {
-                scale: 1,
-                opacity: 1,
-                duration: 2.8,
-                ease: "elastic.out(1, 0.5)",
-                delay: 0.6
-            });
+            // Reveal text with extra flair
+            gsap.to('#celebration', { scale: 1, opacity: 1, duration: 3.1, ease: "elastic.out(1.1, 0.4)", delay: 0.7 });
         }
 
         // ====================== ANIMATION LOOP ======================
         let clock = new THREE.Clock();
-        
+
         function animate() {
             requestAnimationFrame(animate);
             const t = clock.getElapsedTime();
 
-            // Gentle cake sway
-            cake.rotation.y = Math.sin(t * 0.3) * 0.03;
-            cake.position.y = Math.sin(t * 0.8) * 0.06;
+            // Cake breathing
+            cake.rotation.y = Math.sin(t * 0.28) * 0.028;
+            cake.position.y = Math.sin(t * 0.75) * 0.07;
 
-            // Candle lights flicker
-            candleLights.forEach((light, i) => {
-                light.intensity = 1.9 + Math.sin(t * 18 + i) * 0.6;
-            });
+            // Lights flicker
+            candleLights.forEach((l, i) => l.intensity = 2.4 + Math.sin(t * 21 + i) * 0.75);
 
             animateFlames(t);
+            animateParticles(t);
 
             renderer.render(scene, camera);
         }
         animate();
 
-        // ====================== EVENT LISTENERS ======================
+        // ====================== EVENTS ======================
         container.addEventListener('mousedown', onPointerDown);
         container.addEventListener('mousemove', onPointerMove);
         container.addEventListener('mouseup', onPointerUp);
@@ -538,13 +551,12 @@
         });
 
         // ====================== INTRO ======================
-        gsap.to('.title h1', { opacity: 1, y: 0, duration: 2.2, delay: 0.4, ease: "power3.out" });
-        gsap.to('.instruction-pill', { opacity: 1, scale: 1, duration: 1.8, delay: 1.8 });
+        gsap.to('.title h1', { opacity: 1, y: 0, duration: 2.4, delay: 0.3, ease: "power3.out" });
+        gsap.to('.instruction-pill', { opacity: 1, scale: 1, duration: 2, delay: 1.9 });
 
-        // Initial knife hint
         setTimeout(() => {
-            document.getElementById('knife-cursor').style.opacity = '0.25';
-        }, 2800);
+            document.getElementById('knife-cursor').style.opacity = '0.3';
+        }, 2600);
     </script>
 </body>
 </html>
