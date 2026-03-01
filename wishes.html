@@ -3,471 +3,398 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Echoes of Love | Celebration</title>
-    
+    <title>Echoes of Love | Nithya's Birthday Wishes ✨</title>
+   
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Great+Vibes&family=Montserrat:wght@300;400&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Dancing+Script:wght@400;700&family=Montserrat:wght@300;400&family=Playfair+Display:ital@0;1&display=swap" rel="stylesheet">
+   
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" defer></script>
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
-        /* --- CORE STYLES --- */
-        :root { --gold: #d4af37; --dark: #050505; --accent: #2e1065; }
-        
-        body { 
-            background-color: var(--dark); 
-            color: white; 
-            font-family: 'Montserrat', sans-serif;
-            overflow-x: hidden;
-            -webkit-tap-highlight-color: transparent;
+        :root { 
+            --gold: #f8d1e0; 
+            --rose: #f9a8d4; 
+            --bg: #0a0305; 
+        }
+        html, body { 
+            width: 100%; 
+            overflow-x: hidden; 
+            margin: 0; 
+            padding: 0; 
+            background-color: var(--bg); 
+            color: #fff; 
+            font-family: 'Montserrat', sans-serif; 
+            cursor: none; 
         }
 
-        /* Smooth Scroll */
-        @media (min-width: 769px) {
-            html.lenis { height: auto; } 
-            .lenis.lenis-smooth { scroll-behavior: auto; } 
-            .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; } 
-            .lenis.lenis-stopped { overflow: hidden; } 
+        .font-cinematic { font-family: 'Cinzel', serif; }
+        .font-hand { font-family: 'Dancing Script', cursive; }
+        .font-serif { font-family: 'Playfair Display', serif; }
+
+        /* PREMIUM CURSOR */
+        .cursor-dot, .cursor-outline { 
+            position: fixed; top: 0; left: 0; transform: translate(-50%, -50%); 
+            border-radius: 50%; z-index: 9999; pointer-events: none; 
+        }
+        .cursor-dot { width: 10px; height: 10px; background: #f8d1e0; box-shadow: 0 0 15px #f9a8d4; }
+        .cursor-outline { 
+            width: 44px; height: 44px; 
+            border: 1.5px solid rgba(248, 209, 224, 0.6); 
+            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1); 
         }
 
-        .font-cinematic { font-family: 'Cormorant Garamond', serif; }
-        .font-emotional { font-family: 'Great Vibes', cursive; }
-
-        /* --- CUSTOM CURSOR --- */
-        @media (hover: hover) and (pointer: fine) {
-            .cursor-dot { position: fixed; top: 0; left: 0; width: 8px; height: 8px; background-color: var(--gold); border-radius: 50%; z-index: 10000; pointer-events: none; transform: translate(-50%, -50%); }
-            .cursor-outline { position: fixed; top: 0; left: 0; width: 40px; height: 40px; border: 1px dashed rgba(212, 175, 55, 0.5); border-radius: 50%; z-index: 10000; pointer-events: none; transform: translate(-50%, -50%); transition: width 0.3s, height 0.3s; }
-            body { cursor: none; }
-            a:hover ~ .cursor-outline, .video-card:hover ~ .cursor-outline { width: 60px; height: 60px; border-color: var(--gold); border-style: solid; background: rgba(212, 175, 55, 0.1); }
+        /* HEART PARTICLES */
+        .heart-particle { 
+            position: absolute; color: #f9a8d4; font-size: 22px; 
+            pointer-events: none; z-index: 10; 
+            animation: floatHeart 9s linear infinite; 
+            text-shadow: 0 0 15px #f8d1e0;
+        }
+        @keyframes floatHeart { 
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; } 
+            10% { opacity: 1; } 
+            90% { opacity: 1; } 
+            100% { transform: translateY(-120vh) rotate(380deg); opacity: 0; } 
         }
 
-        /* --- FILM GRAIN (Global) --- */
+        /* FILM GRAIN */
         .film-grain::after {
             content: "";
             position: fixed;
             inset: 0;
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-            opacity: 0.04;
+            opacity: 0.035;
             pointer-events: none;
             mix-blend-mode: overlay;
             z-index: 9999;
         }
 
-        /* --- VIDEO CARD UPGRADES --- */
+        /* ROMANTIC VIDEO CARD */
         .video-card {
-            background: rgba(10, 5, 20, 0.6);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(212, 175, 55, 0.1);
-            border-radius: 16px;
+            background: rgba(15, 5, 12, 0.65);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(249,168,212,0.15);
+            border-radius: 24px;
             overflow: hidden;
-            transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
-            position: relative;
-            transform: translateY(0);
+            transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
         }
-        
         .video-card:hover {
-            transform: translateY(-10px);
-            border-color: rgba(212, 175, 55, 0.4);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8), 0 0 20px rgba(212, 175, 55, 0.15);
+            transform: translateY(-14px) scale(1.02);
+            border-color: rgba(249,168,212,0.5);
+            box-shadow: 0 30px 60px rgba(249,168,212,0.25);
         }
-
-        /* The preview video styling */
         .preview-vid {
-            filter: grayscale(80%) contrast(110%) brightness(70%);
-            transition: all 0.8s ease;
+            filter: brightness(85%) saturate(90%) contrast(110%);
+            transition: all 1s cubic-bezier(0.23, 1, 0.32, 1);
         }
         .video-card:hover .preview-vid {
-            filter: grayscale(0%) contrast(105%) brightness(100%);
-            transform: scale(1.05);
+            filter: brightness(105%) saturate(120%) contrast(100%);
+            transform: scale(1.08);
         }
 
-        .play-overlay {
-            background: radial-gradient(circle at center, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.8) 100%);
-            opacity: 0.8; 
-            transition: opacity 0.5s ease;
+        /* BLOOM EFFECT */
+        .video-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at center, rgba(249,168,212,0.18), transparent 70%);
+            opacity: 0;
+            transition: opacity 0.6s;
+            z-index: 2;
+            pointer-events: none;
         }
-        .video-card:hover .play-overlay { opacity: 0; }
+        .video-card:hover::before { opacity: 1; }
 
-        /* Emitting Soundwaves Effect behind cards */
-        .soundwave-pulse {
-            position: absolute; inset: -5px; border-radius: 16px;
-            border: 1px solid var(--gold); opacity: 0;
-            transition: all 0.5s; pointer-events: none; z-index: -1;
-        }
-        .video-card:hover .soundwave-pulse {
-            animation: pulseWave 2s cubic-bezier(0, 0, 0.2, 1) infinite;
-        }
-        @keyframes pulseWave {
-            0% { transform: scale(1); opacity: 0.3; }
-            100% { transform: scale(1.05); opacity: 0; }
+        /* SECTION TITLE */
+        .section-title { 
+            font-family: 'Cinzel', serif; 
+            font-size: 3.2rem; 
+            text-align: center; 
+            background: linear-gradient(90deg, #f8d1e0, #f9a8d4, #f8d1e0); 
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent; 
         }
 
-        /* --- WORLD ENTRANCE GATES --- */
-        .gate { position: fixed; top: 0; width: 50vw; height: 100vh; background: #020202; z-index: 100000; display: flex; align-items: center; }
-        #gate-left { left: 0; border-right: 1px solid rgba(212,175,55,0.2); justify-content: flex-end; }
-        #gate-right { right: 0; border-left: 1px solid rgba(212,175,55,0.2); justify-content: flex-start; }
-
-        /* Modal Lock */
-        body.modal-open { overflow: hidden; }
+        .confetti-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 99999; pointer-events: none; }
     </style>
 </head>
-<body class="film-grain">
-
-    <div id="gate-left" class="gate">
-        <div class="w-1 h-32 bg-gradient-to-b from-transparent via-[#d4af37] to-transparent mr-[-1px]"></div>
-    </div>
-    <div id="gate-right" class="gate">
-        <div class="w-1 h-32 bg-gradient-to-b from-transparent via-[#d4af37] to-transparent ml-[-1px]"></div>
-    </div>
-    <div id="entrance-text" class="fixed inset-0 z-[100001] flex items-center justify-center pointer-events-none">
-        <p class="font-cinematic text-[#d4af37] tracking-[1em] uppercase text-sm drop-shadow-[0_0_10px_rgba(212,175,55,0.8)]">Decrypting Signals</p>
-    </div>
-
+<body class="film-grain relative overflow-hidden">
+    <!-- CUSTOM CURSOR -->
     <div class="cursor-dot hidden md:block"></div>
     <div class="cursor-outline hidden md:block"></div>
 
-    <a href="home.html?skipIntro=true#wishes-anchor" class="fixed top-6 left-6 z-50 text-white/50 hover:text-[#d4af37] transition-all flex items-center gap-3 cursor-pointer group">
-        <div class="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center backdrop-blur-md group-hover:border-[#d4af37] transition-colors bg-black/30">
+    <!-- CONFETTI -->
+    <canvas id="confetti" class="confetti-canvas"></canvas>
+
+    <!-- FLOATING HEARTS -->
+    <div id="hearts" class="fixed inset-0 pointer-events-none z-10"></div>
+
+    <!-- ENTRANCE GATES (romantic version) -->
+    <div id="gate-left" class="fixed top-0 left-0 w-1/2 h-screen bg-[#0a0305] z-[99999] flex items-center justify-end">
+        <div class="w-1 h-40 bg-gradient-to-b from-transparent via-[#f9a8d4] to-transparent"></div>
+    </div>
+    <div id="gate-right" class="fixed top-0 right-0 w-1/2 h-screen bg-[#0a0305] z-[99999] flex items-center justify-start">
+        <div class="w-1 h-40 bg-gradient-to-b from-transparent via-[#f9a8d4] to-transparent"></div>
+    </div>
+    <div id="entrance-text" class="fixed inset-0 z-[100000] flex items-center justify-center pointer-events-none">
+        <p class="font-hand text-[#f9a8d4] text-4xl tracking-widest">With all my love...</p>
+    </div>
+
+    <!-- BACK BUTTON -->
+    <a href="home.html?skipIntro=true#wishes-anchor" 
+       class="fixed top-6 left-6 z-50 text-white/60 hover:text-[#f9a8d4] transition-all flex items-center gap-3 group">
+        <div class="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center backdrop-blur-md group-hover:border-[#f9a8d4]">
             <i class="fas fa-arrow-left"></i>
         </div>
-        <span class="tracking-[0.3em] text-[10px] uppercase font-cinematic opacity-0 group-hover:opacity-100 transform -translate-x-4 group-hover:translate-x-0 transition-all duration-300">Return</span>
+        <span class="tracking-[0.3em] text-xs uppercase font-cinematic opacity-0 group-hover:opacity-100">Back to Gallery</span>
     </a>
 
-    <header class="min-h-[50vh] md:min-h-[60vh] flex flex-col items-center justify-end pb-12 relative overflow-hidden">
-        <div class="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(46,16,101,0.4)_0%,transparent_70%)] pointer-events-none"></div>
-        <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-30 animate-[spin_60s_linear_infinite] pointer-events-none"></div>
+    <!-- HERO -->
+    <header class="min-h-screen flex flex-col items-center justify-center relative overflow-hidden">
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,#f9a8d420_0%,transparent_70%)]"></div>
         
-        <div class="relative z-10 text-center px-4">
-            <p class="text-[#d4af37] text-[10px] md:text-xs tracking-[1em] uppercase font-mono mb-4 md:mb-6 opacity-0 translate-y-4" id="hero-sub">The Galaxy Speaks</p>
-            
-            <h1 class="text-5xl md:text-8xl font-cinematic text-white drop-shadow-[0_0_30px_rgba(212,175,55,0.2)] opacity-0 translate-y-10" id="hero-title">
-                ECHOES OF <span class="font-emotional text-[#d4af37] lowercase text-6xl md:text-9xl px-2">love</span>
+        <div class="relative z-10 text-center px-6 max-w-3xl">
+            <div class="mb-6">
+                <span class="px-6 py-2 rounded-full border border-[#f9a8d4]/30 text-[#f9a8d4] text-xs tracking-[0.4em] font-medium">18 MARCH 2026</span>
+            </div>
+            <h1 class="text-[7.5vw] md:text-8xl font-cinematic leading-none mb-4">
+                ECHOES OF <span class="font-hand text-[#f9a8d4] block text-[11vw] md:text-[9rem] -mt-6">love</span>
             </h1>
-            
-            <div class="w-[1px] h-16 md:h-24 bg-gradient-to-b from-[#d4af37] to-transparent mx-auto mt-8 opacity-0" id="hero-line"></div>
+            <p class="text-3xl md:text-4xl font-hand text-[#f8d1e0] tracking-wider">For Nithya, from the hearts that adore you</p>
+        </div>
+
+        <div onclick="document.getElementById('wishes-section').scrollIntoView({behavior:'smooth'})" 
+             class="absolute bottom-12 cursor-pointer flex flex-col items-center gap-3">
+            <div class="text-xs tracking-[0.3em] text-[#f9a8d4]">SCROLL FOR WISHES</div>
+            <i class="fas fa-chevron-down text-[#f9a8d4] animate-bounce"></i>
         </div>
     </header>
 
-    <main class="max-w-[1600px] mx-auto px-4 md:px-8 pb-32 relative z-10">
-        
-        <div class="flex items-center gap-6 mb-12 opacity-0 fade-up-elem">
-            <h3 class="font-cinematic text-xl text-[#d4af37] tracking-[0.3em] uppercase whitespace-nowrap">The Inner Circle</h3>
-            <div class="h-[1px] bg-gradient-to-r from-[#d4af37]/50 to-transparent flex-grow"></div>
-        </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-10">
-
-            <div class="video-card group cursor-pointer fade-up-elem" onclick="playFullVideo('media/videos/h2.mp4', 'Mom & Dad')">
-                <div class="soundwave-pulse"></div>
-                <div class="aspect-[4/5] relative overflow-hidden bg-black">
-                    <video src="media/videos/h4.mp4" class="preview-vid w-full h-full object-cover" muted loop playsinline></video>
-                    
-                    <div class="play-overlay absolute inset-0 flex flex-col items-center justify-center">
-                        <div class="flex gap-1 items-end h-6 opacity-50 mb-2">
-                            <div class="w-1 bg-[#d4af37] h-2"></div>
-                            <div class="w-1 bg-[#d4af37] h-4"></div>
-                            <div class="w-1 bg-[#d4af37] h-3"></div>
-                        </div>
-                        <span class="text-[8px] tracking-[0.3em] font-mono text-[#d4af37] uppercase">Hover to preview</span>
-                    </div>
-
-                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-50 group-hover:scale-100">
-                        <div class="w-16 h-16 bg-black/40 backdrop-blur-md rounded-full border border-[#d4af37]/50 flex items-center justify-center shadow-[0_0_20px_rgba(212,175,55,0.4)]">
-                            <i class="fas fa-play text-[#d4af37] ml-1 text-xl"></i>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="p-6 bg-gradient-to-t from-black via-[#0a0510] to-transparent relative z-10 border-t border-white/5">
-                    <h3 class="text-2xl text-white font-cinematic drop-shadow-md">Mom & Dad</h3>
-                    <p class="text-[10px] text-[#d4af37] uppercase tracking-widest mt-2 font-mono">The Original Blessings</p>
-                </div>
-            </div>
-
-            <div class="video-card group cursor-pointer fade-up-elem" onclick="playFullVideo('media/videos/h3.mp4', 'Sister')">
-                <div class="soundwave-pulse"></div>
-                <div class="aspect-[4/5] relative overflow-hidden bg-black">
-                    <video src="media/videos/h2.mp4" class="preview-vid w-full h-full object-cover" muted loop playsinline></video>
-                    <div class="play-overlay absolute inset-0 flex flex-col items-center justify-center">
-                        <div class="flex gap-1 items-end h-6 opacity-50 mb-2">
-                            <div class="w-1 bg-[#d4af37] h-2"></div>
-                            <div class="w-1 bg-[#d4af37] h-4"></div>
-                            <div class="w-1 bg-[#d4af37] h-3"></div>
-                        </div>
-                        <span class="text-[8px] tracking-[0.3em] font-mono text-[#d4af37] uppercase">Hover to preview</span>
-                    </div>
-                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-50 group-hover:scale-100">
-                        <div class="w-16 h-16 bg-black/40 backdrop-blur-md rounded-full border border-[#d4af37]/50 flex items-center justify-center shadow-[0_0_20px_rgba(212,175,55,0.4)]">
-                            <i class="fas fa-play text-[#d4af37] ml-1 text-xl"></i>
-                        </div>
-                    </div>
-                </div>
-                <div class="p-6 bg-gradient-to-t from-black via-[#0a0510] to-transparent relative z-10 border-t border-white/5">
-                    <h3 class="text-2xl text-white font-cinematic drop-shadow-md">Sister</h3>
-                    <p class="text-[10px] text-[#d4af37] uppercase tracking-widest mt-2 font-mono">Partner in Crime</p>
-                </div>
-            </div>
-
-            <div class="video-card group cursor-pointer fade-up-elem" onclick="playFullVideo('media/videos/h1.mp4', 'College Gang')">
-                <div class="soundwave-pulse"></div>
-                <div class="aspect-[4/5] relative overflow-hidden bg-black">
-                    <video src="media/videos/h1.mp4" class="preview-vid w-full h-full object-cover" muted loop playsinline></video>
-                    <div class="play-overlay absolute inset-0 flex flex-col items-center justify-center">
-                        <div class="flex gap-1 items-end h-6 opacity-50 mb-2">
-                            <div class="w-1 bg-[#d4af37] h-2"></div>
-                            <div class="w-1 bg-[#d4af37] h-4"></div>
-                            <div class="w-1 bg-[#d4af37] h-3"></div>
-                        </div>
-                        <span class="text-[8px] tracking-[0.3em] font-mono text-[#d4af37] uppercase">Hover to preview</span>
-                    </div>
-                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-50 group-hover:scale-100">
-                        <div class="w-16 h-16 bg-black/40 backdrop-blur-md rounded-full border border-[#d4af37]/50 flex items-center justify-center shadow-[0_0_20px_rgba(212,175,55,0.4)]">
-                            <i class="fas fa-play text-[#d4af37] ml-1 text-xl"></i>
-                        </div>
-                    </div>
-                </div>
-                <div class="p-6 bg-gradient-to-t from-black via-[#0a0510] to-transparent relative z-10 border-t border-white/5">
-                    <h3 class="text-2xl text-white font-cinematic drop-shadow-md">College Gang</h3>
-                    <p class="text-[10px] text-[#d4af37] uppercase tracking-widest mt-2 font-mono">The Crazy Ones</p>
-                </div>
-            </div>
-
-                        <div class="video-card group cursor-pointer fade-up-elem" onclick="playFullVideo('media/videos/h1.mp4', 'College Gang')">
-                <div class="soundwave-pulse"></div>
-                <div class="aspect-[4/5] relative overflow-hidden bg-black">
-                    <video src="media/videos/h3.mp4" class="preview-vid w-full h-full object-cover" muted loop playsinline></video>
-                    <div class="play-overlay absolute inset-0 flex flex-col items-center justify-center">
-                        <div class="flex gap-1 items-end h-6 opacity-50 mb-2">
-                            <div class="w-1 bg-[#d4af37] h-2"></div>
-                            <div class="w-1 bg-[#d4af37] h-4"></div>
-                            <div class="w-1 bg-[#d4af37] h-3"></div>
-                        </div>
-                        <span class="text-[8px] tracking-[0.3em] font-mono text-[#d4af37] uppercase">Hover to preview</span>
-                    </div>
-                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-50 group-hover:scale-100">
-                        <div class="w-16 h-16 bg-black/40 backdrop-blur-md rounded-full border border-[#d4af37]/50 flex items-center justify-center shadow-[0_0_20px_rgba(212,175,55,0.4)]">
-                            <i class="fas fa-play text-[#d4af37] ml-1 text-xl"></i>
-                        </div>
-                    </div>
-                </div>
-                <div class="p-6 bg-gradient-to-t from-black via-[#0a0510] to-transparent relative z-10 border-t border-white/5">
-                    <h3 class="text-2xl text-white font-cinematic drop-shadow-md">College Gang</h3>
-                    <p class="text-[10px] text-[#d4af37] uppercase tracking-widest mt-2 font-mono">The Crazy Ones</p>
-                </div>
-            </div>
-
-                        <div class="video-card group cursor-pointer fade-up-elem" onclick="playFullVideo('media/videos/h1.mp4', 'College Gang')">
-                <div class="soundwave-pulse"></div>
-                <div class="aspect-[4/5] relative overflow-hidden bg-black">
-                    <video src="media/videos/h6.mp4" class="preview-vid w-full h-full object-cover" muted loop playsinline></video>
-                    <div class="play-overlay absolute inset-0 flex flex-col items-center justify-center">
-                        <div class="flex gap-1 items-end h-6 opacity-50 mb-2">
-                            <div class="w-1 bg-[#d4af37] h-2"></div>
-                            <div class="w-1 bg-[#d4af37] h-4"></div>
-                            <div class="w-1 bg-[#d4af37] h-3"></div>
-                        </div>
-                        <span class="text-[8px] tracking-[0.3em] font-mono text-[#d4af37] uppercase">Hover to preview</span>
-                    </div>
-                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-50 group-hover:scale-100">
-                        <div class="w-16 h-16 bg-black/40 backdrop-blur-md rounded-full border border-[#d4af37]/50 flex items-center justify-center shadow-[0_0_20px_rgba(212,175,55,0.4)]">
-                            <i class="fas fa-play text-[#d4af37] ml-1 text-xl"></i>
-                        </div>
-                    </div>
-                </div>
-                <div class="p-6 bg-gradient-to-t from-black via-[#0a0510] to-transparent relative z-10 border-t border-white/5">
-                    <h3 class="text-2xl text-white font-cinematic drop-shadow-md">College Gang</h3>
-                    <p class="text-[10px] text-[#d4af37] uppercase tracking-widest mt-2 font-mono">The Crazy Ones</p>
-                </div>
-            </div>
-
-                        <div class="video-card group cursor-pointer fade-up-elem" onclick="playFullVideo('media/videos/h1.mp4', 'College Gang')">
-                <div class="soundwave-pulse"></div>
-                <div class="aspect-[4/5] relative overflow-hidden bg-black">
-                    <video src="media/videos/h7.mp4" class="preview-vid w-full h-full object-cover" muted loop playsinline></video>
-                    <div class="play-overlay absolute inset-0 flex flex-col items-center justify-center">
-                        <div class="flex gap-1 items-end h-6 opacity-50 mb-2">
-                            <div class="w-1 bg-[#d4af37] h-2"></div>
-                            <div class="w-1 bg-[#d4af37] h-4"></div>
-                            <div class="w-1 bg-[#d4af37] h-3"></div>
-                        </div>
-                        <span class="text-[8px] tracking-[0.3em] font-mono text-[#d4af37] uppercase">Hover to preview</span>
-                    </div>
-                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-50 group-hover:scale-100">
-                        <div class="w-16 h-16 bg-black/40 backdrop-blur-md rounded-full border border-[#d4af37]/50 flex items-center justify-center shadow-[0_0_20px_rgba(212,175,55,0.4)]">
-                            <i class="fas fa-play text-[#d4af37] ml-1 text-xl"></i>
-                        </div>
-                    </div>
-                </div>
-                <div class="p-6 bg-gradient-to-t from-black via-[#0a0510] to-transparent relative z-10 border-t border-white/5">
-                    <h3 class="text-2xl text-white font-cinematic drop-shadow-md">College Gang</h3>
-                    <p class="text-[10px] text-[#d4af37] uppercase tracking-widest mt-2 font-mono">The Crazy Ones</p>
-                </div>
-            </div>
-
-            <div class="video-card group cursor-pointer fade-up-elem" onclick="playFullVideo('media/videos/h2.mp4', 'Grandma')">
-                <div class="soundwave-pulse"></div>
-                <div class="aspect-[4/5] relative overflow-hidden bg-black">
-                    <video src="media/videos/h5.mp4" class="preview-vid w-full h-full object-cover" muted loop playsinline></video>
-                    <div class="play-overlay absolute inset-0 flex flex-col items-center justify-center">
-                        <div class="flex gap-1 items-end h-6 opacity-50 mb-2">
-                            <div class="w-1 bg-[#d4af37] h-2"></div>
-                            <div class="w-1 bg-[#d4af37] h-4"></div>
-                            <div class="w-1 bg-[#d4af37] h-3"></div>
-                        </div>
-                        <span class="text-[8px] tracking-[0.3em] font-mono text-[#d4af37] uppercase">Hover to preview</span>
-                    </div>
-                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-50 group-hover:scale-100">
-                        <div class="w-16 h-16 bg-black/40 backdrop-blur-md rounded-full border border-[#d4af37]/50 flex items-center justify-center shadow-[0_0_20px_rgba(212,175,55,0.4)]">
-                            <i class="fas fa-play text-[#d4af37] ml-1 text-xl"></i>
-                        </div>
-                    </div>
-                </div>
-                <div class="p-6 bg-gradient-to-t from-black via-[#0a0510] to-transparent relative z-10 border-t border-white/5">
-                    <h3 class="text-2xl text-white font-cinematic drop-shadow-md">Grandma</h3>
-                    <p class="text-[10px] text-[#d4af37] uppercase tracking-widest mt-2 font-mono">Wisdom & Warmth</p>
-                </div>
-            </div>
-
-        </div>
-    </main>
-
-    <div id="cinema-modal" class="fixed inset-0 z-[200000] hidden flex items-center justify-center p-4 transition-opacity duration-500 opacity-0">
-        
-        <div class="absolute inset-0 bg-[#050505]/95 backdrop-blur-xl"></div>
-        
-        <button onclick="closeModal()" class="absolute top-6 right-8 text-white/50 hover:text-[#d4af37] text-4xl z-[110] transition-colors group">
-            <i class="fas fa-times transform group-hover:rotate-90 transition-transform duration-300"></i>
-        </button>
-        
-        <div class="w-full max-w-6xl flex flex-col items-center relative z-10 transform scale-95 opacity-0 transition-all duration-500" id="modal-content">
+    <!-- WISHES SECTION -->
+    <section id="wishes-section" class="py-24 relative">
+        <div class="max-w-7xl mx-auto px-6">
+            <h2 class="section-title mb-16">Messages from the Heart</h2>
             
-            <h2 id="modal-title" class="text-3xl md:text-5xl font-cinematic text-white mb-6 drop-shadow-lg">Title</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Card 1: Mom & Dad -->
+                <div class="video-card group cursor-pointer" onclick="playFullVideo('media/videos/h2.mp4', 'Mom &amp; Dad')">
+                    <div class="aspect-[4/5] relative overflow-hidden">
+                        <video src="media/videos/h4.mp4" class="preview-vid w-full h-full object-cover" muted loop playsinline></video>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
+                        <div class="absolute bottom-8 left-8 right-8">
+                            <div class="text-[#f9a8d4] text-xs font-medium tracking-widest">THE FIRST LOVE</div>
+                            <h3 class="text-3xl font-cinematic">Mom &amp; Dad</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 2: Sister -->
+                <div class="video-card group cursor-pointer" onclick="playFullVideo('media/videos/h3.mp4', 'Sister')">
+                    <div class="aspect-[4/5] relative overflow-hidden">
+                        <video src="media/videos/h2.mp4" class="preview-vid w-full h-full object-cover" muted loop playsinline></video>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
+                        <div class="absolute bottom-8 left-8 right-8">
+                            <div class="text-[#f9a8d4] text-xs font-medium tracking-widest">PARTNER IN EVERYTHING</div>
+                            <h3 class="text-3xl font-cinematic">Sister</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 3: College Gang -->
+                <div class="video-card group cursor-pointer" onclick="playFullVideo('media/videos/h1.mp4', 'College Gang')">
+                    <div class="aspect-[4/5] relative overflow-hidden">
+                        <video src="media/videos/h1.mp4" class="preview-vid w-full h-full object-cover" muted loop playsinline></video>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
+                        <div class="absolute bottom-8 left-8 right-8">
+                            <div class="text-[#f9a8d4] text-xs font-medium tracking-widest">THE CHAOS CREW</div>
+                            <h3 class="text-3xl font-cinematic">College Gang</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 4: Grandma -->
+                <div class="video-card group cursor-pointer" onclick="playFullVideo('media/videos/h2.mp4', 'Grandma')">
+                    <div class="aspect-[4/5] relative overflow-hidden">
+                        <video src="media/videos/h5.mp4" class="preview-vid w-full h-full object-cover" muted loop playsinline></video>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
+                        <div class="absolute bottom-8 left-8 right-8">
+                            <div class="text-[#f9a8d4] text-xs font-medium tracking-widest">ENDLESS WISDOM</div>
+                            <h3 class="text-3xl font-cinematic">Grandma</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 5: Extra special (h6) -->
+                <div class="video-card group cursor-pointer" onclick="playFullVideo('media/videos/h1.mp4', 'Best Friends')">
+                    <div class="aspect-[4/5] relative overflow-hidden">
+                        <video src="media/videos/h6.mp4" class="preview-vid w-full h-full object-cover" muted loop playsinline></video>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
+                        <div class="absolute bottom-8 left-8 right-8">
+                            <div class="text-[#f9a8d4] text-xs font-medium tracking-widest">FOREVER CREW</div>
+                            <h3 class="text-3xl font-cinematic">Best Friends</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 6: Extra special (h7) -->
+                <div class="video-card group cursor-pointer" onclick="playFullVideo('media/videos/h1.mp4', 'Cousins')">
+                    <div class="aspect-[4/5] relative overflow-hidden">
+                        <video src="media/videos/h7.mp4" class="preview-vid w-full h-full object-cover" muted loop playsinline></video>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
+                        <div class="absolute bottom-8 left-8 right-8">
+                            <div class="text-[#f9a8d4] text-xs font-medium tracking-widest">CHILDHOOD MAGIC</div>
+                            <h3 class="text-3xl font-cinematic">Cousins</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CINEMA MODAL -->
+    <div id="cinema-modal" class="fixed inset-0 z-[200000] hidden flex items-center justify-center p-4 bg-black/95">
+        <button onclick="closeModal()" 
+                class="absolute top-8 right-8 text-5xl text-white/60 hover:text-[#f9a8d4] transition-colors z-50">✕</button>
+        
+        <div class="w-full max-w-5xl relative">
+            <h2 id="modal-title" class="text-4xl font-cinematic text-center mb-8 text-[#f9a8d4]"></h2>
             
-            <div class="w-full aspect-video bg-black rounded-xl overflow-hidden shadow-[0_0_60px_rgba(212,175,55,0.15)] border border-[#d4af37]/20 relative">
-                <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(212,175,55,0.1)_0%,transparent_70%)] pointer-events-none"></div>
-                
-                <video id="main-player" class="w-full h-full relative z-10" controls>
+            <div class="aspect-video bg-black rounded-3xl overflow-hidden border border-[#f9a8d4]/20 shadow-2xl">
+                <video id="main-player" class="w-full h-full" controls autoplay>
                     <source src="" type="video/mp4">
-                    Your browser does not support the video tag.
                 </video>
             </div>
-            
         </div>
     </div>
 
     <script>
-        const isMobile = window.innerWidth < 768;
+        // Lenis smooth scroll
+        const lenis = new Lenis({ duration: 1.4, smoothWheel: true });
+        function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+        requestAnimationFrame(raf);
 
-        // 1. Smooth Scroll (Lenis)
-        if (!isMobile) {
-            const lenis = new Lenis({
-                duration: 1.2,
-                easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-                smooth: true
-            });
-            function raf(time) {
-                lenis.raf(time);
-                requestAnimationFrame(raf);
-            }
-            requestAnimationFrame(raf);
-        }
-
-        // 2. Custom Cursor
-        if (!isMobile && window.matchMedia("(hover: hover)").matches) {
-            const dot = document.querySelector('.cursor-dot');
-            const outline = document.querySelector('.cursor-outline');
-            window.addEventListener('mousemove', e => {
-                gsap.to(dot, { x: e.clientX, y: e.clientY, duration: 0.1 });
-                gsap.to(outline, { x: e.clientX, y: e.clientY, duration: 0.15 });
-            });
-        }
-
-        // 3. Play/Pause Preview Videos on Hover (Saves performance!)
-        const cards = document.querySelectorAll('.video-card');
-        cards.forEach(card => {
-            const vid = card.querySelector('.preview-vid');
-            if(vid) {
-                card.addEventListener('mouseenter', () => vid.play());
-                card.addEventListener('mouseleave', () => {
-                    vid.pause();
-                    vid.currentTime = 0; // Reset to start
-                });
-            }
+        // Custom cursor
+        const dot = document.querySelector('.cursor-dot');
+        const outline = document.querySelector('.cursor-outline');
+        document.addEventListener('mousemove', e => {
+            dot.style.left = `${e.clientX}px`;
+            dot.style.top = `${e.clientY}px`;
+            outline.style.left = `${e.clientX}px`;
+            outline.style.top = `${e.clientY}px`;
         });
 
-        // 4. Initial Entrance Animations
+        // Floating hearts
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'heart-particle';
+            heart.textContent = ['♥','♡','✧'][Math.floor(Math.random()*3)];
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = (Math.random() * 7 + 8) + 's';
+            document.getElementById('hearts').appendChild(heart);
+            setTimeout(() => heart.remove(), 18000);
+        }
+        setInterval(createHeart, 220);
+
+        // Confetti (same as previous page)
+        function launchConfetti() {
+            const canvas = document.getElementById('confetti');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            const colors = ['#f9a8d4', '#f8d1e0', '#fff', '#fda4af'];
+            let particles = [];
+
+            class Particle {
+                constructor() {
+                    this.x = Math.random() * canvas.width;
+                    this.y = Math.random() * -canvas.height;
+                    this.size = Math.random() * 11 + 6;
+                    this.speed = Math.random() * 5 + 4;
+                    this.angle = Math.random() * 360;
+                    this.color = colors[Math.floor(Math.random() * colors.length)];
+                }
+                update() {
+                    this.y += this.speed;
+                    this.angle += 3;
+                }
+                draw() {
+                    ctx.save();
+                    ctx.translate(this.x, this.y);
+                    ctx.rotate(this.angle * Math.PI / 180);
+                    ctx.fillStyle = this.color;
+                    ctx.fillRect(-this.size/2, -this.size/2, this.size, this.size);
+                    ctx.restore();
+                }
+            }
+
+            for (let i = 0; i < 280; i++) particles.push(new Particle());
+
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                particles.forEach((p, i) => {
+                    p.update();
+                    p.draw();
+                    if (p.y > canvas.height) particles.splice(i, 1);
+                });
+                if (particles.length > 20) requestAnimationFrame(animate);
+                else canvas.style.opacity = '0';
+            }
+            animate();
+        }
+
+        // Gate animation
         window.onload = () => {
             const tl = gsap.timeline();
-            
-            tl.to("#entrance-text", { opacity: 0, duration: 0.5, delay: 0.5 })
-              .to("#gate-left", { x: "-100%", duration: 1.5, ease: "power3.inOut" }, "open")
-              .to("#gate-right", { x: "100%", duration: 1.5, ease: "power3.inOut" }, "open")
-              .to("#hero-sub", { opacity: 1, y: 0, duration: 1, ease: "power3.out" }, "open+=0.5")
-              .to("#hero-title", { opacity: 1, y: 0, duration: 1.5, ease: "expo.out" }, "open+=0.7")
-              .to("#hero-line", { opacity: 1, duration: 1, ease: "power2.out" }, "open+=1")
-              .set(".gate", { display: "none" });
+            tl.to("#entrance-text", { opacity: 0, duration: 0.8, delay: 0.6 })
+              .to("#gate-left", { x: "-100%", duration: 1.8, ease: "power3.inOut" }, "open")
+              .to("#gate-right", { x: "100%", duration: 1.8, ease: "power3.inOut" }, "open")
+              .to(".video-card", { opacity: 1, y: 0, stagger: 0.1, duration: 1.2, ease: "power3.out" }, "open+=0.6");
 
-            // Scroll reveal for video cards
-            gsap.utils.toArray('.fade-up-elem').forEach((elem, i) => {
-                gsap.from(elem, {
-                    scrollTrigger: {
-                        trigger: elem,
-                        start: "top 90%",
-                    },
-                    y: 50,
-                    opacity: 0,
-                    duration: 1,
-                    ease: "power3.out"
-                });
+            // Auto confetti
+            setTimeout(() => {
+                launchConfetti();
+            }, 1200);
+
+            // Preview video hover play
+            document.querySelectorAll('.video-card').forEach(card => {
+                const vid = card.querySelector('video');
+                if (vid) {
+                    card.addEventListener('mouseenter', () => vid.play());
+                    card.addEventListener('mouseleave', () => { vid.pause(); vid.currentTime = 0; });
+                }
             });
         };
 
-        // 5. Modal Logic
-        const modal = document.getElementById('cinema-modal');
-        const modalContent = document.getElementById('modal-content');
-        const player = document.getElementById('main-player');
-        const title = document.getElementById('modal-title');
-
+        // Modal
+        let modal, player, modalTitle;
         window.playFullVideo = (source, name) => {
+            if (!modal) {
+                modal = document.getElementById('cinema-modal');
+                player = document.getElementById('main-player');
+                modalTitle = document.getElementById('modal-title');
+            }
+            modalTitle.textContent = name;
             player.src = source;
-            title.innerText = name;
-            
             modal.classList.remove('hidden');
-            
-            // Allow display:block to render, then animate opacity and scale
-            requestAnimationFrame(() => {
-                modal.classList.remove('opacity-0');
-                modalContent.classList.remove('scale-95', 'opacity-0');
-                modalContent.classList.add('scale-100', 'opacity-100');
-            });
-            
             player.play();
-            document.body.classList.add('modal-open');
-            if(window.lenis) lenis.stop(); // Stop background scrolling
+            lenis.stop();
         };
 
         window.closeModal = () => {
-            modal.classList.add('opacity-0');
-            modalContent.classList.remove('scale-100', 'opacity-100');
-            modalContent.classList.add('scale-95', 'opacity-0');
-            
-            setTimeout(() => {
-                modal.classList.add('hidden');
-                player.pause();
-                player.src = "";
-            }, 500); // Matches CSS transition duration
-            
-            document.body.classList.remove('modal-open');
-            if(window.lenis) lenis.start();
+            modal.classList.add('hidden');
+            player.pause();
+            player.src = '';
+            lenis.start();
         };
 
-        // Close on background click
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) closeModal();
+        // Close modal on escape
+        document.addEventListener('keydown', e => {
+            if (e.key === "Escape" && modal && !modal.classList.contains('hidden')) closeModal();
         });
     </script>
 </body>
