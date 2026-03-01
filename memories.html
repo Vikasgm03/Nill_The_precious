@@ -45,7 +45,7 @@
             body { cursor: none; }
         }
 
-        /* --- FILM GRAIN --- */
+        /* --- FILM GRAIN (Optimized) --- */
         .film-grain::after {
             content: ""; position: fixed; inset: 0;
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
@@ -79,7 +79,7 @@
             align-items: center;
             justify-content: center;
             overflow: hidden;
-            /* Gives a slight shadow to separate cards stacking on top of each other */
+            /* Native CSS shadow for beautiful stacking */
             box-shadow: 0 -20px 50px rgba(0,0,0,0.8);
         }
 
@@ -101,7 +101,7 @@
             height: 100%;
             object-fit: cover;
             /* Resting: Moody, cinematic, slightly desaturated */
-            filter: grayscale(40%) contrast(110%) brightness(75%) sepia(20%);
+            filter: grayscale(60%) contrast(110%) brightness(75%) sepia(20%);
             transform: scale(1.05);
             transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
         }
@@ -149,7 +149,7 @@
         @media (max-width: 768px) {
             .art-frame { width: 92vw; height: 80vh; }
             .info-glass { bottom: 15px; left: 15px; right: 15px; max-width: none; padding: 16px 20px; }
-            /* Make text smaller for mobile glass card */
+            /* Mobile adjustment */
             .info-glass h2 { font-size: 1.75rem; line-height: 1; margin-bottom: 0.5rem; }
             .info-glass p { font-size: 0.75rem; }
         }
@@ -314,8 +314,8 @@
               .to("#gate-flash", { width: "100vw", opacity: 0, duration: 1.5, ease: "expo.inOut" }, "open")
               
               // Phase 3: Gates Open
-              .to("#gate-left", { x: "-100%", duration: 1.5, ease: "expo.inOut" }, "open")
-              .to("#gate-right", { x: "100%", duration: 1.5, ease: "expo.inOut" }, "open")
+              .to("#gate-left", { x: "-100%", duration: 1.5, ease: "power3.inOut" }, "open")
+              .to("#gate-right", { x: "100%", duration: 1.5, ease: "power3.inOut" }, "open")
               
               // Phase 4: Reveal Hero Text
               .to("#hero-sub", { opacity: 1, y: -20, duration: 1, ease: "power3.out" }, "open+=0.5")
