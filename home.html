@@ -157,6 +157,18 @@
             box-shadow: 0 0 40px rgba(212,175,55,0.2);
             transform: translateY(-10px);
         }
+
+
+        @keyframes cloudDrift {
+    0% { transform: scale(1) translateX(0); }
+    100% { transform: scale(1.15) translateX(-2%); }
+}
+@keyframes cloudDriftReverse {
+    0% { transform: scale(1) translateX(0); }
+    100% { transform: scale(1.15) translateX(2%); }
+}
+.animate-cloud-drift { animation: cloudDrift 20s ease-in-out infinite alternate; }
+.animate-cloud-drift-reverse { animation: cloudDriftReverse 20s ease-in-out infinite alternate; }
     </style>
 </head>
 <body>
@@ -167,26 +179,36 @@
         <div class="cursor-dot hidden md:block"></div>
         <div class="cursor-outline hidden md:block"></div>
 
-        <section id="intro-screen" class="fixed inset-0 z-[9999] flex flex-col items-center justify-center cursor-pointer transition-colors duration-700">
-            <div class="intro-spotlight"></div>
-            <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-20 animate-pulse"></div>
+<section id="intro-screen" class="fixed inset-0 z-[9999] flex items-center justify-center cursor-pointer overflow-hidden bg-transparent">
 
-            <div class="relative z-10 text-center px-4">
-                <h1 class="relative text-7xl md:text-9xl font-cinematic font-bold text-transparent bg-clip-text bg-gradient-to-b from-[#d4af37] via-[#fcf6ba] to-[#8a6219] fade-elem tracking-widest drop-shadow-[0_0_15px_rgba(212,175,55,0.2)]">
-                    WELCOME
-                </h1>
-                <p class="font-emotional text-2xl text-purple-200/50 mt-4 mb-12 fade-elem tracking-wide">The Queen's Birthday</p>
-                <div class="fade-elem enter-btn group">
-                    <span class="text-xs md:text-sm text-[#d4af37] tracking-[0.4em] uppercase font-cinematic transition-colors duration-300 group-hover:font-bold">
-                        Enter The Realm
-                    </span>
-                </div>
-            </div>
-            
-            <div class="absolute bottom-10 opacity-30 text-[#d4af37] text-[10px] tracking-widest animate-bounce">
-                TAP ANYWHERE
-            </div>
-        </section>
+    <div id="cloud-gate-left" class="absolute top-0 left-0 w-1/2 h-full bg-[#05020a] overflow-hidden flex justify-end shadow-[20px_0_50px_rgba(0,0,0,0.9)] z-10 will-change-transform">
+        <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1534152011248-19af35b02441?q=80&w=1500')] bg-cover bg-left opacity-50 mix-blend-screen animate-cloud-drift"></div>
+        <div class="absolute right-0 w-4 h-full bg-gradient-to-r from-transparent to-[#d4af37]/60 blur-[4px]"></div>
+    </div>
+
+    <div id="cloud-gate-right" class="absolute top-0 right-0 w-1/2 h-full bg-[#05020a] overflow-hidden flex justify-start shadow-[-20px_0_50px_rgba(0,0,0,0.9)] z-10 will-change-transform">
+        <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1534152011248-19af35b02441?q=80&w=1500')] bg-cover bg-right opacity-50 mix-blend-screen animate-cloud-drift-reverse"></div>
+        <div class="absolute left-0 w-4 h-full bg-gradient-to-l from-transparent to-[#d4af37]/60 blur-[4px]"></div>
+    </div>
+
+    <div id="intro-crack" class="absolute top-0 bottom-0 left-1/2 -translate-x-1/2 w-[2px] bg-[#fcf6ba] shadow-[0_0_40px_10px_rgba(212,175,55,0.8)] z-20 animate-[pulse_2s_ease-in-out_infinite]"></div>
+
+    <div class="absolute bottom-0 w-full h-48 bg-gradient-to-t from-[#050505] to-transparent z-20 pointer-events-none opacity-80"></div>
+
+    <div id="intro-content" class="relative z-30 text-center px-4 pointer-events-none flex flex-col items-center">
+        <h1 class="text-6xl md:text-9xl font-cinematic font-bold text-transparent bg-clip-text bg-gradient-to-b from-[#fcf6ba] via-[#d4af37] to-[#8a6219] tracking-widest drop-shadow-[0_0_25px_rgba(212,175,55,0.4)]">
+            ENTER
+        </h1>
+        <p class="font-emotional text-3xl text-purple-200/80 mt-2 mb-12 tracking-wide drop-shadow-md">The Queen's Realm</p>
+        
+        <div class="inline-block border border-[#d4af37]/40 bg-black/50 backdrop-blur-md px-8 py-3 rounded-full animate-bounce shadow-[0_0_20px_rgba(212,175,55,0.2)]">
+            <span class="text-xs md:text-sm text-[#d4af37] tracking-[0.4em] uppercase font-cinematic">
+                Tap to Part the Clouds
+            </span>
+        </div>
+    </div>
+
+</section>
 
         <section class="relative h-screen flex items-center justify-center overflow-hidden bg-[#050505] perspective-container group z-[2]">
             <div class="absolute inset-0 bg-cover bg-center opacity-20 grayscale mix-blend-luminosity" style="background-image: url('https://images.unsplash.com/photo-1536630596259-22a7442a537d?w=1000');"></div>
