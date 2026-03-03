@@ -10,32 +10,36 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
     
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Great+Vibes&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
     
     <style>
         :root {
             --lavender: #E6E6FA;
-            --deep-purple: #1a0b2e;
+            --deep-purple: #0a0314;
             --gold: #d4af37;
         }
         
         body {
             margin: 0;
             overflow: hidden;
-            background: radial-gradient(circle at center, var(--deep-purple) 0%, #05020a 100%);
+            background: radial-gradient(circle at center, #1a0b2e 0%, var(--deep-purple) 100%);
             color: white;
             font-family: 'Montserrat', sans-serif;
             user-select: none;
-            touch-action: none; /* Prevents scrolling while swiping */
+            touch-action: none;
         }
 
         /* 3D Scene Container */
-        #cake-container { position: absolute; inset: 0; z-index: 10; }
+        #cake-container { position: absolute; inset: 0; z-index: 10; cursor: pointer; }
 
-        /* Magical Swipe Canvas */
-        #swipe-canvas {
-            position: absolute; inset: 0; z-index: 20; pointer-events: none;
+        /* Floating Atmosphere */
+        .bg-particles {
+            position: absolute; inset: 0; pointer-events: none; z-index: 1;
+            background: radial-gradient(circle at 20% 30%, rgba(230, 230, 250, 0.05) 0%, transparent 40%),
+                        radial-gradient(circle at 80% 70%, rgba(212, 175, 55, 0.05) 0%, transparent 50%);
+            animation: breathe 8s infinite alternate ease-in-out;
         }
+        @keyframes breathe { 0% { opacity: 0.5; } 100% { opacity: 1; } }
 
         /* UI Overlays */
         .ui-layer {
@@ -44,38 +48,35 @@
             justify-content: space-between; padding: 2rem;
         }
 
-        .title-box {
-            text-align: center; margin-top: 5vh;
-        }
+        .title-box { text-align: center; margin-top: 6vh; }
         .title-box h1 {
             font-family: 'Cinzel', serif;
             font-size: clamp(2rem, 6vw, 4rem);
             color: var(--lavender);
-            letter-spacing: 0.2em;
-            text-shadow: 0 0 20px rgba(230, 230, 250, 0.4);
-            font-weight: 400;
+            letter-spacing: 0.25em;
+            text-shadow: 0 0 30px rgba(230, 230, 250, 0.4);
+            margin: 0;
         }
         .title-box p {
             font-family: 'Great Vibes', cursive;
-            font-size: clamp(2rem, 4vw, 3rem);
+            font-size: clamp(2.5rem, 5vw, 4rem);
             color: var(--gold);
-            margin-top: -10px;
+            margin-top: -5px;
+            text-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
         }
 
         .instruction {
-            position: absolute; bottom: 15%; left: 50%; transform: translateX(-50%);
-            background: rgba(255,255,255,0.05); backdrop-filter: blur(10px);
-            border: 1px solid rgba(230, 230, 250, 0.2); border-radius: 50px;
-            padding: 12px 32px; font-family: 'Montserrat', sans-serif;
-            color: white; font-size: 0.9rem; letter-spacing: 0.3em;
-            text-transform: uppercase; display: flex; align-items: center; gap: 12px;
-            box-shadow: 0 0 30px rgba(0,0,0,0.5);
+            position: absolute; bottom: 12%; left: 50%; transform: translateX(-50%);
+            background: rgba(10, 3, 20, 0.7); backdrop-filter: blur(15px);
+            border: 1px solid rgba(212, 175, 55, 0.4); border-radius: 50px;
+            padding: 14px 40px; font-family: 'Cinzel', serif;
+            color: var(--gold); font-size: clamp(0.8rem, 3vw, 1.1rem); letter-spacing: 0.3em;
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.2);
+            white-space: nowrap; animation: pulseGlow 2s infinite;
         }
-        .instruction span { animation: swipeAnim 2s infinite ease-in-out; display: inline-block; }
-        @keyframes swipeAnim {
-            0% { transform: translateX(-15px); opacity: 0; }
-            50% { opacity: 1; }
-            100% { transform: translateX(15px); opacity: 0; }
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 20px rgba(212,175,55,0.2); border-color: rgba(212,175,55,0.4); }
+            50% { box-shadow: 0 0 40px rgba(212,175,55,0.6); border-color: rgba(212,175,55,0.8); }
         }
 
         /* Celebration Screen */
@@ -86,42 +87,49 @@
         }
         #celebration h2 {
             font-family: 'Great Vibes', cursive;
-            font-size: clamp(5rem, 15vw, 12rem);
-            background: linear-gradient(to bottom, #fff, var(--lavender));
+            font-size: clamp(5rem, 16vw, 12rem);
+            background: linear-gradient(180deg, #ffffff 0%, #E6E6FA 100%);
             -webkit-background-clip: text; color: transparent;
-            line-height: 1; text-shadow: 0 0 50px rgba(230, 230, 250, 0.4);
-            margin: 0;
+            line-height: 1; text-shadow: 0 0 60px rgba(230, 230, 250, 0.5);
+            margin: 0; padding-bottom: 20px;
         }
         #celebration h3 {
             font-family: 'Cinzel', serif;
-            font-size: clamp(2rem, 6vw, 4rem);
-            letter-spacing: 0.4em; color: var(--gold);
-            margin: 0; text-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
+            font-size: clamp(2rem, 7vw, 4rem);
+            letter-spacing: 0.5em; color: var(--gold);
+            margin: 0; margin-top: -20px;
+            text-shadow: 0 0 30px rgba(212, 175, 55, 0.6);
         }
 
         .back-btn {
             position: fixed; top: 30px; left: 30px; z-index: 100;
-            color: rgba(255,255,255,0.5); font-family: 'Cinzel', serif;
+            color: rgba(230,230,250,0.6); font-family: 'Cinzel', serif;
             font-size: 0.8rem; letter-spacing: 0.2em; text-decoration: none;
-            transition: color 0.3s;
+            transition: all 0.3s; border: 1px solid transparent;
+            padding: 8px 20px; border-radius: 30px;
         }
-        .back-btn:hover { color: white; }
+        .back-btn:hover { 
+            color: var(--lavender); border-color: rgba(230,230,250,0.3);
+            background: rgba(255,255,255,0.05);
+        }
     </style>
 </head>
 <body>
 
-    <audio id="magic-swipe" src="https://assets.mixkit.co/sfx/preview/2754/2754-preview.mp3" preload="auto"></audio>
+    <audio id="slice-sound" src="https://assets.mixkit.co/sfx/preview/2754/2754-preview.mp3" preload="auto"></audio>
     <audio id="bday-song" src="https://cdn.pixabay.com/audio/2022/10/05/audio_68629e7695.mp3" preload="auto" loop></audio>
 
-    <a href="home.html" class="back-btn">← RETURN</a>
+    <a href="gallery.html" class="back-btn">← RETURN</a>
+
+    <div class="bg-particles"></div>
 
     <div class="ui-layer" id="ui-layer">
         <div class="title-box">
             <h1 class="fade-in">MAKE A WISH</h1>
-            <p class="fade-in">and swipe to cut</p>
+            <p class="fade-in">My Eternal Queen</p>
         </div>
-        <div class="instruction fade-in">
-            Swipe Across <span>✨</span>
+        <div class="instruction fade-in" id="hint-btn">
+            TAP TO CUT CAKE
         </div>
     </div>
 
@@ -131,270 +139,325 @@
     </div>
 
     <div id="cake-container"></div>
-    <canvas id="swipe-canvas"></canvas>
 
     <script>
         const isMobile = window.innerWidth < 768;
 
         // ==========================================
-        // 1. THREE.JS SCENE SETUP (Ultra-Optimized)
+        // 1. SCENE SETUP
         // ==========================================
         const container = document.getElementById('cake-container');
         const scene = new THREE.Scene();
+        scene.fog = new THREE.FogExp2(0x0a0314, 0.025);
         
-        // Dynamic camera placement based on screen size
-        const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
-        camera.position.set(0, 6, isMobile ? 16 : 12);
+        const cameraZ = isMobile ? 20 : 15; 
+        const camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 0.1, 100);
+        camera.position.set(0, 8, cameraZ);
 
-        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: "high-performance" });
         renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobile ? 1.5 : 2));
+        
+        // Shadows enabled for depth, optimized for mobile
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
         container.appendChild(renderer.domElement);
 
-        // Soft, elegant lighting
-        scene.add(new THREE.AmbientLight(0xffffff, 0.7));
-        const dirLight = new THREE.DirectionalLight(0xffffff, 1);
-        dirLight.position.set(5, 10, 7);
-        scene.add(dirLight);
+        // ==========================================
+        // 2. ELEGANT LIGHTING
+        // ==========================================
+        scene.add(new THREE.AmbientLight(0xffffff, 0.6));
+
+        const mainLight = new THREE.SpotLight(0xfff0d0, 2.5, 0, Math.PI/4, 0.5);
+        mainLight.position.set(10, 25, 15);
+        mainLight.castShadow = true;
+        mainLight.shadow.mapSize.width = 1024;
+        mainLight.shadow.mapSize.height = 1024;
+        scene.add(mainLight);
+
+        const rimLight = new THREE.DirectionalLight(0xE6E6FA, 1.5);
+        rimLight.position.set(-15, 5, -15);
+        scene.add(rimLight);
+
+        const candleLights = [];
 
         // ==========================================
-        // 2. THE SIMPLE LAVENDER CAKE
+        // 3. THE MASTERPIECE CAKE (Single Tier Lavender)
         // ==========================================
-        const cakeRadius = 3;
-        const cakeHeight = 2.5;
-        const lavenderColor = 0xE6E6FA;
-        const spongeColor = 0xFFF5E1; // Vanilla inside
+        const cakeRadius = 3.5;
+        const cakeHeight = 3.5;
         
         const cakeGroup = new THREE.Group();
         scene.add(cakeGroup);
 
-        // We build the cake in two pre-cut halves so it splits perfectly!
         const leftHalf = new THREE.Group();
         const rightHalf = new THREE.Group();
         cakeGroup.add(leftHalf);
         cakeGroup.add(rightHalf);
 
-        // Materials
-        const icingMat = new THREE.MeshStandardMaterial({ color: lavenderColor, roughness: 0.6 });
-        const spongeMat = new THREE.MeshStandardMaterial({ color: spongeColor, roughness: 0.9 });
-        const goldMat = new THREE.MeshStandardMaterial({ color: 0xd4af37, metalness: 0.8, roughness: 0.2 });
+        // Premium Materials
+        const icingMat = new THREE.MeshStandardMaterial({ color: 0xE6E6FA, roughness: 0.3, metalness: 0.1 });
+        const spongeMat = new THREE.MeshStandardMaterial({ color: 0xFFE4C4, roughness: 0.9 }); // Vanilla
+        const jamMat = new THREE.MeshStandardMaterial({ color: 0x800020, roughness: 0.5 }); // Berry jam line
+        const goldMat = new THREE.MeshStandardMaterial({ color: 0xd4af37, roughness: 0.1, metalness: 0.9 });
 
-        // Geometries
-        const halfCylGeoLeft = new THREE.CylinderGeometry(cakeRadius, cakeRadius, cakeHeight, 32, 1, false, Math.PI/2, Math.PI);
-        const halfCylGeoRight = new THREE.CylinderGeometry(cakeRadius, cakeRadius, cakeHeight, 32, 1, false, -Math.PI/2, Math.PI);
-        const innerPlaneGeo = new THREE.PlaneGeometry(cakeRadius * 2, cakeHeight);
+        // Geometry Math for perfect splitting
+        // Right Half goes from 0 to PI
+        const rightGeo = new THREE.CylinderGeometry(cakeRadius, cakeRadius, cakeHeight, 32, 1, false, 0, Math.PI);
+        // Left Half goes from PI to 2PI
+        const leftGeo = new THREE.CylinderGeometry(cakeRadius, cakeRadius, cakeHeight, 32, 1, false, Math.PI, Math.PI);
         
-        // Build Left Half
-        const leftIcing = new THREE.Mesh(halfCylGeoLeft, icingMat);
-        const leftInside = new THREE.Mesh(innerPlaneGeo, spongeMat);
-        leftInside.rotation.y = Math.PI / 2; // Face right
-        leftHalf.add(leftIcing);
-        leftHalf.add(leftInside);
+        const innerPlaneGeo = new THREE.PlaneGeometry(cakeRadius * 2, cakeHeight);
+        const innerJamGeo = new THREE.PlaneGeometry(cakeRadius * 2, 0.1);
 
         // Build Right Half
-        const rightIcing = new THREE.Mesh(halfCylGeoRight, icingMat);
-        const rightInside = new THREE.Mesh(innerPlaneGeo, spongeMat);
-        rightInside.rotation.y = -Math.PI / 2; // Face left
+        const rightIcing = new THREE.Mesh(rightGeo, icingMat);
+        rightIcing.castShadow = true; rightIcing.receiveShadow = true;
+        
+        const rightInner = new THREE.Mesh(innerPlaneGeo, spongeMat);
+        rightInner.rotation.y = -Math.PI / 2; // Face the cut inwards
+        const rightJam = new THREE.Mesh(innerJamGeo, jamMat);
+        rightJam.rotation.y = -Math.PI / 2;
+        rightJam.position.z = 0.01; // Slight offset to prevent z-fighting
+        
         rightHalf.add(rightIcing);
-        rightHalf.add(rightInside);
+        rightHalf.add(rightInner);
+        rightHalf.add(rightJam);
 
-        // Elegant Gold Base Rings
-        const ringGeo = new THREE.TorusGeometry(cakeRadius + 0.05, 0.1, 16, 32, Math.PI);
-        const leftRing = new THREE.Mesh(ringGeo, goldMat);
-        leftRing.rotation.x = Math.PI / 2; leftRing.rotation.z = Math.PI / 2; leftRing.position.y = -cakeHeight/2 + 0.1;
-        leftHalf.add(leftRing);
+        // Build Left Half
+        const leftIcing = new THREE.Mesh(leftGeo, icingMat);
+        leftIcing.castShadow = true; leftIcing.receiveShadow = true;
         
-        const rightRing = new THREE.Mesh(ringGeo, goldMat);
-        rightRing.rotation.x = Math.PI / 2; rightRing.rotation.z = -Math.PI / 2; rightRing.position.y = -cakeHeight/2 + 0.1;
-        rightHalf.add(rightRing);
-
-        // The Candle (Attached to right half)
-        const candleGroup = new THREE.Group();
-        candleGroup.position.set(0.3, cakeHeight/2, 0); // Slightly offset
-        rightHalf.add(candleGroup);
-
-        const candleBody = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.1, 1.2, 16), new THREE.MeshStandardMaterial({ color: 0xffffff }));
-        candleBody.position.y = 0.6;
-        candleGroup.add(candleBody);
-
-        // Candle Flame (Glowing Sphere)
-        const flame = new THREE.Mesh(
-            new THREE.SphereGeometry(0.15, 16, 16), 
-            new THREE.MeshBasicMaterial({ color: 0xffaa00, transparent: true, opacity: 0.9 })
-        );
-        flame.position.y = 1.3;
-        candleGroup.add(flame);
+        const leftInner = new THREE.Mesh(innerPlaneGeo, spongeMat);
+        leftInner.rotation.y = Math.PI / 2; // Face the cut inwards
+        const leftJam = new THREE.Mesh(innerJamGeo, jamMat);
+        leftJam.rotation.y = Math.PI / 2;
+        leftJam.position.z = -0.01;
         
-        const candleLight = new THREE.PointLight(0xffaa00, 2, 10);
-        candleLight.position.y = 1.3;
-        candleGroup.add(candleLight);
+        leftHalf.add(leftIcing);
+        leftHalf.add(leftInner);
+        leftHalf.add(leftJam);
 
-        // Gentle floating animation before cut
-        gsap.to(cakeGroup.position, { y: 0.3, duration: 2, yoyo: true, repeat: -1, ease: "sine.inOut" });
-
-        // ==========================================
-        // 3. MAGICAL SWIPE TRAIL (Canvas 2D)
-        // ==========================================
-        const swipeCanvas = document.getElementById('swipe-canvas');
-        const ctx = swipeCanvas.getContext('2d');
-        let width, height;
-        
-        function resizeCanvas() {
-            width = swipeCanvas.width = window.innerWidth;
-            height = swipeCanvas.height = window.innerHeight;
+        // Add Gold Drip Edges (Using small spheres for performance & elegant look)
+        for (let i = 0; i < 40; i++) {
+            const angle = (i / 40) * Math.PI * 2;
+            const dropLength = Math.random() * 0.8 + 0.2;
+            const drop = new THREE.Mesh(new THREE.CapsuleGeometry(0.08, dropLength, 4, 8), goldMat);
+            drop.position.set(Math.cos(angle) * (cakeRadius + 0.02), (cakeHeight/2) - (dropLength/2), Math.sin(angle) * (cakeRadius + 0.02));
+            if(angle < Math.PI) rightHalf.add(drop);
+            else leftHalf.add(drop);
         }
-        window.addEventListener('resize', () => {
-            resizeCanvas();
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        });
-        resizeCanvas();
+        
+        // Add Gold Base Ring
+        const baseRing = new THREE.TorusGeometry(cakeRadius + 0.1, 0.15, 16, 64);
+        const ringMesh = new THREE.Mesh(baseRing, goldMat);
+        ringMesh.rotation.x = Math.PI / 2;
+        ringMesh.position.y = -cakeHeight/2;
+        cakeGroup.add(ringMesh); // Keep ring solid, doesn't split
 
-        let isDrawing = false;
-        let points = [];
+        // Candles (1 Center, 6 Circle)
+        const candleMat = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.2 });
+        const flameGroup = new THREE.Group();
+        cakeGroup.add(flameGroup);
+        const flames = [];
+
+        function createCandle(x, z, parent) {
+            const candle = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.08, 1.2, 16), candleMat);
+            candle.position.set(x, cakeHeight/2 + 0.6, z);
+            candle.castShadow = true;
+            parent.add(candle);
+
+            // Canvas texture for realistic glowing flame
+            const canvas = document.createElement('canvas'); canvas.width = 64; canvas.height = 64;
+            const ctx = canvas.getContext('2d');
+            const tex = new THREE.CanvasTexture(canvas);
+            const mat = new THREE.SpriteMaterial({ map: tex, blending: THREE.AdditiveBlending, transparent: true });
+            const flame = new THREE.Sprite(mat);
+            flame.scale.set(1.8, 2.5, 1);
+            flame.position.set(x, cakeHeight/2 + 1.5, z);
+            flameGroup.add(flame);
+            flames.push({ sprite: flame, ctx: ctx, tex: tex, offset: Math.random() * 10 });
+
+            // Point Light for each flame
+            const light = new THREE.PointLight(0xffaa33, 1.5, 8);
+            light.position.set(x, cakeHeight/2 + 1.8, z);
+            scene.add(light);
+            candleLights.push(light);
+        }
+
+        // Place candles (Attach to right half so they move when cut)
+        createCandle(0.5, 0, rightHalf); // Center-ish
+        for(let i=0; i<6; i++) {
+            const a = (i/6) * Math.PI * 2;
+            const r = 2;
+            createCandle(Math.cos(a)*r, Math.sin(a)*r, rightHalf);
+        }
+
+        function animateFlames(t) {
+            flames.forEach(f => {
+                f.ctx.clearRect(0,0,64,64);
+                const g = f.ctx.createRadialGradient(32,32,2,32,24,20);
+                g.addColorStop(0, `rgba(255,255,220,${0.9 + Math.sin(t*15 + f.offset)*0.1})`);
+                g.addColorStop(0.4, `rgba(255,160,50,${0.8 + Math.cos(t*12 + f.offset)*0.2})`);
+                g.addColorStop(1, 'rgba(255,60,0,0)');
+                f.ctx.fillStyle = g;
+                f.ctx.beginPath();
+                f.ctx.arc(32, 32, 24, 0, Math.PI*2);
+                f.ctx.fill();
+                f.tex.needsUpdate = true;
+            });
+        }
+
+        // ==========================================
+        // 4. THE 3D KNIFE (Sleek & Realistic)
+        // ==========================================
+        const knifeGroup = new THREE.Group();
+        scene.add(knifeGroup);
+
+        const blade = new THREE.Mesh(new THREE.BoxGeometry(0.04, 4.5, 0.8), new THREE.MeshStandardMaterial({ color: 0xdddddd, metalness: 0.9, roughness: 0.1 }));
+        blade.position.y = -2.25;
+        const handle = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.18, 1.5, 16), goldMat);
+        handle.position.y = 0.75;
+        const guard = new THREE.Mesh(new THREE.BoxGeometry(0.3, 0.1, 1), goldMat);
+        
+        knifeGroup.add(blade, handle, guard);
+        
+        // Initial knife resting position (Hovering elegantly above and slightly right)
+        knifeGroup.position.set(4, 8, 2);
+        knifeGroup.rotation.set(0, 0, Math.PI / 4); // Tilted
+
+        // Idle floating animation for knife
+        gsap.to(knifeGroup.position, { y: 8.5, duration: 2, yoyo: true, repeat: -1, ease: "sine.inOut" });
+
+        // Gentle floating animation for cake
+        gsap.to(cakeGroup.position, { y: 0.2, duration: 3, yoyo: true, repeat: -1, ease: "sine.inOut" });
+
+        // ==========================================
+        // 5. CHOREOGRAPHED CUT ANIMATION
+        // ==========================================
         let hasCut = false;
 
-        // Listeners for swipe
-        window.addEventListener('pointerdown', (e) => {
+        function triggerCinematicCut() {
             if(hasCut) return;
-            isDrawing = true;
-            points = [];
-            points.push({ x: e.clientX, y: e.clientY, age: 0 });
-            
-            // Initialize Audio safely on first touch
-            document.getElementById('bday-song').load();
-            document.getElementById('magic-swipe').load();
-        });
-
-        window.addEventListener('pointermove', (e) => {
-            if (!isDrawing || hasCut) return;
-            points.push({ x: e.clientX, y: e.clientY, age: 0 });
-            
-            // Logic to detect if they swiped across the center
-            if (points.length > 5) {
-                const start = points[0];
-                const current = points[points.length - 1];
-                const dx = Math.abs(current.x - start.x);
-                const dy = Math.abs(current.y - start.y);
-                
-                // If swipe is long enough, trigger cut
-                if (dx > window.innerWidth * 0.4 || dy > window.innerHeight * 0.3) {
-                    triggerCut();
-                }
-            }
-        });
-
-        window.addEventListener('pointerup', () => { isDrawing = false; });
-
-        function drawTrail() {
-            ctx.clearRect(0, 0, width, height);
-            if (points.length < 2) return;
-
-            ctx.beginPath();
-            ctx.moveTo(points[0].x, points[0].y);
-            
-            for (let i = 1; i < points.length; i++) {
-                ctx.lineTo(points[i].x, points[i].y);
-                points[i].age++; // Age the points so they fade out
-            }
-
-            // Glowing magic line
-            ctx.lineCap = 'round';
-            ctx.lineJoin = 'round';
-            ctx.lineWidth = 8;
-            ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)';
-            ctx.shadowBlur = 20;
-            ctx.shadowColor = '#E6E6FA';
-            ctx.stroke();
-
-            // Remove old points to create tail
-            points = points.filter(p => p.age < 15);
-        }
-
-        // ==========================================
-        // 4. THE GRAND CUT & CELEBRATION
-        // ==========================================
-        function triggerCut() {
             hasCut = true;
-            isDrawing = false;
 
-            // Play sound
-            const swoosh = document.getElementById('magic-swipe');
-            swoosh.volume = 0.5;
-            swoosh.play().catch(e=>{});
+            // Audio prep
+            const sliceSound = document.getElementById('slice-sound');
+            const song = document.getElementById('bday-song');
+            
+            // 1. Move Knife to Center Top
+            gsap.killTweensOf(knifeGroup.position); // Stop idle float
+            
+            const tl = gsap.timeline();
 
-            // Blow out candle
-            gsap.to(flame.scale, { x: 0, y: 0, z: 0, duration: 0.2 });
-            gsap.to(candleLight, { intensity: 0, duration: 0.2 });
+            tl.to(knifeGroup.position, { x: 0, y: 9, z: 0, duration: 0.8, ease: "power2.out" })
+              .to(knifeGroup.rotation, { z: 0, x: Math.PI/8, duration: 0.8, ease: "power2.out" }, "<")
+              
+              // 2. The Strike Down!
+              .to(knifeGroup.position, { 
+                  y: -0.5, 
+                  duration: 0.4, 
+                  ease: "power4.in",
+                  onStart: () => { 
+                      sliceSound.volume = 0.6;
+                      sliceSound.play().catch(e=>{}); 
+                  }
+              })
+              
+              // 3. Blow out flames
+              .add(() => {
+                  flames.forEach(f => gsap.to(f.sprite.scale, { x:0, y:0, duration: 0.2 }));
+                  candleLights.forEach(l => gsap.to(l, { intensity: 0, duration: 0.2 }));
+              })
 
-            // Split the cake!
-            gsap.to(leftHalf.position, { x: -2.5, duration: 2.5, ease: "power3.out" });
-            gsap.to(rightHalf.position, { x: 2.5, duration: 2.5, ease: "power3.out" });
-            gsap.to(leftHalf.rotation, { z: 0.15, y: -0.2, duration: 2.5, ease: "power3.out" });
-            gsap.to(rightHalf.rotation, { z: -0.15, y: 0.2, duration: 2.5, ease: "power3.out" });
+              // 4. Split Cake
+              .to(leftHalf.position, { x: -2.5, duration: 2.5, ease: "power3.out" }, "+=0.2")
+              .to(rightHalf.position, { x: 2.5, duration: 2.5, ease: "power3.out" }, "<")
+              .to(leftHalf.rotation, { z: 0.1, y: -0.2, duration: 2.5, ease: "power3.out" }, "<")
+              .to(rightHalf.rotation, { z: -0.1, y: 0.2, duration: 2.5, ease: "power3.out" }, "<")
+              
+              // 5. Hide Knife
+              .to(knifeGroup.position, { y: 15, z: -10, duration: 1, ease: "power2.in" }, "<")
 
-            // Fade out UI
-            gsap.to('#ui-layer', { opacity: 0, duration: 1 });
-
-            // Launch Celebration
-            setTimeout(() => {
-                // Play Song
-                const song = document.getElementById('bday-song');
-                song.volume = 0.7;
-                song.play().catch(e=>{});
-
-                // Move Camera Closer
-                gsap.to(camera.position, { z: isMobile ? 12 : 9, y: 4, duration: 3, ease: "power2.inOut" });
-
-                // Show Text
-                gsap.to('#celebration', { opacity: 1, scale: 1, duration: 2, ease: "elastic.out(1, 0.5)" });
-
-                // Confetti Explosion
-                const duration = 15 * 1000;
-                const animationEnd = Date.now() + duration;
-                const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
-
-                function randomInRange(min, max) { return Math.random() * (max - min) + min; }
-
-                const interval = setInterval(function() {
-                    const timeLeft = animationEnd - Date.now();
-                    if (timeLeft <= 0) return clearInterval(interval);
-                    
-                    const particleCount = 50 * (timeLeft / duration);
-                    confetti(Object.assign({}, defaults, { 
-                        particleCount, 
-                        origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 },
-                        colors: ['#E6E6FA', '#d4af37', '#ffffff']
-                    }));
-                    confetti(Object.assign({}, defaults, { 
-                        particleCount, 
-                        origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 },
-                        colors: ['#E6E6FA', '#d4af37', '#ffffff']
-                    }));
-                }, 250);
-
-            }, 500);
+              // 6. Camera zoom and UI fade
+              .to('#ui-layer', { opacity: 0, duration: 1 }, "<")
+              .to(camera.position, { 
+                  z: isMobile ? 12 : 9, 
+                  y: 4, 
+                  duration: 3, 
+                  ease: "power2.inOut" 
+              }, "<")
+              
+              // 7. Launch Celebration
+              .add(() => {
+                  song.volume = 0.8;
+                  song.play().catch(e=>{});
+                  
+                  gsap.to('#celebration', { opacity: 1, scale: 1, duration: 2, ease: "elastic.out(1, 0.5)" });
+                  
+                  launchGrandConfetti();
+              }, "-=1");
         }
 
+        function launchGrandConfetti() {
+            const duration = 15 * 1000;
+            const animationEnd = Date.now() + duration;
+            const defaults = { startVelocity: 35, spread: 360, ticks: 80, zIndex: 0 };
+            
+            function randomInRange(min, max) { return Math.random() * (max - min) + min; }
+
+            const interval = setInterval(function() {
+                const timeLeft = animationEnd - Date.now();
+                if (timeLeft <= 0) return clearInterval(interval);
+                
+                const particleCount = 40 * (timeLeft / duration);
+                
+                confetti(Object.assign({}, defaults, { 
+                    particleCount, 
+                    origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 },
+                    colors: ['#E6E6FA', '#d4af37', '#ffffff']
+                }));
+                confetti(Object.assign({}, defaults, { 
+                    particleCount, 
+                    origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 },
+                    colors: ['#E6E6FA', '#d4af37', '#ffffff']
+                }));
+            }, 250);
+        }
+
+        // Event Listener for the Tap
+        container.addEventListener('pointerdown', triggerCinematicCut);
+
         // ==========================================
-        // 5. RENDER LOOP
+        // 6. RENDER LOOP
         // ==========================================
+        const clock = new THREE.Clock();
+
         function animate() {
             requestAnimationFrame(animate);
-            drawTrail();
+            const t = clock.getElapsedTime();
 
-            // Make flame flicker slightly before cut
             if(!hasCut) {
-                flame.scale.setScalar(1 + Math.sin(Date.now() * 0.01) * 0.1);
-                candleLight.intensity = 2 + Math.sin(Date.now() * 0.01) * 0.2;
+                // Whole cake slowly rotates before cut
+                cakeGroup.rotation.y = t * 0.1;
+                
+                // Flicker lights
+                candleLights.forEach((l, i) => l.intensity = 1.5 + Math.sin(t * 20 + i) * 0.3);
             }
-
+            
+            animateFlames(t);
             renderer.render(scene, camera);
         }
         animate();
 
-        // Intro Animation
+        // Responsive
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // UI Intro Animation
         gsap.from('.fade-in', { y: 30, opacity: 0, duration: 1.5, stagger: 0.3, ease: "power3.out", delay: 0.5 });
 
     </script>
