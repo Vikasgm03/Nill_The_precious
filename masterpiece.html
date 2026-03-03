@@ -8,6 +8,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Great+Vibes&family=Montserrat:wght@300&display=swap" rel="stylesheet">
     
@@ -63,7 +64,7 @@
         /* --- 2. LAYOUT & CARD (From Cosmic Code) --- */
         .stage {
             position: relative; z-index: 20; height: 100%; width: 100%;
-            display: flex; flex-col; align-items: center; justify-content: center;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
             perspective: 2000px;
         }
 
@@ -142,21 +143,32 @@
         }
 
         /* --- UTILS --- */
-        .back-btn {
-            position: fixed; top: 30px; left: 30px;
+        .back-btn, .music-btn {
+            position: fixed; z-index: 100;
             color: rgba(255,255,255,0.6); font-size: 0.8rem; letter-spacing: 0.2em;
-            text-transform: uppercase; cursor: pointer; transition: 0.3s; z-index: 100;
+            text-transform: uppercase; cursor: pointer; transition: 0.3s;
             border: 1px solid rgba(255,255,255,0.2); padding: 10px 20px; border-radius: 30px;
+            background: rgba(0,0,0,0.3); backdrop-filter: blur(5px);
         }
-        .back-btn:hover { color: #fff; border-color: #d4af37; background: rgba(212, 175, 55, 0.1); }
+        .back-btn { top: 30px; left: 30px; }
+        .music-btn { bottom: 30px; right: 30px; display: flex; align-items: center; gap: 8px; }
+        .back-btn:hover, .music-btn:hover { color: #fff; border-color: #d4af37; background: rgba(212, 175, 55, 0.1); }
 
     </style>
 </head>
 <body>
 
+    <audio id="fireworks-audio" src="https://assets.mixkit.co/sfx/preview/2739/2739-preview.mp3" preload="auto"></audio>
+    <audio id="bg-music" src="https://cdn.pixabay.com/audio/2022/10/05/audio_68629e7695.mp3" loop preload="auto"></audio>
+
     <a href="home.html?skipIntro=true#cake-anchor" class="back-btn">
     ← Gallery
-</a>
+    </a>
+
+    <button onclick="toggleMusic()" class="music-btn">
+        <i class="fas fa-music"></i>
+        <span id="music-text">PLAY MUSIC</span>
+    </button>
 
     <div class="royal-bg"></div>
     <div class="spotlight"></div>
@@ -235,8 +247,30 @@
         }
         setInterval(createPetal, 200);
 
+        // --- MUSIC LOGIC ---
+        const bgMusic = document.getElementById('bg-music');
+        let isPlaying = false;
+        
+        function toggleMusic() {
+            if (isPlaying) {
+                bgMusic.pause();
+                document.getElementById('music-text').innerText = "PLAY MUSIC";
+            } else {
+                bgMusic.play().catch(e => console.log(e));
+                document.getElementById('music-text').innerText = "PAUSE MUSIC";
+            }
+            isPlaying = !isPlaying;
+        }
+
         // --- 3. ROYAL FIREWORKS (Crackers) ---
         function launchRoyalFireworks() {
+            // Play crackers audio exactly when confetti launches
+            const fwAudio = document.getElementById('fireworks-audio');
+            if(fwAudio) {
+                fwAudio.volume = 0.5;
+                fwAudio.play().catch(e => console.log('Autoplay prevented by browser'));
+            }
+
             const duration = 4000;
             const end = Date.now() + duration;
 
