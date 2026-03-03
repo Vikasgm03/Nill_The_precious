@@ -247,16 +247,34 @@
         }
         setInterval(createPetal, 200);
 
-        // --- MUSIC LOGIC ---
+        // --- MUSIC LOGIC (Auto-Play Setup) ---
         const bgMusic = document.getElementById('bg-music');
         let isPlaying = false;
+
+        function startMusic() {
+            bgMusic.play().then(() => {
+                isPlaying = true;
+                document.getElementById('music-text').innerText = "PAUSE MUSIC";
+            }).catch(e => {
+                console.log("Autoplay prevented by browser. Awaiting user interaction.");
+            });
+        }
+
+        // Try playing immediately on load
+        window.addEventListener('DOMContentLoaded', () => {
+            startMusic();
+            
+            // If browser blocked it, wait for the first click/touch anywhere on the screen
+            document.body.addEventListener('click', () => { if(!isPlaying) startMusic(); }, { once: true });
+            document.body.addEventListener('touchstart', () => { if(!isPlaying) startMusic(); }, { once: true });
+        });
         
         function toggleMusic() {
             if (isPlaying) {
                 bgMusic.pause();
                 document.getElementById('music-text').innerText = "PLAY MUSIC";
             } else {
-                bgMusic.play().catch(e => console.log(e));
+                bgMusic.play();
                 document.getElementById('music-text').innerText = "PAUSE MUSIC";
             }
             isPlaying = !isPlaying;
