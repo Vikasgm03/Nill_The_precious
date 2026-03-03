@@ -1,427 +1,185 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Make a Wish • Nithya</title>
-    
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Great+Vibes&family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;500&display=swap" rel="stylesheet">
-    
-    <style>
-        :root {
-            --lavender: #d4b8f0;
-            --gold: #d4af37;
-        }
-        body {
-            margin: 0;
-            overflow: hidden;
-            background: radial-gradient(circle at center, #1a0b2e 0%, #05020a 100%);
-            color: white;
-            font-family: 'Montserrat', sans-serif;
-            user-select: none;
-            touch-action: none; /* Prevents scroll bounce on mobile */
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Make a Wish</title>
 
-        #cake-container {
-            position: absolute;
-            inset: 0;
-            z-index: 10;
-            cursor: pointer;
-        }
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 
-        /* Magical Floating Particles in Background */
-        .bg-particles {
-            position: absolute; inset: 0; pointer-events: none; z-index: 1;
-            background: radial-gradient(circle at 20% 30%, rgba(212,184,240,0.08) 0%, transparent 40%),
-                        radial-gradient(circle at 80% 70%, rgba(212,175,55,0.05) 0%, transparent 50%);
-            animation: breathe 8s infinite alternate ease-in-out;
-        }
-        @keyframes breathe { 0% { opacity: 0.5; } 100% { opacity: 1; } }
+<style>
+body{
+    margin:0;
+    height:100vh;
+    background:linear-gradient(180deg,#1a1026,#05020a);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    font-family: 'Segoe UI', sans-serif;
+    overflow:hidden;
+    color:white;
+}
 
-        /* UI Overlays */
-        .ui-layer {
-            position: absolute; inset: 0; z-index: 30; pointer-events: none;
-            display: flex; flex-direction: column; justify-content: space-between; padding: 2rem;
-        }
+/* Cake */
+.cake{
+    position:relative;
+    width:220px;
+    height:180px;
+    margin-bottom:40px;
+}
 
-        .title-box { text-align: center; margin-top: 8vh; }
-        .title-box h1 {
-            font-family: 'Playfair Display', serif;
-            font-size: clamp(2.5rem, 8vw, 5rem);
-            color: var(--lavender);
-            text-shadow: 0 0 30px rgba(212,184,240,0.5);
-            margin: 0; line-height: 1;
-        }
-        .title-box p {
-            font-family: 'Great Vibes', cursive;
-            font-size: clamp(2rem, 5vw, 3.5rem);
-            color: var(--gold);
-            margin-top: 5px;
-        }
+.layer{
+    position:absolute;
+    width:220px;
+    height:60px;
+    border-radius:10px;
+    left:0;
+}
 
-        /* The Tap Instruction */
-        .instruction {
-            position: absolute; bottom: 15%; left: 50%; transform: translateX(-50%);
-            background: rgba(10, 3, 20, 0.8); backdrop-filter: blur(10px);
-            border: 1px solid rgba(212, 175, 55, 0.4); border-radius: 50px;
-            padding: 16px 40px; font-family: 'Cinzel', serif;
-            color: var(--gold); font-size: clamp(0.9rem, 3vw, 1.2rem); letter-spacing: 0.2em;
-            box-shadow: 0 0 30px rgba(212, 175, 55, 0.2);
-            white-space: nowrap; animation: pulseGlow 2s infinite;
-        }
-        @keyframes pulseGlow {
-            0%, 100% { box-shadow: 0 0 20px rgba(212,175,55,0.2); transform: translateX(-50%) scale(1); }
-            50% { box-shadow: 0 0 40px rgba(212,175,55,0.6); transform: translateX(-50%) scale(1.05); }
-        }
+.layer1{ bottom:0; background:#f7d6e0;}
+.layer2{ bottom:50px; background:#f3c1d4;}
+.layer3{ bottom:100px; background:#e6a8c5;}
 
-        /* Final Celebration Text */
-        #celebration {
-            position: absolute; inset: 0; z-index: 40; pointer-events: none;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            opacity: 0; transform: scale(0.9);
-        }
-        #celebration h2 {
-            font-family: 'Great Vibes', cursive;
-            font-size: clamp(5rem, 16vw, 12rem);
-            background: linear-gradient(180deg, #ffffff 0%, var(--lavender) 100%);
-            -webkit-background-clip: text; color: transparent;
-            line-height: 1; text-shadow: 0 0 60px rgba(212,184,240,0.5);
-            margin: 0; padding-bottom: 10px;
-        }
-        #celebration h3 {
-            font-family: 'Cinzel', serif;
-            font-size: clamp(2rem, 7vw, 4rem);
-            letter-spacing: 0.5em; color: var(--gold);
-            margin: 0; margin-top: -15px;
-            text-shadow: 0 0 30px rgba(212, 175, 55, 0.6);
-        }
+.icing{
+    position:absolute;
+    bottom:150px;
+    width:220px;
+    height:40px;
+    background:#fff;
+    border-radius:50% 50% 10px 10px;
+}
 
-        .back-btn {
-            position: fixed; top: 24px; left: 24px; z-index: 100;
-            color: rgba(212,184,240,0.7); font-family: 'Cinzel', serif; font-size: 0.8rem;
-            letter-spacing: 0.2em; text-decoration: none; transition: all 0.3s;
-            border: 1px solid rgba(212,184,240,0.3); padding: 10px 20px; border-radius: 30px;
-            background: rgba(0,0,0,0.4); backdrop-filter: blur(5px);
-        }
-        .back-btn:hover { color: #fff; border-color: var(--gold); background: rgba(212,175,55,0.15); }
-    </style>
+/* Candles */
+.candle{
+    position:absolute;
+    width:8px;
+    height:30px;
+    background:white;
+    bottom:180px;
+}
+
+.flame{
+    position:absolute;
+    width:10px;
+    height:15px;
+    background:radial-gradient(circle,#fff 0%,orange 60%,transparent 70%);
+    border-radius:50%;
+    top:-15px;
+    left:-1px;
+    animation:flicker 0.2s infinite alternate;
+}
+
+@keyframes flicker{
+    from{transform:scale(1);}
+    to{transform:scale(1.2);}
+}
+
+/* Knife */
+.knife{
+    position:absolute;
+    width:6px;
+    height:160px;
+    background:linear-gradient(to bottom,#ddd,#999);
+    top:-200px;
+    border-radius:3px;
+}
+
+/* Celebration */
+.message{
+    position:absolute;
+    text-align:center;
+    opacity:0;
+    transform:scale(0.8);
+}
+
+h1{
+    font-size:40px;
+    margin:0;
+}
+
+button{
+    padding:12px 30px;
+    border:none;
+    background:#d4af37;
+    border-radius:30px;
+    font-weight:bold;
+    letter-spacing:2px;
+    cursor:pointer;
+}
+</style>
 </head>
 <body>
 
-    <audio id="slice-sound" src="https://assets.mixkit.co/sfx/preview/2754/2754-preview.mp3" preload="auto"></audio>
-    <audio id="bday-song" src="https://cdn.pixabay.com/audio/2022/10/05/audio_68629e7695.mp3" preload="auto" loop></audio>
+<div class="cake" id="cake">
+    <div class="layer layer1"></div>
+    <div class="layer layer2"></div>
+    <div class="layer layer3"></div>
+    <div class="icing"></div>
 
-    <a href="home.html" class="back-btn">← RETURN</a>
-
-    <div class="bg-particles"></div>
-
-    <div class="ui-layer" id="ui-layer">
-        <div class="title-box">
-            <h1 class="fade-in">Make a Wish</h1>
-            <p class="fade-in">My Eternal Queen</p>
-        </div>
-        <div class="instruction fade-in" id="hint-btn">
-            TAP ANYWHERE TO CUT ✨
-        </div>
+    <div class="candle" style="left:60px">
+        <div class="flame"></div>
     </div>
-
-    <div id="celebration">
-        <h2>Happy Birthday</h2>
-        <h3>NITHYA</h3>
+    <div class="candle" style="left:100px">
+        <div class="flame"></div>
     </div>
+    <div class="candle" style="left:140px">
+        <div class="flame"></div>
+    </div>
+</div>
 
-    <div id="cake-container"></div>
+<div class="knife" id="knife"></div>
 
-    <script>
-        const isMobile = window.innerWidth < 768;
+<button onclick="cutCake()">TAP TO CUT</button>
 
-        // ==========================================
-        // 1. SCENE SETUP
-        // ==========================================
-        const container = document.getElementById('cake-container');
-        const scene = new THREE.Scene();
-        scene.fog = new THREE.FogExp2(0x0a0314, 0.02);
-        
-        const cameraZ = isMobile ? 18 : 14; 
-        const camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 0.1, 100);
-        camera.position.set(0, 8, cameraZ);
+<div class="message" id="message">
+    <h1>Happy Birthday</h1>
+    <h2>NITHYA ❤️</h2>
+</div>
 
-        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: "high-performance" });
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-        renderer.shadowMap.enabled = !isMobile; // Disable shadows on mobile for smoother performance
-        if(!isMobile) renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-        container.appendChild(renderer.domElement);
+<script>
+let cut = false;
 
-        // ==========================================
-        // 2. LIGHTING
-        // ==========================================
-        scene.add(new THREE.AmbientLight(0xffffff, 0.5));
+function cutCake(){
+    if(cut) return;
+    cut = true;
 
-        const mainLight = new THREE.SpotLight(0xfff0d0, 2.5, 0, Math.PI/4, 0.5);
-        mainLight.position.set(10, 25, 15);
-        if(!isMobile) mainLight.castShadow = true;
-        scene.add(mainLight);
+    const knife = document.getElementById("knife");
+    const flames = document.querySelectorAll(".flame");
 
-        const rimLight = new THREE.DirectionalLight(0xd4b8f0, 1.2);
-        rimLight.position.set(-15, 5, -15);
-        scene.add(rimLight);
-
-        const candleLights = [];
-
-        // ==========================================
-        // 3. THE SPLIT LAVENDER CAKE
-        // ==========================================
-        const cakeRadius = 3.2;
-        const cakeHeight = 3.0;
-        
-        const cakeGroup = new THREE.Group();
-        scene.add(cakeGroup);
-
-        const leftHalf = new THREE.Group();
-        const rightHalf = new THREE.Group();
-        cakeGroup.add(leftHalf);
-        cakeGroup.add(rightHalf);
-
-        // Materials
-        const icingMat = new THREE.MeshStandardMaterial({ color: 0xd4b8f0, roughness: 0.4 }); // Lavender
-        const spongeMat = new THREE.MeshStandardMaterial({ color: 0xFFE4C4, roughness: 0.9 }); // Vanilla Sponge
-        const jamMat = new THREE.MeshStandardMaterial({ color: 0x8b0000, roughness: 0.3 }); // Dark Red Jam
-        const goldMat = new THREE.MeshStandardMaterial({ color: 0xd4af37, roughness: 0.2, metalness: 0.8 });
-
-        // Geometries for Half Cylinders
-        const rightGeo = new THREE.CylinderGeometry(cakeRadius, cakeRadius, cakeHeight, 32, 1, false, 0, Math.PI);
-        const leftGeo = new THREE.CylinderGeometry(cakeRadius, cakeRadius, cakeHeight, 32, 1, false, Math.PI, Math.PI);
-        const innerPlaneGeo = new THREE.PlaneGeometry(cakeRadius * 2, cakeHeight);
-        const innerJamGeo = new THREE.PlaneGeometry(cakeRadius * 2, 0.15);
-
-        // Build Right Half
-        const rightIcing = new THREE.Mesh(rightGeo, icingMat);
-        const rightInner = new THREE.Mesh(innerPlaneGeo, spongeMat);
-        rightInner.rotation.y = -Math.PI / 2;
-        const rightJam = new THREE.Mesh(innerJamGeo, jamMat);
-        rightJam.rotation.y = -Math.PI / 2;
-        rightJam.position.z = 0.01; 
-        
-        rightHalf.add(rightIcing, rightInner, rightJam);
-
-        // Build Left Half
-        const leftIcing = new THREE.Mesh(leftGeo, icingMat);
-        const leftInner = new THREE.Mesh(innerPlaneGeo, spongeMat);
-        leftInner.rotation.y = Math.PI / 2;
-        const leftJam = new THREE.Mesh(innerJamGeo, jamMat);
-        leftJam.rotation.y = Math.PI / 2;
-        leftJam.position.z = -0.01;
-        
-        leftHalf.add(leftIcing, leftInner, leftJam);
-
-        // Gold Drip Edges
-        for (let i = 0; i < 30; i++) {
-            const angle = (i / 30) * Math.PI * 2;
-            const dropLength = Math.random() * 0.8 + 0.3;
-            const drop = new THREE.Mesh(new THREE.CapsuleGeometry(0.08, dropLength, 4, 8), goldMat);
-            drop.position.set(Math.cos(angle) * (cakeRadius + 0.02), (cakeHeight/2) - (dropLength/2), Math.sin(angle) * (cakeRadius + 0.02));
-            if(angle < Math.PI) rightHalf.add(drop);
-            else leftHalf.add(drop);
-        }
-        
-        // Base Ring (Doesn't split)
-        const ringMesh = new THREE.Mesh(new THREE.TorusGeometry(cakeRadius + 0.1, 0.12, 16, 64), goldMat);
-        ringMesh.rotation.x = Math.PI / 2;
-        ringMesh.position.y = -cakeHeight/2;
-        cakeGroup.add(ringMesh); 
-
-        // Candles & Flames
-        const flameGroup = new THREE.Group();
-        cakeGroup.add(flameGroup);
-        const flames = [];
-
-        function createCandle(x, z, parent) {
-            const candle = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.07, 1.2, 12), new THREE.MeshStandardMaterial({ color: 0xffffff }));
-            candle.position.set(x, cakeHeight/2 + 0.6, z);
-            parent.add(candle);
-
-            // Sprite Flame
-            const canvas = document.createElement('canvas'); canvas.width = 32; canvas.height = 32;
-            const ctx = canvas.getContext('2d');
-            const tex = new THREE.CanvasTexture(canvas);
-            const mat = new THREE.SpriteMaterial({ map: tex, blending: THREE.AdditiveBlending, transparent: true });
-            const flame = new THREE.Sprite(mat);
-            flame.scale.set(1.5, 2, 1);
-            flame.position.set(x, cakeHeight/2 + 1.5, z);
-            flameGroup.add(flame);
-            flames.push({ sprite: flame, ctx: ctx, tex: tex, offset: Math.random() * 10 });
-
-            const light = new THREE.PointLight(0xffaa33, 1.2, 8);
-            light.position.set(x, cakeHeight/2 + 1.8, z);
-            scene.add(light);
-            candleLights.push(light);
-        }
-
-        // Place 5 candles attached to the right half
-        createCandle(0.3, 0, rightHalf);
-        createCandle(1.5, 1.2, rightHalf);
-        createCandle(1.5, -1.2, rightHalf);
-        createCandle(2.2, 0, rightHalf);
-        createCandle(0.5, 2, rightHalf);
-
-        function animateFlames(t) {
-            flames.forEach(f => {
-                f.ctx.clearRect(0,0,32,32);
-                const g = f.ctx.createRadialGradient(16,16,1,16,12,12);
-                g.addColorStop(0, `rgba(255,255,220,${0.9 + Math.sin(t*15 + f.offset)*0.1})`);
-                g.addColorStop(0.4, `rgba(255,160,50,${0.8 + Math.cos(t*12 + f.offset)*0.2})`);
-                g.addColorStop(1, 'rgba(255,60,0,0)');
-                f.ctx.fillStyle = g;
-                f.ctx.beginPath();
-                f.ctx.arc(16, 16, 12, 0, Math.PI*2);
-                f.ctx.fill();
-                f.tex.needsUpdate = true;
+    // Knife drop
+    gsap.to(knife,{
+        top:"100px",
+        duration:0.5,
+        ease:"power2.out",
+        onComplete:()=>{
+            // Blow flames
+            flames.forEach(f=>{
+                gsap.to(f,{scale:0,opacity:0,duration:0.3});
             });
+
+            // Split cake
+            gsap.to(".layer1",{x:-40,duration:1});
+            gsap.to(".layer2",{x:-40,duration:1});
+            gsap.to(".layer3",{x:-40,duration:1});
+            gsap.to(".icing",{x:-40,duration:1});
+
+            gsap.to("#cake",{scale:1.05,duration:1});
+
+            // Confetti
+            confetti({
+                particleCount:150,
+                spread:90,
+                origin:{y:0.6}
+            });
+
+            // Show message
+            gsap.to("#message",{opacity:1,scale:1,duration:1.5,delay:0.5});
         }
+    });
+}
+</script>
 
-        // ==========================================
-        // 4. THE 3D KNIFE
-        // ==========================================
-        const knifeGroup = new THREE.Group();
-        scene.add(knifeGroup);
-
-        const blade = new THREE.Mesh(new THREE.BoxGeometry(0.04, 4.5, 0.8), new THREE.MeshStandardMaterial({ color: 0xdddddd, metalness: 0.9, roughness: 0.1 }));
-        blade.position.y = -2.25;
-        const handle = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.16, 1.5, 16), goldMat);
-        handle.position.y = 0.75;
-        
-        knifeGroup.add(blade, handle);
-        
-        // Hide high up initially
-        knifeGroup.position.set(0, 15, 0);
-        knifeGroup.rotation.set(0, 0, Math.PI / 6);
-
-        // Gentle floating animation for cake
-        gsap.to(cakeGroup.position, { y: 0.3, duration: 3, yoyo: true, repeat: -1, ease: "sine.inOut" });
-
-        // ==========================================
-        // 5. CHOREOGRAPHED CUT (ON TAP)
-        // ==========================================
-        let hasCut = false;
-
-        function triggerCinematicCut() {
-            if(hasCut) return;
-            hasCut = true;
-
-            const sliceSound = document.getElementById('slice-sound');
-            const song = document.getElementById('bday-song');
-            
-            const tl = gsap.timeline();
-
-            // 1. Knife swoops in and slices down
-            tl.to(knifeGroup.position, { y: 8, duration: 0.5, ease: "power2.out" })
-              .to(knifeGroup.position, { 
-                  y: -0.5, 
-                  duration: 0.4, 
-                  ease: "power4.in",
-                  onStart: () => { 
-                      sliceSound.volume = 0.7;
-                      sliceSound.play().catch(e=>{}); 
-                  }
-              })
-              
-              // 2. Blow out flames instantly
-              .add(() => {
-                  flames.forEach(f => gsap.to(f.sprite.scale, { x:0, y:0, duration: 0.2 }));
-                  candleLights.forEach(l => gsap.to(l, { intensity: 0, duration: 0.2 }));
-              })
-
-              // 3. Cake Splits
-              .to(leftHalf.position, { x: -2.5, duration: 2.5, ease: "power3.out" }, "+=0.1")
-              .to(rightHalf.position, { x: 2.5, duration: 2.5, ease: "power3.out" }, "<")
-              .to(leftHalf.rotation, { z: 0.1, y: -0.25, duration: 2.5, ease: "power3.out" }, "<")
-              .to(rightHalf.rotation, { z: -0.1, y: 0.25, duration: 2.5, ease: "power3.out" }, "<")
-              
-              // 4. Knife flies away
-              .to(knifeGroup.position, { y: 15, z: -5, duration: 1, ease: "power2.in" }, "<")
-
-              // 5. UI Fades out, Camera Zooms in
-              .to('#ui-layer', { opacity: 0, duration: 0.8 }, "<")
-              .to(camera.position, { 
-                  z: isMobile ? 12 : 9, 
-                  y: 5, 
-                  duration: 3, 
-                  ease: "power2.inOut" 
-              }, "<")
-              
-              // 6. Celebration starts!
-              .add(() => {
-                  song.volume = 0.8;
-                  song.play().catch(e=>{});
-                  
-                  gsap.to('#celebration', { opacity: 1, scale: 1, duration: 2, ease: "elastic.out(1, 0.5)" });
-                  launchConfettiLoop();
-              }, "-=1");
-        }
-
-        function launchConfettiLoop() {
-            const duration = 15 * 1000;
-            const animationEnd = Date.now() + duration;
-            const defaults = { startVelocity: 35, spread: 360, ticks: 80, zIndex: 0 };
-            
-            function randomInRange(min, max) { return Math.random() * (max - min) + min; }
-
-            const interval = setInterval(function() {
-                const timeLeft = animationEnd - Date.now();
-                if (timeLeft <= 0) return clearInterval(interval);
-                
-                const particleCount = 40 * (timeLeft / duration);
-                
-                confetti(Object.assign({}, defaults, { 
-                    particleCount, 
-                    origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 },
-                    colors: ['#d4b8f0', '#d4af37', '#ffffff']
-                }));
-                confetti(Object.assign({}, defaults, { 
-                    particleCount, 
-                    origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 },
-                    colors: ['#d4b8f0', '#d4af37', '#ffffff']
-                }));
-            }, 250);
-        }
-
-        // ONE CLICK DOES EVERYTHING
-        container.addEventListener('pointerdown', triggerCinematicCut);
-
-        // ==========================================
-        // 6. RENDER LOOP
-        // ==========================================
-        const clock = new THREE.Clock();
-
-        function animate() {
-            requestAnimationFrame(animate);
-            const t = clock.getElapsedTime();
-
-            if(!hasCut) {
-                // Cake rotates slowly before cut
-                cakeGroup.rotation.y = t * 0.15;
-            }
-            
-            animateFlames(t);
-            renderer.render(scene, camera);
-        }
-        animate();
-
-        window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        });
-
-        // UI Intro
-        gsap.from('.fade-in', { y: 30, opacity: 0, duration: 1.5, stagger: 0.3, ease: "power3.out", delay: 0.5 });
-
-    </script>
 </body>
 </html>
