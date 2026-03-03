@@ -30,6 +30,9 @@
             .lenis.lenis-stopped { overflow: hidden; } 
         }
 
+        /* SCROLL LOCK CLASSS */
+        body.scroll-locked { overflow: hidden !important; height: 100vh !important; touch-action: none; }
+
         /* --- CUSTOM CURSOR --- */
         @media (hover: hover) and (pointer: fine) {
             .cursor-dot { position: fixed; top: 0; left: 0; width: 8px; height: 8px; background-color: var(--gold); border-radius: 50%; z-index: 10000; pointer-events: none; transform: translate(-50%, -50%); }
@@ -94,7 +97,6 @@
             .timeline-node { left: 24px; }
             .mobile-pl { padding-left: 56px !important; }
         }
-        body.scroll-locked { overflow: hidden !important; height: 100vh !important; }
     </style>
 </head>
 <body class="scroll-locked film-grain">
@@ -231,11 +233,13 @@
         gsap.registerPlugin(ScrollTrigger);
         const isMobile = window.innerWidth < 768;
 
-        // 1. Smooth Scroll
+        // 1. Smooth Scroll - Stop immediately so user can't scroll while gate is closed
+        let lenis;
         if (!isMobile) {
-            const lenis = new Lenis({ duration: 1.2, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), smooth: true });
+            lenis = new Lenis({ duration: 1.2, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), smooth: true });
             function raf(time) { lenis.raf(time); ScrollTrigger.update(); requestAnimationFrame(raf); }
             requestAnimationFrame(raf);
+            lenis.stop(); // Lock lenis scrolling
         }
 
         // 2. Custom Cursor
@@ -280,7 +284,13 @@
             document.body.addEventListener('click', () => { music.play().catch(e => console.log(e)); }, {once:true});
             document.body.addEventListener('scroll', () => { music.play().catch(e => console.log(e)); }, {once:true});
 
-            const tl = gsap.timeline();
+            // Unlock scrolling upon completion
+            const tl = gsap.timeline({
+                onComplete: () => {
+                    document.body.classList.remove('scroll-locked');
+                    if (lenis) lenis.start();
+                }
+            });
             
             // Phase 1: Portal Rings Expansion
             tl.to(".ring-1", { scale: 15, opacity: 0, duration: 1.5, ease: "power2.in" }, "+=0.5")
@@ -301,8 +311,7 @@
               .from("#header-section p", { y: 10, opacity: 0, duration: 1, ease: "power3.out", stagger: 0.2 }, "open+=0.7")
               .set(".gate", { display: "none" })
               .set("#gate-flash", { display: "none" })
-              .set("#entrance-seal", { display: "none" })
-              .set("body", { className: "film-grain" }); // Unlocks scroll
+              .set("#entrance-seal", { display: "none" });
 
             // Scroll Triggers
             gsap.to("#header-section", { opacity: 0, y: -50, scrollTrigger: { trigger: "body", start: "top top", end: "15% top", scrub: true }});
