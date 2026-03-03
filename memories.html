@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>BLOOM • Her Birthday Memories</title>
-   
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Great+Vibes&family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;400&display=swap" rel="stylesheet">
-   
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
@@ -21,7 +21,7 @@
             --blush: #f8d7e3;
             --dark: #050505;
         }
-       
+        
         body {
             background-color: var(--dark);
             color: white;
@@ -32,6 +32,13 @@
         .font-cinematic { font-family: 'Cormorant Garamond', serif; }
         .font-emotional { font-family: 'Great Vibes', cursive; }
         .font-playfair { font-family: 'Playfair Display', serif; }
+
+        /* SCROLL LOCK */
+        body.scroll-locked {
+            overflow: hidden !important;
+            height: 100vh !important;
+            touch-action: none;
+        }
 
         /* Smooth Scroll */
         @media (min-width: 769px) {
@@ -179,15 +186,12 @@
     </style>
 </head>
 <body class="scroll-locked film-grain">
-    <!-- Floating Petals -->
     <div class="petals-container" id="petals"></div>
 
-    <!-- Cosmic Gate -->
     <div id="gate-left" class="gate"></div>
     <div id="gate-right" class="gate"></div>
     <div id="gate-flash"></div>
 
-    <!-- Entrance Seal -->
     <div id="entrance-seal" class="fixed inset-0 z-[100002] flex flex-col items-center justify-center pointer-events-none">
         <div class="relative flex items-center justify-center w-48 h-48">
             <div class="absolute w-40 h-40 border border-[rgba(232,180,184,0.4)] rounded-full animate-[ping_3s_infinite]"></div>
@@ -196,23 +200,19 @@
         <p class="mt-10 font-cinematic text-[#e8b4b8] tracking-[0.6em] uppercase text-sm animate-pulse">BLOOM • Opening Her Magical Day</p>
     </div>
 
-    <!-- Custom Cursor -->
     <div class="cursor-dot hidden md:block"></div>
     <div class="cursor-outline hidden md:block"></div>
 
-    <!-- Back Button -->
-    <a href="home.html?skipIntro=true#gallery-anchor" class="fixed top-6 left-6 z-50 text-white/60 hover:text-[#e8b4b8] transition-all flex items-center gap-3 bg-black/40 backdrop-blur-md px-5 py-2.5 rounded-full border border-white/10">
+    <a href="home.html?skipIntro=true#gallery-anchor" class="fixed top-6 left-6 z-50 text-white/60 hover:text-[#e8b4b8] transition-all flex items-center gap-3 bg-black/40 backdrop-blur-md px-5 py-2.5 rounded-full border border-white/10 cursor-pointer">
         <i class="fas fa-arrow-left"></i>
         <span class="tracking-widest text-xs font-cinematic">RETURN HOME</span>
     </a>
 
-    <!-- Music Toggle -->
-    <button onclick="toggleMusic()" id="music-btn" class="music-btn">
+    <button onclick="toggleMusic()" id="music-btn" class="music-btn cursor-pointer hover:bg-white/10 hover:scale-105">
         <i class="fas fa-music"></i>
         <span id="music-text">PLAY HER SONG</span>
     </button>
 
-    <!-- HERO -->
     <div class="sticky-card bg-[#050505]">
         <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(232,180,184,0.12)_0%,transparent_65%)]"></div>
         <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1519741497674-611027288377?w=2000')] bg-cover bg-center opacity-10 mix-blend-screen"></div>
@@ -231,7 +231,6 @@
 
     <div class="stack-container">
 
-        <!-- CHAPTER 1 -->
         <div class="sticky-card bg-[#0a0508]">
             <div class="art-frame group">
                 <img src="media/6.jpeg" class="cinematic-img" alt="Birthday Glow">
@@ -244,7 +243,6 @@
             </div>
         </div>
 
-        <!-- CHAPTER 2 -->
         <div class="sticky-card bg-[#050508]">
             <div class="art-frame group">
                 <img src="media/5.jpeg" class="cinematic-img" alt="Cake Moment">
@@ -257,7 +255,6 @@
             </div>
         </div>
 
-        <!-- CHAPTER 3 -->
         <div class="sticky-card bg-[#080508]">
             <div class="art-frame group">
                 <img src="media/p/p9.jpeg" class="cinematic-img" alt="Birthday Spirit">
@@ -270,7 +267,6 @@
             </div>
         </div>
 
-        <!-- CHAPTER 4 -->
         <div class="sticky-card bg-[#05080a]">
             <div class="art-frame group">
                 <img src="media/1.jpeg" class="cinematic-img" alt="Gift Moment">
@@ -283,7 +279,6 @@
             </div>
         </div>
 
-        <!-- CHAPTER 5 -->
         <div class="sticky-card bg-[#050505]">
             <div class="art-frame group">
                 <img src="media/25.jpg" class="cinematic-img" alt="Timeless Smile">
@@ -296,21 +291,22 @@
             </div>
         </div>
 
-        <!-- FINAL CHAPTER -->
         <div id="final-chapter" class="sticky-card bg-black flex flex-col items-center justify-center text-center relative overflow-hidden">
-            <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(232,180,184,0.15)_0%,transparent_70%)]"></div>
+            <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(232,180,184,0.15)_0%,transparent_70%)] pointer-events-none"></div>
             
             <i class="fas fa-heart text-[#e8b4b8] text-6xl mb-6 drop-shadow-2xl"></i>
 
             <p class="text-4xl font-emotional text-[#e8b4b8] mb-12">You are the most beautiful bloom in the garden of life</p>
             
+            <button onclick="window.location.href='home.html?skipIntro=true#gallery-anchor'" 
+                    class="px-12 py-5 border border-[#e8b4b8]/60 hover:border-[#e8b4b8] rounded-full text-sm tracking-widest font-cinematic transition-all hover:scale-105 relative z-20 cursor-pointer bg-black/30 backdrop-blur-sm">
+                RETURN TO THE WORLD
+            </button>
         </div>
     </div>
 
-    <!-- Chapter Navigation Dots -->
     <div class="chapter-dots hidden md:flex" id="chapter-dots"></div>
 
-    <!-- Confetti Canvas -->
     <canvas id="confetti-canvas"></canvas>
 
     <script>
@@ -355,11 +351,19 @@
         petalStyle.innerHTML = `@keyframes fall { to { transform: translateY(110vh) rotate(720deg); } }`;
         document.head.appendChild(petalStyle);
 
-        // Entrance Gate Animation
+        // Entrance Gate Animation & Scroll Lock Management
         window.onload = () => {
+            if (lenis) lenis.stop(); // Lock scrolling on desktop
+            
             createPetals();
 
-            const tl = gsap.timeline();
+            const tl = gsap.timeline({
+                onComplete: () => {
+                    document.body.classList.remove('scroll-locked'); // Unlock scrolling on mobile
+                    if (lenis) lenis.start(); // Unlock scrolling on desktop
+                }
+            });
+            
             tl.to(".ring-1", { scale: 18, opacity: 0, duration: 1.8, ease: "power2.in" }, "+=0.6")
               .to(".ring-2", { scale: 18, opacity: 0, duration: 1.8, ease: "power2.in" }, "-=1.3")
               .to("#entrance-seal", { opacity: 0, duration: 0.6 }, "-=0.8")
@@ -374,8 +378,7 @@
               .to("#scroll-hint", { opacity: 1, duration: 1.2 }, "open+=1.7")
               .set(".gate", { display: "none" })
               .set("#gate-flash", { display: "none" })
-              .set("#entrance-seal", { display: "none" })
-              .set("body", { className: "film-grain" });
+              .set("#entrance-seal", { display: "none" });
 
             // Parallax on images
             if (!isMobile) {
@@ -476,12 +479,12 @@
             animateConfetti();
         }
 
-        // Background Music Toggle (replace src with your song)
+        // Background Music Toggle 
         let audio = null;
         let isPlaying = false;
         function toggleMusic() {
             if (!audio) {
-                audio = new Audio('https://assets.mixkit.co/sfx/preview/296/296-preview.mp3'); // replace with your soft birthday song
+                audio = new Audio('https://assets.mixkit.co/sfx/preview/296/296-preview.mp3'); 
                 audio.loop = true;
             }
             if (isPlaying) {
@@ -493,8 +496,6 @@
             }
             isPlaying = !isPlaying;
         }
-
-        // Tailwind script already included via CDN
     </script>
 </body>
 </html>
